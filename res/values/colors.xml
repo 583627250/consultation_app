@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <resources>
+         <color name="consultation_color_white">#FFFFFF</color>
+         <color name="consultation_color_black">#525252</color>
+         <color name="consultation_color_red">#FF0000</color>
+         <color name="consultation_color_gray">#EEEEEE</color>
+         <color name="consultation_color_48D1CC">#48D1CC</color>
+         <color name="consultation_color_E8D8D8">#E8D8D8</color>
+         <color name="consultation_color_00CD00">#00CD00</color>
+         <color name="consultation_color_008B00">#008B00</color>
+         <color name="consultation_color_CFCFCF">#CFCFCF</color>
+         <color name="consultation_color_EBEBEB">#EBEBEB</color>
+         <color name="consultation_color_3F474A">#3F474A</color>
+         <color name="consultation_color_4876FF">#4876FF</color>
+         <color name="consultation_color_D2691E">#D2691E</color>
+         <color name="consultation_color_3A5FCD">#3A5FCD</color>
+         <color name="consultation_color_C4C4C4">#C4C4C4</color>
+         <color name="consultation_color_transparent">#00000000</color>
+         
+         <color name="province_line_border">#C7C7C7</color>
+         
+         <color name="consultation_color_F4F4F4">#F4F4F4</color>
+         <color name="consultation_color_2CB67A">#2CB67A</color>
+         <color name="consultation_color_2CB679">#2CB679</color>
+         <color name="consultation_color_919191">#919191</color>
+    </resources>

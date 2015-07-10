@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:background="@drawable/knowledge_recommend_layout_selector"
+    android:orientation="horizontal" >
+
+    <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:gravity="center"
+         android:layout_weight="4">
+         
+         <ImageView
+		    android:id="@+id/specialist_info_imageView"
+		    android:layout_width="50dip"
+		    android:layout_height="50dip"
+		    android:src="@drawable/ic_launcher"
+		    android:scaleType="fitXY" /> 
+     </LinearLayout>
+            
+		        
+     <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:layout_weight="1">
+         
+         <LinearLayout 
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_weight="1"
+             android:orientation="vertical">
+	         <TextView
+		          android:id="@+id/specialist_info_name"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:textColor="@color/consultation_color_black"
+		          android:text="张三"
+		          android:textStyle="bold"/>
+	         <TextView
+		          android:id="@+id/specialist_info_department"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:text="内科|专家"/>
+	         <TextView
+		          android:id="@+id/specialist_info_hospital"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:text="某某医院"/>
+         </LinearLayout>
+         <LinearLayout 
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_gravity="center_vertical"
+             android:layout_weight="2.5"
+             android:background="@drawable/specilaist_text_shape"
+             android:layout_marginRight="10dp"
+             android:orientation="vertical">
+	         <TextView
+		          android:id="@+id/specialist_info_patient_text"
+		          android:gravity="center"
+		          android:paddingTop="3dp"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:textColor="@color/consultation_color_white"
+		          android:text="诊断患者"/>
+	         
+	         <TextView
+		          android:id="@+id/specialist_info_patient_count_text"
+		          android:gravity="center"
+		          android:layout_margin="2dp"
+		          android:layout_width="match_parent"
+		          android:layout_height="match_parent"
+		          android:background="@drawable/specilaist_count_shape"
+		          android:textColor="@color/consultation_color_D2691E"
+		          android:text="0"/>
+	     </LinearLayout>
+     </LinearLayout>
+
+</LinearLayout>

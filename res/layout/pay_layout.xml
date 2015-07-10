@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/consultation_color_E8D8D8"
+       android:orientation="vertical" >
+       
+        <include
+	        android:id="@+id/consultation_header"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        layout="@layout/header" />
+    
+	          <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginTop="2dp"
+	            android:padding="8dp"
+	            android:background="@color/consultation_color_white"
+	            android:layout_gravity="center_vertical"
+	            android:orientation="horizontal" >
+	            
+	            <TextView
+	                android:id="@+id/pay_amount_text"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:layout_weight="3"
+	                android:gravity="center_vertical"
+	                android:padding="5dp"
+	                android:singleLine="true"
+	                android:textColor="@color/consultation_color_black"
+	                android:text="充值金额" />
+	
+	            <EditText
+	                android:id="@+id/pay_amount_input_edit"
+	                android:layout_width="match_parent"
+	                android:layout_height="match_parent"
+	                android:layout_weight="1"
+	                android:background="@color/consultation_color_white"
+	                android:gravity="center_vertical"
+	                android:hint="请输入支付的金额"
+	                android:singleLine="true"
+	                android:inputType="number"
+	                android:textColor="@color/consultation_color_black"
+	                android:padding="5dp" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" >
+
+            <Button
+                android:id="@+id/pay_btn_commint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="确    定"
+                android:textColor="@color/consultation_color_white" />
+        </LinearLayout>
+        
+     </LinearLayout>
+</RelativeLayout>
