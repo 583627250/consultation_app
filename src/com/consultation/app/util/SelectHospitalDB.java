@@ -17,6 +17,8 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
     // 表里面的三个内容
     private static final String ID="_id";
     
+    private static final String PROVINCE = "_province";
+    
     private static final String CITY="_city";
 
     private static final String NAME="_name";
@@ -28,7 +30,7 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql=
-            "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER primary key autoincrement, " + CITY + " text, " + NAME
+            "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER primary key autoincrement, " + PROVINCE + " text, " + CITY + " text, " + NAME
                 + " text);";
         db.execSQL(sql);
 
@@ -54,12 +56,20 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
         return cursor;
     }
     
+    public Cursor selectByProvince(String province) {
+        SQLiteDatabase db=this.getReadableDatabase();
+        String[] selectionArgs = {province};  
+        Cursor cursor=db.query(TABLE_NAME, null, PROVINCE+"=?", selectionArgs, null, null, ID + " ASC");
+        return cursor;
+    }
+    
     /* 增加操作 */
-    public long insert(String city,String name) {
+    public long insert(String province, String city,String name) {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues cv=new ContentValues();
         cv.put(NAME, name);
         cv.put(CITY, city);
+        cv.put(PROVINCE, province);
         long row=db.insert(TABLE_NAME, null, cv);
         return row;
     }
@@ -70,7 +80,11 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
         String where=ID + "=?";
         String[] whereValue={Integer.toString(id)};
         db.delete(TABLE_NAME, where, whereValue);
-
+    }
+    
+    public void delete() {
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
     }
 
     /* 修改操作 */
@@ -79,10 +93,8 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getWritableDatabase();
         String where=ID + "=?";
         String[] whereValue={Integer.toString(id)};
-
         ContentValues cv=new ContentValues();
         cv.put(NAME, name);
-
         db.update(TABLE_NAME, cv, where, whereValue);
     }
 

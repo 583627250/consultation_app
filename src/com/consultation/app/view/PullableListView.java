@@ -22,7 +22,6 @@ public class PullableListView extends ListView implements Pullable{
 	private TextView mStateTextView;
 	private int state = INIT;
 	private boolean canLoad = true;
-	private boolean autoLoad = true;
 	private boolean hasMoreData = true;
 	private AnimationDrawable mLoadAnim;
 
@@ -62,14 +61,6 @@ public class PullableListView extends ListView implements Pullable{
 	}
 	
 	/**
-	 * 是否开启自动加载
-	 * @param enable true启用，false禁用
-	 */
-	public void enableAutoLoad(boolean enable){
-		autoLoad = enable;
-	}
-	
-	/**
 	 * 是否显示加载更多
 	 * @param v true显示，false不显示
 	 */
@@ -103,7 +94,7 @@ public class PullableListView extends ListView implements Pullable{
 	protected void onScrollChanged(int l, int t, int oldl, int oldt){
 		super.onScrollChanged(l, t, oldl, oldt);
 		// 在滚动中判断是否满足自动加载条件
-		checkLoad();
+//		checkLoad();
 	}
 
 	/**
@@ -111,8 +102,9 @@ public class PullableListView extends ListView implements Pullable{
 	 */
 	private void checkLoad(){
 		if (reachBottom() && mOnLoadListener != null && state != LOADING
-				&& canLoad && autoLoad && hasMoreData)
-			load();
+				&& canLoad && hasMoreData){
+		    load();
+		}
 	}
 	
 	private void load(){
@@ -122,8 +114,7 @@ public class PullableListView extends ListView implements Pullable{
 
 	private void changeState(int state){
 		this.state = state;
-		switch (state)
-		{
+		switch (state){
 		case INIT:
 			mLoadAnim.stop();
 			mLoadingView.setVisibility(View.INVISIBLE);

@@ -2,38 +2,29 @@ package com.consultation.app.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.consultation.app.R;
-import com.consultation.app.activity.JionInDoctorActivity;
-import com.consultation.app.activity.PayActivity;
-import com.consultation.app.exception.ConsultationCallbackException;
-import com.consultation.app.listener.ConsultationCallbackHandler;
-import com.consultation.app.util.CommonUtil;
 
-public class MineFragment extends Fragment {
+public class MineFragment extends Fragment implements OnClickListener{
     
     private View mineLayout;
 
-    private TextView header_text;
+    private TextView header_text,phone_text,tip_text,updatePwd_text,pay_text,
+                     share_text,invitation_text,set_text,feedback_text,update_text,
+                     help_text,about_text;
 
-    private ImageView myPhotoImage, myAccountImage, messageImage, jionImage, messageCountImage;
-
-    private TextView realName, department, hospital, myInfo, myAccount, blance, myMessages, myJoin;
-
-    private LinearLayout info, account, message, jion;
+    private LinearLayout info_layout,updatePwd_layout,pay_layout,share_layout,invitation_layout,
+                         set_layout,feedback_layout,update_layout,help_layout,about_layout  ;
     
-    private static Context context;
+//    private static Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,123 +34,117 @@ public class MineFragment extends Fragment {
     }
     
     public static MineFragment getInstance(Context ctx) { 
-        context = ctx;
+//        context = ctx;
         return new MineFragment();
     } 
 
     private void initLayout() {
         header_text=(TextView)mineLayout.findViewById(R.id.header_text);
-        header_text.setText("个人信息");
+        header_text.setText("我");
         header_text.setTextSize(20);
 
-        messageCountImage=(ImageView)mineLayout.findViewById(R.id.mine_info_message_count_image);
-//        LayoutParams messageCountBtnParams=
-//            new LayoutParams((int)SizeUtil.getImageSize(((Activity)context).getContext(), 50), (int)SizeUtil.getImageSize(
-//                ((Activity)context).getContext(), 50));
-//        messageCountBtnParams.gravity = Gravity.CENTER;
-//        messageCountImage.setLayoutParams(messageCountBtnParams);
-        messageCountImage.setImageResource(CommonUtil.getResourceId(context, "drawable", "message_count_" + 2));
 
-        myPhotoImage=(ImageView)mineLayout.findViewById(R.id.mine_info_imageView);
-//        LayoutParams photoParams=
-//            new LayoutParams((int)SizeUtil.getImageSize(((Activity)context).getContext(), 135), (int)SizeUtil.getImageSize(
-//                ((Activity)context).getContext(), 135));
-//        photoParams.gravity = Gravity.CENTER;
-//        myPhotoImage.setLayoutParams(photoParams);
-        myPhotoImage.setImageResource(R.drawable.splash_image);
+        phone_text=(TextView)mineLayout.findViewById(R.id.mine_info_phone_text);
+        phone_text.setTextSize(20);
 
-        myAccountImage=(ImageView)mineLayout.findViewById(R.id.mine_account_imageView);
-//        LayoutParams myAccountParams=
-//            new LayoutParams((int)SizeUtil.getImageSize(((Activity)context).getContext(), 50), (int)SizeUtil.getImageSize(
-//                ((Activity)context).getContext(), 50));
-//        myAccountParams.gravity = Gravity.CENTER;
-//        myAccountImage.setLayoutParams(myAccountParams);
+        tip_text=(TextView)mineLayout.findViewById(R.id.mine_info_tip_text);
+        tip_text.setTextSize(14);
 
-        messageImage=(ImageView)mineLayout.findViewById(R.id.mine_message_imageView);
-//        LayoutParams messageParams=
-//            new LayoutParams((int)SizeUtil.getImageSize(((Activity)context).getContext(), 50), (int)SizeUtil.getImageSize(
-//                ((Activity)context).getContext(), 50));
-//        messageParams.gravity = Gravity.CENTER;
-//        messageImage.setLayoutParams(messageParams);
+        updatePwd_text=(TextView)mineLayout.findViewById(R.id.mine_info_update_pwd_text);
+        updatePwd_text.setTextSize(18);
 
-        jionImage=(ImageView)mineLayout.findViewById(R.id.mine_join_imageView);
-//        LayoutParams jionParams=
-//            new LayoutParams((int)SizeUtil.getImageSize(((Activity)context).getContext(), 50), (int)SizeUtil.getImageSize(
-//                ((Activity)context).getContext(), 50));
-//        jionParams.gravity = Gravity.CENTER;
-//        jionImage.setLayoutParams(jionParams);
+        pay_text=(TextView)mineLayout.findViewById(R.id.mine_info_pay_text);
+        pay_text.setTextSize(18);
 
-        realName=(TextView)mineLayout.findViewById(R.id.mine_info_realname);
-        realName.setTextSize(17);
+        share_text=(TextView)mineLayout.findViewById(R.id.mine_info_share_text);
+        share_text.setTextSize(18);
 
-        department=(TextView)mineLayout.findViewById(R.id.mine_info_department);
-        department.setTextSize(14);
+        invitation_text=(TextView)mineLayout.findViewById(R.id.mine_info_invitation_text);
+        invitation_text.setTextSize(18);
 
-        hospital=(TextView)mineLayout.findViewById(R.id.mine_info_hospital);
-        hospital.setTextSize(14);
+        set_text=(TextView)mineLayout.findViewById(R.id.mine_info_set_text);
+        set_text.setTextSize(18);
 
-        myInfo=(TextView)mineLayout.findViewById(R.id.mine_info_more_text);
-        myInfo.setTextSize(14);
+        feedback_text=(TextView)mineLayout.findViewById(R.id.mine_info_feedback_text);
+        feedback_text.setTextSize(18);
+        
+        update_text=(TextView)mineLayout.findViewById(R.id.mine_info_update_text);
+        update_text.setTextSize(18);
+        
+        help_text=(TextView)mineLayout.findViewById(R.id.mine_info_help_text);
+        help_text.setTextSize(18);
+       
+        about_text=(TextView)mineLayout.findViewById(R.id.mine_info_about_text);
+        about_text.setTextSize(18);
 
-        myAccount=(TextView)mineLayout.findViewById(R.id.mine_info_account_text);
-        myAccount.setTextSize(17);
+        info_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_info_layout);
+        info_layout.setOnClickListener(this);
+        
+        updatePwd_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_update_pwd_layout);
+        updatePwd_layout.setOnClickListener(this);
+        
+        pay_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_pay_layout);
+        pay_layout.setOnClickListener(this);
+        
+        share_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_share_layout);
+        share_layout.setOnClickListener(this);
+        
+        invitation_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_invitation_layout);
+        invitation_layout.setOnClickListener(this);
+        
+        set_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_set_layout);
+        set_layout.setOnClickListener(this);
+        
+        feedback_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_feedback_layout);
+        feedback_layout.setOnClickListener(this);
+        
+        update_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_update_layout);
+        update_layout.setOnClickListener(this);
+        
+        help_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_help_layout);
+        help_layout.setOnClickListener(this);
+        
+        about_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_about_layout);
+        about_layout.setOnClickListener(this);
+        
+    }
 
-        blance=(TextView)mineLayout.findViewById(R.id.mine_info_balance_text);
-        blance.setTextSize(14);
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.mine_my_info_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_update_pwd_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_pay_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_share_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_invitation_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_set_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_feedback_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_update_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_help_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
+            case R.id.mine_my_about_layout:
+//                Toast.makeText(context, "hahah", 500).show();
+                break;
 
-        myMessages=(TextView)mineLayout.findViewById(R.id.mine_info_message_text);
-        myMessages.setTextSize(17);
-
-        myJoin=(TextView)mineLayout.findViewById(R.id.mine_info_jion_text);
-        myJoin.setTextSize(17);
-
-        info=(LinearLayout)mineLayout.findViewById(R.id.mine_my_info_layout);
-        account=(LinearLayout)mineLayout.findViewById(R.id.mine_my_account_layout);
-        message=(LinearLayout)mineLayout.findViewById(R.id.mine_my_message_layout);
-        jion=(LinearLayout)mineLayout.findViewById(R.id.mine_my_jion_layout);
-        account.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                // 充值
-                PayActivity.setHandler(new ConsultationCallbackHandler() {
-                    
-                    @Override
-                    public void onSuccess(String rspContent, int statusCode) {
-                        blance.setText("余额："+rspContent+"元");
-                    }
-                    
-                    @Override
-                    public void onFailure(ConsultationCallbackException exp) {
-                        
-                    }
-                });
-                startActivity(new Intent(context, PayActivity.class));
-            }
-        });
-        info.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 详细资料
-                Toast.makeText(context, "详细资料", Toast.LENGTH_SHORT).show();
-            }
-        });
-        message.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 显示消息
-                messageCountImage.setVisibility(View.GONE);
-            }
-        });
-        jion.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 到加入医生界面
-                startActivity(new Intent(context, JionInDoctorActivity.class));
-            }
-        });
+            default:
+                break;
+        }
     }
 }

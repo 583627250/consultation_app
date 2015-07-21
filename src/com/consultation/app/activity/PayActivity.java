@@ -1,9 +1,11 @@
 package com.consultation.app.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,6 +56,10 @@ public class PayActivity extends Activity {
             
             @Override
             public void onClick(View v) {
+                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm.isActive()) {     
+                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );   
+                }
                 finish();
             }
         });

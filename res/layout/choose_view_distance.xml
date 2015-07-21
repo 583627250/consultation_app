@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="450dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/choosearea_bg_left" >
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:cacheColorHint="#00000000"
         android:divider="#dcdcdc"
         android:dividerHeight="1px"
+        android:scrollbars="none"
         android:paddingLeft="4dp"
         android:paddingRight="4dp" />
 

@@ -92,7 +92,7 @@
                 android:layout_weight="1"
                 android:hint="请输入密码"
                 android:textColorHint="#D3D3D3"
-                android:inputType="textCapCharacters"
+                android:inputType="textPassword"
                 android:padding="5dp"
                 android:singleLine="true" />
         </LinearLayout>
@@ -132,7 +132,7 @@
                 android:background="@color/consultation_color_white"
                 android:gravity="center_vertical"
                 android:layout_weight="0.8"
-                android:hint="请输入下方验证码"
+                android:hint="请输入验证码"
                 android:textColorHint="#D3D3D3"
                 android:inputType="number"
                 android:padding="5dp"

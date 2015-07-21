@@ -1,10 +1,12 @@
 package com.consultation.app.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -120,9 +122,6 @@ public class JionInDoctorActivity extends Activity {
                     Toast.makeText(JionInDoctorActivity.this, "请阅读免责条款", Toast.LENGTH_LONG).show();
                     return;
                 }
-                System.out.println(primary.isChecked());
-                System.out.println(specialist.isChecked());
-                System.out.println(agreenment.isChecked());
             }
         });
     }

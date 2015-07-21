@@ -41,13 +41,11 @@ public class FixedSpeedScroller extends Scroller {
  	} 
     @Override  
     public void startScroll(int startX, int startY, int dx, int dy, int duration) {  
-    	//System.out.println("startScroll1");
         super.startScroll(startX, startY, dx, dy, mDuration);  
     }  
   
     @Override  
     public void startScroll(int startX, int startY, int dx, int dy) {  
-    	//System.out.println("startScroll2");
         super.startScroll(startX, startY, dx, dy, mDuration);  
     }  
   

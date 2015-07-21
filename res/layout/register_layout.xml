@@ -201,7 +201,7 @@
                         android:background="@color/consultation_color_white"
                         android:gravity="center_vertical"
                         android:hint="请输入登陆密码"
-                        android:inputType="textCapCharacters"
+                        android:inputType="textPassword"
                         android:textColorHint="#D3D3D3"
                         android:padding="5dp"
                         android:singleLine="true" />
@@ -251,7 +251,7 @@
                         android:background="@color/consultation_color_white"
                         android:gravity="center_vertical"
                         android:hint="请再次输入密码"
-                        android:inputType="textCapCharacters"
+                        android:inputType="textPassword"
                         android:textColorHint="#D3D3D3"
                         android:padding="5dp"
                         android:singleLine="true" />

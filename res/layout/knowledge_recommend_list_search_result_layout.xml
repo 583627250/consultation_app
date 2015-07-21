@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_white"
+        android:orientation="vertical" >
+
+        <include
+	        android:id="@+id/consultation_header"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        layout="@layout/header" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@color/consultation_color_white"
+            android:orientation="horizontal" >
+			
+            <ListView
+	            android:id="@+id/knowledge_recommend_list_search_result_listView"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:divider="#F4F4F4"
+                android:dividerHeight="0.1dp" >
+        	</ListView>
+            
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

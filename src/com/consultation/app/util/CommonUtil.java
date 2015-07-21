@@ -129,7 +129,7 @@ public class CommonUtil {
     }
 
     public static void showLoadingDialog(Context context) {
-        showLoadingDialog(context, context.getString(CommonUtil.getResourceId(context, "string", "loading_txt")));
+        showLoadingDialog(context, "数据加载中...");
     }
     
     /**

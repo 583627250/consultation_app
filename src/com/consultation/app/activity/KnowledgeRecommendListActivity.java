@@ -1,9 +1,17 @@
 package com.consultation.app.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,24 +22,36 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.model.RecommendTo;
+import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.SharePreferencesEditor;
+import com.consultation.app.view.ExpandTabRecommendedView;
 import com.consultation.app.view.PullToRefreshLayout;
 import com.consultation.app.view.PullToRefreshLayout.OnRefreshListener;
 import com.consultation.app.view.PullableListView;
 import com.consultation.app.view.PullableListView.OnLoadListener;
+import com.consultation.app.view.RecommendMiddleFilterView;
 
 
+@SuppressLint("HandlerLeak")
 public class KnowledgeRecommendListActivity extends Activity implements OnLoadListener{
     
     private LinearLayout back_layout;
     
-    private TextView back_text,title_text;
+    private TextView back_text;
+    
+    private ArrayList<View> mViewArray=new ArrayList<View>();
     
     private PullableListView recommendListView;
 
@@ -43,17 +63,39 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
 
     private RequestQueue mQueue;
     
+    private ExpandTabRecommendedView expandTabView;
+    
+    private RecommendMiddleFilterView viewMiddle;
+    
+    private ImageView searchImage;
+    
+    private int page = 1;
+    
+    private boolean hasMore = true;
+    
+    private SharePreferencesEditor editor;
+    
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case 0:
                 myAdapter.notifyDataSetChanged();
-                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                 recommendListView.setHasMoreData(true);
+                page = 1;
+                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                 break;
             case 1:
-                ((PullableListView)msg.obj).finishLoading();
+                if(hasMore){
+                    ((PullableListView)msg.obj).finishLoading();
+                }else{
+                    recommendListView.setHasMoreData(false);
+                }
                 myAdapter.notifyDataSetChanged();
+                break;
+            case 2:
+                recommendListView.setHasMoreData(true);
+                page = 1;
+                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.FAIL);
                 break;
             }
             
@@ -64,14 +106,18 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_layout);
+        editor = new SharePreferencesEditor(KnowledgeRecommendListActivity.this);
         initDate();
         initView();
+        initVaule();
+        initListener();
     }
 
     private void initView() {
-        title_text = (TextView)findViewById(R.id.header_text);
-        title_text.setText("推荐科普");
-        title_text.setTextSize(20);
+        expandTabView = (ExpandTabRecommendedView)findViewById(R.id.header_title_expandTabView);
+        
+        String names[] = new String[] { "妇产科", "儿科", "皮肤科", "内科", "脑科", "外科" };
+        viewMiddle = new RecommendMiddleFilterView(KnowledgeRecommendListActivity.this, names);
         
         back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
@@ -90,22 +136,48 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
             
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-                new Thread(new Runnable() {
+                Map<String, String> parmas = new HashMap<String, String>();
+                parmas.put("page", "1");
+                parmas.put("rows", "10");
+                if(!"".equals(editor.get("uid", ""))){
+                    parmas.put("uid", editor.get("uid", ""));
+                    parmas.put("userTp", editor.get("userType", ""));
+                }
+                OpenApiService.getInstance(KnowledgeRecommendListActivity.this).getKnowledgeList(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
-                    public void run() {
+                    public void onResponse(String arg0) {
                         try {
-                            Thread.sleep(2000);
-                            initDate();
-                            Message msg = handler.obtainMessage();
-                            msg.what = 0;
-                            msg.obj = pullToRefreshLayout;
-                            handler.sendMessage(msg);
-                        } catch (InterruptedException e) {
+                            JSONObject responses = new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1){
+                                JSONArray infos = responses.getJSONArray("knowledges");
+                                recommend_content_list.clear();
+                                for(int i=0; i < infos.length(); i++) {
+                                    JSONObject info = infos.getJSONObject(i);
+                                    recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
+                                }
+                                Message msg = handler.obtainMessage();
+                                msg.what = 0;
+                                msg.obj = pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                            }else{
+                                Message msg = handler.obtainMessage();
+                                msg.what = 2;
+                                msg.obj = pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }).start();
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         
@@ -113,47 +185,68 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
         recommendListView=(PullableListView)findViewById(R.id.knowledge_recommend_list_listView);
         recommendListView.setAdapter(myAdapter);
         recommendListView.setOnLoadListener(this);
-        recommendListView.setHasMoreData(false);
         recommendListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(KnowledgeRecommendListActivity.this, recommend_content_list.size()+"----"+recommend_content_list.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(KnowledgeRecommendListActivity.this, RecommendActivity.class);
+                intent.putExtra("id", recommend_content_list.get(position).getId());
+                startActivity(intent);
+            }
+        });
+        searchImage = (ImageView)findViewById(R.id.header_right_image);
+        searchImage.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(KnowledgeRecommendListActivity.this, SearchRecommendActivity.class));
             }
         });
     }
 
     private void initDate() {
-        RecommendTo TO1=new RecommendTo();
-        TO1.setAuthor("王忠");
-        TO1.setDepartment("内科");
-        TO1.setTitle("关于药物的服用时间和注意事项");
-        
-        RecommendTo TO2=new RecommendTo();
-        TO2.setAuthor("老冯");
-        TO2.setDepartment("内科");
-        TO2.setTitle("发烧就要用退烧药么？");
-        
-        RecommendTo TO3=new RecommendTo();
-        TO3.setAuthor("季秀君");
-        TO3.setDepartment("皮肤科");
-        TO3.setTitle("痣，祛还是留");
-        
-        RecommendTo TO4=new RecommendTo();
-        TO4.setAuthor("马晓红");
-        TO4.setDepartment("儿科");
-        TO4.setTitle("婴幼儿血管瘤需要综合治疗");
-        
-        RecommendTo TO5=new RecommendTo();
-        TO5.setAuthor("刘永生");
-        TO5.setDepartment("皮肤科");
-        TO5.setTitle("手总脱皮是缺少维生素？");
-        
-        recommend_content_list.add(TO1);
-        recommend_content_list.add(TO2);
-        recommend_content_list.add(TO3);
-        recommend_content_list.add(TO4);
-        recommend_content_list.add(TO5);
+        mQueue = Volley.newRequestQueue(KnowledgeRecommendListActivity.this);
+        Map<String, String> parmas = new HashMap<String, String>();
+        parmas.put("page", String.valueOf(page));
+        parmas.put("rows", "10");
+        if(!"".equals(editor.get("uid", ""))){
+            parmas.put("uid", editor.get("uid", ""));
+            parmas.put("userTp", editor.get("userType", ""));
+        }
+        CommonUtil.showLoadingDialog(KnowledgeRecommendListActivity.this);
+        OpenApiService.getInstance(KnowledgeRecommendListActivity.this).getKnowledgeList(mQueue, parmas, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String arg0) {
+                CommonUtil.closeLodingDialog();
+                try {
+                    JSONObject responses = new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1){
+                        JSONArray infos = responses.getJSONArray("knowledges");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info = infos.getJSONObject(i);
+                            recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
+                        }
+                        if(infos.length()==10){
+                            recommendListView.setHasMoreData(true);
+                        }else{
+                            recommendListView.setHasMoreData(false);
+                        }
+                    }else{
+                        Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                CommonUtil.closeLodingDialog();
+                Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     
     private static class ViewHolder {
@@ -194,38 +287,83 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
             holder.title.setTextSize(18);
             holder.title.setText(recommend_content_list.get(position).getTitle());
             holder.author.setTextSize(15);
-            holder.author.setText("@" + recommend_content_list.get(position).getDepartment() + "-"
-                + recommend_content_list.get(position).getAuthor());
-//            final String imgUrl=recommend_content_list.get(position).getPhoto();
-//            // 给 ImageView 设置一个 tag
-//            holder.photo.setTag(imgUrl);
-//            // 预设一个图片
-//            holder.photo.setImageResource(CommonUtil.getResourceId(context, "drawable", "pfk"));
-//            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
-//                mImageLoader.get(imgUrl, listener);
-//            }
+            holder.author.setText("@" + recommend_content_list.get(position).getDepart_name() + "-"
+                + recommend_content_list.get(position).getUser_name());
             return convertView;
         }
     }
 
     @Override
     public void onLoad(final PullableListView pullableListView) {
-        new Thread(new Runnable() {
+        Map<String, String> parmas = new HashMap<String, String>();
+        page++;
+        parmas.put("page", String.valueOf(page));
+        parmas.put("rows", "10");
+        if(!"".equals(editor.get("uid", ""))){
+            parmas.put("uid", editor.get("uid", ""));
+            parmas.put("userTp", editor.get("userType", ""));
+        }
+        OpenApiService.getInstance(KnowledgeRecommendListActivity.this).getKnowledgeList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
-            public void run() {
+            public void onResponse(String arg0) {
                 try {
-                    Thread.sleep(4000);
-                    initDate();
-                    Message msg = handler.obtainMessage();
-                    msg.what = 1;
-                    msg.obj = pullableListView;
-                    handler.sendMessage(msg);
-                } catch (InterruptedException e) {
+                    JSONObject responses = new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1){
+                        JSONArray infos = responses.getJSONArray("knowledges");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info = infos.getJSONObject(i);
+                            recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
+                        }
+                        if(infos.length()==10){
+                            hasMore = true;
+                        }else{
+                            hasMore = false;
+                        }
+                        Message msg = handler.obtainMessage();
+                        msg.what = 1;
+                        msg.obj = pullableListView;
+                        handler.sendMessage(msg);
+                    }else{
+                        Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    
+    private void initVaule() {
+        mViewArray.add(viewMiddle);
+        ArrayList<String> mTextArray = new ArrayList<String>();
+        mTextArray.add("选择专业");
+        expandTabView.setValue(mTextArray, mViewArray);
+        expandTabView.setTitle("选择专业", 0);
+    }
+
+    private void initListener() {
+        viewMiddle.setOnSelectListener(new RecommendMiddleFilterView.OnSelectListener() {
+            @Override
+            public void getValue(String distance, String showText) {
+                onRefresh(viewMiddle, showText);
+            }
+        });
+    }
+
+    private void onRefresh(View view, String showText) {
+        expandTabView.onPressBack();
+        if(showText.length()>4){
+            expandTabView.setTitle(showText.substring(0, 4)+"...",0);
+        }else{
+            expandTabView.setTitle(showText,0);
+        }
+        Toast.makeText(KnowledgeRecommendListActivity.this, showText, Toast.LENGTH_SHORT).show();
     }
 }

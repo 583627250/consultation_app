@@ -6,14 +6,96 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_E8D8D8"
+        android:background="@color/consultation_color_white"
         android:orientation="vertical" >
 
-        <include
-            android:id="@+id/consultation_header"
-            android:layout_width="fill_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/header" />
+            android:layout_gravity="center_vertical"
+            android:background="#2CB67A"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+
+            <LinearLayout
+                android:id="@+id/header_layout_lift"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/header_lift_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/back_icon" />
+
+                <TextView
+                    android:id="@+id/header_text_lift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="3dp"
+                    android:text="返回"
+                    android:textColor="@color/consultation_color_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:orientation="vertical" >
+
+                <com.consultation.app.view.CircularImage
+                    android:id="@+id/specialist_info_user_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <TextView
+                    android:id="@+id/specialist_info_user_name_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="张三三"
+                    android:textColor="@color/consultation_color_white" />
+
+                <TextView
+                    android:id="@+id/specialist_info_user_title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginTop="3dp"
+                    android:text="主任医师"
+                    android:textColor="#22705A" />
+            </LinearLayout>
+        </RelativeLayout>
+        
+        <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center_vertical"
+           android:background="@color/consultation_color_white"
+           android:orientation="horizontal"
+           android:padding="8dp" >
+
+           <TextView
+               android:id="@+id/specialist_info_user_goodAt"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textColor="#4A4A4A"
+               android:text="他的擅长领域" />
+       	</LinearLayout>
+       	<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/consultation_color_F4F4F4" >
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -25,240 +107,32 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:id="@+id/specialist_detailed_info_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp" >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3.5"
-                        android:gravity="center" >
-
-                        <ImageView
-                            android:id="@+id/specialist_detailed_info_imageView"
-                            android:layout_width="50dip"
-                            android:layout_height="50dip"
-                            android:background="@drawable/specilaist_info_image_shape"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_launcher" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical" >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
-
-                            <TextView
-                                android:id="@+id/specialist_detailed_info_realname"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="张三"
-                                android:textColor="@color/consultation_color_D2691E"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/specialist_detailed_info_authentication"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.5"
-                                android:background="@drawable/specilaist_info_shape"
-                                android:gravity="center"
-                                android:padding="2dp"
-                                android:text="初级医师认证"
-                                android:textColor="@color/consultation_color_4876FF"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/specialist_detailed_info_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="职称：初级医师" />
-
-                        <TextView
-                            android:id="@+id/specialist_detailed_info_department"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="所属科室：小儿科" />
-
-                        <TextView
-                            android:id="@+id/specialist_detailed_info_hospital"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="所属医院：北京儿童医院" />
-                    </LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/consultation_color_F4F4F4" >
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/specialist_info_user_help_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp" >
-
-                    <TextView
-                        android:id="@+id/specialist_detailed_info_goodAt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="擅长领域" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="1dp"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp" >
-
-                    <TextView
-                        android:id="@+id/specialist_detailed_info_goodAt_detailed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp" >
-
-                    <TextView
-                        android:id="@+id/specialist_detailed_info_authenticationInfo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="认证信息" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="1dp"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:padding="8dp" >
-
-                    <TextView
-                        android:id="@+id/specialist_detailed_info_authenticationInfo_detailed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域擅长领域" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/specialist_detailed_info_feedback_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="患者反馈" />
-
-                <LinearLayout
-                    android:id="@+id/specialist_detailed_info_feedback_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/consultation_color_white"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
                     android:padding="8dp" >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/consultation_color_D2691E"
-                        android:orientation="horizontal" >
-
-                        <TextView
-                            android:id="@+id/specialist_detailed_info_feedback_score_int"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="right|center"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="7dp"
-                            android:paddingTop="10dp"
-                            android:text="4."
-                            android:textColor="@color/consultation_color_white"
-                            android:textSize="28dp" />
-
-                        <TextView
-                            android:id="@+id/specialist_detailed_info_feedback_score_float"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="left|center"
-                            android:paddingRight="7dp"
-                            android:text="99"
-                            android:textColor="@color/consultation_color_white"
-                            android:textSize="16dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="0.5"
-                        android:orientation="vertical"
-                        android:paddingLeft="10dp" >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:orientation="horizontal" >
-
-                            <TextView
-                                android:id="@+id/specialist_detailed_info_feedback_text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:paddingBottom="3dp"
-                                android:paddingTop="3dp"
-                                android:text="反馈："
-                                android:textColor="@color/consultation_color_black"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <RatingBar
-                                android:id="@+id/specialist_detailed_info_feedback_ratingBar"
-                                style="@style/roomRatingBar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:clickable="false"
-                                android:maxHeight="18dp"
-                                android:minHeight="18dp" />
-                        </LinearLayout>
+                        android:layout_weight="1" >
 
                         <TextView
-                            android:id="@+id/specialist_detailed_info_feedback_count_text"
+                            android:id="@+id/specialist_info_user_help_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:paddingBottom="3dp"
-                            android:paddingTop="3dp"
-                            android:text="100个反馈" />
+                            android:text="已经帮助患者"
+                            android:textColor="#2CB67A" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -266,20 +140,123 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:paddingLeft="10dp" >
+                        android:gravity="right" >
 
-                        <ImageView
-                            android:id="@+id/recommend_item_image"
+                        <TextView
+                            android:id="@+id/specialist_info_user_help_count_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:paddingRight="7dp"
+                            android:gravity="right"
+                            android:paddingRight="12dp"
+                            android:textColor="#7B7B7B"
+                            android:text="324名" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="right"
+                            android:paddingRight="10dp"
                             android:src="@drawable/icon_item_arrow" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/specialist_info_user_help_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="#F4F4F4"
+                    android:dividerHeight="0.1dp" >
+                </ListView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+                
+                
+                <LinearLayout
+                    android:id="@+id/specialist_info_user_evaluation_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="8dp" >
+
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center_vertical"
+	                    android:layout_weight="0.7" >
+	
+	                    <RatingBar
+	                        android:id="@+id/specialist_info_user_ratingBar"
+	                        style="@style/roomRatingBar2"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_gravity="center_vertical"
+	                        android:stepSize="0.1"
+	                        android:saveEnabled="false"
+	                        android:maxHeight="24dp"
+	                        android:minHeight="24dp" />
+	                    <TextView
+				            android:id="@+id/specialist_info_user_evaluation_score"
+				            android:layout_width="match_parent"
+				            android:layout_height="match_parent"
+				            android:text="8.3分"
+				            android:paddingLeft="5dp"
+				            android:layout_gravity="center_vertical"
+				            android:textColor="#2CB67A"/>
+	                </LinearLayout>
+	
+	                <LinearLayout
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_gravity="center_vertical"
+	                    android:layout_weight="1"
+	                    android:gravity="right" >
+	
+	                    <TextView
+	                        android:id="@+id/specialist_info_user_evaluation_count_text"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:gravity="right"
+	                        android:paddingRight="12dp"
+	                        android:textColor="#7B7B7B"
+	                        android:text="共20条评论" />
+	
+	                    <ImageView
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_gravity="center"
+	                        android:gravity="right"
+	                        android:paddingRight="10dp"
+	                        android:src="@drawable/icon_item_arrow" />
+	                </LinearLayout>
+            
+				</LinearLayout>
+	            <LinearLayout
+	                android:layout_width="match_parent"
+	                android:layout_height="0.1dp"
+	                android:background="@color/consultation_color_F4F4F4" >
+	            </LinearLayout>
+	
+	            <ListView
+	                android:id="@+id/specialist_info_user_evaluation_listView"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:divider="#F4F4F4"
+	                android:dividerHeight="0.1dp" >
+	            </ListView>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
 </RelativeLayout>

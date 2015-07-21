@@ -1,7 +1,13 @@
 package com.consultation.app.fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -13,21 +19,31 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.activity.SearchSpecialistActivity;
 import com.consultation.app.activity.SpecialistInfoActivity;
+import com.consultation.app.model.SpecialistTo;
+import com.consultation.app.model.UserStatisticsTo;
+import com.consultation.app.model.UserTo;
+import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
+import com.consultation.app.util.CommonUtil;
 import com.consultation.app.view.ExpandTabView;
 import com.consultation.app.view.LeftFilterView;
 import com.consultation.app.view.MiddleFilterView;
@@ -56,7 +72,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
 
     private PullableListView specialistListView;
 
-    private List<String> specialistList=new ArrayList<String>();
+    private List<SpecialistTo> specialistList=new ArrayList<SpecialistTo>();
 
     private MyAdapter myAdapter;
 
@@ -68,20 +84,36 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
     
     private static Context mContext;
     
+    private int page = 1;
+    
+    private boolean hasMore = true;
+    
+    private ImageView searchBtn;
+    
     private Handler handler = new Handler() {
+        
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case 0:
                 myAdapter.notifyDataSetChanged();
-                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                 specialistListView.setHasMoreData(true);
+                page = 1;
+                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                 break;
             case 1:
-                ((PullableListView)msg.obj).finishLoading();
+                if(hasMore){
+                    ((PullableListView)msg.obj).finishLoading();
+                }else{
+                    specialistListView.setHasMoreData(false);
+                }
                 myAdapter.notifyDataSetChanged();
                 break;
+            case 2:
+                specialistListView.setHasMoreData(true);
+                page = 1;
+                ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.FAIL);
+                break;
             }
-            
         };
     };
 
@@ -99,16 +131,64 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
         mContext = ctx;
         return new SpecialistFragment();
     }
-
+    
     private void initData() {
         mQueue = Volley.newRequestQueue(mContext);
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        specialistList.add("");
-        specialistList.add("");
-        specialistList.add("");
-        specialistList.add("");
-        specialistList.add("");
-        specialistList.add("");
+        
+        
+        
+        
+        Map<String, String> parmas = new HashMap<String, String>();
+        parmas.put("page", String.valueOf(page));
+        parmas.put("rows", "10");
+        CommonUtil.showLoadingDialog(mContext);
+        OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String arg0) {
+                CommonUtil.closeLodingDialog();
+                try {
+                    JSONObject responses = new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1){
+                        JSONArray infos = responses.getJSONArray("experts");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info = infos.getJSONObject(i);
+                            SpecialistTo specialistTo = new SpecialistTo();
+                            specialistTo.setApprove_status(info.getString("approve_status"));
+                            specialistTo.setDepart_name(info.getString("depart_name"));
+                            specialistTo.setGoodat_fields(info.getString("goodat_fields"));
+                            specialistTo.setHospital_name(info.getString("hospital_name"));
+                            specialistTo.setId(info.getString("id"));
+                            specialistTo.setTitle(info.getString("title"));
+                            JSONObject userToJsonObject = info.getJSONObject("user");
+                            UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
+                            JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
+                            specialistTo.setUser(userTo);
+                            UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                            specialistTo.setUserTj(userStatistics);
+                            specialistList.add(specialistTo);
+                        }
+                        if(infos.length()==10){
+                            specialistListView.setHasMoreData(true);
+                        }else{
+                            specialistListView.setHasMoreData(false);
+                        }
+                    }else{
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                CommonUtil.closeLodingDialog();
+                Toast.makeText(mContext, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initLayout() {
@@ -132,47 +212,87 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
             
             @Override
             public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-                new Thread(new Runnable() {
+                Map<String, String> parmas = new HashMap<String, String>();
+                parmas.put("page", "1");
+                parmas.put("rows", "10");
+                OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
-                    public void run() {
+                    public void onResponse(String arg0) {
                         try {
-                            Thread.sleep(2000);
-                            specialistList.add("");
-                            specialistList.add("");
-                            specialistList.add("");
-                            specialistList.add("");
-                            specialistList.add("");
-                            specialistList.add("");
-                            Message msg = handler.obtainMessage();
-                            msg.what = 0;
-                            msg.obj = pullToRefreshLayout;
-                            handler.sendMessage(msg);
-                        } catch (InterruptedException e) {
+                            JSONObject responses = new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1){
+                                JSONArray infos = responses.getJSONArray("experts");
+                                specialistList.clear();
+                                for(int i=0; i < infos.length(); i++) {
+                                    JSONObject info = infos.getJSONObject(i);
+                                    SpecialistTo specialistTo = new SpecialistTo();
+                                    specialistTo.setApprove_status(info.getString("approve_status"));
+                                    specialistTo.setDepart_name(info.getString("depart_name"));
+                                    specialistTo.setGoodat_fields(info.getString("goodat_fields"));
+                                    specialistTo.setHospital_name(info.getString("hospital_name"));
+                                    specialistTo.setId(info.getString("id"));
+                                    specialistTo.setTitle(info.getString("title"));
+                                    JSONObject userToJsonObject = info.getJSONObject("user");
+                                    UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
+                                    JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
+                                    specialistTo.setUser(userTo);
+                                    UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                                    specialistTo.setUserTj(userStatistics);
+                                    specialistList.add(specialistTo);
+                                }
+                                Message msg = handler.obtainMessage();
+                                msg.what = 0;
+                                msg.obj = pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                            }else{
+                                Message msg = handler.obtainMessage();
+                                msg.what = 2;
+                                msg.obj = pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
                             e.printStackTrace();
                         }
-                        
                     }
-                }).start();
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        Toast.makeText(mContext, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         
         specialistListView=(PullableListView)specialistLayout.findViewById(R.id.specialist_info_listView);
         specialistListView.setAdapter(myAdapter);
         specialistListView.setOnLoadListener(this);
-        specialistListView.setHasMoreData(false);
         specialistListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(id >= 0) {
-                    startActivity(new Intent(mContext, SpecialistInfoActivity.class));
-                }
+                Intent intent = new Intent(mContext, SpecialistInfoActivity.class);
+                intent.putExtra("id", specialistList.get(position).getId());
+                intent.putExtra("name", specialistList.get(position).getUser().getUser_name());
+                intent.putExtra("title", specialistList.get(position).getTitle());
+                intent.putExtra("photoUrl", specialistList.get(position).getUser().getIcon_url());
+                startActivity(intent);
+            }
+        });
+        
+        searchBtn = (ImageView)specialistLayout.findViewById(R.id.header_right_image);
+        searchBtn.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, SearchSpecialistActivity.class));
             }
         });
     }
 
-    private static class ViewHolder {
+    private class ViewHolder {
 
         ImageView photo;
 
@@ -185,6 +305,10 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
         TextView patients;
 
         TextView patientCount;
+        
+        TextView score;
+        
+        RatingBar scoreRatingBar;
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -211,6 +335,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
                 convertView=LayoutInflater.from(((Activity)mContext)).inflate(R.layout.specialist_info_item, null);
                 holder.photo=(ImageView)convertView.findViewById(R.id.specialist_info_imageView);
                 holder.name=(TextView)convertView.findViewById(R.id.specialist_info_name);
+                holder.scoreRatingBar=(RatingBar)convertView.findViewById(R.id.specialist_info_score_ratingBar);
+                holder.score=(TextView)convertView.findViewById(R.id.specialist_info_score);
                 holder.departmen=(TextView)convertView.findViewById(R.id.specialist_info_department);
                 holder.hospital=(TextView)convertView.findViewById(R.id.specialist_info_hospital);
                 holder.patients=(TextView)convertView.findViewById(R.id.specialist_info_patient_text);
@@ -219,25 +345,24 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
             } else {
                 holder=(ViewHolder)convertView.getTag();
             }
-            final String imgUrl="";
-            // 给 ImageView 设置一个 tag
+            final String imgUrl=specialistList.get(position).getUser().getIcon_url();
             holder.photo.setTag(imgUrl);
-            // 预设一个图片
-            holder.photo.setImageResource(R.drawable.ic_launcher);
-            holder.name.setText("张三");
-            holder.name.setTextSize(16);
-            holder.departmen.setText("妇产科" + "|" + "主治医生");
-            holder.departmen.setTextSize(14);
-            holder.hospital.setText("北京协和医院");
-            holder.hospital.setTextSize(14);
+            holder.photo.setImageResource(R.drawable.photo);
+            holder.name.setText(specialistList.get(position).getUser().getUser_name());
+            holder.name.setTextSize(18);
+            holder.score.setText(specialistList.get(position).getUserTj().getStar_value()+"分");
+            holder.score.setTextSize(16);
+            holder.scoreRatingBar.setRating((float)specialistList.get(position).getUserTj().getStar_value());
+            holder.departmen.setText(specialistList.get(position).getDepart_name()+"|"+specialistList.get(position).getTitle());
+            holder.departmen.setTextSize(16);
+            holder.hospital.setText(specialistList.get(position).getHospital_name());
+            holder.hospital.setTextSize(16);
             holder.patients.setTextSize(14);
-            holder.patientCount.setText("3");
-            holder.patientCount.setTextSize(14);
+            holder.patientCount.setText(specialistList.get(position).getUserTj().getTotal_consult()+"");
+            holder.patientCount.setTextSize(16);
             if(imgUrl != null && !imgUrl.equals("")) {
-                if(imgUrl != null && !imgUrl.equals("")) {
-                    ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
-                    mImageLoader.get(imgUrl, listener);
-                }
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                mImageLoader.get(imgUrl, listener);
             }
             return convertView;
         }
@@ -248,13 +373,13 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
         mViewArray.add(viewMiddle);
         mViewArray.add(viewRight);
         ArrayList<String> mTextArray = new ArrayList<String>();
-        mTextArray.add("医院");
-        mTextArray.add("科室");
-        mTextArray.add("职称");
+        mTextArray.add("选择医院");
+        mTextArray.add("选择专业");
+        mTextArray.add("选择职称");
         expandTabView.setValue(mTextArray, mViewArray);
-        expandTabView.setTitle("医院", 0);
-        expandTabView.setTitle("科室", 1);
-        expandTabView.setTitle("职称", 2);
+        expandTabView.setTitle("选择医院", 0);
+        expandTabView.setTitle("选择专业", 1);
+        expandTabView.setTitle("选择职称", 2);
     }
 
     private void initListener() {
@@ -285,9 +410,15 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
         expandTabView.onPressBack();
         int position = getPositon(view);
         if (position >= 0 && !expandTabView.getTitle(position).equals(showText)) {
-            expandTabView.setTitle(showText, position);
+            if(showText.length()>4){
+                expandTabView.setTitle(showText.substring(0, 4)+"...", position);
+            }else{
+                expandTabView.setTitle(showText, position);
+            }
         }
-        Toast.makeText(mContext, showText, Toast.LENGTH_SHORT).show();
+        if(position == 2){
+            Toast.makeText(mContext, showText, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private int getPositon(View tView) {
@@ -301,26 +432,57 @@ public class SpecialistFragment extends Fragment implements OnLoadListener{
 
     @Override
     public void onLoad(final PullableListView pullableListView) {
-        new Thread(new Runnable() {
+        Map<String, String> parmas = new HashMap<String, String>();
+        page++;
+        parmas.put("page", String.valueOf(page));
+        parmas.put("rows", "10");
+        OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
-            public void run() {
+            public void onResponse(String arg0) {
                 try {
-                    Thread.sleep(4000);
-                    specialistList.add("");
-                    specialistList.add("");
-                    specialistList.add("");
-                    specialistList.add("");
-                    specialistList.add("");
-                    specialistList.add("");
-                    Message msg = handler.obtainMessage();
-                    msg.what = 1;
-                    msg.obj = pullableListView;
-                    handler.sendMessage(msg);
-                } catch (InterruptedException e) {
+                    JSONObject responses = new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1){
+                        JSONArray infos = responses.getJSONArray("experts");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info = infos.getJSONObject(i);
+                            SpecialistTo specialistTo = new SpecialistTo();
+                            specialistTo.setApprove_status(info.getString("approve_status"));
+                            specialistTo.setDepart_name(info.getString("depart_name"));
+                            specialistTo.setGoodat_fields(info.getString("goodat_fields"));
+                            specialistTo.setHospital_name(info.getString("hospital_name"));
+                            specialistTo.setId(info.getString("id"));
+                            specialistTo.setTitle(info.getString("title"));
+                            JSONObject userToJsonObject = info.getJSONObject("user");
+                            UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
+                            JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
+                            specialistTo.setUser(userTo);
+                            UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                            specialistTo.setUserTj(userStatistics);
+                            specialistList.add(specialistTo);
+                        }
+                        if(infos.length()==10){
+                            hasMore = true;
+                        }else{
+                            hasMore = false;
+                        }
+                        Message msg = handler.obtainMessage();
+                        msg.what = 1;
+                        msg.obj = pullableListView;
+                        handler.sendMessage(msg);
+                    }else{
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                Toast.makeText(mContext, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

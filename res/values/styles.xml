@@ -19,6 +19,17 @@
     
     <style name="roomRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/room_rating_bar</item>
+    	 <item name="android:isIndicator">true</item>
+    </style>
+    
+    <style name="roomRatingBar2" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/room_rating_bar2</item>
+    	 <item name="android:isIndicator">true</item>
+    </style>
+    
+    <style name="roomRatingBar3" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/room_rating_bar3</item>
+    	 <item name="android:isIndicator">true</item>
     </style>
     
     <style name="PopupWindowAnimation">  

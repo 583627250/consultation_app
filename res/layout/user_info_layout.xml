@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_F4F4F4"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/user_info_name_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColor="#7B7C7C"
+                        android:text="真实姓名" />
+                    
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_E8D8D8">
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/user_info_name_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入真实姓名"
+                        android:textColorHint="#D3D3D3"
+                        android:padding="5dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+                
+                <LinearLayout 
+		            android:layout_width="match_parent"
+		            android:layout_height="0.1dp"
+		            android:background="@color/consultation_color_F4F4F4">
+		        </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/user_info_sex_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColor="#7B7C7C"
+                        android:text="性别" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_E8D8D8">
+                    </LinearLayout>
+                    
+                    <RadioGroup 
+                        android:id="@+id/user_info_sex_radioGroup" 
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent" 
+                        android:layout_height="match_parent"> 
+						<RadioButton 
+						    android:id="@+id/user_info_sex_radioMale" 
+						    android:layout_width="wrap_content" 
+						    android:gravity="center_vertical"
+						    android:layout_gravity="center_vertical"
+						    android:layout_height="32dp" 
+						    android:paddingRight="10dp"
+						    android:text="男" 
+						    android:textColor="#000000"
+						    android:checked="true">
+						</RadioButton> 
+						<RadioButton 
+						    android:id="@+id/user_info_sex_radioFemale" 
+						    android:layout_width="wrap_content" 
+						    android:layout_height="32dp" 
+						    android:layout_gravity="center_vertical"
+						    android:gravity="center_vertical"
+						    android:textColor="#000000"
+						    android:text="女">
+						</RadioButton> 
+					</RadioGroup> 
+
+                </LinearLayout>
+                
+                <LinearLayout 
+		            android:layout_width="match_parent"
+		            android:layout_height="0.1dp"
+		            android:background="@color/consultation_color_F4F4F4">
+		        </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/user_info_birthday_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColor="#7B7C7C"
+                        android:text="出生日期" />
+                    
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_E8D8D8">
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/user_info_birthday_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:gravity="center_vertical"
+                        android:hint="请选择出生日期"
+                        android:focusable="false"  
+            			android:focusableInTouchMode="false"
+                        android:textColorHint="#D3D3D3"
+                        android:padding="5dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+                
+                <LinearLayout 
+		            android:layout_width="match_parent"
+		            android:layout_height="0.1dp"
+		            android:background="@color/consultation_color_F4F4F4">
+		        </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/user_info_addre_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColor="#7B7C7C"
+                        android:text="所在城市" />
+                    
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_E8D8D8">
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/user_info_addre_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:gravity="center_vertical"
+                        android:hint="请选择所在城市"
+                        android:focusable="false"  
+            			android:focusableInTouchMode="false"
+                        android:textColorHint="#D3D3D3"
+                        android:padding="5dp"
+                        android:singleLine="true" />
+                </LinearLayout>
+
+                <LinearLayout
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_marginTop="20dp"
+		            android:paddingLeft="20dp"
+		            android:paddingRight="20dp"
+		            android:orientation="vertical"
+		            android:layout_gravity="center_vertical" >
+
+                    <Button
+			            android:id="@+id/user_info_btn"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:padding="10dp"
+			            android:background="@drawable/login_login_btn_shape"
+			            android:textColor="@color/consultation_color_white"
+			            android:text="提交并完成注册" />
+                </LinearLayout>
+            </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

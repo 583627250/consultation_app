@@ -336,7 +336,6 @@ public class PhoneUtil {
 		String [] result = new String[apps.size()];
 		for(int j = 0;j<apps.size();j++){
 			String appItem = apps.get(j);
-			System.out.println(appItem);
 			result[j] = appItem;
 		}
 		

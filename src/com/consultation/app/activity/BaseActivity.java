@@ -32,7 +32,7 @@ public class BaseActivity extends Activity {
 
     protected String mCurrentDistrictName="";
 
-    protected String mCurrentZipCode="";
+//    protected String mCurrentZipCode="";
 
     protected void initProvinceDatas() {
         List<ProvinceModel> provinceList=null;
@@ -52,7 +52,7 @@ public class BaseActivity extends Activity {
                     mCurrentCityName=cityList.get(0).getName();
                     List<DistrictModel> districtList=cityList.get(0).getDistrictList();
                     mCurrentDistrictName=districtList.get(0).getName();
-                    mCurrentZipCode=districtList.get(0).getZipcode();
+//                    mCurrentZipCode=districtList.get(0).getZipcode();
                 }
             }
             mProvinceDatas=new String[provinceList.size()];

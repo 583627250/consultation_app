@@ -3,39 +3,40 @@ package com.consultation.app.model;
 import java.util.List;
 
 public class CityModel {
-	private String name;
-	private List<DistrictModel> districtList;
-	
-	public CityModel() {
-		super();
-	}
 
-	public CityModel(String name, List<DistrictModel> districtList) {
-		super();
-		this.name = name;
-		this.districtList = districtList;
-	}
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    private List<DistrictModel> districtList;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public CityModel() {
+        super();
+    }
 
-	public List<DistrictModel> getDistrictList() {
-		return districtList;
-	}
+    public CityModel(String name, List<DistrictModel> districtList) {
+        super();
+        this.name=name;
+        this.districtList=districtList;
+    }
 
-	public void setDistrictList(List<DistrictModel> districtList) {
-		this.districtList = districtList;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		return "CityModel [name=" + name + ", districtList=" + districtList
-				+ "]";
-	}
-	
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public List<DistrictModel> getDistrictList() {
+        return districtList;
+    }
+
+    public void setDistrictList(List<DistrictModel> districtList) {
+        this.districtList=districtList;
+    }
+
+    @Override
+    public String toString() {
+        return "CityModel [name=" + name + ", districtList=" + districtList + "]";
+    }
+
 }

@@ -75,7 +75,7 @@ public class PullToRefreshLayout extends RelativeLayout {
     // 正在刷新的图标
     private View refreshingView;
     // 刷新结果图标
-    private View refreshStateImageView;
+//    private View refreshStateImageView;
     // 刷新结果：成功或失败
     private TextView refreshStateTextView;
 
@@ -167,18 +167,18 @@ public class PullToRefreshLayout extends RelativeLayout {
         switch (refreshResult) {
         case SUCCEED:
             // 刷新成功
-            refreshStateImageView.setVisibility(View.VISIBLE);
+//            refreshStateImageView.setVisibility(View.VISIBLE);
             refreshStateTextView.setText(R.string.refresh_succeed);
-            refreshStateImageView
-                    .setBackgroundResource(R.drawable.refresh_succeed);
+//            refreshStateImageView
+//                    .setBackgroundResource(R.drawable.refresh_succeed);
             break;
         case FAIL:
         default:
             // 刷新失败
-            refreshStateImageView.setVisibility(View.VISIBLE);
+//            refreshStateImageView.setVisibility(View.VISIBLE);
             refreshStateTextView.setText(R.string.refresh_fail);
-            refreshStateImageView
-                    .setBackgroundResource(R.drawable.refresh_failed);
+//            refreshStateImageView
+//                    .setBackgroundResource(R.drawable.refresh_failed);
             break;
         }
         // 刷新结果停留1秒
@@ -198,7 +198,7 @@ public class PullToRefreshLayout extends RelativeLayout {
         switch (state) {
         case INIT:
             // 下拉布局初始状态
-            refreshStateImageView.setVisibility(View.GONE);
+//            refreshStateImageView.setVisibility(View.GONE);
             refreshStateTextView.setText(R.string.pull_to_refresh);
             pullView.startAnimation((RotateAnimation) AnimationUtils
                     .loadAnimation(getContext(), R.anim.reverse_anim_pull));
@@ -308,7 +308,7 @@ public class PullToRefreshLayout extends RelativeLayout {
         refreshStateTextView = (TextView) refreshView
                 .findViewById(R.id.state_tv);
         refreshingView = refreshView.findViewById(R.id.refreshing_icon);
-        refreshStateImageView = refreshView.findViewById(R.id.state_iv);
+//        refreshStateImageView = refreshView.findViewById(R.id.state_iv);
     }
 
     @Override

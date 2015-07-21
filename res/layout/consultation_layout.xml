@@ -13,7 +13,7 @@
 	        android:id="@+id/consultation_header"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        layout="@layout/header" />
+	        layout="@layout/consultation_header" />
         
         	<LinearLayout
                 android:layout_width="match_parent"
@@ -25,10 +25,10 @@
 		            android:layout_height="fill_parent"
 		            android:layout_weight="1"
 		            android:gravity="center"
-		            android:paddingTop="10dp"
-                	android:paddingBottom="10dp"
+		            android:paddingTop="8dp"
+                	android:paddingBottom="8dp"
 		            android:text="全部"
-		            android:textColor="@color/consultation_color_black" />
+		            android:textColor="#A2A2A2" />
 		
 		        <TextView
 		            android:id="@+id/consulation_list_title_2"
@@ -36,10 +36,10 @@
 		            android:layout_height="fill_parent"
 		            android:layout_weight="1"
 		            android:gravity="center"
-		            android:paddingTop="10dp"
-                	android:paddingBottom="10dp"
-		            android:text="我的待办"
-		            android:textColor="@color/consultation_color_black" />
+		            android:paddingTop="8dp"
+                	android:paddingBottom="8dp"
+		            android:text="专家咨询"
+		            android:textColor="#A2A2A2" />
 		        
 		        <TextView
 		            android:id="@+id/consulation_list_title_3"
@@ -47,10 +47,10 @@
 		            android:layout_height="fill_parent"
 		            android:layout_weight="1"
 		            android:gravity="center"
-		            android:paddingTop="10dp"
-                	android:paddingBottom="10dp"
-		            android:text="处理中"
-		            android:textColor="@color/consultation_color_black" />
+		            android:paddingTop="8dp"
+                	android:paddingBottom="8dp"
+		            android:text="公开讨论"
+		            android:textColor="#A2A2A2" />
 		        
 		        <TextView
 		            android:id="@+id/consulation_list_title_4"
@@ -58,10 +58,10 @@
 		            android:layout_height="fill_parent"
 		            android:layout_weight="1"
 		            android:gravity="center"
-		            android:paddingTop="10dp"
-                	android:paddingBottom="10dp"
+		            android:paddingTop="8dp"
+                	android:paddingBottom="8dp"
 		            android:text="历史"
-		            android:textColor="@color/consultation_color_black" />
+		            android:textColor="#A2A2A2" />
 		        
 		        
 		        <TextView
@@ -70,10 +70,10 @@
 		            android:layout_height="fill_parent"
 		            android:layout_weight="1"
 		            android:gravity="center"
-		            android:paddingTop="10dp"
-                	android:paddingBottom="10dp"
+		            android:paddingTop="8dp"
+                	android:paddingBottom="8dp"
 		            android:text="归档"
-		            android:textColor="@color/consultation_color_black" />
+		            android:textColor="#A2A2A2" />
     
         	</LinearLayout>
         	
@@ -83,6 +83,11 @@
 		        android:layout_height="wrap_content"
 		        android:scaleType="matrix"
 		        android:src="@drawable/pageview_title_image" />
+	        	<LinearLayout 
+			        android:layout_width="match_parent"
+			        android:layout_height="0.3dp"
+		        	android:background="#A2A2A2">
+			    </LinearLayout>
 
 			    <android.support.v4.view.ViewPager
 			        android:id="@+id/consulation_list_viewPager"

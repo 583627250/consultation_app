@@ -1,7 +1,13 @@
 package com.consultation.app.fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,10 +30,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.activity.KnowledgeRecommendListActivity;
+import com.consultation.app.activity.RecommendActivity;
 import com.consultation.app.model.RecommendTo;
+import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.CommonUtil;
 import com.consultation.app.view.MyImgScroll;
 
 public class KnowledgeFragment extends Fragment {
@@ -36,19 +47,17 @@ public class KnowledgeFragment extends Fragment {
 
     private RequestQueue mQueue;
     
-//    private ImageLoader mImageLoader;
-
     private TextView header_text;
 
     private TextView department_text,more_text;
     
     private TextView fckText,ekText,ctText,gkText,pfkText,nkText,lrkfText,moreText;
 
-    private MyImgScroll myPager; // 图片容器
+    private MyImgScroll myPager;
 
     private LinearLayout ovalLayout,fckLayout,ekLayout,ctLayout,gkLayout,pfkLayout,nkLayout,lrkfLayout,moreLayout; // 圆点容器
 
-    private List<View> listViews; // 图片组
+    private List<View> listViews;
 
     private ListView listView;
 
@@ -59,6 +68,9 @@ public class KnowledgeFragment extends Fragment {
     private static Context context;
     
     private ViewHolder holder;
+    
+    private int[] imageResId = new int[] { R.drawable.a, R.drawable.b,
+        R.drawable.c, R.drawable.d, R.drawable.e };
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,41 +86,43 @@ public class KnowledgeFragment extends Fragment {
     } 
     
     private void initData() {
-        RecommendTo TO1=new RecommendTo();
-        TO1.setAuthor("王忠");
-        TO1.setDepartment("内科");
-        TO1.setTitle("关于药物的服用时间和注意事项");
-        
-        RecommendTo TO2=new RecommendTo();
-        TO2.setAuthor("老冯");
-        TO2.setDepartment("内科");
-        TO2.setTitle("发烧就要用退烧药么？");
-        
-        RecommendTo TO3=new RecommendTo();
-        TO3.setAuthor("季秀君");
-        TO3.setDepartment("皮肤科");
-        TO3.setTitle("痣，祛还是留");
-        
-        RecommendTo TO4=new RecommendTo();
-        TO4.setAuthor("马晓红");
-        TO4.setDepartment("儿科");
-        TO4.setTitle("婴幼儿血管瘤需要综合治疗");
-        
-        RecommendTo TO5=new RecommendTo();
-        TO5.setAuthor("刘永生");
-        TO5.setDepartment("皮肤科");
-        TO5.setTitle("手总脱皮是缺少维生素？");
-        
-        recommend_content_list.add(TO1);
-        recommend_content_list.add(TO2);
-        recommend_content_list.add(TO3);
-        recommend_content_list.add(TO4);
-        recommend_content_list.add(TO5);
+        mQueue = Volley.newRequestQueue(context);
+        Map<String, String> parmas = new HashMap<String, String>();
+        parmas.put("page", "1");
+        parmas.put("rows", "5");
+        CommonUtil.showLoadingDialog(context);
+        OpenApiService.getInstance(context).getKnowledgeList(mQueue, parmas, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String arg0) {
+                CommonUtil.closeLodingDialog();
+                try {
+                    JSONObject responses = new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1){
+                        JSONArray infos = responses.getJSONArray("knowledges");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info = infos.getJSONObject(i);
+                            recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
+                        }
+                        setListViewHeightBasedOnChildren(listView);
+                    }else{
+                        Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                CommonUtil.closeLodingDialog();
+                Toast.makeText(context, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initLayout() {
-        mQueue = Volley.newRequestQueue(context);
-//        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initData();
         header_text=(TextView)knowledgeLayout.findViewById(R.id.header_text);
         header_text.setText("科普知识");
@@ -142,28 +156,25 @@ public class KnowledgeFragment extends Fragment {
         moreText=(TextView)knowledgeLayout.findViewById(R.id.hot_department_8_text);
         moreText.setTextSize(14);
         
-        
-        
         more_text=(TextView)knowledgeLayout.findViewById(R.id.knowledge_listView_more);
         more_text.setTextSize(18);
         more_text.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
-//                Toast.makeText(context, "加载跟多", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(context, KnowledgeRecommendListActivity.class));
             }
         });
         listView=(ListView)knowledgeLayout.findViewById(R.id.knowledge_listView);
         listView.setAdapter(new MyAdapter());
-        setListViewHeightBasedOnChildren(listView);
-
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 // 推荐详情
-                Toast.makeText(context, "第"+position+"篇", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, RecommendActivity.class);
+                intent.putExtra("id", recommend_content_list.get(position).getId());
+                startActivity(intent);
             }
         });
         fckLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_fck);
@@ -237,8 +248,6 @@ public class KnowledgeFragment extends Fragment {
      */
     private void InitViewPager() {
         listViews = new ArrayList<View>();
-        int[] imageResId = new int[] { R.drawable.a, R.drawable.b,
-                R.drawable.c, R.drawable.d, R.drawable.e };
         for (int i = 0; i < imageResId.length; i++) {
             ImageView imageView = new ImageView(context);
             imageView.setOnClickListener(new OnClickListener() {
@@ -271,8 +280,6 @@ public class KnowledgeFragment extends Fragment {
     }
     
     private static class ViewHolder {
-
-//        ImageView photo;
 
         TextView title;
 
@@ -310,17 +317,8 @@ public class KnowledgeFragment extends Fragment {
             holder.title.setTextSize(18);
             holder.title.setText(recommend_content_list.get(position).getTitle());
             holder.author.setTextSize(15);
-            holder.author.setText("@" + recommend_content_list.get(position).getDepartment() + "-"
-                + recommend_content_list.get(position).getAuthor());
-//            final String imgUrl=recommend_content_list.get(position).getPhoto();
-//            // 给 ImageView 设置一个 tag
-//            holder.photo.setTag(imgUrl);
-//            // 预设一个图片
-//            holder.photo.setImageResource(CommonUtil.getResourceId(context, "drawable", "pfk"));
-//            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
-//                mImageLoader.get(imgUrl, listener);
-//            }
+            holder.author.setText("@" + recommend_content_list.get(position).getDepart_name() + "-"
+                + recommend_content_list.get(position).getUser_name());
             return convertView;
         }
     }

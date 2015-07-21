@@ -52,6 +52,11 @@ public class ChooseTextAdapter extends ArrayAdapter<String> {
 		normalDrawbleId = nId;
 		init();
 	}
+	
+	public void setArrayData(List<String> listData){
+	    mListData.clear();
+	    mListData = listData;
+	}
 
 	public void setSelectedPosition(int pos) {
 		if (mListData != null && pos < mListData.size()) {

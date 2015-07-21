@@ -3,38 +3,40 @@ package com.consultation.app.model;
 import java.util.List;
 
 public class ProvinceModel {
-	private String name;
-	private List<CityModel> cityList;
-	
-	public ProvinceModel() {
-		super();
-	}
 
-	public ProvinceModel(String name, List<CityModel> cityList) {
-		super();
-		this.name = name;
-		this.cityList = cityList;
-	}
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    private List<CityModel> cityList;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public ProvinceModel() {
+        super();
+    }
 
-	public List<CityModel> getCityList() {
-		return cityList;
-	}
+    public ProvinceModel(String name, List<CityModel> cityList) {
+        super();
+        this.name=name;
+        this.cityList=cityList;
+    }
 
-	public void setCityList(List<CityModel> cityList) {
-		this.cityList = cityList;
-	}
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public String toString() {
-		return "ProvinceModel [name=" + name + ", cityList=" + cityList + "]";
-	}
-	
+    public void setName(String name) {
+        this.name=name;
+    }
+
+    public List<CityModel> getCityList() {
+        return cityList;
+    }
+
+    public void setCityList(List<CityModel> cityList) {
+        this.cityList=cityList;
+    }
+
+    @Override
+    public String toString() {
+        return "ProvinceModel [name=" + name + ", cityList=" + cityList + "]";
+    }
+
 }

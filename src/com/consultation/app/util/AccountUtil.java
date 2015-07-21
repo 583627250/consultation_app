@@ -31,7 +31,6 @@ public class AccountUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(isAvailableUsername("9-324324"));
     }
 
     /**
@@ -57,7 +56,7 @@ public class AccountUtil {
      * @return
      */
     public static boolean isMobileNum(String number) {
-        String regEx="^(13[0-9]|15[0-2]|15[6-9]17[0-9]|18[6-9])\\d{8}$";
+        String regEx="^[1]([3][0-9]{1}|59|58|88|89)[0-9]{8}$";
         Pattern pattern=Pattern.compile(regEx);
         Matcher matcher=pattern.matcher(number);
         if(matcher.matches()) {

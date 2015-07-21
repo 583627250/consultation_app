@@ -91,7 +91,7 @@ public class ProvinceActivity extends BaseActivity {
                     }else{
                         if(!isSelectAreas){
                             mCurrentDistrictName = temp[position];
-                            h.onSuccess(mCurrentProviceName+mCurrentCityName+mCurrentDistrictName, 0);
+                            h.onSuccess(mCurrentProviceName+","+mCurrentCityName+","+mCurrentDistrictName, 0);
                             finish();
                         }
                     }

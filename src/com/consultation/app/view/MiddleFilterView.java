@@ -50,34 +50,9 @@ public class MiddleFilterView extends LinearLayout implements ViewBaseAction, Vi
 		init(context);
 	}
 
-	public void updateShowText(String showArea, String showBlock) {
-		if (showArea == null || showBlock == null) {
-			return;
-		}
-		for (int i = 0; i < groups.size(); i++) {
-			if (groups.get(i).equals(showArea)) {
-				earaListViewAdapter.setSelectedPosition(i);
-				childrenItem.clear();
-				if (i < children.size()) {
-					childrenItem.addAll(children.get(i));
-				}
-				tEaraPosition = i;
-				break;
-			}
-		}
-		for (int j = 0; j < childrenItem.size(); j++) {
-			if (childrenItem.get(j).replace("不限", "").equals(showBlock.trim())) {
-				plateListViewAdapter.setSelectedPosition(j);
-				tBlockPosition = j;
-				break;
-			}
-		}
-		setDefaultSelect();
-	}
-
 	private void init(final Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.choose_view_region, this, true);
+		inflater.inflate(R.layout.choose_view_midd, this, true);
 		regionListView = (ListView) findViewById(R.id.listView);
 		plateListView = (ListView) findViewById(R.id.listView2);
 

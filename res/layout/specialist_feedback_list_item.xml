@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/knowledge_recommend_layout_selector"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    android:paddingTop="15dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:paddingLeft="5dp" >
+
+            <ImageView
+                android:id="@+id/specialist_info_feedback_item_user_photo"
+                android:layout_width="45dip"
+                android:layout_height="45dip"
+                android:scaleType="fitXY"
+                android:src="@drawable/photo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingRight="15dp"
+                android:paddingBottom="4dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+                    
+                    <LinearLayout 
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
+	                    <TextView
+	                        android:id="@+id/specialist_info_item_name_text"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="match_parent"
+	                        android:gravity="center_vertical"
+	                        android:layout_weight="1"
+	                        android:text="王大妈 :"
+	                        android:textColor="#7B7B7B" />
+	                    
+	                    <LinearLayout 
+	                        android:layout_width="match_parent"
+	                        android:layout_height="wrap_content"
+	                        android:layout_weight="1"
+	                        android:gravity="right"
+	                        android:layout_gravity="center_vertical">
+	                    
+		                    <RatingBar
+		                        android:id="@+id/specialist_info_user_feedback_ratingBar"
+		                        style="@style/roomRatingBar3"
+		                        android:layout_width="wrap_content"
+		                        android:layout_height="wrap_content"
+		                        android:layout_gravity="right"
+		                        android:gravity="right"
+		                        android:stepSize="0.1"
+		                        android:saveEnabled="false"
+		                        android:maxHeight="20dp"
+		                        android:minHeight="20dp" />
+	                    </LinearLayout>
+					</LinearLayout>
+                    
+                    <TextView
+                        android:id="@+id/specialist_info_item_message_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="杨医生真实太好了，治好了我多年的骨质疏松"
+                        android:textColor="#4A4A4A" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/specialist_info_item_feedbackDate_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="3dp"
+        android:gravity="center_vertical|right"
+        android:text="2015-07-07"
+        android:paddingRight="15dp"
+        android:textColor="#7B7B7B" />
+
+</LinearLayout>

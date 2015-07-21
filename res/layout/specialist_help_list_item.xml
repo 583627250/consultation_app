@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp"
+    android:background="@drawable/knowledge_recommend_layout_selector"
+    android:orientation="horizontal" >
+
+    <LinearLayout 
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:gravity="center"
+         android:paddingLeft="5dp"
+         android:layout_weight="4">
+         
+         <ImageView
+		    android:id="@+id/specialist_info_item_user_photo"
+		    android:layout_width="45dip"
+		    android:layout_height="45dip"
+		    android:src="@drawable/photo"
+		    android:scaleType="fitXY" /> 
+     </LinearLayout>
+     
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+		        
+	     <LinearLayout 
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent"
+	         android:orientation="horizontal"
+	         android:paddingBottom="4dp"
+	         android:layout_weight="1">
+	         
+	         <LinearLayout 
+	             android:layout_height="match_parent"
+	             android:layout_width="match_parent"
+	             android:layout_weight="1"
+	             android:layout_gravity="center_vertical"
+	             android:orientation="vertical">
+	             
+	             <TextView
+			          android:id="@+id/specialist_info_item_titles_text"
+			          android:gravity="center_vertical"
+			          android:layout_width="match_parent"
+			          android:layout_height="match_parent"
+			          android:layout_weight="1"
+			          android:textColor="#4A4A4A"
+			          android:singleLine="true"
+			          android:text="如何防止骨质疏松"/>
+	             
+	             <TextView
+			          android:id="@+id/specialist_info_item_nameAndDate_text"
+			          android:gravity="center_vertical"
+			          android:layout_width="match_parent"
+			          android:layout_height="match_parent"
+			          android:layout_weight="1"
+			          android:textColor="#7B7B7B"
+			          android:text="王大妈  2015-06-09"/>
+		         
+	         </LinearLayout>
+	         <LinearLayout 
+	             android:layout_height="wrap_content"
+	             android:layout_width="match_parent"
+	             android:layout_gravity="center_vertical"
+	             android:layout_weight="1.8" 
+	             android:gravity="right"
+	             android:layout_marginRight="15dp">
+	             
+	             <LinearLayout 
+		             android:layout_height="wrap_content"
+		             android:layout_width="70dp"
+		             android:layout_gravity="center_vertical"
+		             android:orientation="vertical">
+			         <!-- <TextView
+				          android:id="@+id/specialist_info_patient_text"
+				          android:gravity="center"
+				          android:paddingTop="3dp"
+				          android:layout_width="match_parent"
+				          android:layout_height="match_parent"
+				          android:textColor="@color/consultation_color_white"
+				          android:text="帮助患者"/> -->
+				          
+				          <ImageView
+						    android:id="@+id/specialist_info_item_state_imageView"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:src="@drawable/specialist_help_complete"
+						    android:scaleType="fitXY" /> 
+			         
+			         <!-- <TextView
+				          android:id="@+id/specialist_info_patient_count_text"
+				          android:gravity="center"
+				          android:layout_margin="2dp"
+				          android:layout_width="match_parent"
+				          android:layout_height="match_parent"
+				          android:background="@drawable/specilaist_count_shape"
+				          android:textColor="@color/consultation_color_FFAD2B"
+				          android:text="0"/> -->
+		     	</LinearLayout>
+		     </LinearLayout>
+         </LinearLayout>
+     </LinearLayout>
+
+</LinearLayout>

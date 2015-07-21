@@ -70,7 +70,6 @@ public abstract class MaskedImage extends ImageView {
         } catch (Exception localException) {  
             StringBuilder localStringBuilder = new StringBuilder()  
                     .append("Attempting to draw with recycled bitmap. View ID = ");  
-            System.out.println("localStringBuilder=="+localStringBuilder);  
         }  
     }  
 }  

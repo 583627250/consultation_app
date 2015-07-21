@@ -12,7 +12,7 @@
          <color name="consultation_color_EBEBEB">#EBEBEB</color>
          <color name="consultation_color_3F474A">#3F474A</color>
          <color name="consultation_color_4876FF">#4876FF</color>
-         <color name="consultation_color_D2691E">#D2691E</color>
+         <color name="consultation_color_FFAD2B">#FFAD2B</color>
          <color name="consultation_color_3A5FCD">#3A5FCD</color>
          <color name="consultation_color_C4C4C4">#C4C4C4</color>
          <color name="consultation_color_transparent">#00000000</color>
@@ -22,5 +22,6 @@
          <color name="consultation_color_F4F4F4">#F4F4F4</color>
          <color name="consultation_color_2CB67A">#2CB67A</color>
          <color name="consultation_color_2CB679">#2CB679</color>
+         <color name="consultation_color_3CB679">#3CB679</color>
          <color name="consultation_color_919191">#919191</color>
     </resources>
