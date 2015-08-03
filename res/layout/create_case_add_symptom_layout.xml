@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_white"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2.1"
+                android:orientation="vertical" >
+
+                <ListView
+                    android:id="@+id/syamptom_left_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@color/consultation_color_black"
+                    android:dividerHeight="0.1dp"
+                    android:scrollbars="none" >
+                </ListView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_black" >
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/consultation_color_black" >
+            </LinearLayout>
+            
+            <ScrollView 
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:layout_weight="1">
+	            <LinearLayout
+	                android:id="@+id/syamptom_right_layout"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center_horizontal"
+	                android:background="@color/consultation_color_white"
+	                android:orientation="vertical" >
+	            </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+        
+        <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/consultation_color_F4F4F4"
+	        android:orientation="vertical" >
+            
+            <Button
+	            android:id="@+id/syamptom_btn_save"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:padding="10dp"
+	            android:background="@drawable/create_case_submit_selector"
+	            android:textColor="@color/consultation_color_white"
+	            android:text="保存" />
+        
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

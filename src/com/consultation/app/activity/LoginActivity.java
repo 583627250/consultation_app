@@ -33,7 +33,6 @@ import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
-import com.consultation.app.util.AccountUtil;
 import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
@@ -206,6 +205,7 @@ public class LoginActivity extends Activity {
                             if(responses.getInt("rtnCode") == 1){
                                 editor.put("uid", responses.getString("uid"));
                                 editor.put("userType", responses.getString("userTp"));
+//                                editor.put("userType", account.getText().toString());
                                 ClientUtil.setToken(responses.getString("accessToken"));
                                 handler.onSuccess("登陆成功", ConsultionStatusCode.USER_LOGIN_SUCCESS);
                                 finish();
@@ -230,7 +230,7 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
                         CommonUtil.closeLodingDialog();
-                        Toast.makeText(LoginActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

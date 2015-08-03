@@ -31,6 +31,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.bluetooth.BluetoothAdapter;
@@ -51,6 +52,7 @@ import android.os.Build;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.WindowManager;
 
 @SuppressLint("DefaultLocale")
 public class PhoneUtil {
@@ -103,10 +105,8 @@ public class PhoneUtil {
                 return strber.toString();
             }
         } catch(MalformedURLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch(IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return "";
@@ -136,7 +136,6 @@ public class PhoneUtil {
         try {
             phoneMgr=(TelephonyManager)ctx.getSystemService(Context.TELEPHONY_SERVICE);
         } catch(Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return phoneMgr.getLine1Number();
@@ -374,7 +373,6 @@ public class PhoneUtil {
 		try {
 			region = getMobileLocation(getTelePhoneNumber(ctx), 2);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return region;
@@ -389,7 +387,6 @@ public class PhoneUtil {
 		try {
 			serviceProviders = getMobileLocation(getTelePhoneNumber(ctx),1);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return serviceProviders;
@@ -563,5 +560,15 @@ public class PhoneUtil {
          return (ctx.getResources().getConfiguration().screenLayout
                  & Configuration.SCREENLAYOUT_SIZE_MASK)
                  >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+     }
+     
+     public int getWidth(Context ctx){
+         WindowManager wm=((Activity)ctx).getWindowManager();
+         return wm.getDefaultDisplay().getWidth();
+     }
+     
+     public int getHeight(Context ctx){
+         WindowManager wm=((Activity)ctx).getWindowManager();
+         return wm.getDefaultDisplay().getHeight();
      }
 }

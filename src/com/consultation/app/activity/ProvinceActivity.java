@@ -53,7 +53,7 @@ public class ProvinceActivity extends BaseActivity {
     private void init() {
         initProvinceDatas();
         title_text = (TextView)findViewById(R.id.header_text);
-        title_text.setText("选择地区");
+        title_text.setText("选择省");
         title_text.setTextSize(20);
     
         back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
@@ -77,6 +77,7 @@ public class ProvinceActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!isSelectProvince){
                     isSelectProvince = true;
+                    title_text.setText("选择市");
                     mCurrentProviceName = temp[position];
                     String[] cities=mCitisDatasMap.get(mCurrentProviceName);
                     temp = cities;
@@ -84,6 +85,7 @@ public class ProvinceActivity extends BaseActivity {
                 }else{
                     if(!isSelectCitys){
                         isSelectCitys = true;
+                        title_text.setText("选择区/县");
                         mCurrentCityName = temp[position];
                         String[] areas=mDistrictDatasMap.get(mCurrentCityName);
                         temp = areas;

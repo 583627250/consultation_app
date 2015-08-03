@@ -67,9 +67,8 @@ public abstract class MaskedImage extends ImageView {
             paramCanvas.drawBitmap(localBitmap2, 0.0F, 0.0F, localPaint3);  
             paramCanvas.restoreToCount(i);  
             return;  
-        } catch (Exception localException) {  
-            StringBuilder localStringBuilder = new StringBuilder()  
-                    .append("Attempting to draw with recycled bitmap. View ID = ");  
+        } catch (Exception localException) {
+            localException.printStackTrace();
         }  
     }  
 }  

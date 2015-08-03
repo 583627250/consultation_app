@@ -31,7 +31,7 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <ImageView
                         android:id="@+id/mine_info_imageView"
@@ -41,6 +41,7 @@
                         android:src="@drawable/photo" />
 
                     <LinearLayout
+                        android:id="@+id/mine_my_info_text_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -67,6 +68,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/mine_my_info_icon_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -95,11 +97,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -147,11 +149,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -199,11 +201,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -251,11 +253,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -303,11 +305,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -355,11 +357,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -407,11 +409,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -459,11 +461,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -511,11 +513,11 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/knowledge_recommend_layout_selector"
                     android:orientation="horizontal"
-                    android:padding="10dp" >
+                    android:padding="15dp" >
 
                     <LinearLayout
                         android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="match_parent" >
 
                         <ImageView
                             android:layout_width="wrap_content"

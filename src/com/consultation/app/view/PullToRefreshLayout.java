@@ -3,8 +3,6 @@ package com.consultation.app.view;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.consultation.app.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
@@ -18,6 +16,8 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.consultation.app.R;
 
 
 /**

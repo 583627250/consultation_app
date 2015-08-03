@@ -175,7 +175,7 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
 
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
-                        Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(KnowledgeRecommendListActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -244,7 +244,7 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
             @Override
             public void onErrorResponse(VolleyError arg0) {
                 CommonUtil.closeLodingDialog();
-                Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(KnowledgeRecommendListActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -335,7 +335,7 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
 
             @Override
             public void onErrorResponse(VolleyError arg0) {
-                Toast.makeText(KnowledgeRecommendListActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(KnowledgeRecommendListActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
     }

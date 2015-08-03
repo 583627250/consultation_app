@@ -31,7 +31,6 @@ import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.AccountUtil;
-import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
@@ -134,7 +133,7 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this, "请输入手机号码", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!AccountUtil.isMobileNum(phone_edit.getText().toString())){
+                if(!AccountUtil.isPhoneNum(phone_edit.getText().toString())){
                     Toast.makeText(RegisterActivity.this, "手机号输入有误，请重输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -186,7 +185,7 @@ public class RegisterActivity extends Activity {
                                     @Override
                                     public void onErrorResponse(VolleyError arg0) {
                                         CommonUtil.closeLodingDialog();
-                                        Toast.makeText(RegisterActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }else{
@@ -201,7 +200,7 @@ public class RegisterActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
                         CommonUtil.closeLodingDialog();
-                        Toast.makeText(RegisterActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

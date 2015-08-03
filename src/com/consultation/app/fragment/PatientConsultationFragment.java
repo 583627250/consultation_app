@@ -62,16 +62,16 @@ public class PatientConsultationFragment extends Fragment {
 
         t1 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_1);
         t1.setText("全部");
-        t1.setTextSize(18);
+        t1.setTextSize(17);
         t2 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_2);
         t2.setText("专家咨询");
-        t2.setTextSize(18);
+        t2.setTextSize(17);
         t3 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_3);
         t3.setText("公开讨论");
-        t3.setTextSize(18);
+        t3.setTextSize(17);
         t4 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_4);
         t4.setText("历史");
-        t4.setTextSize(18);
+        t4.setTextSize(17);
         TextView t5 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_5);
         t5.setVisibility(View.GONE);
         t1.setTextColor(Color.parseColor("#2CB67A"));

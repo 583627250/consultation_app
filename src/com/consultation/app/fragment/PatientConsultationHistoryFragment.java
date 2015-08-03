@@ -183,7 +183,7 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
                         CommonUtil.closeLodingDialog();
-                        Toast.makeText(patientConsultationHistoryFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT)
+                        Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
                             .show();
                     }
                 });
@@ -278,7 +278,7 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
 
                             @Override
                             public void onErrorResponse(VolleyError arg0) {
-                                Toast.makeText(patientConsultationHistoryFragment.getContext(), arg0.getMessage(),
+                                Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试",
                                     Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -445,7 +445,7 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
-                    Toast.makeText(patientConsultationHistoryFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
     }

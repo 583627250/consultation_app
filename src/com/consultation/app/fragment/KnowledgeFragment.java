@@ -117,7 +117,7 @@ public class KnowledgeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError arg0) {
                 CommonUtil.closeLodingDialog();
-                Toast.makeText(context, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
     }

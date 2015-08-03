@@ -6,22 +6,16 @@
     android:background="@drawable/knowledge_recommend_layout_selector"
     android:orientation="horizontal"
     android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
     android:paddingTop="10dp" >
-    
-    <LinearLayout 
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:gravity="center"
-         android:paddingLeft="10dp"
-         android:layout_weight="2">
-         
-         <ImageView
-		    android:id="@+id/consulation_primary_list_all_item_image"
-		    android:layout_width="70dip"
-		    android:layout_height="70dip"
-		    android:src="@drawable/ic_launcher"
-		    android:scaleType="fitXY" /> 
-     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/consulation_primary_list_all_item_image"
+        android:layout_width="70dip"
+        android:layout_height="70dip"
+        android:layout_gravity="center_vertical"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,9 +28,9 @@
             android:id="@+id/consulation_primary_list_all_item_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
             android:layout_weight="1"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:text="风湿骨痛"
             android:textColor="#414141" />
 
@@ -45,10 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:text="张三丰(患者)|张无忌(专家)"
+            android:paddingTop="3dp"
             android:singleLine="true"
+            android:text="张三丰(患者)|张无忌(专家)"
             android:textColor="#515151" />
 
         <TextView
@@ -56,8 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingTop="3dp"
             android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:text="2015-07-14"
             android:textColor="#515151" />
     </LinearLayout>
@@ -65,9 +59,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:layout_weight="2"
         android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
         android:paddingRight="10dp" >
 
         <LinearLayout
@@ -104,7 +98,6 @@
                 android:text="新建"
                 android:textColor="#FFAF2C" />
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>

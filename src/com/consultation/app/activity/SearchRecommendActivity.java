@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +48,8 @@ public class SearchRecommendActivity extends Activity {
     private TextView deleteText;
     
     private boolean isHave = false;
+    
+    private ImageView deleteBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,16 @@ public class SearchRecommendActivity extends Activity {
         back_text.setTextSize(18);
         searchEditText=(EditText)findViewById(R.id.header_edit);
         searchEditText.setTextSize(16);
+        searchEditText.setHint("请输入文章标题");
+        searchEditText.setHintTextColor(Color.parseColor("#D3D3D3"));
+        deleteBtn = (ImageView)findViewById(R.id.header_image_delete);
+        deleteBtn.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                searchEditText.setText("");
+            }
+        });
         deleteText = (TextView)findViewById(R.id.recommend_search_history_listView_delete);
         deleteText.setTextSize(16);
         if(!isHasHistory){

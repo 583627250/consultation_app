@@ -68,10 +68,12 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
             android:visibility="invisible"
-            android:text="新建"
+            android:text="保存"
             android:textColor="@color/consultation_color_white" />
     </LinearLayout>
 

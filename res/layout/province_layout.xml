@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +16,62 @@
             android:layout_height="wrap_content"
             layout="@layout/header" />
 
+        <LinearLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
+            android:visibility="gone"
+            android:orientation="horizontal" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/recommend_search_edit_shape"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/search_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp" />
+
+                <EditText
+                    android:id="@+id/search_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/consultation_color_white"
+                    android:textColor="@color/consultation_color_black" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/search_text_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="#2CB67A"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="搜索"
+                android:textColor="@color/consultation_color_white" />
+        </LinearLayout>
+        
+        <LinearLayout 
+             android:id="@+id/search_line_layout"
+             android:visibility="gone"
+             android:layout_width="match_parent"
+             android:layout_height="0.1dp"
+             android:orientation="horizontal"
+             android:background="#F4F4F4">
+         </LinearLayout>
+
         <ListView
             android:id="@+id/province_listView"
             android:layout_width="match_parent"
@@ -22,7 +79,6 @@
             android:divider="#F4F4F4"
             android:dividerHeight="0.1dp" >
         </ListView>
-        
     </LinearLayout>
 
 </LinearLayout>

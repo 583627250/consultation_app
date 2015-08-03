@@ -114,9 +114,8 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
             case 0:
                 consultationImage.setImageResource(R.drawable.consultation_selected);
                 consultationText.setTextColor(Color.parseColor("#2CB67A"));
-
-//                if(null != editor.get("userTp", "") && !"".equals(editor.get("userTp", ""))) {
-//                    int type=Integer.parseInt(editor.get("userTp", ""));
+//                if(null != editor.get("userType", "") && !"".equals(editor.get("userType", ""))) {
+//                    int type=Integer.parseInt(editor.get("userType", ""));
 //                    switch(type) {
 //                        case 0:
 //                            if(patientConsultationFragment == null) {
@@ -289,6 +288,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
         switch(v.getId()) {
             case R.id.consultation_layout:
                 // 点击消息tab，选中第一个tab
+//                setTabSelection(0);
                 if(ClientUtil.isLogin()) {
                     setTabSelection(0);
                 } else {

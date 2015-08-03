@@ -183,7 +183,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
                         CommonUtil.closeLodingDialog();
-                        Toast.makeText(patientConsultationDoingFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(patientConsultationDoingFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 });
         }
@@ -278,7 +278,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                             @Override
                             public void onErrorResponse(VolleyError arg0) {
                                 Toast
-                                    .makeText(patientConsultationDoingFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT)
+                                    .makeText(patientConsultationDoingFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
                                     .show();
                             }
                         });
@@ -445,7 +445,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
-                    Toast.makeText(patientConsultationDoingFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(patientConsultationDoingFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
     }

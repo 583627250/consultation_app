@@ -1,10 +1,14 @@
 package com.consultation.app.util;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -21,6 +25,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -38,15 +43,16 @@ import android.widget.Toast;
 public class CommonUtil {
 
     private static ProgressDialog mProgressDialog;
-    
+
     private static ProgressDialog AlipayProgressDialog;
-    
-    public static AlertDialog.Builder showAlertDialog(Context context, String strTitle, String strMessage, DialogInterface.OnClickListener posListener, DialogInterface.OnClickListener negListener){
+
+    public static AlertDialog.Builder showAlertDialog(Context context, String strTitle, String strMessage,
+        DialogInterface.OnClickListener posListener, DialogInterface.OnClickListener negListener) {
         String submitTxt=context.getString(CommonUtil.getResourceId(context, "string", "submit_button_txt"));
         String cacelTxt=context.getString(CommonUtil.getResourceId(context, "string", "cancel_button_txt"));
         return showAlertDialog(context, strTitle, strMessage, submitTxt, posListener, cacelTxt, negListener, null);
     }
-    
+
     public static AlertDialog.Builder showAlertDialog(Context context, String strTitle, String strMessage, String strPositive,
         DialogInterface.OnClickListener posListener, String strNegative, DialogInterface.OnClickListener negListener,
         View customView) {
@@ -56,7 +62,7 @@ public class CommonUtil {
         try {
             AlertDialog.Builder anAlert=new AlertDialog.Builder(context);
             anAlert.setTitle(strTitle);
-            if(strMessage != null && strMessage.length()>0){
+            if(strMessage != null && strMessage.length() > 0) {
                 anAlert.setMessage(strMessage);
             }
             anAlert.setPositiveButton(strPositive, posListener);
@@ -94,9 +100,7 @@ public class CommonUtil {
         } catch(Exception e) {
         }
     }
-    
-    
-    
+
     /**
      * 弹出等支付宝待对话框
      * @param context
@@ -117,7 +121,7 @@ public class CommonUtil {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * 关闭支付宝等待框
      */
@@ -131,7 +135,7 @@ public class CommonUtil {
     public static void showLoadingDialog(Context context) {
         showLoadingDialog(context, "数据加载中...");
     }
-    
+
     /**
      * 关闭等待框
      */
@@ -141,7 +145,6 @@ public class CommonUtil {
             mProgressDialog=null;
         }
     }
-    
 
     /**
      * 弹出提示框
@@ -160,7 +163,6 @@ public class CommonUtil {
     public static void killApplication() {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-
 
     /**
      * 查看app是否已经安装
@@ -286,7 +288,7 @@ public class CommonUtil {
             e.printStackTrace();
             return false;
         } finally {
-            if(fos != null){
+            if(fos != null) {
                 fos.close();
                 bis.close();
                 is.close();
@@ -325,7 +327,30 @@ public class CommonUtil {
         Bitmap bitmap=BitmapFactory.decodeFile(filepath);
         return bitmap;
     }
-    
+
+    public static Bitmap readBitMap(int widths, String filepath) {
+        BitmapFactory.Options opts=new BitmapFactory.Options();
+        // 设置为ture只获取图片大小
+        opts.inJustDecodeBounds=true;
+        opts.inPreferredConfig=Bitmap.Config.ARGB_8888;
+        // 返回为空
+        BitmapFactory.decodeFile(filepath, opts);
+        int width=opts.outWidth;
+        int height=opts.outHeight;
+        float scaleWidth=0.f, scaleHeight=0.f;
+        int heights = (height * widths) / width;
+        if(width > widths || height > heights) {
+            // 缩放
+            scaleWidth=((float)width) / widths;
+            scaleHeight=((float)height) / heights;
+        }
+        opts.inJustDecodeBounds=false;
+        float scale=Math.max(scaleWidth, scaleHeight);
+        opts.inSampleSize=(int)scale;
+        WeakReference<Bitmap> weak=new WeakReference<Bitmap>(BitmapFactory.decodeFile(filepath, opts));
+        return Bitmap.createScaledBitmap(weak.get(), widths, heights, true);
+    }
+
     /**
      * 获取资源id
      */
@@ -339,4 +364,73 @@ public class CommonUtil {
         }
         return 0;
     }
+    
+    /**
+     * 加载本地图片
+     * 
+     * @param path
+     * @return
+     */
+    public static Bitmap getLoacalBitmap(String path) {
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inTempStorage = new byte[100 * 1024];
+            // 3.设置位图颜色显示优化方式
+            // ALPHA_8：每个像素占用1byte内存（8位）
+            // ARGB_4444:每个像素占用2byte内存（16位）
+            // ARGB_8888:每个像素占用4byte内存（32位）
+            // RGB_565:每个像素占用2byte内存（16位）
+            // Android默认的颜色模式为ARGB_8888，这个颜色模式色彩最细腻，显示质量最高。但同样的，占用的内存//也最大。也就意味着一个像素点占用4个字节的内存。我们来做一个简单的计算题：3200*2400*4
+            // bytes //=30M。如此惊人的数字！哪怕生命周期超不过10s，Android也不会答应的。
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            // 4.设置图片可以被回收，创建Bitmap用于存储Pixel的内存空间在系统内存不足时可以被回收
+            options.inPurgeable = true;
+            // 5.设置位图缩放比例
+            // width，hight设为原来的四分一（该参数请使用2的整数倍）,这也减小了位图占用的内存大小；例如，一张//分辨率为2048*1536px的图像使用inSampleSize值为4的设置来解码，产生的Bitmap大小约为//512*384px。相较于完整图片占用12M的内存，这种方式只需0.75M内存(假设Bitmap配置为//ARGB_8888)。
+            options.inSampleSize = 1;
+            // 6.设置解码位图的尺寸信息
+            options.inInputShareable = true;
+            // 7.解码位图
+            return BitmapFactory.decodeStream(fis, null, options);
+            // return BitmapFactory.decodeStream(fis); // /把流转化为Bitmap图片
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 把图片转换成字符串
+     * 
+     * @param path
+     * @return
+     */
+    public static String bitmapToString(Bitmap bitmap) {
+        int rate = 100;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, rate, os);
+        while (os.size() > 200 * 1024) {
+            os.reset();
+            rate = rate - 10;
+            if (rate < 0) {
+                return null;
+            } else {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, rate, os);
+            }
+        }
+        return new String(Base64Coder.encodeLines(os.toByteArray()));
+    }
+    
+    public static Bitmap drawableToRoundBitmap(Drawable drawable, int pixels){  
+        int width = drawable.getIntrinsicWidth();  
+        int height = drawable.getIntrinsicHeight();  
+        Bitmap bitmap = Bitmap.createBitmap(width, height,  
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888  
+                        : Bitmap.Config.RGB_565);  
+        Canvas canvas = new Canvas(bitmap);  
+        drawable.setBounds(0,0,width,height);  
+        drawable.draw(canvas);  
+        return toRoundCorner(bitmap, pixels);  
+    } 
 }

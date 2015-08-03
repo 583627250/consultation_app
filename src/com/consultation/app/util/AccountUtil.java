@@ -55,15 +55,15 @@ public class AccountUtil {
      * @param number
      * @return
      */
-    public static boolean isMobileNum(String number) {
-        String regEx="^[1]([3][0-9]{1}|59|58|88|89)[0-9]{8}$";
-        Pattern pattern=Pattern.compile(regEx);
-        Matcher matcher=pattern.matcher(number);
-        if(matcher.matches()) {
-            return true;
-        }
-        return false;
-    }
+//    public static boolean isMobileNum(String number) {
+//        String regEx="^[1]([3][0-9]{1}|59|58|88|89)[0-9]{8}$";
+//        Pattern pattern=Pattern.compile(regEx);
+//        Matcher matcher=pattern.matcher(number);
+//        if(matcher.matches()) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public static boolean isPhoneNum(String num) {
         String regEx="^1[3|4|5|7|8][0-9]\\d{8}$";

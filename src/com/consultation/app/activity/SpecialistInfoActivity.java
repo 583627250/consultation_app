@@ -30,7 +30,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.model.DoctorTo;
@@ -108,6 +107,7 @@ public class SpecialistInfoActivity extends Activity {
                 CommonUtil.closeLodingDialog();
                 try {
                     JSONObject responses = new JSONObject(arg0);
+                    System.out.println(arg0);
                     if(responses.getInt("rtnCode") == 1){
                         JSONObject infos = responses.getJSONObject("doctor");
                         doctorTo = new DoctorTo();
@@ -147,7 +147,7 @@ public class SpecialistInfoActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError arg0) {
                 CommonUtil.closeLodingDialog();
-                Toast.makeText(mContext, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
         helpList.add("");

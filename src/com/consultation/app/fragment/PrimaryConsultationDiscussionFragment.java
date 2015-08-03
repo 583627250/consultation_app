@@ -30,8 +30,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
+import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.model.PcasesTo;
@@ -188,7 +188,7 @@ public class PrimaryConsultationDiscussionFragment extends Fragment implements O
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
                     CommonUtil.closeLodingDialog();
-                    Toast.makeText(consultationListAllFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(consultationListAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -281,7 +281,7 @@ public class PrimaryConsultationDiscussionFragment extends Fragment implements O
 
                             @Override
                             public void onErrorResponse(VolleyError arg0) {
-                                Toast.makeText(consultationListAllFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT)
+                                Toast.makeText(consultationListAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
                                     .show();
                             }
                         });
@@ -457,7 +457,7 @@ public class PrimaryConsultationDiscussionFragment extends Fragment implements O
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
-                    Toast.makeText(consultationListAllFragment.getContext(), arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(consultationListAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
     }

@@ -120,7 +120,7 @@ public class SearchSpecialistResultActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError arg0) {
                 CommonUtil.closeLodingDialog();
-                Toast.makeText(mContext, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -19,15 +19,15 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.consultation.app.R;
-import com.consultation.app.activity.CreatCase;
+import com.consultation.app.activity.CreateCaseActivity;
 import com.consultation.app.activity.SearchConsulationActivity;
 
 public class PrimaryConsultationFragment extends Fragment {
@@ -82,24 +82,24 @@ public class PrimaryConsultationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // 新建
-                startActivity(new Intent(consultationLayout.getContext(), CreatCase.class));
+                startActivity(new Intent(consultationLayout.getContext(), CreateCaseActivity.class));
             }
         });
         
         t1 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_1);
-        t1.setTextSize(18);
+        t1.setTextSize(17);
         t1.setText("全部");
         t2 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_2);
-        t2.setTextSize(18);
+        t2.setTextSize(17);
         t2.setText("我的待办");
         t3 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_3);
-        t3.setTextSize(18);
+        t3.setTextSize(17);
         t3.setText("处理中");
         t4 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_4);
-        t4.setTextSize(18);
+        t4.setTextSize(17);
         t4.setText("讨论区");
         t5 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_5);
-        t5.setTextSize(18);
+        t5.setTextSize(17);
         t5.setText("历史");
         t1.setTextColor(Color.parseColor("#2CB67A"));
         t1.setOnClickListener(new MyOnClickListener(0));

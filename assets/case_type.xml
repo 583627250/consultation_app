@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MedicalRecord>
+	<Root ID="1" Name="ChiefComplaint"  Level="0">
+		<Title>主诉</Title>
+		<Group ID="1.1" Name="Fever" Level="1" ChildCount="3">
+      		<Title>发热</Title>
+			<Item ID="1.1.1" Name="temperature" LastStr="度" Level="2" Type="Edit" Input="True" Value=""/>
+			<Item ID="1.1.2" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" Value=""/>
+			<Item ID="1.1.3" Name="days" FirstStr="热型" Level="2" Type="CheckBoxList" Input="True">
+				<Options ID="1.1.3-1" Checked="0">稽留热</Options>
+				<Options ID="1.1.3-2" Checked="0">弛张热</Options>
+			</Item>
+    	</Group>
+		<Group ID="1.2" Name="Weight" Level ="1" ChildCount="2">
+			<Title>体重变化</Title>
+			<Item ID="1.2.1" Name="change" FirstStr="近三月内体重变化" Level="2" Type="RadioButtonGroup" Input="False">
+				<Options ID="1.2.1-1" Checked="0">增加</Options>
+				<Options ID="1.2.1-2" Checked="0">减少</Options>
+			</Item>
+			<Item ID="1.2.2" Name="count" LastStr="公斤" Level="2" Type="Edit" Input="True" Value=""/>
+    	</Group>
+		<Group ID="1.3" Name="Pain" Level = "1" ChildCount="4">
+			<Title>疼痛</Title>
+			<Item ID="1.3.1" Name="Part" FirstStr="部位" Level="2" Type="CheckBoxList" Input="False">
+				<Options ID="1.3.1-1" Checked="0">腰部</Options>
+				<Options ID="1.3.1-2" Checked="0">腹部</Options>
+				<Options ID="1.3.1-3" Checked="0">会阴</Options>
+				<Options ID="1.3.1-4" Checked="0">阴囊</Options>
+				<Options ID="1.3.1-5" Checked="0">阴茎</Options>
+				<Options ID="1.3.1-6" Checked="0">下腹部</Options>
+			</Item>
+			<Item ID="1.3.2" Name="Quality" FirstStr="性质"  Level="2" Type="CheckBoxList" Input="False"> 
+				<Options ID="1.3.2-1" Checked="0">绞痛</Options>
+				<Options ID="1.3.2-2" Checked="0">隐痛</Options>
+				<Options ID="1.3.2-3" Checked="0">尿后痛</Options>
+				<Options ID="1.3.2-4" Checked="0">尿中痛</Options>
+			</Item>
+			<Item ID="1.3.3" Name="Change" FirstStr="变化"  Level="2" ChildCount="4"> 
+				<SubItem ID="1.3.3.1" Name="Reason" Level="3" Type="CheckBoxList" input="True">
+					<Options ID="1.3.3.1-1" Checked="0">饮酒后加重</Options>
+					<Options ID="1.3.3.1-2" Checked="0">久坐加重</Options>				
+				</SubItem>
+				<SubItem ID="1.3.3.2" Name="ease" Level="3" Type="Edit" input="True" Value=""/>
+				<SubItem ID="1.3.3.3" Name="frequency" Level="3" Type="CheckBoxList" input="True">
+					<Options ID="1.3.3.3-1" Checked="0">间歇性发作</Options>
+					<Options ID="1.3.3.3-2" Checked="0">持续性发作</Options>				
+				</SubItem>
+				<SubItem ID="1.3.3.4" Name="parts" LastStr="放射痛" Level="3" Type="Edit" input="True">
+					<Options ID="1.3.3.3-1" Checked="0">间歇性发作</Options>
+					<Options ID="1.3.3.3-2" Checked="0">持续性发作</Options>				
+				</SubItem>
+			</Item>
+			<Item ID="1.3.4" Name=" Simultaneous phenomenon" Level="2" Type="CheckBoxList" Input="True"> 
+				<Options ID="1.3.2-1">血尿</Options>
+				<Options ID="1.3.2-2">恶心呕吐</Options>
+				<Options ID="1.3.2-3">尿频</Options>
+				<Options ID="1.3.2-4">发热</Options>
+			</Item>
+                  </Group>
+		<Group ID="1.4" Name="Urination related symptoms" Level="1" ChildCount="1">
+			<Title>排尿相关症状</Title>
+			<Item ID="1.4.1" Name="Symptoms" FirstStr="症状" Level="2" Type="CheckBoxList" Input="False">
+				<Options ID="1.4.1-1">尿频</Options>
+				<Options ID="1.4.1-2">尿急</Options>
+				<Options ID="1.4.1-3">尿痛</Options>
+				<Options ID="1.4.1-4">夜尿频多</Options>
+				<Options ID="1.4.1-5">排尿困难</Options>
+				<Options ID="1.4.1-6">尿分叉</Options>
+				<Options ID="1.4.1-7">尿等待</Options>
+				<Options ID="1.4.1-8">遗尿</Options>
+				<Options ID="1.4.1-9">尿线变细</Options>
+				<Options ID="1.4.1-10">排尿无力</Options>
+				<Options ID="1.4.1-11">终末滴沥</Options>
+				<Options ID="1.4.1-12">尿滁留</Options>
+				<Options ID="1.4.1-13">尿失禁</Options>
+				<Options ID="1.4.1-14">血尿</Options>
+				<Options ID="1.4.1-15">乳糜尿</Options>
+				<Options ID="1.4.1-16">混浊尿</Options>
+				<Options ID="1.4.1-17">气体尿</Options>
+				<Options ID="1.4.1-18">少尿</Options>
+				<Options ID="1.4.1-19">无尿</Options>
+			</Item>
+		</Group>
+		<Group ID="1.5" Name="Hematuria associated symptoms" Level="1" ChildCount="3">
+			<Title>血尿相关症状</Title>
+			<Item ID="1.5.1" Name="microscopy" FirstStr="镜检" Level="2" Type="Edit" Input="True"/>
+			<Item ID="1.5.2" Name="macrography" FirstStr="肉眼检查" Level="2"  ChildCount="3">
+				<SubItem ID="1.5.2.1" Name="Degree" Level="3" Type="RadioButtonGroup" input="False">
+					<Options ID="1.5.2.1-1">初始血尿</Options>
+					<Options ID="1.5.2.1-2">全程血尿</Options>				
+					<Options ID="1.5.2.1-3">终末血尿</Options>				
+				</SubItem>
+				<SubItem ID="1.5.2.2" Name="Color" FirstStr="尿液颜色" Level="3" Type="RadioButtonGroup" input="False">
+					<Options ID="1.5.2.2-1">鲜红</Options>
+					<Options ID="1.5.2.2-2">暗红</Options>				
+					<Options ID="1.5.2.2-3">淡红</Options>				
+				</SubItem>
+				<SubItem ID="1.5.2.3" Name="With" FirstStr="伴" Level="3" Type="Edit" input="True"/>
+				<SubItem ID="1.5.2.4" Name="Status" FirstStr="呈" Level="3" Type="CheckBoxList" input="True">
+					<Options ID="1.5.2.4-1">条状</Options>
+					<Options ID="1.5.2.4-2">蚯蚓状</Options>				
+					<Options ID="1.5.2.4-3">片状</Options>				
+				</SubItem>
+			</Item>
+			<Item ID="1.5.3" Name="Simultaneous phenomenon" Level="2" Type="CheckBoxList" Input="True"> 
+				<Options ID="1.5.3-1">腰腹疼痛</Options>
+				<Options ID="1.5.3-2">恶心呕吐</Options>
+				<Options ID="1.5.3-3">无痛血尿</Options>
+				<Options ID="1.5.3-4">发热</Options>
+				<Options ID="1.5.3-5">尿频</Options>
+				<Options ID="1.5.3-6">尿急</Options>
+				<Options ID="1.5.3-7">尿痛</Options>
+			</Item>
+		</Group>
+		<Group ID="1.6" Name="Hemospermia" Level="1" ChildCount="3">
+			<Title>血精</Title>
+			<Item ID="1.6.1" Name="Frequency" LastStr="次/天" Level="2" Type="Edit" Input="True"/>
+			<Item ID="1.6.2" Name="Color" Level="2" Type="RadioButtonGroup" Input="False"> 
+				<Options ID="1.6.2-1">鲜红</Options>
+				<Options ID="1.6.2-2">暗红</Options>				
+				<Options ID="1.6.2-3">淡红</Options>				
+			</Item>
+			<Item ID="1.6.3" Name="With" FirstStr="伴" Level="2" Type="CheckBoxList" Input="False"> 
+				<Options ID="1.6.3-1">睾丸</Options>
+				<Options ID="1.6.3-2">会阴部疼痛</Options>				
+				<Options ID="1.6.3-3">尿频</Options>				
+				<Options ID="1.6.3-4">尿分叉</Options>				
+			</Item>
+		</Group>
+		<Group ID="1.7" Name="Urethral secretions" Level="1" ChildCount="2">
+			<Title>尿道分泌物</Title>
+			<Item ID="1.7.1" Name="Quality" Level="2" Type="CheckBoxList" Input="False">
+				<Options ID="1.7.1-1">脓性</Options>
+				<Options ID="1.7.1-2">血性</Options>					
+			</Item>
+			<Item ID="1.7.2" Name="Color" Level="2" Type="RadioButtonGroup" Input="True"> 
+				<Options ID="1.6.2-1">鲜红</Options>
+				<Options ID="1.6.2-2">暗红</Options>				
+				<Options ID="1.6.2-3">淡红</Options>				
+			</Item>
+		</Group>
+		<Group ID="1.8" Name="Check" Level="1" ChildCount="2">
+			<Title>查体</Title>
+			<Item ID="1.8.1" Name="Disease" Level="2" Type="Edit" Input="True"/>
+			<Item ID="1.8.2" Name="DiseaseDate" Level="2" Type="DatetimePicker" Input="True"/> 
+			<Item ID="1.8.3" Name="Discovery" Level="2" Type="Edit" Input="True"/> 
+		</Group>
+	</Root>
+         <Root ID="2" Name="Signs"  Level="0">
+		<Title>体征</Title>
+         </Root>
+	<Root ID="3" Name="LIS"  Level="0">
+		<Title>检验</Title>
+
+         </Root>
+         <Root ID="4" Name="PACS"  Level="0">
+		<Title>检查</Title>
+ 
+         </Root>
+         <Root ID="5" Name="Treatment"  Level="0">
+		<Title>诊治经过</Title>
+
+         </Root>
+         <Root ID="6" Name="PastHistory"  Level="0">
+		<Title>既往史</Title>
+
+         </Root> 
+         <Root ID="7" Name="FamilyHistory"  Level="0">
+		<Title>家族史</Title>
+
+         </Root>
+         <Root ID="7" Name="ExpertOpinion"  Level="0">
+		<Title>专家意见</Title>
+
+	</Root>
+</MedicalRecord>

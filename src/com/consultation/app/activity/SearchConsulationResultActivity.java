@@ -154,7 +154,7 @@ public class SearchConsulationResultActivity extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
                     CommonUtil.closeLodingDialog();
-                    Toast.makeText(SearchConsulationResultActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchConsulationResultActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
     }

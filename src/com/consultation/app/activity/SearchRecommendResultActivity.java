@@ -100,7 +100,7 @@ public class SearchRecommendResultActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError arg0) {
                 CommonUtil.closeLodingDialog();
-                Toast.makeText(SearchRecommendResultActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchRecommendResultActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
     }
