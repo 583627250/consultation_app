@@ -4,15 +4,15 @@ import java.util.List;
 
 public class TitleModel {
 
-    private String id;
+    private String id = "0";
 
-    private String name;
+    private String name = "";
 
-    private String level;
+    private String level = "0";
 
-    private String childCount;
+    private String childCount = "0";
 
-    private String title;
+    private String title = "";
 
     private List<ItemModel> itemModels;
 

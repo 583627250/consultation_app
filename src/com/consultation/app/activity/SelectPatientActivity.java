@@ -129,7 +129,7 @@ public class SelectPatientActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String editTextString = searchEditText.getText().toString().trim();
-                if(AccountUtil.isPhoneNum(editTextString)){
+                if(!AccountUtil.isPhoneNum(editTextString)){
                     Toast.makeText(SelectPatientActivity.this, "请输入正确的手机号码", Toast.LENGTH_LONG).show();
                     return;
                 }

@@ -70,7 +70,6 @@ public class SelectPatientResultActivity extends Activity {
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("userTp", editor.get("userType", ""));
         parmas.put("mobile_ph", nameString);
-        System.out.println(parmas);
         CommonUtil.showLoadingDialog(mContext);
         OpenApiService.getInstance(mContext).getPatientInfo(mQueue, parmas, new Response.Listener<String>() {
 
@@ -90,11 +89,16 @@ public class SelectPatientResultActivity extends Activity {
                         phone.setText("手机号:" + infos.getString("mobile_ph"));
                         patient.setId(infos.getString("id"));
                         patient.setMobile_ph(infos.getString("mobile_ph"));
+                        patient.setReal_name(infos.getString("real_name"));
                         birthday.setText("出生日期:" + infos.getString("birth_year") + "-" + infos.getString("birth_month") + "-"
                             + infos.getString("birth_day"));
                         address.setText("地址:" + infos.getString("area_province") + infos.getString("area_city")
                             + infos.getString("area_county"));
-                        blance.setText("余额:" + infos.getString("current_balance"));
+                        if(null == infos.getJSONObject("userBalance").getString("current_balance") || "null".equals(infos.getJSONObject("userBalance").getString("current_balance"))){
+                            blance.setText("余额:0元");
+                        }else{
+                            blance.setText("余额:" + infos.getJSONObject("userBalance").getString("current_balance")+"元");
+                        }
                         info_layout.setVisibility(View.VISIBLE);
                     } else {
                         noData.setVisibility(View.VISIBLE);
@@ -160,8 +164,6 @@ public class SelectPatientResultActivity extends Activity {
         code_edit=(EditText)findViewById(R.id.search_patient_result_code_input_edit);
         code_edit.setTextSize(18);
 
-//        info_layout.setVisibility(View.VISIBLE);
-
         codeBtn=(Button)findViewById(R.id.search_patient_result_phone_get_btn);
         codeBtn.setTextSize(14);
         codeBtn.setOnClickListener(new OnClickListener() {
@@ -217,10 +219,11 @@ public class SelectPatientResultActivity extends Activity {
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(mContext);
-                OpenApiService.getInstance(mContext).getRegisterVerification(mQueue, parmas, new Response.Listener<String>() {
+                OpenApiService.getInstance(mContext).getIsPatient(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String arg0) {
+                        CommonUtil.closeLodingDialog();
                         try {
                             JSONObject responses=new JSONObject(arg0);
                             if(responses.getInt("rtnCode") == 1) {

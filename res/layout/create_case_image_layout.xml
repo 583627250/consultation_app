@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/consultation_color_white"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp" >
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_0"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_1"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/create_case_add_image_layout_2_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/consultation_color_white"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp" >
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_2"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_3"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/create_case_add_image_layout_3_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/consultation_color_white"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp" >
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_4"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_5"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/create_case_add_image_layout_4_0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/consultation_color_white"
+        android:orientation="horizontal"
+        android:paddingBottom="15dp" >
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_6"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_case_add_image_layout_7"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/create_case_add_image_7"
+                android:layout_width="100dip"
+                android:layout_height="80dip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/primary_new_add_image_icon" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

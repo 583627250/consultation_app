@@ -188,6 +188,9 @@ public class LoginActivity extends Activity {
 //                }
                 Map<String, String> parmas = new HashMap<String, String>();
                 parmas.put("mobile_ph", "13501320010");
+//                13501320010 111111 初级医生
+//                13501324949 111111 专家
+//                13501320011 111111 患者
                 parmas.put("pwd", "111111");
 //                parmas.put("mobile_ph", account.getText().toString());
 //                parmas.put("pwd", password.getText().toString());

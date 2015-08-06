@@ -4,23 +4,45 @@ import java.util.List;
 
 public class ItemModel {
 
-    private String id;
+    private String id = "0";
 
-    private String name;
+    private String name = "";
 
-    private String firstStr;
+    private String firstStr = "";
 
-    private String lastStr;
+    private String lastStr = "";
 
-    private String level;
+    private String level = "";
 
-    private String type;
+    private String type = "";
 
-    private String input;
+    private String input = "";
+    
+    private String childCount = "0";
+    
+    private String value = "";
 
     private List<OptionsModel> optionsModels;
 
     private List<ItemModel> itemModels;
+
+    public String getChildCount() {
+        return childCount;
+    }
+    
+    public void setChildCount(String childCount) {
+        this.childCount=childCount;
+    }
+
+
+    public String getValue() {
+        return value;
+    }
+
+    
+    public void setValue(String value) {
+        this.value=value;
+    }
 
     public List<ItemModel> getItemModels() {
         return itemModels;

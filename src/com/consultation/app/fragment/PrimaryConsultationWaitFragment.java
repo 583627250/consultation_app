@@ -34,7 +34,7 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.model.PatientTo;
-import com.consultation.app.model.PcasesTo;
+import com.consultation.app.model.CasesTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
@@ -52,7 +52,7 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
 
     private PullableListView patientListView;
 
-    private List<PcasesTo> patientList=new ArrayList<PcasesTo>();
+    private List<CasesTo> patientList=new ArrayList<CasesTo>();
 
     private MyAdapter myAdapter;
 
@@ -128,16 +128,15 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
                             JSONArray infos=responses.getJSONArray("pcases");
                             for(int i=0; i < infos.length(); i++) {
                                 JSONObject info=infos.getJSONObject(i);
-                                PcasesTo pcasesTo=new PcasesTo();
+                                CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
-                                pcasesTo.setContent(info.getString("content"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 pcasesTo.setCreate_time(info.getLong("create_time"));
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                pcasesTo.setPatient_userid(info.getString("patient_userid"));
+                                pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setConsult_fee(info.getInt("consult_fee"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -220,9 +219,8 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
                                         patientList.clear();
                                         for(int i=0; i < infos.length(); i++) {
                                             JSONObject info=infos.getJSONObject(i);
-                                            PcasesTo pcasesTo=new PcasesTo();
+                                            CasesTo pcasesTo=new CasesTo();
                                             pcasesTo.setId(info.getString("id"));
-                                            pcasesTo.setContent(info.getString("content"));
                                             pcasesTo.setStatus(info.getString("status"));
                                             pcasesTo.setDestination(info.getString("destination"));
                                             pcasesTo.setCreate_time(info.getLong("create_time"));
@@ -230,7 +228,7 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                             pcasesTo.setConsult_fee(info.getInt("consult_fee"));
-                                            pcasesTo.setPatient_userid(info.getString("patient_userid"));
+                                            pcasesTo.setPatient_name(info.getString("patient_name"));
                                             pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                             pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                             pcasesTo.setExpert_name(info.getString("expert_name"));
@@ -397,9 +395,8 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
                             JSONArray infos=responses.getJSONArray("pcases");
                             for(int i=0; i < infos.length(); i++) {
                                 JSONObject info=infos.getJSONObject(i);
-                                PcasesTo pcasesTo=new PcasesTo();
+                                CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
-                                pcasesTo.setContent(info.getString("content"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 pcasesTo.setCreate_time(info.getLong("create_time"));
@@ -407,7 +404,7 @@ public class PrimaryConsultationWaitFragment extends Fragment implements OnLoadL
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 pcasesTo.setConsult_fee(info.getInt("consult_fee"));
-                                pcasesTo.setPatient_userid(info.getString("patient_userid"));
+                                pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                 pcasesTo.setExpert_name(info.getString("expert_name"));

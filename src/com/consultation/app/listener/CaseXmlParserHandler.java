@@ -64,6 +64,7 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    subItemModel.setLastStr(attributes.getValue("LastStr"));
 		    subItemModel.setLevel(attributes.getValue("Level"));
 		    subItemModel.setType(attributes.getValue("Type"));
+		    subItemModel.setInput(attributes.getValue("Input"));
 		    subItemModel.setOptionsModels(new ArrayList<OptionsModel>());
 		    isSubOptions = true;
         } else if (qName.equals("Item")) {
@@ -75,6 +76,8 @@ public class CaseXmlParserHandler extends DefaultHandler {
             itemModel.setLastStr(attributes.getValue("LastStr"));
             itemModel.setLevel(attributes.getValue("Level"));
             itemModel.setType(attributes.getValue("Type"));
+            itemModel.setInput(attributes.getValue("Input"));
+            itemModel.setChildCount(attributes.getValue("ChildCount"));
             itemModel.setOptionsModels(new ArrayList<OptionsModel>());
             itemModel.setItemModels(new ArrayList<ItemModel>());
         } else if (qName.equals("Options")) {

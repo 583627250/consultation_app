@@ -4,11 +4,11 @@ import java.util.List;
 
 public class CaseModel {
 
-    private String id;
+    private String id = "0";
 
-    private String name;
+    private String name = "";
 
-    private String level;
+    private String level = "0";
 
     private List<TitleModel> titleModels;
 

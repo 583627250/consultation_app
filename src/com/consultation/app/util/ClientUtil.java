@@ -36,7 +36,15 @@ public class ClientUtil {
 
     public static String GET_PATIENTCASE_LIST_URL=SERVICE_DOMAIN + "/api/patientCase/list.json";
     
+    public static String GET_PATIENTCASE_INFO_URL=SERVICE_DOMAIN + "/api/patientCase/getById.json";
+    
     public static String GET_PATIENT_INFO_URL =SERVICE_DOMAIN + "/api/user/getByMobile.json";
+    
+    public static String GET_CASE_SAVE_URL =SERVICE_DOMAIN + "/api/patientCase/save.json";
+    
+    public static String GET_IS_PATIENT_URL =SERVICE_DOMAIN + "/api/user/verifySmsCodeOfPatient.json";
+    
+    public static String GET_CASE_UP_ALL_URL =SERVICE_DOMAIN + "/api/patientCase/saveDetails.json";
 
     private static CaseParams caseParams=new CaseParams();
 

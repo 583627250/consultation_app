@@ -2,11 +2,11 @@ package com.consultation.app.model;
 
 public class OptionsModel {
 
-    private String id;
+    private String id = "0";
 
-    private String checked;
+    private String checked = "0";
 
-    private String name;
+    private String name = "";
 
     public String getId() {
         return id;

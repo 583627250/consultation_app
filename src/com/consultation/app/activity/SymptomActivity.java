@@ -7,14 +7,10 @@ import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +32,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.consultation.app.R;
+import com.consultation.app.model.CaseModel;
 import com.consultation.app.model.ItemModel;
+import com.consultation.app.model.OptionsModel;
 import com.consultation.app.model.TitleModel;
 import com.consultation.app.util.ClientUtil;
 
@@ -71,11 +69,15 @@ public class SymptomActivity extends CaseBaseActivity {
 
     private Map<Integer, List<LinearLayout>> maps=new HashMap<Integer, List<LinearLayout>>();
 
-    private boolean isSave=false;
-
     private List<TitleModel> titleModels;
-    
+
+    private int page;
+
     private Button saveBtn;
+
+    private String titleText;
+    
+    private boolean isAdd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,31 +87,21 @@ public class SymptomActivity extends CaseBaseActivity {
         WindowManager wm=this.getWindowManager();
         width=wm.getDefaultDisplay().getWidth();
         height=wm.getDefaultDisplay().getHeight();
+        page=getIntent().getIntExtra("page", -1);
+        titleText=getIntent().getStringExtra("titleText");
         initData();
         initView();
     }
 
     private void initView() {
         title_text=(TextView)findViewById(R.id.header_text);
-        title_text.setText("症状");
+        title_text.setText(titleText);
         title_text.setTextSize(20);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
         back_text=(TextView)findViewById(R.id.header_text_lift);
         back_text.setTextSize(18);
-//        save_text=(TextView)findViewById(R.id.header_right);
-//        save_text.setVisibility(View.VISIBLE);
-//        save_text.setTextSize(18);
-//        save_text.setBackgroundResource(R.drawable.symptom_save_text_selector);
-//        save_text.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                // 保存
-//                saveData();
-//            }
-//        });
 
         back_layout.setOnClickListener(new OnClickListener() {
 
@@ -117,13 +109,6 @@ public class SymptomActivity extends CaseBaseActivity {
             public void onClick(final View v) {
                 Intent intent=new Intent();
                 Bundle bundle=new Bundle();
-                if(!isSave) {
-                    if(saveData()) {
-                        bundle.putBoolean("isAdd", true);
-                    } else {
-                        bundle.putBoolean("isAdd", false);
-                    }
-                }
                 InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 if(imm.isActive()) {
                     imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
@@ -159,14 +144,15 @@ public class SymptomActivity extends CaseBaseActivity {
                 myAdapter.notifyDataSetChanged();
             }
         });
-        
-        saveBtn = (Button)findViewById(R.id.syamptom_btn_save);
+
+        saveBtn=(Button)findViewById(R.id.syamptom_btn_save);
         saveBtn.setTextSize(20);
         saveBtn.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 // 保存数据
+                saveData();
             }
         });
     }
@@ -204,7 +190,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                 String[] data_list=new String[subItemModel.getOptionsModels().size()];
                                 for(int j=0; j < subItemModel.getOptionsModels().size(); j++) {
                                     data_list[j]=subItemModel.getOptionsModels().get(j).getName();
-                                    CheckBox box = new CheckBox(context);
+                                    CheckBox box=new CheckBox(context);
                                     checkBoxs.add(box);
                                     views.put(subItemModel.getOptionsModels().get(j).getId(), box);
                                 }
@@ -240,7 +226,7 @@ public class SymptomActivity extends CaseBaseActivity {
                             String[] data_list=new String[itemModel.getOptionsModels().size()];
                             for(int j=0; j < itemModel.getOptionsModels().size(); j++) {
                                 data_list[j]=itemModel.getOptionsModels().get(j).getName();
-                                CheckBox box = new CheckBox(context);
+                                CheckBox box=new CheckBox(context);
                                 checkBoxs.add(box);
                                 views.put(itemModel.getOptionsModels().get(j).getId(), box);
                             }
@@ -281,35 +267,257 @@ public class SymptomActivity extends CaseBaseActivity {
         }
     }
 
-    private boolean saveData() {
-        boolean isAdd=false;
+    private void saveData() {
         for(String key: views.keySet()) {
             Object view=views.get(key);
             if(EditText.class.isInstance(view)) {
                 if(null != ((EditText)view).getText().toString() && !"".equals(((EditText)view).getText().toString())) {
-                    ClientUtil.getCaseParams().add(key, ((EditText)view).getText().toString());
-                    isAdd=true;
+                    setValue(key, ((EditText)view).getText().toString(), 0);
+                    isAdd = true;
                 }
             } else if(RadioButton.class.isInstance(view)) {
                 RadioButton radioButton=(RadioButton)view;
                 if(radioButton.isChecked()) {
-                    if(null != radioButton.getText().toString() && !"".equals(radioButton.getText().toString())) {
-                        ClientUtil.getCaseParams().add(key, radioButton.getText().toString());
-                    }
+                    setValue(key, "1", 1);
+                    isAdd = true;
+                }else{
+                    setValue(key, "0", 1);
                 }
-            } else if(TextView.class.isInstance(view)) {
-                if(null != ((TextView)view).getText().toString() && !"".equals(((TextView)view).getText().toString())) {
-                    ClientUtil.getCaseParams().add(key, ((TextView)view).getText().toString());
+            } else if(CheckBox.class.isInstance(view)) {
+                CheckBox box = (CheckBox)view;
+                if(box.isChecked()) {
+                    setValue(key, "1", 2);
+                    isAdd = true;
+                }else{
+                    setValue(key, "0", 2);
                 }
             }
         }
-        isSave=true;
-        return isAdd;
+        ModleToXml();
+    }
+
+    private void setValue(String id, String value, int type) {
+        int titleIds = Integer.parseInt(id.split("\\.")[1])-1;
+        for(int i=0; i < titleModels.size(); i++) {
+            List<ItemModel> list = titleModels.get(titleIds).getItemModels();
+            for(int j=0; j < list.size(); j++) {
+                ItemModel model = list.get(j);
+                if(type == 0){
+                    if(id.split("\\.").length==3){
+                        if(model.getId().equals(id)){
+                            model.setValue(value);
+                        }
+                    }else if(id.split("\\.").length==4){
+                        if(model.getItemModels().get(Integer.parseInt(id.split("\\.")[3])-1).getId().equals(id)){
+                            model.getItemModels().get(Integer.parseInt(id.split("\\.")[3])-1).setValue(value);
+                        }
+                    }
+                }else if(type == 1){
+                    if(id.split("\\.").length==3){
+                        List<OptionsModel> list2 = model.getOptionsModels();
+                        for(int k=0; k < list2.size(); k++) {
+                            if(list2.get(k).getId().equals(id)){
+                                list2.get(k).setChecked(value);
+                            }
+                        }
+                    }else if(id.split("\\.").length==4){
+                        List<OptionsModel> list3 = model.getItemModels().get(Integer.parseInt(id.split("\\.")[3])-1).getOptionsModels();
+                        for(int k=0; k < list3.size(); k++) {
+                            if(list3.get(k).getId().equals(id)){
+                                list3.get(k).setChecked(value);
+                            }
+                        }
+                    }
+                }else if(type == 2){
+                    if(id.split("\\.").length==3){
+                        List<OptionsModel> list2 = model.getOptionsModels();
+                        for(int k=0; k < list2.size(); k++) {
+                            if(list2.get(k).getId().equals(id)){
+                                list2.get(k).setChecked(value);
+                            }
+                        }
+                    }else if(id.split("\\.").length==4){
+                        List<OptionsModel> list3 = model.getItemModels().get(Integer.parseInt(id.split("\\.")[3])-1).getOptionsModels();
+                        for(int k=0; k < list3.size(); k++) {
+                            if(list3.get(k).getId().equals(id)){
+                                list3.get(k).setChecked(value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
+//    private void ModleToXml() {
+//        CaseModel caseModel = caseList.get(page);
+//        List<String> strings = new ArrayList<String>();
+//        strings.add("<Root ID=\""+caseModel.getId()+"\" Name=\""+caseModel.getName()+"\" Level=\""+caseModel.getLevel()+"\">");
+//        strings.add("<Title>"+titleText+"</Title>");
+//        for(int i=0; i < titleModels.size(); i++) {
+//            TitleModel titleModel = titleModels.get(i);
+//            List<ItemModel> itemModels = titleModel.getItemModels();
+//            strings.add("<Group ID=\""+titleModel.getId()+"\" Name=\""+titleModel.getName()+"\" Level=\""+titleModel.getLevel()+"\" ChildCount=\""+titleModel.getChildCount()+"\">");
+//            strings.add("<Title>"+titleModel.getTitle()+"</Title>");
+//            for(int j=0; j < itemModels.size(); j++) {
+//                ItemModel itemModel = itemModels.get(j);
+//                if(null != itemModel.getChildCount()){
+//                    strings.add("<Item ID=\""+itemModel.getId()+"\" Name=\""+itemModel.getName()+"\" ");
+//                    if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+//                        strings.add("FirstStr=\""+itemModel.getFirstStr()+"\" ");
+//                    }
+//                    if(itemModel.getLastStr()!=null || !"".equals(itemModel.getLastStr())){
+//                        strings.add("LastStr=\""+itemModel.getLastStr()+"\" ");
+//                    }
+//                    strings.add("Level=\""+itemModel.getLevel()+"\" ");
+//                    strings.add("ChildCount=\""+itemModel.getChildCount()+"\">");
+//                    List<ItemModel> subItemModels = itemModel.getItemModels();
+//                    for(int k=0; k < subItemModels.size(); k++) {
+//                        ItemModel itemModel2 = subItemModels.get(k);
+//                        strings.add("<SubItem ID=\""+itemModel2.getId()+"\" Name=\""+itemModel2.getName()+"\" ");
+//                        if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+//                            strings.add("FirstStr=\""+itemModel2.getFirstStr()+"\" ");
+//                        }
+//                        if(itemModel.getLastStr()!=null  || !"".equals(itemModel.getLastStr())){
+//                            strings.add("LastStr=\""+itemModel2.getLastStr()+"\" ");
+//                        }
+//                        strings.add("Level=\""+itemModel2.getLevel()+"\" ");
+//                        strings.add("Type=\""+itemModel2.getType()+"\" ");
+//                        strings.add("Input=\""+itemModel2.getInput()+"\"");
+//                        if(itemModel2.getType().equals("Edit")){
+//                            strings.add(" Value=\""+itemModel2.getValue()+"\"/>");
+//                        }else{
+//                            strings.add(">");
+//                            List<OptionsModel> optionsModels = itemModel2.getOptionsModels();
+//                            for(int x=0; x < optionsModels.size(); x++) {
+//                                strings.add("<Options ID=\""+optionsModels.get(x).getId()+"\" Checked=\""+optionsModels.get(x).getChecked()+"\">");
+//                                strings.add(optionsModels.get(x).getName()+"</Options>");
+//                            }
+//                            strings.add("</SubItem>");
+//                        }
+//                    }
+//                    strings.add("</Item>");
+//                }else{
+//                    strings.add("<Item ID=\""+itemModel.getId()+"\" Name=\""+itemModel.getName()+"\" ");
+//                    if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+//                        strings.add("FirstStr=\""+itemModel.getFirstStr()+"\" ");
+//                    }
+//                    if(itemModel.getLastStr()!=null || !"".equals(itemModel.getLastStr())){
+//                        strings.add("LastStr=\""+itemModel.getLastStr()+"\" ");
+//                    }
+//                    strings.add("Level=\""+itemModel.getLevel()+"\" ");
+//                    strings.add("Type=\""+itemModel.getType()+"\" ");
+//                    strings.add("Input=\""+itemModel.getInput()+"\"");
+//                    if(itemModel.getType().equals("Edit")){
+//                        strings.add(" Value=\""+itemModel.getValue()+"\"/>");
+//                    }else{
+//                        strings.add(">");
+//                        List<OptionsModel> optionsModels = itemModel.getOptionsModels();
+//                        for(int k=0; k < optionsModels.size(); k++) {
+//                            strings.add("<Options ID=\""+optionsModels.get(k).getId()+"\" Checked=\""+optionsModels.get(k).getChecked()+"\">");
+//                            strings.add(optionsModels.get(k).getName()+"</Options>");
+//                        }
+//                        strings.add("</Item>");
+//                    }
+//                }
+//            }
+//            strings.add("</Group>");
+//        }
+//        strings.add("</Root>");
+//        System.out.println(strings.size());
+//        for(String string: strings) {
+//            System.out.println(string);
+//        }
+//    }
+
+    private void ModleToXml() {
+        CaseModel caseModel = caseList.get(page);
+        StringBuilder stringBuffer = new StringBuilder();
+        stringBuffer.append("<Root ID=\""+caseModel.getId()+"\" Name=\""+caseModel.getName()+"\" Level=\""+caseModel.getLevel()+"\">");
+        stringBuffer.append("<Title>"+titleText+"</Title>");
+        for(int i=0; i < titleModels.size(); i++) {
+            TitleModel titleModel = titleModels.get(i);
+            List<ItemModel> itemModels = titleModel.getItemModels();
+            stringBuffer.append("<Group ID=\""+titleModel.getId()+"\" Name=\""+titleModel.getName()+"\" Level=\""+titleModel.getLevel()+"\" ChildCount=\""+titleModel.getChildCount()+"\">");
+            stringBuffer.append("<Title>"+titleModel.getTitle()+"</Title>");
+            for(int j=0; j < itemModels.size(); j++) {
+                ItemModel itemModel = itemModels.get(j);
+                if(null != itemModel.getChildCount()){
+                    stringBuffer.append("<Item ID=\""+itemModel.getId()+"\" Name=\""+itemModel.getName()+"\" ");
+                    if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+                        stringBuffer.append("FirstStr=\""+itemModel.getFirstStr()+"\" ");
+                    }
+                    if(itemModel.getLastStr()!=null || !"".equals(itemModel.getLastStr())){
+                        stringBuffer.append("LastStr=\""+itemModel.getLastStr()+"\" ");
+                    }
+                    stringBuffer.append("Level=\""+itemModel.getLevel()+"\" ");
+                    stringBuffer.append("ChildCount=\""+itemModel.getChildCount()+"\">");
+                    List<ItemModel> subItemModels = itemModel.getItemModels();
+                    for(int k=0; k < subItemModels.size(); k++) {
+                        ItemModel itemModel2 = subItemModels.get(k);
+                        stringBuffer.append("<SubItem ID=\""+itemModel2.getId()+"\" Name=\""+itemModel2.getName()+"\" ");
+                        if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+                            stringBuffer.append("FirstStr=\""+itemModel2.getFirstStr()+"\" ");
+                        }
+                        if(itemModel.getLastStr()!=null  || !"".equals(itemModel.getLastStr())){
+                            stringBuffer.append("LastStr=\""+itemModel2.getLastStr()+"\" ");
+                        }
+                        stringBuffer.append("Level=\""+itemModel2.getLevel()+"\" ");
+                        stringBuffer.append("Type=\""+itemModel2.getType()+"\" ");
+                        stringBuffer.append("Input=\""+itemModel2.getInput()+"\"");
+                        if(itemModel2.getType().equals("Edit")){
+                            stringBuffer.append(" Value=\""+itemModel2.getValue()+"\"/>");
+                        }else{
+                            stringBuffer.append(">");
+                            List<OptionsModel> optionsModels = itemModel2.getOptionsModels();
+                            for(int x=0; x < optionsModels.size(); x++) {
+                                stringBuffer.append("<Options ID=\""+optionsModels.get(x).getId()+"\" Checked=\""+optionsModels.get(x).getChecked()+"\">");
+                                stringBuffer.append(optionsModels.get(x).getName()+"</Options>");
+                            }
+                            stringBuffer.append("</SubItem>");
+                        }
+                    }
+                    stringBuffer.append("</Item>");
+                }else{
+                    stringBuffer.append("<Item ID=\""+itemModel.getId()+"\" Name=\""+itemModel.getName()+"\" ");
+                    if(itemModel.getFirstStr()!=null || !"".equals(itemModel.getFirstStr())){
+                        stringBuffer.append("FirstStr=\""+itemModel.getFirstStr()+"\" ");
+                    }
+                    if(itemModel.getLastStr()!=null || !"".equals(itemModel.getLastStr())){
+                        stringBuffer.append("LastStr=\""+itemModel.getLastStr()+"\" ");
+                    }
+                    stringBuffer.append("Level=\""+itemModel.getLevel()+"\" ");
+                    stringBuffer.append("Type=\""+itemModel.getType()+"\" ");
+                    stringBuffer.append("Input=\""+itemModel.getInput()+"\"");
+                    if(itemModel.getType().equals("Edit")){
+                        stringBuffer.append(" Value=\""+itemModel.getValue()+"\"/>");
+                    }else{
+                        stringBuffer.append(">");
+                        List<OptionsModel> optionsModels = itemModel.getOptionsModels();
+                        for(int k=0; k < optionsModels.size(); k++) {
+                            stringBuffer.append("<Options ID=\""+optionsModels.get(k).getId()+"\" Checked=\""+optionsModels.get(k).getChecked()+"\">");
+                            stringBuffer.append(optionsModels.get(k).getName()+"</Options>");
+                        }
+                        stringBuffer.append("</Item>");
+                    }
+                }
+            }
+            stringBuffer.append("</Group>");
+        }
+        stringBuffer.append("</Root>");
+        ClientUtil.getCaseParams().add(String.valueOf(page), stringBuffer.toString());
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("isAdd", isAdd);
+        intent.putExtras(bundle);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 
     private void initData() {
         initCaseDatas();
-        titleModels=caseList.get(0).getTitleModels();
+        titleModels=caseList.get(page).getTitleModels();
         for(int i=0; i < titleModels.size(); i++) {
             leftList.add(titleModels.get(i).getTitle());
         }
@@ -365,6 +573,9 @@ public class SymptomActivity extends CaseBaseActivity {
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setLayoutParams(layoutParams);
 
+        LayoutParams inputParams=new LayoutParams(width / 4, height / 20);
+        inputParams.gravity=Gravity.CENTER;
+        inputParams.leftMargin=width / 30;
         if(name != null && !"".equals(name)) {
             TextView textName=new TextView(context);
             LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -375,11 +586,9 @@ public class SymptomActivity extends CaseBaseActivity {
             textName.setTextColor(Color.parseColor("#414141"));
             textName.setTextSize(16);
             layout.addView(textName);
+            inputParams.leftMargin=width / 40;
         }
 
-        LayoutParams inputParams=new LayoutParams(width / 4, height / 20);
-        inputParams.gravity=Gravity.CENTER;
-        inputParams.leftMargin=width / 40;
         input.setLayoutParams(inputParams);
         input.setGravity(Gravity.CENTER);
         input.setTextColor(Color.parseColor("#414141"));
@@ -418,6 +627,7 @@ public class SymptomActivity extends CaseBaseActivity {
         textName.setTextColor(Color.parseColor("#414141"));
         textName.setTextSize(16);
         layout.addView(textName);
+
         return layout;
     }
 
@@ -462,15 +672,15 @@ public class SymptomActivity extends CaseBaseActivity {
 
         return layout;
     }
-    
+
     private LinearLayout createCheckBox(String name, String[] data_list, List<CheckBox> checkBoxs) {
         LinearLayout layout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin=height / 50;
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setLayoutParams(layoutParams);
-        
-        if(null != name && !"".equals(name)){
+
+        if(null != name && !"".equals(name)) {
             TextView textName=new TextView(context);
             LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             textNameParams.leftMargin=width / 40;
@@ -482,12 +692,12 @@ public class SymptomActivity extends CaseBaseActivity {
             layout.addView(textName);
         }
 
-        LayoutParams viewParams=new LayoutParams(width / 3, height / 18);
+        LayoutParams viewParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         viewParams.leftMargin=width / 40;
         viewParams.gravity=Gravity.LEFT;
-        
+
         for(int i=0; i < checkBoxs.size(); i++) {
-            CheckBox box = checkBoxs.get(i);
+            CheckBox box=checkBoxs.get(i);
             box.setLayoutParams(viewParams);
             box.setTextSize(16);
             box.setText(data_list[i]);
