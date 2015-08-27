@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_white"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/syamptom_txt_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="vertical" >
+
+                    <EditText
+                        android:id="@+id/syamptom_txt_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_white"
+                        android:hint="请输入病例内容"
+                        android:padding="5dp"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/consultation_color_F4F4F4"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/syamptom_txt_btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/create_case_submit_selector"
+                android:padding="10dp"
+                android:text="保存"
+                android:textColor="@color/consultation_color_white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_E8D8D8"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/consultation_header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/header" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@color/consultation_color_white"
+                android:orientation="horizontal" >
+
+                <com.consultation.app.view.PullToRefreshLayout
+                    android:id="@+id/mine_invitation_refresh_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <include layout="@layout/refresh_head" />
+
+                    <com.consultation.app.view.PullableListView
+                        android:id="@+id/mine_invitation_listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="#F4F4F4"
+                        android:dividerHeight="0.1dp" />
+                </com.consultation.app.view.PullToRefreshLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#000000" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/consultation_color_F4F4F4"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/mine_invitation_input_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/consultation_color_white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入邀请人手机号码"
+                    android:inputType="phone"
+                    android:maxLength="11"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColorHint="#D3D3D3" />
+
+                <Button
+                    android:id="@+id/mine_invitation_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/create_case_submit_selector"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    android:text="邀请"
+                    android:textColor="@color/consultation_color_white" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

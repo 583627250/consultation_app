@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,9 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.activity.CaseInfoActivity;
+import com.consultation.app.activity.LoginActivity;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.model.CasesTo;
 import com.consultation.app.service.OpenApiService;
@@ -69,6 +73,8 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
     private RequestQueue mQueue;
     
     private ImageLoader mImageLoader;
+    
+//    private int curruntId;
 
     private Handler handler=new Handler() {
 
@@ -101,14 +107,15 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         primaryConsultationAllFragment=inflater.inflate(R.layout.consulation_list_all_layout, container, false);
         editor=new SharePreferencesEditor(primaryConsultationAllFragment.getContext());
+        myAdapter=new MyAdapter();
+        mQueue=Volley.newRequestQueue(primaryConsultationAllFragment.getContext());
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initData();
         initLayout();
         return primaryConsultationAllFragment;
     }
 
     private void initData() {
-        mQueue=Volley.newRequestQueue(primaryConsultationAllFragment.getContext());
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         if(patientList.size() == 0){
             Map<String, String> parmas=new HashMap<String, String>();
             parmas.put("page", "1");
@@ -122,6 +129,7 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                 
                 @Override
                 public void onResponse(String arg0) {
+                    System.out.println(arg0);
                     CommonUtil.closeLodingDialog();
                     try {
                         JSONObject responses=new JSONObject(arg0);
@@ -133,25 +141,33 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
-                                pcasesTo.setCreate_time(info.getLong("create_time"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
+                                } else {
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                }
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
-                                pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                String consult_fee=info.getString("consult_fee");
+                                if(consult_fee.equals("null")) {
+                                    pcasesTo.setConsult_fee("0");
+                                } else {
+                                    pcasesTo.setConsult_fee(consult_fee);
+                                }
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                 pcasesTo.setExpert_name(info.getString("expert_name"));
                                 pcasesTo.setProblem(info.getString("problem"));
                                 pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                 pcasesTo.setOpinion(info.getString("opinion"));
-                                pcasesTo.setUid(info.getString("uid"));
                                 PatientTo patientTo=new PatientTo();
                                 JSONObject pObject=info.getJSONObject("user");
                                 patientTo.setAddress(pObject.getString("address"));
                                 patientTo.setId(pObject.getInt("id") + "");
                                 patientTo.setState(pObject.getString("state"));
-                                // patientTo.setCreate_time(pObject.getLong("create_time"));
                                 patientTo.setTp(pObject.getString("tp"));
                                 patientTo.setDoctor(pObject.getString("doctor"));
                                 patientTo.setMobile_ph(pObject.getString("mobile_ph"));
@@ -167,7 +183,6 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 patientTo.setArea_county(pObject.getString("area_county"));
                                 patientTo.setIcon_url(pObject.getString("icon_url"));
                                 patientTo.setModify_time(pObject.getString("modify_time"));
-                                patientTo.setUid(pObject.getString("uid"));
                                 pcasesTo.setPatient(patientTo);
                                 patientList.add(pcasesTo);
                             }
@@ -176,6 +191,21 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                             } else {
                                 patientListView.setHasMoreData(false);
                             }
+                        } else if(responses.getInt("rtnCode") == 10004){
+                            
+                            Toast.makeText(primaryConsultationAllFragment.getContext(), responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    initData();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                }
+                            });
+                            startActivity(new Intent(primaryConsultationAllFragment.getContext(), LoginActivity.class));
                         } else {
                             Toast.makeText(primaryConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
                                 Toast.LENGTH_SHORT).show();
@@ -223,11 +253,21 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
                                             pcasesTo.setDestination(info.getString("destination"));
-                                            pcasesTo.setCreate_time(info.getLong("create_time"));
+                                            String createTime=info.getString("create_time");
+                                            if(createTime.equals("null")) {
+                                                pcasesTo.setCreate_time(0);
+                                            } else {
+                                                pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                            }
                                             pcasesTo.setTitle(info.getString("title"));
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                            pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                            String consult_fee=info.getString("consult_fee");
+                                            if(consult_fee.equals("null")) {
+                                                pcasesTo.setConsult_fee("0");
+                                            } else {
+                                                pcasesTo.setConsult_fee(consult_fee);
+                                            }
                                             pcasesTo.setPatient_name(info.getString("patient_name"));
                                             pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                             pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -235,13 +275,11 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                             pcasesTo.setProblem(info.getString("problem"));
                                             pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                             pcasesTo.setOpinion(info.getString("opinion"));
-                                            pcasesTo.setUid(info.getString("uid"));
                                             PatientTo patientTo=new PatientTo();
                                             JSONObject pObject=info.getJSONObject("user");
                                             patientTo.setAddress(pObject.getString("address"));
                                             patientTo.setId(pObject.getInt("id") + "");
                                             patientTo.setState(pObject.getString("state"));
-                                            // patientTo.setCreate_time(pObject.getLong("create_time"));
                                             patientTo.setTp(pObject.getString("tp"));
                                             patientTo.setDoctor(pObject.getString("doctor"));
                                             patientTo.setMobile_ph(pObject.getString("mobile_ph"));
@@ -257,7 +295,6 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                             patientTo.setArea_county(pObject.getString("area_county"));
                                             patientTo.setIcon_url(pObject.getString("icon_url"));
                                             patientTo.setModify_time(pObject.getString("modify_time"));
-                                            patientTo.setUid(pObject.getString("uid"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
                                         }
@@ -265,6 +302,24 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                         msg.what=0;
                                         msg.obj=pullToRefreshLayout;
                                         handler.sendMessage(msg);
+                                    } else if(responses.getInt("rtnCode") == 10004){
+                                        Message msg=handler.obtainMessage();
+                                        msg.what=2;
+                                        msg.obj=pullToRefreshLayout;
+                                        handler.sendMessage(msg);
+                                        Toast.makeText(primaryConsultationAllFragment.getContext(), responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                            @Override
+                                            public void onSuccess(String rspContent, int statusCode) {
+                                                initData();
+                                            }
+
+                                            @Override
+                                            public void onFailure(ConsultationCallbackException exp) {
+                                            }
+                                        });
+                                        startActivity(new Intent(primaryConsultationAllFragment.getContext(), LoginActivity.class));
                                     } else {
                                         Message msg=handler.obtainMessage();
                                         msg.what=2;
@@ -281,13 +336,16 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
                             @Override
                             public void onErrorResponse(VolleyError arg0) {
+                                Message msg=handler.obtainMessage();
+                                msg.what=2;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
                                 Toast.makeText(primaryConsultationAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
                                     .show();
                             }
                         });
                 }
             });
-        myAdapter=new MyAdapter();
         patientListView=(PullableListView)primaryConsultationAllFragment.findViewById(R.id.consulation_list_all_listView);
         patientListView.setAdapter(myAdapter);
         patientListView.setOnLoadListener(this);
@@ -295,11 +353,23 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                curruntId = position;
                 Intent intent = new Intent(primaryConsultationAllFragment.getContext(), CaseInfoActivity.class);
                 intent.putExtra("caseId", patientList.get(position).getId());
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+//            patientList.remove(curruntId);
+//            myAdapter.notifyDataSetChanged();
+            patientList.clear();
+            initData();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class PatientViewHolder {
@@ -367,8 +437,8 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
             final String imgUrl=patientList.get(position).getPatient().getIcon_url();
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo);
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+            if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
                 mImageLoader.get(imgUrl, listener);
             }
             holder.photo.setImageBitmap(CommonUtil.drawableToRoundBitmap(holder.photo.getDrawable(), 15));
@@ -390,6 +460,7 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
                 @Override
                 public void onResponse(String arg0) {
+                    System.out.println(arg0);
                     try {
                         JSONObject responses=new JSONObject(arg0);
                         if(responses.getInt("rtnCode") == 1) {
@@ -400,11 +471,21 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
-                                pcasesTo.setCreate_time(info.getLong("create_time"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
+                                } else {
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                }
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                String consult_fee=info.getString("consult_fee");
+                                if(consult_fee.equals("null")) {
+                                    pcasesTo.setConsult_fee("0");
+                                } else {
+                                    pcasesTo.setConsult_fee(consult_fee);
+                                }
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -412,13 +493,11 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 pcasesTo.setProblem(info.getString("problem"));
                                 pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                 pcasesTo.setOpinion(info.getString("opinion"));
-                                pcasesTo.setUid(info.getString("uid"));
                                 PatientTo patientTo=new PatientTo();
                                 JSONObject pObject=info.getJSONObject("user");
                                 patientTo.setAddress(pObject.getString("address"));
                                 patientTo.setId(pObject.getInt("id") + "");
                                 patientTo.setState(pObject.getString("state"));
-                                // patientTo.setCreate_time(pObject.getLong("create_time"));
                                 patientTo.setTp(pObject.getString("tp"));
                                 patientTo.setDoctor(pObject.getString("doctor"));
                                 patientTo.setMobile_ph(pObject.getString("mobile_ph"));
@@ -434,7 +513,6 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 patientTo.setArea_county(pObject.getString("area_county"));
                                 patientTo.setIcon_url(pObject.getString("icon_url"));
                                 patientTo.setModify_time(pObject.getString("modify_time"));
-                                patientTo.setUid(pObject.getString("uid"));
                                 pcasesTo.setPatient(patientTo);
                                 patientList.add(pcasesTo);
                             }
@@ -447,7 +525,31 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                             msg.what=1;
                             msg.obj=pullableListView;
                             handler.sendMessage(msg);
+                        } else if(responses.getInt("rtnCode") == 10004){
+                            hasMore=true;
+                            Message msg=handler.obtainMessage();
+                            msg.what=1;
+                            msg.obj=pullableListView;
+                            handler.sendMessage(msg);
+                            Toast.makeText(primaryConsultationAllFragment.getContext(), responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    initData();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                }
+                            });
+                            startActivity(new Intent(primaryConsultationAllFragment.getContext(), LoginActivity.class));
                         } else {
+                            hasMore=true;
+                            Message msg=handler.obtainMessage();
+                            msg.what=1;
+                            msg.obj=pullableListView;
+                            handler.sendMessage(msg);
                             Toast.makeText(primaryConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
                                 Toast.LENGTH_SHORT).show();
                         }
@@ -459,6 +561,11 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
+                    hasMore=true;
+                    Message msg=handler.obtainMessage();
+                    msg.what=1;
+                    msg.obj=pullableListView;
+                    handler.sendMessage(msg);
                     Toast.makeText(primaryConsultationAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -114,45 +114,45 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
             case 0:
                 consultationImage.setImageResource(R.drawable.consultation_selected);
                 consultationText.setTextColor(Color.parseColor("#2CB67A"));
-//                if(null != editor.get("userType", "") && !"".equals(editor.get("userType", ""))) {
-//                    int type=Integer.parseInt(editor.get("userType", ""));
-//                    switch(type) {
-//                        case 0:
-//                            if(patientConsultationFragment == null) {
-//                                patientConsultationFragment=PatientConsultationFragment.getInstance(HomeActivity.this);
-//                                transaction.add(R.id.content_layout, patientConsultationFragment);
-//                            } else {
-//                                transaction.show(patientConsultationFragment);
-//                            }
-//                            break;
-//                        case 1:
-//                            if(primaryConsultationFragment == null) {
-//                                primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
-//                                transaction.add(R.id.content_layout, primaryConsultationFragment);
-//                            } else {
-//                                transaction.show(primaryConsultationFragment);
-//                            }
-//                            break;
-//                        case 2:
-//                            if(expertConsultationFragment == null) {
-//                                expertConsultationFragment=ExpertConsultationFragment.getInstance(HomeActivity.this);
-//                                transaction.add(R.id.content_layout, expertConsultationFragment);
-//                            } else {
-//                                transaction.show(expertConsultationFragment);
-//                            }
-//                            break;
-//
-//                        default:
-//                            break;
-//                    }
-//                } else {
-//                    if(patientConsultationFragment == null) {
-//                        patientConsultationFragment=PatientConsultationFragment.getInstance(HomeActivity.this);
-//                        transaction.add(R.id.content_layout, patientConsultationFragment);
-//                    } else {
-//                        transaction.show(patientConsultationFragment);
-//                    }
-//                }
+                if(null != editor.get("userType", "") && !"".equals(editor.get("userType", ""))) {
+                    int type=Integer.parseInt(editor.get("userType", ""));
+                    switch(type) {
+                        case 0:
+                            if(patientConsultationFragment == null) {
+                                patientConsultationFragment=PatientConsultationFragment.getInstance(HomeActivity.this);
+                                transaction.add(R.id.content_layout, patientConsultationFragment);
+                            } else {
+                                transaction.show(patientConsultationFragment);
+                            }
+                            break;
+                        case 1:
+                            if(primaryConsultationFragment == null) {
+                                primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
+                                transaction.add(R.id.content_layout, primaryConsultationFragment);
+                            } else {
+                                transaction.show(primaryConsultationFragment);
+                            }
+                            break;
+                        case 2:
+                            if(expertConsultationFragment == null) {
+                                expertConsultationFragment=ExpertConsultationFragment.getInstance(HomeActivity.this);
+                                transaction.add(R.id.content_layout, expertConsultationFragment);
+                            } else {
+                                transaction.show(expertConsultationFragment);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                } else {
+                    if(patientConsultationFragment == null) {
+                        patientConsultationFragment=PatientConsultationFragment.getInstance(HomeActivity.this);
+                        transaction.add(R.id.content_layout, patientConsultationFragment);
+                    } else {
+                        transaction.show(patientConsultationFragment);
+                    }
+                }
 
                 // if(patientConsultationFragment == null){
                 // patientConsultationFragment = PatientConsultationFragment.getInstance(HomeActivity.this);
@@ -161,12 +161,12 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                 // transaction.show(patientConsultationFragment);
                 // }
 
-                if(primaryConsultationFragment == null) {
-                    primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
-                    transaction.add(R.id.content_layout, primaryConsultationFragment);
-                } else {
-                    transaction.show(primaryConsultationFragment);
-                }
+                // if(primaryConsultationFragment == null) {
+                // primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
+                // transaction.add(R.id.content_layout, primaryConsultationFragment);
+                // } else {
+                // transaction.show(primaryConsultationFragment);
+                // }
 
                 // if(expertConsultationFragment == null){
                 // expertConsultationFragment = ExpertConsultationFragment.getInstance(HomeActivity.this);
@@ -288,7 +288,6 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
         switch(v.getId()) {
             case R.id.consultation_layout:
                 // 点击消息tab，选中第一个tab
-//                setTabSelection(0);
                 if(ClientUtil.isLogin()) {
                     setTabSelection(0);
                 } else {
@@ -327,25 +326,22 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                 break;
             case R.id.mine_layout:
                 // 点击设置tab，选中第四个tab
-                setTabSelection(3);
-                // if(isLogin){
-                // setTabSelection(3);
-                // }else{
-                // startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-                // LoginActivity.setHandler(new ConsultationCallbackHandler() {
-                //
-                // @Override
-                // public void onSuccess(String rspContent, int statusCode) {
-                // isLogin = true;
-                // setTabSelection(3);
-                // }
-                //
-                // @Override
-                // public void onFailure(ConsultationCallbackException exp) {
-                //
-                // }
-                // });
-                // }
+                if(ClientUtil.isLogin()) {
+                    setTabSelection(3);
+                } else {
+                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                        @Override
+                        public void onSuccess(String rspContent, int statusCode) {
+                            setTabSelection(3);
+                        }
+
+                        @Override
+                        public void onFailure(ConsultationCallbackException exp) {
+                        }
+                    });
+                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                }
                 break;
             default:
                 break;

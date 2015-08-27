@@ -61,6 +61,7 @@
             android:visibility="invisible"
             android:layout_gravity="center_vertical"
             android:src="@drawable/header_right_image_search" />
+        
     </LinearLayout>
 
 

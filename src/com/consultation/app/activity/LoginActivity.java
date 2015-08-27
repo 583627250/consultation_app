@@ -33,6 +33,7 @@ import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.AccountUtil;
 import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
@@ -164,39 +165,41 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //登陆
-//                if(account.getText().toString() == null || "".equals(account.getText().toString())){
-//                    Toast.makeText(LoginActivity.this, "手机号不能位空,请输入手机号!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(!AccountUtil.isMobileNum(account.getText().toString())){
-//                    Toast.makeText(LoginActivity.this, "手机号输入有误,请输入正确的手机号!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(password.getText().toString() == null || "".equals(password.getText().toString())){
-//                    Toast.makeText(LoginActivity.this, "密码不能位空,请输入密码!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(password.getText().toString().length()<6){
-//                    Toast.makeText(LoginActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(loginCount > 3){
-//                    if(code.getText().toString() == null || "".equals(code.getText().toString())){
-//                        Toast.makeText(LoginActivity.this, "验证码不能位空,请输入验证码!", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                }
+                if(account.getText().toString() == null || "".equals(account.getText().toString())){
+                    Toast.makeText(LoginActivity.this, "手机号不能位空,请输入手机号!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!AccountUtil.isPhoneNum(account.getText().toString())){
+                    Toast.makeText(LoginActivity.this, "手机号输入有误,请输入正确的手机号!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(password.getText().toString() == null || "".equals(password.getText().toString())){
+                    Toast.makeText(LoginActivity.this, "密码不能位空,请输入密码!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(password.getText().toString().length()<6){
+                    Toast.makeText(LoginActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(loginCount > 3){
+                    if(code.getText().toString() == null || "".equals(code.getText().toString())){
+                        Toast.makeText(LoginActivity.this, "验证码不能位空,请输入验证码!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 Map<String, String> parmas = new HashMap<String, String>();
-                parmas.put("mobile_ph", "13501320010");
+//                parmas.put("mobile_ph", "13501320011");
+//                parmas.put("mobile_ph", "13501320010");
+//                parmas.put("mobile_ph", "13501324949");
 //                13501320010 111111 初级医生
 //                13501324949 111111 专家
 //                13501320011 111111 患者
-                parmas.put("pwd", "111111");
-//                parmas.put("mobile_ph", account.getText().toString());
-//                parmas.put("pwd", password.getText().toString());
-//                if(loginCount > 3){
-//                    parmas.put("smsVerifyCode", code.getText().toString());
-//                }
+//                parmas.put("pwd", "111111");
+                parmas.put("mobile_ph", account.getText().toString());
+                parmas.put("pwd", password.getText().toString());
+                if(loginCount > 3){
+                    parmas.put("smsVerifyCode", code.getText().toString());
+                }
                 CommonUtil.showLoadingDialog(LoginActivity.this);
                 OpenApiService.getInstance(LoginActivity.this).getLogin(mQueue, parmas, new Response.Listener<String>() {
 
@@ -205,10 +208,13 @@ public class LoginActivity extends Activity {
                         CommonUtil.closeLodingDialog();
                         try {
                             JSONObject responses = new JSONObject(arg0);
+                            System.out.println(arg0);
                             if(responses.getInt("rtnCode") == 1){
                                 editor.put("uid", responses.getString("uid"));
                                 editor.put("userType", responses.getString("userTp"));
-//                                editor.put("userType", account.getText().toString());
+                                editor.put("refreshToken", responses.getString("refreshToken"));
+                                editor.put("real_name", responses.getString("real_name"));
+                                editor.put("icon_url", responses.getString("icon_url"));
                                 ClientUtil.setToken(responses.getString("accessToken"));
                                 handler.onSuccess("登陆成功", ConsultionStatusCode.USER_LOGIN_SUCCESS);
                                 finish();

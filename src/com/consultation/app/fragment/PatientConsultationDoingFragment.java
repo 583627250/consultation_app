@@ -126,19 +126,23 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                     pcasesTo.setId(info.getString("id"));
                                     pcasesTo.setStatus(info.getString("status"));
                                     pcasesTo.setDestination(info.getString("destination"));
-                                    pcasesTo.setCreate_time(info.getLong("create_time"));
+                                    String createTime=info.getString("create_time");
+                                    if(createTime.equals("null")) {
+                                        pcasesTo.setCreate_time(0);
+                                    } else {
+                                        pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                    }
                                     pcasesTo.setTitle(info.getString("title"));
                                     pcasesTo.setDepart_id(info.getString("depart_id"));
                                     pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                     pcasesTo.setPatient_name(info.getString("patient_name"));
-                                    pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                    pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                     pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                     pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                     pcasesTo.setExpert_name(info.getString("expert_name"));
                                     pcasesTo.setProblem(info.getString("problem"));
                                     pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                     pcasesTo.setOpinion(info.getString("opinion"));
-                                    pcasesTo.setUid(info.getString("uid"));
                                     PatientTo patientTo=new PatientTo();
                                     JSONObject pObject=info.getJSONObject("user");
                                     patientTo.setAddress(pObject.getString("address"));
@@ -160,7 +164,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                     patientTo.setArea_county(pObject.getString("area_county"));
                                     patientTo.setIcon_url(pObject.getString("icon_url"));
                                     patientTo.setModify_time(pObject.getString("modify_time"));
-                                    patientTo.setUid(pObject.getString("uid"));
                                     pcasesTo.setPatient(patientTo);
                                     patientList.add(pcasesTo);
                                 }
@@ -217,11 +220,16 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
                                             pcasesTo.setDestination(info.getString("destination"));
-                                            pcasesTo.setCreate_time(info.getLong("create_time"));
+                                            String createTime=info.getString("create_time");
+                                            if(createTime.equals("null")) {
+                                                pcasesTo.setCreate_time(0);
+                                            } else {
+                                                pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                            }
                                             pcasesTo.setTitle(info.getString("title"));
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                            pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                            pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                             pcasesTo.setPatient_name(info.getString("patient_name"));
                                             pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                             pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -229,7 +237,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                             pcasesTo.setProblem(info.getString("problem"));
                                             pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                             pcasesTo.setOpinion(info.getString("opinion"));
-                                            pcasesTo.setUid(info.getString("uid"));
                                             PatientTo patientTo=new PatientTo();
                                             JSONObject pObject=info.getJSONObject("user");
                                             patientTo.setAddress(pObject.getString("address"));
@@ -251,7 +258,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                             patientTo.setArea_county(pObject.getString("area_county"));
                                             patientTo.setIcon_url(pObject.getString("icon_url"));
                                             patientTo.setModify_time(pObject.getString("modify_time"));
-                                            patientTo.setUid(pObject.getString("uid"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
                                         }
@@ -383,11 +389,16 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
-                                pcasesTo.setCreate_time(info.getLong("create_time"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
+                                } else {
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                }
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -395,7 +406,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                 pcasesTo.setProblem(info.getString("problem"));
                                 pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                 pcasesTo.setOpinion(info.getString("opinion"));
-                                pcasesTo.setUid(info.getString("uid"));
                                 PatientTo patientTo=new PatientTo();
                                 JSONObject pObject=info.getJSONObject("user");
                                 patientTo.setAddress(pObject.getString("address"));
@@ -417,7 +427,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                 patientTo.setArea_county(pObject.getString("area_county"));
                                 patientTo.setIcon_url(pObject.getString("icon_url"));
                                 patientTo.setModify_time(pObject.getString("modify_time"));
-                                patientTo.setUid(pObject.getString("uid"));
                                 pcasesTo.setPatient(patientTo);
                                 patientList.add(pcasesTo);
                             }

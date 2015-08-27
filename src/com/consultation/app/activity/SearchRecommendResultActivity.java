@@ -29,6 +29,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.RecommendTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.CommonUtil;
@@ -60,12 +62,12 @@ public class SearchRecommendResultActivity extends Activity {
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
         titleString = getIntent().getStringExtra("titleString");
         editor = new SharePreferencesEditor(SearchRecommendResultActivity.this);
+        mQueue = Volley.newRequestQueue(SearchRecommendResultActivity.this);
         initDate();
         initView();
     }
 
     private void initDate() {
-        mQueue = Volley.newRequestQueue(SearchRecommendResultActivity.this);
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("title", titleString);
         if(!"".equals(editor.get("uid", ""))){
@@ -88,7 +90,21 @@ public class SearchRecommendResultActivity extends Activity {
                             recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
                         }
                         myAdapter.notifyDataSetChanged();
-                    }else{
+                    } else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(SearchRecommendResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(SearchRecommendResultActivity.this, LoginActivity.class));
+                    } else{
                         Toast.makeText(SearchRecommendResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {

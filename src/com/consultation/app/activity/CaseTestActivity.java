@@ -1,12 +1,12 @@
 package com.consultation.app.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,22 +22,29 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ButtonListener;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.TitleModel;
+import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.PhoneUtil;
+import com.consultation.app.util.SharePreferencesEditor;
 
 @SuppressLint("UseSparseArrays")
 public class CaseTestActivity extends CaseBaseActivity implements OnLongClickListener {
@@ -64,35 +71,29 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
 
     private int height;
 
-    private TextView textAdd;
-
-    private Map<Integer, List<String>> images=new HashMap<Integer, List<String>>();
-
-    private boolean isCreate=false;
-
-    private View imagesView;
+    private TextView textAdd, tip;
 
     private List<TitleModel> titleModels;
 
-    // private int page;
-
     private Button saveBtn;
+    
+    private String caseId,departmentId;
+    
+    private SharePreferencesEditor editor;
 
-    private ImageView image0, image1, image2, image3, image4, image5, image6, image7;
-
-    private LinearLayout layout2, layout3, layout4;
-
-    private List<ImageView> imageList=new ArrayList<ImageView>();
+    private Map<Integer, List<String>> pathMap=new HashMap<Integer, List<String>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_case_add_symptom_layout);
+        setContentView(R.layout.create_case_add_test_layout);
         context=this;
+        editor=new SharePreferencesEditor(context);
         WindowManager wm=this.getWindowManager();
         width=wm.getDefaultDisplay().getWidth();
         height=wm.getDefaultDisplay().getHeight();
-        // page=getIntent().getIntExtra("page", -1);
+        caseId = getIntent().getStringExtra("caseId");
+        departmentId = getIntent().getStringExtra("departmentId");
         initData();
         initView();
     }
@@ -101,40 +102,6 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("检验");
         title_text.setTextSize(20);
-
-        imagesView=LayoutInflater.from(CaseTestActivity.this).inflate(R.layout.create_case_image_layout, null);
-
-        image0=(ImageView)imagesView.findViewById(R.id.create_case_add_image_0);
-        image1=(ImageView)imagesView.findViewById(R.id.create_case_add_image_1);
-        image2=(ImageView)imagesView.findViewById(R.id.create_case_add_image_2);
-        image3=(ImageView)imagesView.findViewById(R.id.create_case_add_image_3);
-        image4=(ImageView)imagesView.findViewById(R.id.create_case_add_image_4);
-        image5=(ImageView)imagesView.findViewById(R.id.create_case_add_image_5);
-        image6=(ImageView)imagesView.findViewById(R.id.create_case_add_image_6);
-        image7=(ImageView)imagesView.findViewById(R.id.create_case_add_image_7);
-
-        image0.setOnLongClickListener(this);
-        image1.setOnLongClickListener(this);
-        image2.setOnLongClickListener(this);
-        image3.setOnLongClickListener(this);
-        image4.setOnLongClickListener(this);
-        image5.setOnLongClickListener(this);
-        image6.setOnLongClickListener(this);
-        image7.setOnLongClickListener(this);
-
-        layout2=(LinearLayout)imagesView.findViewById(R.id.create_case_add_image_layout_2_0);
-        layout3=(LinearLayout)imagesView.findViewById(R.id.create_case_add_image_layout_3_0);
-        layout4=(LinearLayout)imagesView.findViewById(R.id.create_case_add_image_layout_4_0);
-
-        InvisibleAllImage();
-        imageList.add(image0);
-        imageList.add(image1);
-        imageList.add(image2);
-        imageList.add(image3);
-        imageList.add(image4);
-        imageList.add(image5);
-        imageList.add(image6);
-        imageList.add(image7);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
@@ -145,104 +112,141 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
 
             @Override
             public void onClick(final View v) {
-                // Intent intent=new Intent();
-                // Bundle bundle=new Bundle();
-                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm.isActive()) {
-                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                }
-                // intent.putExtras(bundle);
-                // setResult(Activity.RESULT_OK, intent);
-                // finish();
+                finish();
             }
         });
-        rightLayout=(LinearLayout)findViewById(R.id.syamptom_right_layout);
+        rightLayout=(LinearLayout)findViewById(R.id.test_right_layout);
+
+        textAdd=(TextView)findViewById(R.id.test_add_image_text);
+        textAdd.setText(Html.fromHtml("<u>" + "添加" + "</u>"));
+        textAdd.setGravity(Gravity.CENTER_VERTICAL);
+        textAdd.setTextColor(Color.BLUE);
+        textAdd.setTextSize(17);
+        textAdd.setVisibility(View.INVISIBLE);
+        textAdd.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(CaseTestActivity.this, AddPatientPicActivity.class), currentPosition);
+            }
+        });
+
+        tip=(TextView)findViewById(R.id.test_image_tip);
+        tip.setTextSize(14);
+        tip.setVisibility(View.INVISIBLE);
 
         myAdapter=new MyAdapter();
-        listView=(ListView)findViewById(R.id.syamptom_left_listView);
+        listView=(ListView)findViewById(R.id.test_left_listView);
         listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 currentPosition=position;
-                if(isCreate) {
-                    showRightLayout(position);
-                } else {
-                    isCreate=true;
-                    rightLayout.addView(createmImageViews());
-                }
+                tip.setVisibility(View.VISIBLE);
+                textAdd.setVisibility(View.VISIBLE);
+                saveBtn.setVisibility(View.VISIBLE);
+                showRightLayout(position);
                 myAdapter.notifyDataSetChanged();
             }
         });
 
-        saveBtn=(Button)findViewById(R.id.syamptom_btn_save);
-        saveBtn.setTextSize(20);
+        saveBtn=(Button)findViewById(R.id.test_image_btn_save);
+        saveBtn.setTextSize(17);
+        saveBtn.setVisibility(View.INVISIBLE);
         saveBtn.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // 保存数据
-                List<String> paths=images.get(0);
-                String[] strs = new String[paths.size()];
-                for(int i=0; i < paths.size(); i++) {
-                    strs[i] = paths.get(i);
+                if(pathMap.get(currentPosition) == null || pathMap.get(currentPosition).size() == 0) {
+                    Toast.makeText(context, "请添加图片", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                Intent intent=new Intent();
-                intent.putExtra("paths", strs);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                File[] files=new File[pathMap.get(currentPosition).size()];
+                for(int i=0; i < pathMap.get(currentPosition).size(); i++) {
+                    File file=new File(pathMap.get(currentPosition).get(i));
+                    files[i]=file;
+                }
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("case_id", caseId);
+                params.put("test_name", leftList.get(currentPosition));
+                params.put("accessToken", ClientUtil.getToken());
+                params.put("uid", editor.get("uid", ""));
+                CommonUtil.showLoadingDialog(context);
+                OpenApiService.getInstance(context).getUploadFiles(ClientUtil.GET_UPLOAD_IMAGES_URL, context,
+                    new ConsultationCallbackHandler() {
+
+                        @Override
+                        public void onSuccess(String rspContent, int statusCode) {
+                            CommonUtil.closeLodingDialog();
+                            // {"files":[{"fileSize":"1126 Kb","fileType":"application/octet-stream; charset=utf-8","bytes":null,"fileName":"1437968253117.jpg"},{"fileSize":"1126 Kb","fileType":"application/octet-stream; charset=utf-8","bytes":null,"fileName":"1437968253117.jpg"}]}
+                            System.out.println("sccTextis ========> " + rspContent);
+                            Toast.makeText(context, "图片上传成功", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailure(ConsultationCallbackException exp) {
+                            Toast.makeText(context, "图片上传失败，请重新上传", Toast.LENGTH_LONG).show();
+                            CommonUtil.closeLodingDialog();
+                        }
+                    }, files, params);
             }
         });
+        saveBtn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_register_btn_shape),
+            getResources().getDrawable(R.drawable.login_register_press_btn_shape)).getBtnTouchListener());
     }
 
     private void showRightLayout(int position) {
-        // 影藏所有图片
-        InvisibleAllImage();
-        List<String> imagePaths=images.get(currentPosition);
+        rightLayout.removeAllViews();
+        List<String> imagePaths=pathMap.get(currentPosition);
         if(null != imagePaths && imagePaths.size() != 0) {
+            LinearLayout rowsLayout=new LinearLayout(context);
+            RelativeLayout relativeLayout=new RelativeLayout(context);
             for(int i=0; i < imagePaths.size(); i++) {
-                ImageView view=imageList.get(i);
-                if(i == 2) {
-                    layout2.setVisibility(View.VISIBLE);
-                } else if(i == 4) {
-                    layout3.setVisibility(View.VISIBLE);
-                } else if(i == 6) {
-                    layout4.setVisibility(View.VISIBLE);
+                if(i % 2 == 0) {
+                    rowsLayout=createLinearLayout();
+                    rightLayout.addView(rowsLayout);
                 }
-                view.setVisibility(View.VISIBLE);
-                Bitmap bitmap=CommonUtil.readBitMap(PhoneUtil.getInstance().getWidth(CaseTestActivity.this), imagePaths.get(i));
-                view.setImageBitmap(bitmap);
+                relativeLayout=createImage(imagePaths.get(i), i);
+                rowsLayout.addView(relativeLayout);
             }
         }
     }
 
-    private void InvisibleAllImage() {
-        image0.setVisibility(View.GONE);
-        image1.setVisibility(View.GONE);
-        image2.setVisibility(View.GONE);
-        image3.setVisibility(View.GONE);
-        image4.setVisibility(View.GONE);
-        image5.setVisibility(View.GONE);
-        image6.setVisibility(View.GONE);
-        image7.setVisibility(View.GONE);
-        layout2.setVisibility(View.GONE);
-        layout3.setVisibility(View.GONE);
-        layout4.setVisibility(View.GONE);
+    private LinearLayout createLinearLayout() {
+        LinearLayout linearLayout=new LinearLayout(context);
+        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity=Gravity.CENTER_VERTICAL;
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setPadding(0, height / 100, 0, height / 100);
+        linearLayout.setBackgroundColor(Color.WHITE);
+        linearLayout.setLayoutParams(layoutParams);
+        return linearLayout;
     }
 
-    // private boolean saveData() {
-    // boolean isAdd=false;
-    // // for(String key: images.keySet()) {
-    // // ImageView view=images.get(key);
-    // //
-    // // }
-    // // isSave=true;
-    // return isAdd;
-    // }
+    private RelativeLayout createImage(String path, int id) {
+        RelativeLayout relativeLayout=new RelativeLayout(context);
+        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        layoutParams.gravity=Gravity.CENTER;
+        layoutParams.leftMargin=width / 55;
+        layoutParams.weight=1;
+        relativeLayout.setLayoutParams(layoutParams);
+
+        ImageView imageView=new ImageView(context);
+        imageView.setId(id);
+        imageView.setOnLongClickListener(this);
+        LayoutParams imageViewParams=new LayoutParams(width / 15 * 4, width / 15 * 4);
+        imageView.setLayoutParams(imageViewParams);
+        imageView.setScaleType(ScaleType.CENTER_CROP);
+        Bitmap bitmap=CommonUtil.readBitMap(PhoneUtil.getInstance().getWidth(CaseTestActivity.this), path);
+        imageView.setImageBitmap(bitmap);
+        relativeLayout.addView(imageView);
+
+        return relativeLayout;
+    }
 
     private void initData() {
-        initCaseDatas();
+        initCaseDatas("123456case.xml");
         titleModels=caseList.get(0).getTitleModels();
         for(int i=0; i < titleModels.size(); i++) {
             leftList.add(titleModels.get(i).getTitle());
@@ -253,13 +257,15 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(data != null) {
             String photoPath=data.getStringExtra("bitmap");
-            List<String> paths=images.get(currentPosition);
+            List<String> paths=pathMap.get(currentPosition);
             if(null == paths) {
                 paths=new ArrayList<String>();
                 paths.add(photoPath);
-                images.put(currentPosition, paths);
+                pathMap.put(currentPosition, paths);
             } else {
-                paths.add(photoPath);
+                if(!paths.contains(photoPath)){
+                    paths.add(photoPath);
+                }
             }
             showRightLayout(currentPosition);
         }
@@ -308,76 +314,9 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         }
     }
 
-    private LinearLayout createmImageViews() {
-        LinearLayout layout=new LinearLayout(context);
-        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin=height / 50;
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(layoutParams);
-
-        LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
-        textNameParams.leftMargin=width / 40;
-
-        textAdd=new TextView(context);
-        textAdd.setLayoutParams(textNameParams);
-        textAdd.setText(Html.fromHtml("<u>" + "添加" + "</u>"));
-        textAdd.setGravity(Gravity.CENTER_VERTICAL);
-        textAdd.setTextColor(Color.BLUE);
-        textAdd.setTextSize(17);
-        textAdd.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(null != images.get(currentPosition) && images.get(currentPosition).size() == 8) {
-                    Toast.makeText(CaseTestActivity.this, "最多只能添加七张图片", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                startActivityForResult(new Intent(CaseTestActivity.this, AddPatientPicActivity.class), currentPosition);
-            }
-        });
-        layout.addView(textAdd);
-        layout.addView(imagesView);
-        TextView textName=new TextView(context);
-        textName.setLayoutParams(textNameParams);
-        textName.setText("提示：长按已选图片可删除图片，最多添加八张图片");
-        textName.setGravity(Gravity.CENTER_VERTICAL);
-        textName.setTextColor(Color.RED);
-        textName.setTextSize(14);
-        layout.addView(textName);
-        return layout;
-    }
-
     @Override
     public boolean onLongClick(View v) {
-        switch(v.getId()) {
-            case R.id.create_case_add_image_0:
-                showDialogs(0);
-                break;
-            case R.id.create_case_add_image_1:
-                showDialogs(1);
-                break;
-            case R.id.create_case_add_image_2:
-                showDialogs(2);
-                break;
-            case R.id.create_case_add_image_3:
-                showDialogs(3);
-                break;
-            case R.id.create_case_add_image_4:
-                showDialogs(4);
-                break;
-            case R.id.create_case_add_image_5:
-                showDialogs(5);
-                break;
-            case R.id.create_case_add_image_6:
-                showDialogs(6);
-                break;
-            case R.id.create_case_add_image_7:
-                showDialogs(7);
-                break;
-
-            default:
-                break;
-        }
+        showDialogs(v.getId());
         return false;
     }
 
@@ -386,7 +325,7 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         builder.setMessage("删除该图片?").setCancelable(false).setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-                images.get(currentPosition).remove(index);
+                pathMap.get(currentPosition).remove(index);
                 showRightLayout(currentPosition);
             }
         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {

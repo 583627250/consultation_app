@@ -1,53 +1,69 @@
 package com.consultation.app.activity;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
-import com.consultation.app.R;
-import com.consultation.app.model.CasesTo;
-import com.consultation.app.model.PatientTo;
-import com.consultation.app.service.OpenApiService;
-import com.consultation.app.util.BitmapCache;
-import com.consultation.app.util.ClientUtil;
-import com.consultation.app.util.CommonUtil;
-import com.consultation.app.util.SharePreferencesEditor;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
+import com.android.volley.toolbox.Volley;
+import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
+import com.consultation.app.model.CaseContentTo;
+import com.consultation.app.model.CasesTo;
+import com.consultation.app.model.DoctorTo;
+import com.consultation.app.model.UserStatisticsTo;
+import com.consultation.app.model.UserTo;
+import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ActivityList;
+import com.consultation.app.util.BitmapCache;
+import com.consultation.app.util.ClientUtil;
+import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.SharePreferencesEditor;
+
 @SuppressLint("HandlerLeak")
 public class CaseInfoActivity extends Activity {
 
-    private TextView title_text, back_text;
+    private TextView title_text, back_text, right_text;
 
     private LinearLayout back_layout;
 
     private TextView primaryName, primaryDepartment, primaryTitle, primaryHospital, primaryTip, expertName, expertDepartment,
             expertTitle, expertHospital, expertTip, caseStatus, caseStatusText, caseTitle, caseTitleText, caseInfo, caseInfoText,
-            caseUnresolved, caseUnresolvedText;
+            caseUnresolved, caseUnresolvedText, caseModel, caseModelText, caseOpinion, caseOpinionText;
 
     private LinearLayout all;
 
-    private ImageView updateTitleBtn,updateInfoBtn,updateUnresolvedBtn;
+    private EditText opinionEdit;
+    
+    private Button count;
+
+    private ImageView updateOpinionBtn, saveOpinionBtn, doctorPhoto, expertPhoto;
 
     private String caseId;
 
@@ -57,9 +73,11 @@ public class CaseInfoActivity extends Activity {
 
     private ImageLoader mImageLoader;
 
-    private String caseContent;
+    private StringBuffer caseContent=new StringBuffer();
 
     private CasesTo casesTo;
+    
+    private boolean haveCase = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +85,14 @@ public class CaseInfoActivity extends Activity {
         setContentView(R.layout.case_info_layout);
         caseId=getIntent().getStringExtra("caseId");
         editor=new SharePreferencesEditor(CaseInfoActivity.this);
+        ActivityList.getInstance().setActivitys("CaseInfoActivity", this);
+        mQueue=Volley.newRequestQueue(CaseInfoActivity.this);
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         initData();
         initView();
     }
 
-    private void initView() {
-        mQueue=Volley.newRequestQueue(CaseInfoActivity.this);
-        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
+    private void initData() {
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("id", caseId);
         parmas.put("accessToken", ClientUtil.getToken());
@@ -87,49 +106,149 @@ public class CaseInfoActivity extends Activity {
                 try {
                     JSONObject responses=new JSONObject(arg0);
                     if(responses.getInt("rtnCode") == 1) {
-                        caseContent=responses.getString("caseContent");
-                        JSONObject info=responses.getJSONObject("patientCase");
                         casesTo=new CasesTo();
+                        System.out.println(arg0);
+                        CommonUtil.appendToFile(arg0, new File(Environment.getExternalStorageDirectory() + File.separator + "log.txt"));
+                        String viewingCount=responses.getString("viewingCount");
+                        System.out.println(viewingCount);
+                        if(viewingCount.equals("null")) {
+                            casesTo.setViewingCount(0);
+                        } else {
+                            casesTo.setViewingCount(responses.getInt("viewingCount"));
+                        }
+                        System.out.println(casesTo.getViewingCount());
+                        JSONObject info=responses.getJSONObject("patientCase");
                         casesTo.setId(info.getString("id"));
                         casesTo.setStatus(info.getString("status"));
                         casesTo.setDestination(info.getString("destination"));
-                        casesTo.setCreate_time(info.getLong("create_time"));
+                        String createTime=info.getString("create_time");
+                        if(createTime.equals("null")) {
+                            casesTo.setCreate_time(0);
+                        } else {
+                            casesTo.setCreate_time(Long.parseLong(createTime));
+                        }
                         casesTo.setTitle(info.getString("title"));
                         casesTo.setDepart_id(info.getString("depart_id"));
                         casesTo.setDoctor_userid(info.getString("doctor_userid"));
                         casesTo.setPatient_name(info.getString("patient_name"));
-                        casesTo.setConsult_fee(info.getInt("consult_fee"));
+                        casesTo.setPatient_id(info.getString("patient_userid"));
+                        String consult_fee=info.getString("consult_fee");
+                        if(consult_fee.equals("null")) {
+                            casesTo.setConsult_fee("0");
+                        } else {
+                            casesTo.setConsult_fee(consult_fee);
+                        }
                         casesTo.setDoctor_name(info.getString("doctor_name"));
                         casesTo.setExpert_userid(info.getString("expert_userid"));
                         casesTo.setExpert_name(info.getString("expert_name"));
                         casesTo.setProblem(info.getString("problem"));
                         casesTo.setConsult_tp(info.getString("consult_tp"));
                         casesTo.setOpinion(info.getString("opinion"));
-                        casesTo.setUid(info.getString("uid"));
-                        PatientTo patientTo=new PatientTo();
-                        JSONObject pObject=info.getJSONObject("user");
-                        patientTo.setAddress(pObject.getString("address"));
-                        patientTo.setId(pObject.getInt("id") + "");
-                        patientTo.setState(pObject.getString("state"));
-                        // patientTo.setCreate_time(pObject.getLong("create_time"));
-                        patientTo.setTp(pObject.getString("tp"));
-                        patientTo.setDoctor(pObject.getString("doctor"));
-                        patientTo.setMobile_ph(pObject.getString("mobile_ph"));
-                        patientTo.setPwd(pObject.getString("pwd"));
-                        patientTo.setReal_name(pObject.getString("real_name"));
-                        patientTo.setSex(pObject.getString("sex"));
-                        patientTo.setBirth_year(pObject.getString("birth_year"));
-                        patientTo.setBirth_month(pObject.getString("birth_month"));
-                        patientTo.setBirth_day(pObject.getString("birth_day"));
-                        patientTo.setIdentity_id(pObject.getString("identity_id"));
-                        patientTo.setArea_province(pObject.getString("area_province"));
-                        patientTo.setArea_city(pObject.getString("area_city"));
-                        patientTo.setArea_county(pObject.getString("area_county"));
-                        patientTo.setIcon_url(pObject.getString("icon_url"));
-                        patientTo.setModify_time(pObject.getString("modify_time"));
-                        patientTo.setUid(pObject.getString("uid"));
-                        casesTo.setPatient(patientTo);
+                        if(!responses.getString("caseContent").equals("null")) {
+                            haveCase = true;
+                            CaseContentTo caseContentTo=new CaseContentTo();
+                            JSONObject caseContentJsonObject=responses.getJSONObject("caseContent");
+                            caseContentTo.setCaseId(caseContentJsonObject.getString("case_id"));
+                            caseContentTo.setFill_tp(caseContentJsonObject.getString("fill_tp"));
+                            caseContentTo.setContent_zs_xml(caseContentJsonObject.getString("content_zs_xml"));
+                            if(!caseContentJsonObject.getString("content_zs_xml").equals("null")) {
+                                caseContentTo.setContent_zs_xml(caseContentJsonObject.getString("content_zs_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_zs_txt").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_zs_txt")).append("\r\n");
+                            }
+                            if(!caseContentJsonObject.getString("content_tz_xml").equals("null")) {
+                                caseContentTo.setContent_tz_xml(caseContentJsonObject.getString("content_tz_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_tz_txt").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_tz_txt")).append("\r\n");
+                            }
+                            if(!caseContentJsonObject.getString("content_zljg_xml").equals("null")) {
+                                caseContentTo.setContent_zljg_xml(caseContentJsonObject.getString("content_zljg_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_zljg_txt").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_zljg_txt")).append("\r\n");
+                            }
+                            if(!caseContentJsonObject.getString("content_jws_xml").equals("null")) {
+                                caseContentTo.setContent_jws_xml(caseContentJsonObject.getString("content_jws_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_jws_xml").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_jws_xml")).append("\r\n");
+                            }
+                            if(!caseContentJsonObject.getString("content_jzs_xml").equals("null")) {
+                                caseContentTo.setContent_jzs_xml(caseContentJsonObject.getString("content_jzs_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_jzs_txt").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_jzs_txt")).append("\r\n");
+                            }
+                            if(!caseContentJsonObject.getString("content_jy_xml").equals("null")) {
+                                caseContentTo.setContent_jy_xml(caseContentJsonObject.getString("content_jy_xml"));
+                            }
+                            if(!caseContentJsonObject.getString("content_jy_txt").equals("null")) {
+                                caseContent.append(caseContentJsonObject.getString("content_jy_txt"));
+                            }
+                            casesTo.setCaseContentTo(caseContentTo);
+                            // caseContent="[主诉]\r\n[发热] 12度 59天 热型:稽留热\r\n[体重变化] 近三月内体重变化:增加 12公斤\r\n[疼痛] 变化:饮酒后加重、久坐加重";
+                        }
+                        DoctorTo doctorTo=new DoctorTo();
+                        JSONObject dObject=responses.getJSONObject("doctor");
+                        doctorTo.setId(dObject.getString("id"));
+                        doctorTo.setHospital_name(dObject.getString("depart_name"));
+                        doctorTo.setDepart_name(dObject.getString("hospital_name"));
+                        doctorTo.setTitle(dObject.getString("title"));
+                        doctorTo.setGoodat_fields(dObject.getString("goodat_fields"));
+                        doctorTo.setApprove_status(dObject.getString("approve_status"));
+                        UserTo userTo=new UserTo();
+                        JSONObject uObject=dObject.getJSONObject("user");
+                        userTo.setUser_name(uObject.getString("real_name"));
+                        userTo.setSex(uObject.getString("sex"));
+                        userTo.setBirth_year(uObject.getString("birth_year"));
+                        userTo.setTp(uObject.getString("tp"));
+                        userTo.setIcon_url(uObject.getString("icon_url"));
+                        doctorTo.setUser(userTo);
+                        UserStatisticsTo statisticsTo=new UserStatisticsTo();
+                        JSONObject tObject=dObject.getJSONObject("userTj");
+                        statisticsTo.setTotal_consult(tObject.getInt("total_consult"));
+                        statisticsTo.setStar_value(tObject.getInt("star_value"));
+                        doctorTo.setUserTj(statisticsTo);
+                        casesTo.setDoctorTo(doctorTo);
+                        DoctorTo expertTo=new DoctorTo();
+                        JSONObject eObject=responses.getJSONObject("expert");
+                        expertTo.setId(eObject.getString("id"));
+                        expertTo.setHospital_name(eObject.getString("depart_name"));
+                        expertTo.setDepart_name(eObject.getString("hospital_name"));
+                        expertTo.setTitle(eObject.getString("title"));
+                        expertTo.setGoodat_fields(eObject.getString("goodat_fields"));
+                        expertTo.setApprove_status(eObject.getString("approve_status"));
+                        UserTo userTo1=new UserTo();
+                        JSONObject uObject1=eObject.getJSONObject("user");
+                        userTo1.setUser_name(uObject1.getString("real_name"));
+                        userTo1.setSex(uObject1.getString("sex"));
+                        userTo1.setBirth_year(uObject1.getString("birth_year"));
+                        userTo1.setTp(uObject1.getString("tp"));
+                        userTo1.setIcon_url(uObject1.getString("icon_url"));
+                        expertTo.setUser(userTo1);
+                        UserStatisticsTo statisticsTo1=new UserStatisticsTo();
+                        JSONObject tObject1=eObject.getJSONObject("userTj");
+                        statisticsTo1.setTotal_consult(tObject1.getInt("total_consult"));
+                        statisticsTo1.setStar_value(tObject1.getInt("star_value"));
+                        expertTo.setUserTj(statisticsTo1);
+                        casesTo.setExpertTo(expertTo);
                         handler.sendEmptyMessage(0);
+                    } else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(CaseInfoActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initData();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(CaseInfoActivity.this, LoginActivity.class));
                     } else {
                         Toast.makeText(CaseInfoActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
@@ -152,26 +271,70 @@ public class CaseInfoActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if((casesTo.getStatus().equals("新建") || casesTo.getStatus().equals("已驳回") || casesTo.getStatus().equals("拒受理"))
+                && editor.get("userType", "").equals("1")) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("更多");
+            } else if(casesTo.getStatus().equals("讨论中") && !casesTo.getConsult_tp().equals("公开讨论") && !casesTo.getConsult_tp().equals("手术或住院") && (editor.get("userType", "").equals("2") || editor.get("userType", "").equals("1"))) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("更多");
+            } else if(casesTo.getStatus().equals("讨论中") && (casesTo.getConsult_tp().equals("公开讨论") || casesTo.getConsult_tp().equals("手术或住院")) && (editor.get("userType", "").equals("2") || editor.get("userType", "").equals("1"))) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("讨论");
+                count.setVisibility(View.VISIBLE);
+                count.setText(casesTo.getViewingCount()+"");
+            }else if(casesTo.getStatus().equals("已完成") && editor.get("userType", "").equals("1")
+                && !casesTo.getConsult_tp().equals("公开讨论")) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("评价");
+            } else if(casesTo.getStatus().equals("已完成") && editor.get("userType", "").equals("2")
+                && !casesTo.getConsult_tp().equals("公开讨论")) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("查看评价");
+            } else if(casesTo.getStatus().equals("已审核") && editor.get("userType", "").equals("2")
+                && !casesTo.getConsult_tp().equals("公开讨论")) {
+                right_text.setVisibility(View.VISIBLE);
+                right_text.setText("更多");
+            }
             all.setVisibility(View.VISIBLE);
+            if("null".equals(casesTo.getDoctorTo().getUser().getIcon_url())
+                && !"".equals(casesTo.getDoctorTo().getUser().getIcon_url())) {
+                ImageListener listener=ImageLoader.getImageListener(doctorPhoto, R.drawable.photo, R.drawable.photo);
+                mImageLoader.get(casesTo.getDoctorTo().getUser().getIcon_url(), listener);
+            }
+            doctorPhoto.setImageBitmap(CommonUtil.drawableToRoundBitmap(doctorPhoto.getDrawable(), 15));
+            if("null".equals(casesTo.getExpertTo().getUser().getIcon_url())
+                && !"".equals(casesTo.getExpertTo().getUser().getIcon_url())) {
+                ImageListener listener=ImageLoader.getImageListener(expertPhoto, R.drawable.photo, R.drawable.photo);
+                mImageLoader.get(casesTo.getExpertTo().getUser().getIcon_url(), listener);
+            }
+            expertPhoto.setImageBitmap(CommonUtil.drawableToRoundBitmap(expertPhoto.getDrawable(), 15));
             primaryName.setText(casesTo.getDoctor_name());
-            primaryDepartment.setText("");
-            primaryTitle.setText("");
-            primaryHospital.setText("");
+            primaryDepartment.setText(casesTo.getDoctorTo().getDepart_name());
+            primaryTitle.setText(casesTo.getDoctorTo().getTitle());
+            primaryHospital.setText(casesTo.getDoctorTo().getHospital_name());
             expertName.setText(casesTo.getExpert_name());
-            expertDepartment.setText("");
-            expertTitle.setText("");
-            expertHospital.setText("");
+            expertDepartment.setText(casesTo.getExpertTo().getDepart_name());
+            expertTitle.setText(casesTo.getExpertTo().getTitle());
+            expertHospital.setText(casesTo.getExpertTo().getHospital_name());
             caseStatusText.setText(casesTo.getStatus());
+            caseStatus.setText(casesTo.getPatient_name() + "先生/女士");
             caseTitleText.setText(casesTo.getTitle());
-            caseInfoText.setText(caseContent);
-            caseUnresolvedText.setText("");
+            caseInfoText.setText(caseContent.toString());
+            caseUnresolvedText.setText(casesTo.getProblem());
+            if(casesTo.getOpinion() != null && !casesTo.getOpinion().equals("null") && !casesTo.getOpinion().equals("")) {
+                caseOpinionText.setText(casesTo.getOpinion());
+            }
+            caseModelText.setText(casesTo.getConsult_tp());
         }
     };
 
-    private void initData() {
+    private void initView() {
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("病例详情");
         title_text.setTextSize(20);
+        
+        count = (Button)findViewById(R.id.header_right_tip);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
@@ -189,8 +352,93 @@ public class CaseInfoActivity extends Activity {
             }
         });
 
+        right_text=(TextView)findViewById(R.id.header_right);
+        right_text.setTextSize(18);
+        right_text.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if((casesTo.getStatus().equals("新建") || casesTo.getStatus().equals("已驳回") || casesTo.getStatus().equals("拒受理"))) {
+                    // 进入修改界面
+                    Intent intent=new Intent(CaseInfoActivity.this, CaseMoreActivity.class);
+                    intent.putExtra("btn1", "修改");
+                    intent.putExtra("btn2", "删除");
+                    intent.putExtra("flag", "1");
+                    intent.putExtra("caseId", caseId);
+                    intent.putExtra("departmentId", casesTo.getDepart_id());
+                    intent.putExtra("expertId", casesTo.getExpert_userid());
+                    intent.putExtra("expertName", casesTo.getExpert_name());
+                    intent.putExtra("patientId", casesTo.getPatient_id());
+                    intent.putExtra("patientName", casesTo.getPatient_name());
+                    intent.putExtra("consultType", casesTo.getConsult_tp());
+                    intent.putExtra("titles", casesTo.getTitle());
+                    intent.putExtra("problem", casesTo.getProblem());
+                    StringBuffer buffer=new StringBuffer();
+                    if(haveCase){
+                        if(casesTo.getCaseContentTo().getFill_tp().equals("1")) {
+                            // txt
+                            buffer.append(casesTo.getCaseContentTo().getContent_zs_txt());
+                            buffer.append(casesTo.getCaseContentTo().getContent_tz_txt()).append("&");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jy_txt()).append("&");
+                            buffer.append(casesTo.getCaseContentTo().getContent_zljg_txt()).append("&");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jws_txt()).append("&");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jzs_txt()).append("&");
+                            intent.putExtra("content", buffer.toString());
+                        } else if(casesTo.getCaseContentTo().getFill_tp().equals("2")) {
+                            // xml
+                            buffer.append(casesTo.getCaseContentTo().getContent_zs_xml()).append(",");
+                            buffer.append(casesTo.getCaseContentTo().getContent_tz_xml()).append(",");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jy_xml()).append(",");
+                            buffer.append(casesTo.getCaseContentTo().getContent_zljg_xml()).append(",");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jws_xml()).append(",");
+                            buffer.append(casesTo.getCaseContentTo().getContent_jzs_xml()).append(",");
+                            intent.putExtra("content", buffer.toString());
+                        }
+                    }
+                    startActivity(intent);
+                } else if(casesTo.getStatus().equals("讨论中") && !casesTo.getConsult_tp().equals("公开讨论") && !casesTo.getConsult_tp().equals("手术或住院") && (editor.get("userType", "").equals("2") || editor.get("userType", "").equals("1"))) {
+                    // 进入讨论界面
+                    Intent intent=new Intent(CaseInfoActivity.this, CaseMoreActivity.class);
+                    intent.putExtra("btn1", "手术或住院");
+                    intent.putExtra("btn2", "讨论");
+                    intent.putExtra("flag", "2");
+                    intent.putExtra("viewingCount", casesTo.getViewingCount()+"");
+                    intent.putExtra("consultType", casesTo.getConsult_tp());
+                    intent.putExtra("caseId", caseId);
+                    startActivity(intent);
+                }else if(casesTo.getStatus().equals("讨论中") && (casesTo.getConsult_tp().equals("公开讨论") || casesTo.getConsult_tp().equals("手术或住院")) && (editor.get("userType", "").equals("2") || editor.get("userType", "").equals("1"))) {
+                    // 进入讨论界面
+                    Intent intent=new Intent(CaseInfoActivity.this, DiscussionCaseActivity.class);
+                    intent.putExtra("caseId", caseId);
+                    intent.putExtra("consultType", casesTo.getConsult_tp());
+                    startActivity(intent);
+                }else if(right_text.getText().toString().equals("评价")) {
+                    // 进入评价界面
+                    Intent intent=new Intent(CaseInfoActivity.this, EvaluationCaseActivity.class);
+                    intent.putExtra("doctorUserId", casesTo.getDoctor_userid());
+                    intent.putExtra("caseId", casesTo.getId());
+                    startActivity(intent);
+                } else if(right_text.getText().toString().equals("查看评价")) {
+                    Intent intent=new Intent(CaseInfoActivity.this, EvaluationCaseActivity.class);
+                    intent.putExtra("doctorUserId", casesTo.getDoctor_userid());
+                    startActivity(intent);
+                } else if(casesTo.getStatus().equals("已审核") && editor.get("userType", "").equals("2")
+                    && !casesTo.getConsult_tp().equals("公开讨论")) {
+                    Intent intent=new Intent(CaseInfoActivity.this, CaseMoreActivity.class);
+                    intent.putExtra("btn1", "受理");
+                    intent.putExtra("btn2", "拒绝");
+                    intent.putExtra("flag", "3");
+                    intent.putExtra("caseId", caseId);
+                    startActivity(intent);
+                }
+            }
+        });
+
         all=(LinearLayout)findViewById(R.id.case_info_all_layout);
         all.setVisibility(View.GONE);
+
+        doctorPhoto=(ImageView)findViewById(R.id.case_info_primary_imageView);
+        expertPhoto=(ImageView)findViewById(R.id.case_info_expert_imageView);
 
         primaryName=(TextView)findViewById(R.id.case_info_primary_name_text);
         primaryName.setTextSize(20);
@@ -217,6 +465,18 @@ public class CaseInfoActivity extends Activity {
         caseTitle=(TextView)findViewById(R.id.case_info_title_text);
         caseTitle.setTextSize(17);
 
+        caseModel=(TextView)findViewById(R.id.case_info_mode_text);
+        caseModel.setTextSize(17);
+
+        caseModelText=(TextView)findViewById(R.id.case_info_mode_info_text);
+        caseModelText.setTextSize(17);
+
+        caseOpinion=(TextView)findViewById(R.id.case_info_opinion_text);
+        caseOpinion.setTextSize(17);
+
+        caseOpinionText=(TextView)findViewById(R.id.case_info_opinion_info_text);
+        caseOpinionText.setTextSize(17);
+
         caseStatus=(TextView)findViewById(R.id.case_info_status_text);
         caseStatus.setTextSize(17);
 
@@ -237,31 +497,36 @@ public class CaseInfoActivity extends Activity {
 
         caseUnresolvedText=(TextView)findViewById(R.id.case_info_unresolved_info_text);
         caseUnresolvedText.setTextSize(17);
-        
-        updateTitleBtn = (ImageView)findViewById(R.id.case_info_title_update_image);
-        updateTitleBtn.setOnClickListener(new OnClickListener() {
-            
+
+        updateOpinionBtn=(ImageView)findViewById(R.id.case_info_opinion_update_image);
+        updateOpinionBtn.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                Toast.makeText(CaseInfoActivity.this, "修改标题", Toast.LENGTH_LONG).show();
+                caseTitleText.setVisibility(View.GONE);
+                opinionEdit.setText(caseTitleText.getText());
+                opinionEdit.setVisibility(View.VISIBLE);
+                Toast.makeText(CaseInfoActivity.this, "填写诊断意见", Toast.LENGTH_LONG).show();
+                updateOpinionBtn.setVisibility(View.GONE);
+                saveOpinionBtn.setVisibility(View.VISIBLE);
+                opinionEdit.setFocusable(true);
+                opinionEdit.setFocusableInTouchMode(true);
+                opinionEdit.requestFocus();
+                InputMethodManager inputManager=
+                    (InputMethodManager)opinionEdit.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(opinionEdit, 0);
             }
         });
-        updateInfoBtn = (ImageView)findViewById(R.id.case_info_details_update_image);
-        updateInfoBtn.setOnClickListener(new OnClickListener() {
-            
+        saveOpinionBtn=(ImageView)findViewById(R.id.case_info_opinion_save_image);
+        saveOpinionBtn.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                Toast.makeText(CaseInfoActivity.this, "修改明细", Toast.LENGTH_LONG).show();
-            }
-        });
-        updateUnresolvedBtn = (ImageView)findViewById(R.id.case_info_unresolved_update_image);
-        updateUnresolvedBtn.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(CaseInfoActivity.this, "修改待解决", Toast.LENGTH_LONG).show();
+                Toast.makeText(CaseInfoActivity.this, "保存标题", Toast.LENGTH_LONG).show();
+                caseTitleText.setText(opinionEdit.getText().toString());
+                updateOpinionBtn.setVisibility(View.VISIBLE);
+                saveOpinionBtn.setVisibility(View.GONE);
             }
         });
     }
-
 }

@@ -18,16 +18,12 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.StringRequest;
 import com.consultation.app.ConsultionStatusCode;
 import com.consultation.app.exception.ConsultationCallbackException;
-import com.consultation.app.http.MultiPartStringRequest;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.HttpUtil;
@@ -35,11 +31,17 @@ import com.consultation.app.util.HttpUtil;
 public class OpenApiService {
 
     private static class SingleServiceHolder {
+
         private static final OpenApiService service=new OpenApiService();
     }
 
     public static OpenApiService getInstance(Context context) {
         return SingleServiceHolder.service;
+    }
+
+    public void heartBeat(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_REFRESHACCESSTOKEN_URL, parmas, listener, errorListener);
     }
 
     public void getKnowledgeList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -60,6 +62,11 @@ public class OpenApiService {
     public void getRegister(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_REGISTER_URL, parmas, listener, errorListener);
+    }
+
+    public void getforgetPwd(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_FORGET_PWD_URL, parmas, listener, errorListener);
     }
 
     public void getLogin(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -91,7 +98,7 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_PATIENTCASE_LIST_URL, parmas, listener, errorListener);
     }
-    
+
     public void getPatientCaseListInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_PATIENTCASE_INFO_URL, parmas, listener, errorListener);
@@ -106,7 +113,7 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_CASE_SAVE_URL, parmas, listener, errorListener);
     }
-    
+
     public void getCaseSaveInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_CASE_UP_ALL_URL, parmas, listener, errorListener);
@@ -115,6 +122,76 @@ public class OpenApiService {
     public void getIsPatient(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_IS_PATIENT_URL, parmas, listener, errorListener);
+    }
+
+    public void getDoctorComment(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_DOCTOR_COMMENT_URL, parmas, listener, errorListener);
+    }
+
+    public void getSaveDoctorComment(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_SAVE_DOCTOR_COMMENT_URL, parmas, listener, errorListener);
+    }
+
+    public void getInvitationList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_INVITATION_LIST_URL, parmas, listener, errorListener);
+    }
+
+    public void getSendInvitation(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_SEND_INVITATION_URL, parmas, listener, errorListener);
+    }
+
+    public void getFeedBackList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_FEEDBACK_LIST_URL, parmas, listener, errorListener);
+    }
+
+    public void getDiscussionCaseList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_DISCUSSION_CASE_LIST_URL, parmas, listener, errorListener);
+    }
+
+    public void getSendDiscussionCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_SEND_DISCUSSION_CASE_URL, parmas, listener, errorListener);
+    }
+
+    public void getDiscussionCaseFinsh(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_DISCUSSION_CASE_FINSH_URL, parmas, listener, errorListener);
+    }
+
+    public void getRejectedCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_REJECTED_CASE_URL, parmas, listener, errorListener);
+    }
+
+    public void getReceivedCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_RECEIVED_CASE_URL, parmas, listener, errorListener);
+    }
+
+    public void getToSurgeryCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_TOSURGERY_CASE_URL, parmas, listener, errorListener);
+    }
+
+    public void getDeleteCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_DELETE_CASE_URL, parmas, listener, errorListener);
+    }
+
+    public void getSendFeedBack(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_SEND_FEEDBACK_URL, parmas, listener, errorListener);
+    }
+
+    public void getUserInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_USERINFO_URL, parmas, listener, errorListener);
     }
 
     public void getHttpsRequest(String url, Context context, Map<String, String> parmas, ConsultationCallbackHandler callbackHandler) {
@@ -141,9 +218,10 @@ public class OpenApiService {
             callbackHandler.onFailure(new ConsultationCallbackException(ConsultionStatusCode.FAIL, "网络请求异常"));
         }
     }
-    
-    public void getUploadFiles(String url, Context context, Map<String, String> parmas, ConsultationCallbackHandler callbackHandler, File[] files) {
-        HttpUtil.getInstance(context).uploadFiles(url, callbackHandler, files);
+
+    public void getUploadFiles(String url, Context context, ConsultationCallbackHandler callbackHandler, File[] files,
+        Map<String, String> params) {
+        HttpUtil.getInstance(context).uploadFiles(url, callbackHandler, files, params);
     }
 
     private void httpRequest(RequestQueue mQueue, String url, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -156,23 +234,5 @@ public class OpenApiService {
             }
         };
         mQueue.add(stringRequest);
-    }
-
-    public void sendImageHttp(RequestQueue mQueue, final Map<String, File> files, final Map<String, String> params,
-        final Listener<String> responseListener, final ErrorListener errorListener) {
-        MultiPartStringRequest multiPartRequest=
-            new MultiPartStringRequest(Request.Method.PUT, "", responseListener, errorListener) {
-
-                @Override
-                public Map<String, File> getFileUploads() {
-                    return files;
-                }
-
-                @Override
-                public Map<String, String> getStringUploads() {
-                    return params;
-                }
-            };
-        mQueue.add(multiPartRequest);
     }
 }

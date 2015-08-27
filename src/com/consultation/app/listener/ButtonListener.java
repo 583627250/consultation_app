@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 
 public class ButtonListener {
@@ -22,7 +23,7 @@ public class ButtonListener {
     private int pressColor;
     
     private boolean isColor = false;
-
+    
     public ButtonListener setImage(Drawable commonImage, Drawable pressImage) {
         isColor = false;
         this.commonImage=commonImage;
@@ -48,12 +49,18 @@ public class ButtonListener {
                     }else{
                         ((ImageButton)v).setBackgroundDrawable(pressImage);
                     }
-                    
                 } else if(v instanceof Button) {
                     if(isColor){
                         ((Button)v).setBackgroundColor(pressColor);
                     }else{
                         ((Button)v).setBackgroundDrawable(pressImage);
+                    }
+                }
+                else if(v instanceof LinearLayout) {
+                    if(isColor){
+                        ((LinearLayout)v).setBackgroundColor(pressColor);
+                    }else{
+                        ((LinearLayout)v).setBackgroundDrawable(pressImage);
                     }
                 }
             } else if(event.getAction() == MotionEvent.ACTION_UP) {
@@ -68,6 +75,32 @@ public class ButtonListener {
                         ((Button)v).setBackgroundColor(commonColor);
                     }else{
                         ((Button)v).setBackgroundDrawable(commonImage);
+                    }
+                } else if(v instanceof LinearLayout) {
+                    if(isColor){
+                        ((LinearLayout)v).setBackgroundColor(commonColor);
+                    }else{
+                        ((LinearLayout)v).setBackgroundDrawable(commonImage);
+                    }
+                }
+            }else if(event.getAction() == MotionEvent.ACTION_CANCEL) {
+                if(v instanceof ImageButton) {
+                    if(isColor){
+                        ((ImageButton)v).setBackgroundColor(commonColor);
+                    }else{
+                        ((ImageButton)v).setBackgroundDrawable(commonImage);
+                    }
+                } else if(v instanceof Button) {
+                    if(isColor){
+                        ((Button)v).setBackgroundColor(commonColor);
+                    }else{
+                        ((Button)v).setBackgroundDrawable(commonImage);
+                    }
+                } else if(v instanceof LinearLayout) {
+                    if(isColor){
+                        ((LinearLayout)v).setBackgroundColor(commonColor);
+                    }else{
+                        ((LinearLayout)v).setBackgroundDrawable(commonImage);
                     }
                 }
             }

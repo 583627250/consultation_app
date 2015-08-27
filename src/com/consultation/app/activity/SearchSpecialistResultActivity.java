@@ -34,6 +34,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.SpecialistTo;
 import com.consultation.app.model.UserStatisticsTo;
 import com.consultation.app.model.UserTo;
@@ -69,13 +71,13 @@ public class SearchSpecialistResultActivity extends Activity {
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
         nameString = getIntent().getStringExtra("nameString");
         mContext = this;
+        mQueue = Volley.newRequestQueue(SearchSpecialistResultActivity.this);
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initDate();
         initView();
     }
 
     private void initDate() {
-        mQueue = Volley.newRequestQueue(SearchSpecialistResultActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("real_name", nameString);
@@ -108,7 +110,21 @@ public class SearchSpecialistResultActivity extends Activity {
                             specialist_content_list.add(specialistTo);
                         }
                         myAdapter.notifyDataSetChanged();
-                    }else{
+                    }else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(SearchSpecialistResultActivity.this, LoginActivity.class));
+                    } else{
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -227,7 +243,7 @@ public class SearchSpecialistResultActivity extends Activity {
             holder.patientCount.setText(specialist_content_list.get(position).getUserTj().getTotal_consult()+"");
             holder.patientCount.setTextSize(16);
             if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;

@@ -188,7 +188,7 @@ public class UserInfoSumbitActivity extends Activity {
                     return;
                 }
                 Map<String, String> parmas = new HashMap<String, String>();
-                parmas.put("real_name", realName.getText().toString());
+                parmas.put("real_name", realNameEdit.getText().toString());
                 parmas.put("sex", sexValue+"");
                 parmas.put("birth_year", birthdayEdit.getText().toString().split("-")[0]);
                 parmas.put("birth_month", birthdayEdit.getText().toString().split("-")[1]);
@@ -209,7 +209,21 @@ public class UserInfoSumbitActivity extends Activity {
                             if(responses.getInt("rtnCode") == 1){
                                 handler.onSuccess("用户信息提交成功", ConsultionStatusCode.SUCCESS);
                                 finish();
-                            }else{
+                            }else if(responses.getInt("rtnCode") == 10004){
+                                Toast.makeText(UserInfoSumbitActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initData();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(UserInfoSumbitActivity.this, LoginActivity.class));
+                            } else{
                                 Toast.makeText(UserInfoSumbitActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                             }
                         } catch(JSONException e) {

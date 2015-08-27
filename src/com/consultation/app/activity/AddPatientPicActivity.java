@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -140,7 +138,8 @@ public class AddPatientPicActivity extends Activity implements OnClickListener {
             picPath = cursor.getString(columnIndex);
             cursor.close();
         }
-        if(picPath != null && ( picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))){
+        System.out.println(picPath == null);
+        if(picPath != null && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))){
             Intent intent = new Intent();
             intent.putExtra("bitmap", picPath);
             setResult(Activity.RESULT_OK, intent);
@@ -149,29 +148,4 @@ public class AddPatientPicActivity extends Activity implements OnClickListener {
             Toast.makeText(this, "选择图片文件不正确", Toast.LENGTH_LONG).show();
         }
     }
-
-//    private void setPicToView(Intent picdata) {
-//        Bundle extras=picdata.getExtras();
-//        if(extras != null) {
-//            Bitmap photo=extras.getParcelable("data");
-//            /**
-//             * 下面注释的方法是将裁剪之后的图片以Base64Coder的字符方式上 传到服务器，QQ头像上传采用的方法跟这个类似
-//             */
-//            ByteArrayOutputStream stream=new ByteArrayOutputStream();
-//            photo.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-//            byte[] b=stream.toByteArray();
-//            // 将图片流以字符串形式存储下来
-//            String tp=new String(Base64Coder.encodeLines(b));
-//            System.out.println(tp);
-//            // 这个地方大家可以写下给服务器上传图片的实现，直接把tp直接上传就可以了，
-//            // 服务器处理的方法是服务器那边的事了，吼吼
-//            //
-//            // 如果下载到的服务器的数据还是以Base64Coder的形式的话，可以用以下方式转换
-//            // 为我们可以用的图片类型就OK啦...吼吼
-//            // Bitmap dBitmap=BitmapFactory.decodeFile(tp);
-//
-//        }
-//        setResult(Activity.RESULT_OK, picdata);
-//        finish();
-//    }
 }

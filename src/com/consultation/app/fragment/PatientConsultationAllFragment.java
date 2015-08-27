@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,9 +30,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
-import com.consultation.app.activity.CaseInfoActivity;
-import com.consultation.app.model.PatientTo;
 import com.consultation.app.model.CasesTo;
+import com.consultation.app.model.PatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
@@ -127,25 +125,28 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                     pcasesTo.setId(info.getString("id"));
                                     pcasesTo.setStatus(info.getString("status"));
                                     pcasesTo.setDestination(info.getString("destination"));
-                                    pcasesTo.setCreate_time(info.getLong("create_time"));
+                                    String createTime=info.getString("create_time");
+                                    if(createTime.equals("null")) {
+                                        pcasesTo.setCreate_time(0);
+                                    } else {
+                                        pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                    }
                                     pcasesTo.setTitle(info.getString("title"));
                                     pcasesTo.setDepart_id(info.getString("depart_id"));
                                     pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                     pcasesTo.setPatient_name(info.getString("patient_name"));
-                                    pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                    pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                     pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                     pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                     pcasesTo.setExpert_name(info.getString("expert_name"));
                                     pcasesTo.setProblem(info.getString("problem"));
                                     pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                     pcasesTo.setOpinion(info.getString("opinion"));
-                                    pcasesTo.setUid(info.getString("uid"));
                                     PatientTo patientTo=new PatientTo();
                                     JSONObject pObject=info.getJSONObject("user");
                                     patientTo.setAddress(pObject.getString("address"));
                                     patientTo.setId(pObject.getInt("id") + "");
                                     patientTo.setState(pObject.getString("state"));
-                                    // patientTo.setCreate_time(pObject.getLong("create_time"));
                                     patientTo.setTp(pObject.getString("tp"));
                                     patientTo.setDoctor(pObject.getString("doctor"));
                                     patientTo.setMobile_ph(pObject.getString("mobile_ph"));
@@ -161,7 +162,6 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                     patientTo.setArea_county(pObject.getString("area_county"));
                                     patientTo.setIcon_url(pObject.getString("icon_url"));
                                     patientTo.setModify_time(pObject.getString("modify_time"));
-                                    patientTo.setUid(pObject.getString("uid"));
                                     pcasesTo.setPatient(patientTo);
                                     patientList.add(pcasesTo);
                                 }
@@ -217,11 +217,16 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
                                             pcasesTo.setDestination(info.getString("destination"));
-                                            pcasesTo.setCreate_time(info.getLong("create_time"));
+                                            String createTime=info.getString("create_time");
+                                            if(createTime.equals("null")) {
+                                                pcasesTo.setCreate_time(0);
+                                            } else {
+                                                pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                            }
                                             pcasesTo.setTitle(info.getString("title"));
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                            pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                            pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                             pcasesTo.setPatient_name(info.getString("patient_name"));
                                             pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                             pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -229,7 +234,6 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                             pcasesTo.setProblem(info.getString("problem"));
                                             pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                             pcasesTo.setOpinion(info.getString("opinion"));
-                                            pcasesTo.setUid(info.getString("uid"));
                                             PatientTo patientTo=new PatientTo();
                                             JSONObject pObject=info.getJSONObject("user");
                                             patientTo.setAddress(pObject.getString("address"));
@@ -251,7 +255,6 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                             patientTo.setArea_county(pObject.getString("area_county"));
                                             patientTo.setIcon_url(pObject.getString("icon_url"));
                                             patientTo.setModify_time(pObject.getString("modify_time"));
-                                            patientTo.setUid(pObject.getString("uid"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
                                         }
@@ -381,11 +384,16 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
-                                pcasesTo.setCreate_time(info.getLong("create_time"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
+                                } else {
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                }
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                pcasesTo.setConsult_fee(info.getString("consult_fee"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -393,7 +401,6 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                 pcasesTo.setProblem(info.getString("problem"));
                                 pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                 pcasesTo.setOpinion(info.getString("opinion"));
-                                pcasesTo.setUid(info.getString("uid"));
                                 PatientTo patientTo=new PatientTo();
                                 JSONObject pObject=info.getJSONObject("user");
                                 patientTo.setAddress(pObject.getString("address"));
@@ -415,7 +422,6 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                                 patientTo.setArea_county(pObject.getString("area_county"));
                                 patientTo.setIcon_url(pObject.getString("icon_url"));
                                 patientTo.setModify_time(pObject.getString("modify_time"));
-                                patientTo.setUid(pObject.getString("uid"));
                                 pcasesTo.setPatient(patientTo);
                                 patientList.add(pcasesTo);
                             }

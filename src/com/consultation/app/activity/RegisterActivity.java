@@ -31,6 +31,7 @@ import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.AccountUtil;
+import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
@@ -214,69 +215,69 @@ public class RegisterActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-//                if(null == phone_edit.getText().toString() || "".equals(phone_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "请输入手机号码", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(!AccountUtil.isMobileNum(phone_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "手机号输入有误，请重输入正确的手机号", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(null == verification_edit.getText().toString() || "".equals(verification_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(null == pwd_edit.getText().toString() || "".equals(pwd_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(pwd_edit.getText().toString().length()<6){
-//                    Toast.makeText(RegisterActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(null == repwd_edit.getText().toString() || "".equals(repwd_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "请输入确认密码", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if(!repwd_edit.getText().toString().equals(pwd_edit.getText().toString())){
-//                    Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                CommonUtil.showLoadingDialog(RegisterActivity.this);
-//                Map<String, String> parmas = new HashMap<String, String>();
-//                parmas.put("mobile_ph", phone_edit.getText().toString());
-//                parmas.put("pwd", pwd_edit.getText().toString());
-//                parmas.put("smsVerifyCode", verification_edit.getText().toString());
-//                CommonUtil.showLoadingDialog(RegisterActivity.this);
-//                OpenApiService.getInstance(RegisterActivity.this).getRegister(mQueue, parmas, new Response.Listener<String>() {
-//
-//                    @Override
-//                    public void onResponse(String arg0) {
-//                        CommonUtil.closeLodingDialog();
-//                        try {
-//                            JSONObject responses = new JSONObject(arg0);
-//                            if(responses.getInt("rtnCode") == 1){
-//                                editor.put("uid", responses.getString("uid"));
-//                                editor.put("userType", responses.getString("userTp"));
-//                                ClientUtil.setToken(responses.getString("accessToken"));
+                if(null == phone_edit.getText().toString() || "".equals(phone_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!AccountUtil.isPhoneNum(phone_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "手机号输入有误，请重输入正确的手机号", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(null == verification_edit.getText().toString() || "".equals(verification_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "请输入验证码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(null == pwd_edit.getText().toString() || "".equals(pwd_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(pwd_edit.getText().toString().length()<6){
+                    Toast.makeText(RegisterActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(null == repwd_edit.getText().toString() || "".equals(repwd_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "请输入确认密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!repwd_edit.getText().toString().equals(pwd_edit.getText().toString())){
+                    Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                CommonUtil.showLoadingDialog(RegisterActivity.this);
+                Map<String, String> parmas = new HashMap<String, String>();
+                parmas.put("mobile_ph", phone_edit.getText().toString());
+                parmas.put("pwd", pwd_edit.getText().toString());
+                parmas.put("smsVerifyCode", verification_edit.getText().toString());
+                CommonUtil.showLoadingDialog(RegisterActivity.this);
+                OpenApiService.getInstance(RegisterActivity.this).getRegister(mQueue, parmas, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String arg0) {
+                        CommonUtil.closeLodingDialog();
+                        try {
+                            JSONObject responses = new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1){
+                                editor.put("uid", responses.getString("uid"));
+                                editor.put("userType", responses.getString("userTp"));
+                                ClientUtil.setToken(responses.getString("accessToken"));
                                 UserInfoSumbitActivity.setHandler(handler);
                                 startActivity(new Intent(RegisterActivity.this, UserInfoSumbitActivity.class));
-//                                finish();
-//                            }else{
-//                                Toast.makeText(RegisterActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch(JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError arg0) {
-//                        CommonUtil.closeLodingDialog();
-//                        Toast.makeText(RegisterActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                                finish();
+                            }else{
+                                Toast.makeText(RegisterActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        CommonUtil.closeLodingDialog();
+                        Toast.makeText(RegisterActivity.this, arg0.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         commit_btm.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());

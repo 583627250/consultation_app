@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +27,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.AccountUtil;
 import com.consultation.app.util.CommonUtil;
@@ -149,7 +152,20 @@ public class ForgetPwdActivity extends Activity {
                                                                 }
                                                             }
                                                         }).start();
-                                                    }
+                                                    }else if(responses.getInt("rtnCode") == 10004){
+                                                        Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                                            @Override
+                                                            public void onSuccess(String rspContent, int statusCode) {
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(ConsultationCallbackException exp) {
+                                                            }
+                                                        });
+                                                        startActivity(new Intent(ForgetPwdActivity.this, LoginActivity.class));
+                                                    } 
                                                 } catch(JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -163,6 +179,19 @@ public class ForgetPwdActivity extends Activity {
                                                     .show();
                                             }
                                         });
+                                } else if(responses.getInt("rtnCode") == 10004){
+                                    Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                        @Override
+                                        public void onSuccess(String rspContent, int statusCode) {
+                                        }
+
+                                        @Override
+                                        public void onFailure(ConsultationCallbackException exp) {
+                                        }
+                                    });
+                                    startActivity(new Intent(ForgetPwdActivity.this, LoginActivity.class));
                                 } else {
                                     Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
                                         .show();
@@ -217,7 +246,7 @@ public class ForgetPwdActivity extends Activity {
                 parmas.put("pwd", pwd_edit.getText().toString());
                 parmas.put("smsVerifyCode", verification_edit.getText().toString());
                 CommonUtil.showLoadingDialog(ForgetPwdActivity.this);
-                OpenApiService.getInstance(ForgetPwdActivity.this).getRegister(mQueue, parmas, new Response.Listener<String>() {
+                OpenApiService.getInstance(ForgetPwdActivity.this).getforgetPwd(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String arg0) {
@@ -227,6 +256,19 @@ public class ForgetPwdActivity extends Activity {
                             if(responses.getInt("rtnCode") == 1) {
                                 Toast.makeText(ForgetPwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
                                 finish();
+                            } else if(responses.getInt("rtnCode") == 10004){
+                                Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(ForgetPwdActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                             }

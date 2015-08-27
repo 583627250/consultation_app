@@ -32,6 +32,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.RecommendTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.CommonUtil;
@@ -80,7 +82,6 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
             switch (msg.what) {
             case 0:
                 myAdapter.notifyDataSetChanged();
-                recommendListView.setHasMoreData(true);
                 page = 1;
                 ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                 break;
@@ -107,6 +108,7 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_layout);
         editor = new SharePreferencesEditor(KnowledgeRecommendListActivity.this);
+        mQueue = Volley.newRequestQueue(KnowledgeRecommendListActivity.this);
         initDate();
         initView();
         initVaule();
@@ -156,11 +158,34 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
                                     JSONObject info = infos.getJSONObject(i);
                                     recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
                                 }
+                                if(infos.length() == 10) {
+                                    recommendListView.setHasMoreData(true);
+                                } else {
+                                    recommendListView.setHasMoreData(false);
+                                }
                                 Message msg = handler.obtainMessage();
                                 msg.what = 0;
                                 msg.obj = pullToRefreshLayout;
                                 handler.sendMessage(msg);
-                            }else{
+                            } else if(responses.getInt("rtnCode") == 10004){
+                                Message msg=handler.obtainMessage();
+                                msg.what=2;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initDate();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(KnowledgeRecommendListActivity.this, LoginActivity.class));
+                            } else{
                                 Message msg = handler.obtainMessage();
                                 msg.what = 2;
                                 msg.obj = pullToRefreshLayout;
@@ -175,6 +200,10 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
 
                     @Override
                     public void onErrorResponse(VolleyError arg0) {
+                        Message msg=handler.obtainMessage();
+                        msg.what=2;
+                        msg.obj=pullToRefreshLayout;
+                        handler.sendMessage(msg);
                         Toast.makeText(KnowledgeRecommendListActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -205,7 +234,6 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
     }
 
     private void initDate() {
-        mQueue = Volley.newRequestQueue(KnowledgeRecommendListActivity.this);
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
@@ -232,7 +260,21 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
                         }else{
                             recommendListView.setHasMoreData(false);
                         }
-                    }else{
+                    }else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(KnowledgeRecommendListActivity.this, LoginActivity.class));
+                    } else{
                         Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -324,7 +366,31 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
                         msg.what = 1;
                         msg.obj = pullableListView;
                         handler.sendMessage(msg);
-                    }else{
+                    }else if(responses.getInt("rtnCode") == 10004){
+                        hasMore=true;
+                        Message msg=handler.obtainMessage();
+                        msg.what=1;
+                        msg.obj=pullableListView;
+                        handler.sendMessage(msg);
+                        Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(KnowledgeRecommendListActivity.this, LoginActivity.class));
+                    } else{
+                        hasMore=true;
+                        Message msg=handler.obtainMessage();
+                        msg.what=1;
+                        msg.obj=pullableListView;
+                        handler.sendMessage(msg);
                         Toast.makeText(KnowledgeRecommendListActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -335,6 +401,11 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
 
             @Override
             public void onErrorResponse(VolleyError arg0) {
+                hasMore=true;
+                Message msg=handler.obtainMessage();
+                msg.what=1;
+                msg.obj=pullableListView;
+                handler.sendMessage(msg);
                 Toast.makeText(KnowledgeRecommendListActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });

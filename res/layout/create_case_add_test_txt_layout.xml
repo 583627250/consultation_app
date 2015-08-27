@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_white"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="vertical"
+                    android:padding="10dp" >
+
+                    <TextView
+                        android:id="@+id/test_txt_add_image_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加" />
+
+                    <LinearLayout
+                        android:id="@+id/test_txt_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/consultation_color_white"
+                        android:orientation="vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp" >
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/test_txt_image_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="提示:长按已选图片可以删除该图片"
+                        android:textColor="@color/consultation_color_red" />
+
+                    <Button
+                        android:id="@+id/test_txt_image_btn_save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/login_register_btn_shape"
+                        android:padding="5dp"
+                        android:text="保存"
+                        android:textColor="@color/consultation_color_2CB67A" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/consultation_color_F4F4F4"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/test_txt_btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/create_case_submit_selector"
+                android:padding="10dp"
+                android:text="提交"
+                android:textColor="@color/consultation_color_white" />
+        </LinearLayout> -->
+    </LinearLayout>
+
+</LinearLayout>

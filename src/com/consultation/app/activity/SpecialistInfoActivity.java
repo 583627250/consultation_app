@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.DoctorTo;
 import com.consultation.app.model.UserStatisticsTo;
 import com.consultation.app.model.UserTo;
@@ -90,13 +93,13 @@ public class SpecialistInfoActivity extends Activity {
         title = getIntent().getStringExtra("title");
         photoUrl = getIntent().getStringExtra("photoUrl");
         mContext = this;
+        mQueue = Volley.newRequestQueue(SpecialistInfoActivity.this);
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initData();
         initView();
     }
 
     private void initData() {
-        mQueue = Volley.newRequestQueue(SpecialistInfoActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("id", id);
         CommonUtil.showLoadingDialog(mContext);
@@ -107,7 +110,6 @@ public class SpecialistInfoActivity extends Activity {
                 CommonUtil.closeLodingDialog();
                 try {
                     JSONObject responses = new JSONObject(arg0);
-                    System.out.println(arg0);
                     if(responses.getInt("rtnCode") == 1){
                         JSONObject infos = responses.getJSONObject("doctor");
                         doctorTo = new DoctorTo();
@@ -135,7 +137,21 @@ public class SpecialistInfoActivity extends Activity {
                         
                         setListViewHeightBasedOnChildren(helpListView);
                         setListViewHeightBasedOnChildren(feedbackListView);
-                    }else{
+                    }else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initData();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(SpecialistInfoActivity.this, LoginActivity.class));
+                    } else{
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -188,7 +204,7 @@ public class SpecialistInfoActivity extends Activity {
         
         photo = (CircularImage)findViewById(R.id.specialist_info_user_photo);
 //        if(photoUrl != null && !photoUrl.equals("")) {
-//            ImageListener listener = ImageLoader.getImageListener(photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+//            ImageListener listener = ImageLoader.getImageListener(photo, R.drawable.photo, R.drawable.photo);
 //            mImageLoader.get(photoUrl, listener);
 //        }
         photo.setImageResource(R.drawable.photo);
@@ -227,14 +243,18 @@ public class SpecialistInfoActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                
+                Intent intent = new Intent(mContext, SpecialistInfoHelpActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
             }
         });
         feedbackLayout.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
-                
+                Intent intent = new Intent(mContext, SpecialistInfoFeedbackActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
             }
         });
         
@@ -330,7 +350,7 @@ public class SpecialistInfoActivity extends Activity {
             helpViewHolder.nameDate.setTextSize(14);
             helpViewHolder.state.setImageResource(R.drawable.specialist_help_complete);
 //            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+//                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
 //                mImageLoader.get(imgUrl, listener);
 //            }
             return convertView;
@@ -380,7 +400,7 @@ public class SpecialistInfoActivity extends Activity {
             feedbackViewHolder.feedbackRatingBar.setRating(4.5f);
             
 //            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+//                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
 //                mImageLoader.get(imgUrl, listener);
 //            }
             return convertView;

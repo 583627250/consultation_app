@@ -1,5 +1,7 @@
 package com.consultation.app.activity;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +28,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.CaseParams;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ActivityList;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
@@ -36,33 +42,55 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
 
     private LinearLayout back_layout;
 
-    private LinearLayout symptom_layout, signs_layout, test_layout, check_layout, diagnosis_layout, past_history_layout, family_history_layout;
+    private LinearLayout symptom_layout, signs_layout, test_layout, check_layout, diagnosis_layout, past_history_layout,
+            family_history_layout;
 
-    private TextView symptom_text, signs_text, test_text, check_text, diagnosis_text, past_history_text, family_history_text, symptom_status_text,
-            signs_status_text, diagnosis_status_text, past_history_status_text, family_history_status_text, test_status_text, check_status_text,tip;
+    private TextView symptom_text, signs_text, test_text, check_text, diagnosis_text, past_history_text, family_history_text,
+            symptom_status_text, signs_status_text, diagnosis_status_text, past_history_status_text, family_history_status_text,
+            test_status_text, check_status_text, tip;
 
-    private Button submitBtn,saveBtn;
-    
+    private Button submitBtn, saveBtn;
+
     private SharePreferencesEditor editor;
-    
+
     private String caseId;
-    
-    private String[] paths;
-    
+
+    private String departmentId="123456";
+
+    private boolean isXml=true;
+
     private RequestQueue mQueue;
     
+    private String content = "";
+
+    private List<String> files=new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.primary_new_next_layout);
         editor=new SharePreferencesEditor(CreateCaseNextActivity.this);
-        caseId = getIntent().getStringExtra("caseId");
+        caseId=getIntent().getStringExtra("caseId");
+        content=getIntent().getStringExtra("content");
         initData();
         initView();
     }
 
     private void initData() {
         mQueue=Volley.newRequestQueue(CreateCaseNextActivity.this);
+        AssetManager assetManager=getAssets();
+        try {
+            for(String str: assetManager.list("")) {
+                if(str.endsWith("case.xml")) {
+                    if(str.equals(departmentId + "case.xml")) {
+                        isXml=true;
+                    }
+                    files.add(str);
+                }
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initView() {
@@ -124,10 +152,10 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
 
         signs_layout=(LinearLayout)findViewById(R.id.create_case_signs_layout);
         signs_layout.setOnClickListener(this);
-        
+
         test_layout=(LinearLayout)findViewById(R.id.create_case_test_layout);
         test_layout.setOnClickListener(this);
-        
+
         check_layout=(LinearLayout)findViewById(R.id.create_case_check_layout);
         check_layout.setOnClickListener(this);
 
@@ -140,11 +168,10 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         family_history_layout=(LinearLayout)findViewById(R.id.create_case_family_history_layout);
         family_history_layout.setOnClickListener(this);
 
-        
-        submitBtn = (Button)findViewById(R.id.create_case_btn_finish_sumbit);
+        submitBtn=(Button)findViewById(R.id.create_case_btn_finish_sumbit);
         submitBtn.setTextSize(20);
         submitBtn.setOnClickListener(this);
-        saveBtn = (Button)findViewById(R.id.create_case_btn_finish_save);
+        saveBtn=(Button)findViewById(R.id.create_case_btn_finish_save);
         saveBtn.setTextSize(20);
         saveBtn.setOnClickListener(this);
     }
@@ -154,102 +181,174 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         switch(v.getId()) {
             case R.id.create_case_symptom_layout:
                 // 症状
-                Intent intent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                intent.putExtra("page", 0);
-                intent.putExtra("titleText", "症状");
-                startActivityForResult(intent, 0);
+                if(isXml) {
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    intent.putExtra("page", 0);
+                    intent.putExtra("titleText", "症状");
+                    intent.putExtra("content", content.split(",")[0]);
+                    intent.putExtra("departmentId", departmentId);
+                    startActivityForResult(intent, 0);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("page", 0);
+                    intent.putExtra("titleText", "症状");
+                    intent.putExtra("content", content.split("&")[0]);
+                    startActivityForResult(intent, 0);
+                }
                 break;
             case R.id.create_case_signs_layout:
                 // 体征
-                Intent signsIntent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                signsIntent.putExtra("page", 1);
-                signsIntent.putExtra("titleText", "体征");
-                startActivityForResult(signsIntent, 1);
+                if(isXml) {
+                    Intent signsIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    signsIntent.putExtra("page", 1);
+                    signsIntent.putExtra("titleText", "体征");
+                    signsIntent.putExtra("content", content.split(",")[1]);
+                    signsIntent.putExtra("departmentId", departmentId);
+                    startActivityForResult(signsIntent, 1);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("page", 1);
+                    intent.putExtra("titleText", "体征");
+                    intent.putExtra("content", content.split("&")[1]);
+                    startActivityForResult(intent, 1);
+                }
                 break;
             case R.id.create_case_test_layout:
                 // 检验
-                Intent testIntent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                testIntent.putExtra("page", 2);
-                testIntent.putExtra("titleText", "检验");
-                startActivityForResult(testIntent, 2);
+                if(isXml) {
+                    Intent testIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    testIntent.putExtra("page", 2);
+                    testIntent.putExtra("titleText", "检验");
+                    testIntent.putExtra("content", content.split(",")[2]);
+                    testIntent.putExtra("departmentId", departmentId);
+                    startActivityForResult(testIntent, 2);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("titleText", "检验");
+                    intent.putExtra("page", 2);
+                    intent.putExtra("content", content.split("&")[2]);
+                    startActivityForResult(intent, 2);
+                }
                 break;
             case R.id.create_case_check_layout:
                 // 检查
-                Intent checkIntent = new Intent(CreateCaseNextActivity.this, CaseTestActivity.class);
-                checkIntent.putExtra("page", 3);
-                checkIntent.putExtra("titleText", "检查");
-                startActivityForResult(checkIntent, 3);
+                if(isXml) {
+                    Intent checkIntent=new Intent(CreateCaseNextActivity.this, CaseTestActivity.class);
+                    checkIntent.putExtra("page", 3);
+                    checkIntent.putExtra("caseId", caseId);
+                    checkIntent.putExtra("departmentId", departmentId);
+                    checkIntent.putExtra("titleText", "检查");
+                    startActivityForResult(checkIntent, 3);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, CaseTestTxtActivity.class);
+                    intent.putExtra("titleText", "检查");
+                    intent.putExtra("page", 3);
+                    intent.putExtra("caseId", caseId);
+                    startActivityForResult(intent, 3);
+                }
                 break;
             case R.id.create_case_diagnosis_layout:
                 // 诊疗经过
-                Intent diagnosisIntent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                diagnosisIntent.putExtra("page", 4);
-                diagnosisIntent.putExtra("titleText", "诊疗经过");
-                startActivityForResult(diagnosisIntent, 4);
+                if(isXml) {
+                    Intent diagnosisIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    diagnosisIntent.putExtra("page", 4);
+                    diagnosisIntent.putExtra("content", content.split(",")[3]);
+                    diagnosisIntent.putExtra("departmentId", departmentId);
+                    diagnosisIntent.putExtra("titleText", "诊疗经过");
+                    startActivityForResult(diagnosisIntent, 4);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("titleText", "诊疗经过");
+                    intent.putExtra("page", 4);
+                    intent.putExtra("content", content.split("&")[3]);
+                    startActivityForResult(intent, 4);
+                }
                 break;
             case R.id.create_case_past_history_layout:
                 // 既往史
-                Intent historyIntent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                historyIntent.putExtra("page", 5);
-                historyIntent.putExtra("titleText", "既往史");
-                startActivityForResult(historyIntent, 5);
+                if(isXml) {
+                    Intent historyIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    historyIntent.putExtra("page", 5);
+                    historyIntent.putExtra("content", content.split(",")[4]);
+                    historyIntent.putExtra("titleText", "既往史");
+                    historyIntent.putExtra("departmentId", departmentId);
+                    startActivityForResult(historyIntent, 5);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("titleText", "既往史");
+                    intent.putExtra("page", 5);
+                    intent.putExtra("content", content.split("&")[4]);
+                    startActivityForResult(intent, 5);
+                }
                 break;
             case R.id.create_case_family_history_layout:
                 // 家族史
-                Intent familyIntent = new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                familyIntent.putExtra("page", 6);
-                familyIntent.putExtra("titleText", "家族史");
-                startActivityForResult(familyIntent, 6);
+                if(isXml) {
+                    Intent familyIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    familyIntent.putExtra("page", 6);
+                    familyIntent.putExtra("content", content.split(",")[5]);
+                    familyIntent.putExtra("titleText", "家族史");
+                    familyIntent.putExtra("departmentId", departmentId);
+                    startActivityForResult(familyIntent, 6);
+                }else{
+                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    intent.putExtra("titleText", "家族史");
+                    intent.putExtra("page", 6);
+                    intent.putExtra("content", content.split("&")[5]);
+                    startActivityForResult(intent, 6);
+                }
                 break;
             case R.id.create_case_btn_finish_save:
-                //提交信息
+                // 提交信息
                 getHttpMethod("0");
+                break;
             case R.id.create_case_btn_finish_sumbit:
-                //提交信息
+                // 提交信息
                 getHttpMethod("1");
                 break;
             default:
                 break;
         }
     }
-    
-    private void getHttpMethod(String isSubmit){
-        Map<String, String> parmas = new HashMap<String, String>();
-        parmas.put("id", "10");
+
+    private void getHttpMethod(String isSubmit) {
+        Map<String, String> parmas=new HashMap<String, String>();
+        parmas.put("case_id", caseId);
         parmas.put("is_submit", isSubmit);
+        parmas.put("fill_tp", "2");
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
-        CaseParams caseParams = ClientUtil.getCaseParams();
-        List<String> keys = caseParams.getKeys();
+        CaseParams caseParams=ClientUtil.getCaseParams();
+        List<String> keys=caseParams.getKeys();
         for(int i=0; i < keys.size(); i++) {
             switch(Integer.parseInt(keys.get(i))) {
                 case 0:
-                    if(null != caseParams.getValue("0") && !"".equals(caseParams.getValue("0"))){
+                    if(null != caseParams.getValue("0") && !"".equals(caseParams.getValue("0"))) {
                         parmas.put("content_zs_xml", caseParams.getValue("0"));
                     }
                     break;
                 case 1:
-                    if(null != caseParams.getValue("1") && !"".equals(caseParams.getValue("1"))){
+                    if(null != caseParams.getValue("1") && !"".equals(caseParams.getValue("1"))) {
                         parmas.put("content_tz_xml", caseParams.getValue("1"));
                     }
                     break;
                 case 2:
-                    if(null != caseParams.getValue("2") && !"".equals(caseParams.getValue("2"))){
+                    if(null != caseParams.getValue("2") && !"".equals(caseParams.getValue("2"))) {
                         parmas.put("content_jy_xml", caseParams.getValue("2"));
                     }
                     break;
                 case 4:
-                    if(null != caseParams.getValue("4") && !"".equals(caseParams.getValue("4"))){
+                    if(null != caseParams.getValue("4") && !"".equals(caseParams.getValue("4"))) {
                         parmas.put("content_zljg_xml", caseParams.getValue("4"));
                     }
                     break;
                 case 5:
-                    if(null != caseParams.getValue("5") && !"".equals(caseParams.getValue("5"))){
+                    if(null != caseParams.getValue("5") && !"".equals(caseParams.getValue("5"))) {
                         parmas.put("content_jws_xml", caseParams.getValue("5"));
                     }
                     break;
                 case 6:
-                    if(null != caseParams.getValue("6") && !"".equals(caseParams.getValue("6"))){
+                    if(null != caseParams.getValue("6") && !"".equals(caseParams.getValue("6"))) {
                         parmas.put("content_jzs_xml", caseParams.getValue("6"));
                     }
                     break;
@@ -258,13 +357,6 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                     break;
             }
         }
-        
-//        FormFile[] files = new FormFile[paths.length];
-//        for(int i=0; i < paths.length; i++) {
-//            String filname = paths[i].substring(paths[i].lastIndexOf("/")+1, paths[i].length());
-//            String parameterName = paths[i].substring(paths[i].lastIndexOf("/")+1, paths[i].lastIndexOf("."));
-//            files[i] = new FormFile(filname, new File(paths[i]), parameterName, null);
-//        }
         CommonUtil.showLoadingDialog(CreateCaseNextActivity.this);
         OpenApiService.getInstance(CreateCaseNextActivity.this).getCaseSaveInfo(mQueue, parmas, new Response.Listener<String>() {
 
@@ -274,7 +366,23 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 try {
                     JSONObject responses=new JSONObject(arg0);
                     if(responses.getInt("rtnCode") == 1) {
+                        ClientUtil.reSetCaseParams();
                         Toast.makeText(CreateCaseNextActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                        ActivityList.getInstance().closeActivity("CreateCaseActivity");
+                        finish();
+                    } else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(CreateCaseNextActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(CreateCaseNextActivity.this, LoginActivity.class));
                     } else {
                         Toast.makeText(CreateCaseNextActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
@@ -312,8 +420,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                     }
                     break;
                 case 3:
-                    paths = data.getExtras().getStringArray("paths");
-                    if(paths.length != 0 && null != paths) {
+                    if(data.getExtras().getBoolean("isAdd")) {
                         check_status_text.setText("已填写");
                     }
                     break;
@@ -332,7 +439,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                         family_history_status_text.setText("已填写");
                     }
                     break;
-                    
+
                 default:
                     break;
             }

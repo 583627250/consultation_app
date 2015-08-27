@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.model.CasesTo;
 import com.consultation.app.service.OpenApiService;
@@ -71,13 +74,13 @@ public class SearchConsulationResultActivity extends Activity {
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
         filterString=getIntent().getStringExtra("filter");
         editor=new SharePreferencesEditor(SearchConsulationResultActivity.this);
+        mQueue=Volley.newRequestQueue(SearchConsulationResultActivity.this);
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initDate();
         initView();
     }
 
     private void initDate() {
-        mQueue=Volley.newRequestQueue(SearchConsulationResultActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("filter", filterString);
@@ -101,19 +104,28 @@ public class SearchConsulationResultActivity extends Activity {
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
                                 pcasesTo.setDestination(info.getString("destination"));
-                                pcasesTo.setCreate_time(info.getLong("create_time"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
+                                } else {
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                }
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
-                                pcasesTo.setConsult_fee(info.getInt("consult_fee"));
+                                String consult_fee=info.getString("consult_fee");
+                                if(consult_fee.equals("null")) {
+                                    pcasesTo.setConsult_fee("0");
+                                } else {
+                                    pcasesTo.setConsult_fee(consult_fee);
+                                }
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
                                 pcasesTo.setExpert_name(info.getString("expert_name"));
                                 pcasesTo.setProblem(info.getString("problem"));
                                 pcasesTo.setConsult_tp(info.getString("consult_tp"));
                                 pcasesTo.setOpinion(info.getString("opinion"));
-                                pcasesTo.setUid(info.getString("uid"));
                                 PatientTo patientTo=new PatientTo();
                                 JSONObject pObject=info.getJSONObject("user");
                                 patientTo.setAddress(pObject.getString("address"));
@@ -135,11 +147,24 @@ public class SearchConsulationResultActivity extends Activity {
                                 patientTo.setArea_county(pObject.getString("area_county"));
                                 patientTo.setIcon_url(pObject.getString("icon_url"));
                                 patientTo.setModify_time(pObject.getString("modify_time"));
-                                patientTo.setUid(pObject.getString("uid"));
                                 pcasesTo.setPatient(patientTo);
                                 consulationList.add(pcasesTo);
                             }
                             myAdapter.notifyDataSetChanged();
+                        } else if(responses.getInt("rtnCode") == 10004){
+                            Toast.makeText(SearchConsulationResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    initDate();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                }
+                            });
+                            startActivity(new Intent(SearchConsulationResultActivity.this, LoginActivity.class));
                         } else {
                             Toast.makeText(SearchConsulationResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
                                 .show();
@@ -254,7 +279,7 @@ private class ViewHolder {
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo);
             if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;

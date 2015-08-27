@@ -5,6 +5,8 @@ public class CasesTo {
     private String id;
 
     private String status;
+    
+    private int viewingCount;
 
     private String destination;
 
@@ -16,7 +18,7 @@ public class CasesTo {
 
     private String doctor_userid;
 
-    private int consult_fee;
+    private String consult_fee;
 
     private String doctor_name;
 
@@ -33,8 +35,74 @@ public class CasesTo {
     private String uid;
     
     private String patient_name;
+    
+    private String patient_id;
+
+    
+    public String getPatient_id() {
+        return patient_id;
+    }
+
+
+
+
+    
+    public void setPatient_id(String patient_id) {
+        this.patient_id=patient_id;
+    }
 
     private PatientTo patient;
+    
+    private DoctorTo doctorTo;
+    
+    private DoctorTo expertTo;
+    
+    private CaseContentTo caseContentTo;
+    
+    
+    
+    public int getViewingCount() {
+        return viewingCount;
+    }
+
+
+
+    
+    public void setViewingCount(int viewingCount) {
+        this.viewingCount=viewingCount;
+    }
+
+
+
+    public CaseContentTo getCaseContentTo() {
+        return caseContentTo;
+    }
+
+
+    
+    public void setCaseContentTo(CaseContentTo caseContentTo) {
+        this.caseContentTo=caseContentTo;
+    }
+
+
+    public DoctorTo getDoctorTo() {
+        return doctorTo;
+    }
+
+    
+    public void setDoctorTo(DoctorTo doctorTo) {
+        this.doctorTo=doctorTo;
+    }
+
+    
+    public DoctorTo getExpertTo() {
+        return expertTo;
+    }
+
+    
+    public void setExpertTo(DoctorTo expertTo) {
+        this.expertTo=expertTo;
+    }
 
     public String getId() {
         return id;
@@ -119,11 +187,11 @@ public class CasesTo {
         this.doctor_userid=doctor_userid;
     }
 
-    public int getConsult_fee() {
+    public String getConsult_fee() {
         return consult_fee;
     }
 
-    public void setConsult_fee(int consult_fee) {
+    public void setConsult_fee(String consult_fee) {
         this.consult_fee=consult_fee;
     }
 
@@ -211,29 +279,6 @@ public class CasesTo {
     }
 
     public void setPatient(PatientTo patient) {
-        this.patient=patient;
-    }
-
-    public CasesTo(String id, String content, String status, String destination, long create_time, String title, String depart_id,
-        String doctor_userid, int consult_fee, String patient_name, String doctor_name, String expert_userid,
-        String expert_name, String problem, String consult_tp, String opinion, String uid, PatientTo patient) {
-        super();
-        this.id=id;
-        this.status=status;
-        this.destination=destination;
-        this.create_time=create_time;
-        this.title=title;
-        this.depart_id=depart_id;
-        this.doctor_userid=doctor_userid;
-        this.consult_fee=consult_fee;
-        this.patient_name=patient_name;
-        this.doctor_name=doctor_name;
-        this.expert_userid=expert_userid;
-        this.expert_name=expert_name;
-        this.problem=problem;
-        this.consult_tp=consult_tp;
-        this.opinion=opinion;
-        this.uid=uid;
         this.patient=patient;
     }
 

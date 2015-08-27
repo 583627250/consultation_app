@@ -23,7 +23,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.ClientUtil;
@@ -58,13 +60,13 @@ public class SelectPatientResultActivity extends Activity {
         setContentView(R.layout.search_select_patient_result_layout);
         nameString=getIntent().getStringExtra("nameString");
         mContext=this;
+        editor=new SharePreferencesEditor(mContext);
+        mQueue=Volley.newRequestQueue(SelectPatientResultActivity.this);
         initDate();
         initView();
     }
 
     private void initDate() {
-        editor=new SharePreferencesEditor(mContext);
-        mQueue=Volley.newRequestQueue(SelectPatientResultActivity.this);
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
@@ -100,6 +102,20 @@ public class SelectPatientResultActivity extends Activity {
                             blance.setText("余额:" + infos.getJSONObject("userBalance").getString("current_balance")+"元");
                         }
                         info_layout.setVisibility(View.VISIBLE);
+                    } else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(SelectPatientResultActivity.this, LoginActivity.class));
                     } else {
                         noData.setVisibility(View.VISIBLE);
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
@@ -183,6 +199,20 @@ public class SelectPatientResultActivity extends Activity {
                             JSONObject responses=new JSONObject(arg0);
                             if(responses.getInt("rtnCode") == 1) {
                                 Toast.makeText(mContext, "验证码发送成功", Toast.LENGTH_SHORT).show();
+                            } else if(responses.getInt("rtnCode") == 10004){
+                                Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initDate();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(SelectPatientResultActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(mContext, "验证码发送错误", Toast.LENGTH_SHORT).show();
                             }
@@ -234,6 +264,20 @@ public class SelectPatientResultActivity extends Activity {
                                 intent.putExtras(bundle);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
+                            } else if(responses.getInt("rtnCode") == 10004){
+                                Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initDate();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(SelectPatientResultActivity.this, LoginActivity.class));
                             } else {
                                 Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();
                             }

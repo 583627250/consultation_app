@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/consultation_color_F4F4F4"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="#3E3E3E"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp" >
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/register_tip_image" />
+
+                    <TextView
+                        android:id="@+id/update_my_info_tip_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:text="您还未上传执照/还未通过认证"
+                        android:textColor="#FFAD2B" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_title_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="我的职称"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_title_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择您的职称"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_hospital_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="所在医院"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_hospital_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择您所在的医院"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_department_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="科室"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_department_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择您的科室"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_good_at_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="擅长领域"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_good_at_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入您擅长的领域"
+                        android:padding="5dp"
+                        android:maxLength="200"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_glasses_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="医生级别"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp" >
+
+                        <RadioButton
+                            android:id="@+id/update_my_info_glasses_primary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableLeft="@drawable/radio_btn_bg"
+                            android:drawablePadding="5dp"
+                            android:gravity="center_vertical"
+                            android:paddingRight="15dp"
+                            android:text="初级医师"
+                            android:textColor="#414141" >
+                        </RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/update_my_info_glasses_expert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/radio_btn_bg"
+                            android:drawablePadding="5dp"
+                            android:gravity="center_vertical"
+                            android:text="专家"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_code_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.7"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="职业证书编码"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_code_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:gravity="center_vertical"
+                        android:hint="请输入证书编号"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="vertical"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_photo_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="上传职业证书照片"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:id="@+id/update_my_info_photo_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@color/consultation_color_white"
+                        android:orientation="vertical"
+                        android:padding="5dp" >
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/update_my_info_image_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="提示:长按已选图片可以删除该图片，请确保照片上的字清晰可见"
+                        android:textColor="@color/consultation_color_red" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/consultation_color_white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="10dp" >
+
+                    <CheckBox
+                        android:id="@+id/update_my_info_read_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_btn_bg"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:text="我已经阅读"
+                        android:textColor="#414141" >
+                    </CheckBox>
+
+                    <TextView
+                        android:id="@+id/update_my_info_read_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="免责条款"
+                        android:textColor="#7B7B7C" />
+                </LinearLayout>
+                
+                <!-- <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout> -->
+
+                <LinearLayout
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center_vertical"
+	                android:layout_marginTop="20dp"
+	                android:layout_marginBottom="20dp"
+	                android:orientation="vertical"
+	                android:paddingLeft="20dp"
+	                android:paddingRight="20dp" >
+	
+	                <Button
+	                    android:id="@+id/update_my_info_btn_submit"
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:background="@drawable/login_login_btn_shape"
+	                    android:padding="10dp"
+	                    android:text="提交"
+	                    android:textColor="@color/consultation_color_white" />
+	            </LinearLayout>
+               
+            </LinearLayout>
+        </ScrollView>
+
+       <!--  <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/update_my_info_btn_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/create_case_submit_selector"
+                android:padding="10dp"
+                android:text="提交"
+                android:textColor="@color/consultation_color_white" />
+        </LinearLayout> -->
+    </LinearLayout>
+
+</LinearLayout>

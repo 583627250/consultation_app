@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_white"
+        android:background="@color/consultation_color_F4F4F4"
         android:orientation="vertical" >
 
         <include
@@ -15,9 +15,9 @@
             android:layout_height="wrap_content"
             layout="@layout/header" />
 
-        <ScrollView
+       <!--  <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" > -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,39 +41,21 @@
                         android:src="@drawable/photo" />
 
                     <LinearLayout
-                        android:id="@+id/mine_my_info_text_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingLeft="10dp" >
-
-                        <TextView
-                            android:id="@+id/mine_info_phone_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="13315349584"
-                            android:textColor="#414141" />
-
-                        <TextView
-                            android:id="@+id/mine_info_tip_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:text="请完善个人信息"
-                            android:textColor="#27B67A" />
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/mine_my_info_icon_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:gravity="right"
                         android:orientation="horizontal" >
+                        
+                        <TextView
+	                        android:id="@+id/mine_info_my_text"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_gravity="center_vertical"
+	                        android:paddingRight="5dp"
+	                        android:text="我的资料"
+	                        android:textColor="#414141" />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -87,58 +69,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mine_my_update_pwd_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="15dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/mm_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/mine_info_update_pwd_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="修改密码"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
                     android:background="@color/consultation_color_F4F4F4" >
                 </LinearLayout>
 
@@ -169,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="绑定支付方式"
+                        android:text="我的账户"
                         android:textColor="#414141" />
 
                     <LinearLayout
@@ -178,7 +108,70 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="right"
                         android:orientation="horizontal" >
+                        
+                        <TextView
+	                        android:id="@+id/mine_info_blance_text"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_gravity="center_vertical"
+	                        android:paddingRight="5dp"
+	                        android:text="余额0元"
+	                        android:textColor="#414141" />
 
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mine_my_jion_layout_line"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/mine_my_jion_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="15dp" >
+
+                    <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/yhk_icon" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/mine_info_jion_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="加入医生团队"
+                        android:textColor="#414141" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+                        
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -245,6 +238,59 @@
                     android:layout_height="0.1dp"
                     android:background="@color/consultation_color_F4F4F4" >
                 </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/mine_my_feedback_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="15dp" >
+
+                    <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/fk_icon" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/mine_info_feedback_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:text="意见反馈"
+                        android:textColor="#414141" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/consultation_color_F4F4F4" >
+                </LinearLayout>
+                
 
                 <LinearLayout
                     android:id="@+id/mine_my_invitation_layout"
@@ -299,162 +345,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/mine_my_set_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="15dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/sz_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/mine_info_set_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:text="设置"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mine_my_feedback_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="15dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/fk_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/mine_info_feedback_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:text="意见反馈"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mine_my_update_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="15dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/gx_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/mine_info_update_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:text="更新版本"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/mine_my_help_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -499,64 +389,7 @@
                             android:src="@drawable/icon_item_arrow" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mine_my_about_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="15dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/gy_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/mine_info_about_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="10dp"
-                        android:text="关于"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-	            <LinearLayout
-	                android:layout_width="match_parent"
-	                android:layout_height="10dp"
-	                android:background="@color/consultation_color_F4F4F4" >
-	            </LinearLayout>
             </LinearLayout>
-        </ScrollView>
+        <!-- </ScrollView> -->
     </LinearLayout>
 </RelativeLayout>

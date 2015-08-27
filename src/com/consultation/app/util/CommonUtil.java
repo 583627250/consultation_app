@@ -1,6 +1,7 @@
 package com.consultation.app.util;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -433,4 +436,31 @@ public class CommonUtil {
         drawable.draw(canvas);  
         return toRoundCorner(bitmap, pixels);  
     } 
+    
+    public static void appendToFile(String content, File file) {
+        File dir=file.getParentFile();
+        if(!dir.exists()) {
+            dir.mkdirs();
+        }
+        OutputStream fos=null;
+        try {
+            fos=new FileOutputStream(file, true);
+            OutputStreamWriter write=new OutputStreamWriter(fos, "UTF-8");
+            BufferedWriter writer=new BufferedWriter(write);
+            writer.write(content);
+            writer.close();
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(null != fos) {
+                try {
+                    fos.close();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

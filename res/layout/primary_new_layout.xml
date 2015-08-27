@@ -31,8 +31,9 @@
                     android:layout_height="10dp"
                     android:background="@color/consultation_color_F4F4F4" >
                 </LinearLayout>
-
+                
                 <LinearLayout
+                    android:id="@+id/create_case_select_expert_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -94,6 +95,8 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -141,24 +144,13 @@
                         android:orientation="vertical" >
 
                         <RadioButton
-                            android:id="@+id/create_case_select_consultation_public"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:checked="true"
-                            android:gravity="center_vertical"
-                            android:paddingRight="10dp"
-                            android:text="公开讨论"
-                            android:textColor="#414141" >
-                        </RadioButton>
-
-                        <RadioButton
                             android:id="@+id/create_case_select_consultation_explicit"
                             android:layout_width="wrap_content"
                             android:layout_height="32dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
                             android:text="明确诊断"
+                            android:checked="true"
                             android:textColor="#414141" >
                         </RadioButton>
                         <RadioButton
@@ -167,7 +159,17 @@
                             android:layout_height="32dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:text="申请手术"
+                            android:text="手术或住院"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                        <RadioButton
+                            android:id="@+id/create_case_select_consultation_public"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingRight="10dp"
+                            android:text="公开讨论"
                             android:textColor="#414141" >
                         </RadioButton>
                     </RadioGroup>
@@ -178,7 +180,7 @@
                     android:layout_height="0.1dp"
                     android:background="@color/consultation_color_F4F4F4" >
                 </LinearLayout>
-
+                
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,6 +242,7 @@
                             android:src="@drawable/icon_item_arrow" />
                     </LinearLayout>
                 </LinearLayout>
+                
 
                 <TextView
                     android:id="@+id/create_case_title_text"

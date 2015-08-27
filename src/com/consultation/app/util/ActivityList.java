@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 
 
 public class ActivityList {
@@ -24,6 +25,7 @@ public class ActivityList {
     }
     
     public void closeActivity(String name){
+        maps.get(name).setResult(Activity.RESULT_OK, new Intent());
         maps.get(name).finish();
         maps.remove(name);
     }

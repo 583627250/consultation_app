@@ -12,6 +12,8 @@ public class ClientUtil {
 
     private static String SERVICE_DOMAIN;
 
+    public static String GET_REFRESHACCESSTOKEN_URL=SERVICE_DOMAIN + "/api/user/refreshAccessToken.json ";
+    
     public static String GET_KNOWLEDGE_LIST_URL=SERVICE_DOMAIN + "/api/knowledge/list.json";
 
     public static String GET_KNOWLEDGE_BYID_URL=SERVICE_DOMAIN + "/h5/knowledge/content.shtml";
@@ -19,6 +21,8 @@ public class ClientUtil {
     public static String GET_REGISTER_VERIFICATION_URL=SERVICE_DOMAIN + "/api/user/smsVerifyCode.json";
 
     public static String GET_REGISTER_MOBILEUSABLE_URL=SERVICE_DOMAIN + "/api/user/mobileUsable.json";
+    
+    public static String GET_FORGET_PWD_URL=SERVICE_DOMAIN + "/api/user/forgetPwd.json";
 
     public static String GET_REGISTER_URL=SERVICE_DOMAIN + "/api/user/register.json";
 
@@ -44,7 +48,39 @@ public class ClientUtil {
     
     public static String GET_IS_PATIENT_URL =SERVICE_DOMAIN + "/api/user/verifySmsCodeOfPatient.json";
     
-    public static String GET_CASE_UP_ALL_URL =SERVICE_DOMAIN + "/api/patientCase/saveDetails.json";
+    public static String GET_CASE_UP_ALL_URL =SERVICE_DOMAIN + "/api/caseContent/save.json";
+    
+    public static String GET_UPLOAD_IMAGES_URL =SERVICE_DOMAIN + "/fileUpload/multiUpload.shtml";
+   
+    public static String GET_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/listByDoctorUserid.json";
+    
+    public static String GET_SAVE_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/save.json";
+    
+    public static String GET_INVITATION_LIST_URL =SERVICE_DOMAIN + "/api/doctorInvitCode/list.json";
+    
+    public static String GET_SEND_INVITATION_URL =SERVICE_DOMAIN + "/api/doctorInvitCode/invit.json";
+    
+    public static String GET_FEEDBACK_LIST_URL =SERVICE_DOMAIN + "/api/userFeeback/list.json";
+    
+    public static String GET_SEND_FEEDBACK_URL =SERVICE_DOMAIN + "/api/userFeeback/save.json";
+    
+    public static String GET_DISCUSSION_CASE_LIST_URL =SERVICE_DOMAIN + "/api/caseDiscuss/list.json";
+    
+    public static String GET_SEND_DISCUSSION_CASE_URL =SERVICE_DOMAIN + "/api/caseDiscuss/save.json";
+    
+    public static String GET_DISCUSSION_CASE_FINSH_URL =SERVICE_DOMAIN + "/api/patientCase/completed.json";
+    
+    public static String GET_DELETE_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/deleteById.json";
+    
+    public static String GET_REJECTED_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/rejected.json";
+    
+    public static String GET_RECEIVED_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/received.json";
+    
+    public static String GET_TOSURGERY_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/toSurgery.json";
+    
+    public static String GET_JION_DOCTOR_URL =SERVICE_DOMAIN + "/api/doctor/save.json";
+    
+    public static String GET_USERINFO_URL =SERVICE_DOMAIN + "/api/user/getUserInfo.json";
 
     private static CaseParams caseParams=new CaseParams();
 
@@ -78,7 +114,7 @@ public class ClientUtil {
 
     public static boolean isLogin() {
         boolean islogin=false;
-        if(ClientUtil.token != null && ClientUtil.token.length() > 20) {
+        if(ClientUtil.token != null) {
             islogin=true;
         }
         return islogin;

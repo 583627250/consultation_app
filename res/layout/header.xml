@@ -60,6 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:paddingRight="15dp"
+        android:orientation="horizontal"
         android:gravity="right" >
 
         <TextView
@@ -67,13 +69,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginRight="15dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:layout_marginRight="3dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:visibility="invisible"
             android:text="保存"
+            android:textColor="@color/consultation_color_white" />
+        <Button
+            android:id="@+id/header_right_tip"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="20"
+            android:background="@drawable/discussion_count_shape"
             android:textColor="@color/consultation_color_white" />
     </LinearLayout>
 

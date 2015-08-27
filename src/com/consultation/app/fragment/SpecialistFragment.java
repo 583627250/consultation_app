@@ -106,7 +106,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             switch(msg.what) {
                 case 0:
                     myAdapter.notifyDataSetChanged();
-                    specialistListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
@@ -391,6 +390,11 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                                         specialistTo.setUserTj(userStatistics);
                                         specialistList.add(specialistTo);
                                     }
+                                    if(infos.length() == 10) {
+                                        specialistListView.setHasMoreData(true);
+                                    } else {
+                                        specialistListView.setHasMoreData(false);
+                                    }
                                     Message msg=handler.obtainMessage();
                                     msg.what=0;
                                     msg.obj=pullToRefreshLayout;
@@ -512,7 +516,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             holder.patientCount.setTextSize(16);
             if(imgUrl != null && !imgUrl.equals("")) {
                 ImageListener listener=
-                    ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                    ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
                 mImageLoader.get(imgUrl, listener);
             }
             holder.photo.setImageBitmap(CommonUtil.drawableToRoundBitmap(holder.photo.getDrawable(), 15));

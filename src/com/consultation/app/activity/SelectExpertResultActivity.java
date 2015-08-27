@@ -34,6 +34,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.SpecialistTo;
 import com.consultation.app.model.UserStatisticsTo;
 import com.consultation.app.model.UserTo;
@@ -42,159 +44,7 @@ import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.CommonUtil;
 
 public class SelectExpertResultActivity extends Activity {
-
-//    private LinearLayout back_layout;
-//
-//    private TextView back_text,title_text;
-//    
-//    private ListView recommendListView;
-//
-//    private MyAdapter myAdapter;
-//    
-//    private ViewHolder holder;
-//    
-//    private List<SpecialistTo> specialist_list=new ArrayList<SpecialistTo>();
-//    
-//    private RequestQueue mQueue;
-//    
-//    private String nameString,title;
-//    
-//    private Context mContext;
-//    
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.knowledge_recommend_list_search_result_layout);
-//        nameString = getIntent().getStringExtra("nameString");
-//        title = getIntent().getStringExtra("title");
-//        mContext = this;
-//        initDate();
-//        initView();
-//    }
-//
-//    private void initDate() {
-//        mQueue = Volley.newRequestQueue(SelectExpertResultActivity.this);
-//        Map<String, String> parmas = new HashMap<String, String>();
-//        parmas.put("page", "1");
-//        parmas.put("real_name", nameString);
-//        CommonUtil.showLoadingDialog(mContext);
-//        OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String arg0) {
-//                CommonUtil.closeLodingDialog();
-//                try {
-//                    JSONObject responses = new JSONObject(arg0);
-//                    if(responses.getInt("rtnCode") == 1){
-//                        JSONArray infos = responses.getJSONArray("experts");
-//                        specialist_list.clear();
-//                        for(int i=0; i < infos.length(); i++) {
-//                            JSONObject info = infos.getJSONObject(i);
-//                            SpecialistTo specialistTo = new SpecialistTo();
-//                            specialistTo.setApprove_status(info.getString("approve_status"));
-//                            specialistTo.setDepart_name(info.getString("depart_name"));
-//                            specialistTo.setGoodat_fields(info.getString("goodat_fields"));
-//                            specialistTo.setHospital_name(info.getString("hospital_name"));
-//                            specialistTo.setId(info.getString("id"));
-//                            specialistTo.setTitle(info.getString("title"));
-//                            JSONObject userToJsonObject = info.getJSONObject("user");
-//                            UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
-//                            JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
-//                            specialistTo.setUser(userTo);
-//                            UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
-//                            specialistTo.setUserTj(userStatistics);
-//                            specialist_list.add(specialistTo);
-//                        }
-//                        myAdapter.notifyDataSetChanged();
-//                    }else{
-//                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-//                    }
-//                } catch(JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError arg0) {
-//                CommonUtil.closeLodingDialog();
-//                Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    private void initView() {
-//        back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
-//        back_layout.setVisibility(View.VISIBLE);
-//        back_text=(TextView)findViewById(R.id.header_text_lift);
-//        back_text.setTextSize(18);
-//        title_text = (TextView)findViewById(R.id.header_text);
-//        title_text.setText(title);
-//        title_text.setTextSize(20);
-//        back_layout.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
-//        
-//        myAdapter = new MyAdapter();
-//        recommendListView=(ListView)findViewById(R.id.knowledge_recommend_list_search_result_listView);
-//        recommendListView.setAdapter(myAdapter);
-//        recommendListView.setOnItemClickListener(new OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent();
-//                Bundle bundle = new Bundle();
-//                bundle.putString("expertName", specialist_list.get(position).getUser().getUser_name());
-//                bundle.putString("expertId", specialist_list.get(position).getId());
-//                intent.putExtras(bundle);
-//                setResult(Activity.RESULT_OK, intent);
-//                finish();
-//            }
-//        });
-//    }
-//    
-//    private static class ViewHolder {
-//
-//        TextView name;
-//        
-//    }
-//
-//    private class MyAdapter extends BaseAdapter {
-//
-//        @Override
-//        public int getCount() {
-//            return specialist_list.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int location) {
-//            return specialist_list.get(location);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            if(convertView == null) {
-//                holder=new ViewHolder();
-//                convertView=LayoutInflater.from(((Activity)mContext)).inflate(R.layout.search_recommend_list_item, null);
-//                holder.name=(TextView)convertView.findViewById(R.id.search_recommend_list_item_text);
-//                convertView.setTag(holder);
-//            } else {
-//                holder=(ViewHolder)convertView.getTag();
-//            }
-//            holder.name.setText(specialist_list.get(position).getUser().getUser_name()+"("+specialist_list.get(position).getHospital_name()+")");
-//            holder.name.setTextSize(18);
-//            return convertView;
-//        }
-//    }    
+    
     private LinearLayout back_layout;
 
     private TextView back_text,title_text;
@@ -221,13 +71,13 @@ public class SelectExpertResultActivity extends Activity {
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
         nameString = getIntent().getStringExtra("nameString");
         mContext = this;
+        mQueue = Volley.newRequestQueue(SelectExpertResultActivity.this);
+        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         initDate();
         initView();
     }
 
     private void initDate() {
-        mQueue = Volley.newRequestQueue(SelectExpertResultActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("real_name", nameString);
@@ -260,7 +110,21 @@ public class SelectExpertResultActivity extends Activity {
                             specialist_content_list.add(specialistTo);
                         }
                         myAdapter.notifyDataSetChanged();
-                    }else{
+                    }else if(responses.getInt("rtnCode") == 10004){
+                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(SelectExpertResultActivity.this, LoginActivity.class));
+                    } else{
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -381,7 +245,7 @@ public class SelectExpertResultActivity extends Activity {
             holder.patientCount.setText("￥100");
             holder.patientCount.setTextSize(16);
             if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;

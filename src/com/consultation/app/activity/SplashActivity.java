@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.consultation.app.R;
+import com.consultation.app.service.HeartbeatService;
 
 public class SplashActivity extends Activity {
 
@@ -16,6 +17,8 @@ public class SplashActivity extends Activity {
             new Thread() {
                 public void run() {
                     try {
+                        Intent serviceIntent=new Intent(SplashActivity.this, HeartbeatService.class);
+                        startService(serviceIntent);
                         Thread.sleep(2000);
                         startActivity(new Intent(SplashActivity.this, HomeActivity.class));
                         SplashActivity.this.finish();
