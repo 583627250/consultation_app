@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +125,8 @@ public class CaseInfoNewActivity extends Activity {
     private int width;
 
     private int height;
+
+    private Map<String, ArrayList<ImageFilesTo>> ImageMap=new HashMap<String, ArrayList<ImageFilesTo>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -381,10 +384,9 @@ public class CaseInfoNewActivity extends Activity {
             ztText.setText(caseTo.getPatientCase().getStatus());
             if(havaImage) {
                 // 显示图片
-                System.out.println(caseTo.getImageFilesTos().size());
                 if(isXml) {
                     // 显示 标题加图片
-                    showImageLayout(caseTo.getImageFilesTos());
+                    showListImageLayout(caseTo.getImageFilesTos());
                 } else {
                     // 显示图片
                     showImageLayout(caseTo.getImageFilesTos());
@@ -450,6 +452,63 @@ public class CaseInfoNewActivity extends Activity {
         }
     };
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void showListImageLayout(ArrayList<ImageFilesTo> imageFilesTos) {
+        for(int i=0; i < imageFilesTos.size(); i++) {
+            String testName=imageFilesTos.get(i).getTest_name();
+            if(ImageMap.get(testName) == null) {
+                ArrayList<ImageFilesTo> temp=new ArrayList<ImageFilesTo>();
+                temp.add(imageFilesTos.get(i));
+                ImageMap.put(testName, temp);
+            } else {
+                ImageMap.get(testName).add(imageFilesTos.get(i));
+            }
+        }
+        imageLayout.removeAllViews();
+        Iterator iter=ImageMap.entrySet().iterator();
+        while(iter.hasNext()) {
+            Map.Entry entry=(Map.Entry)iter.next();
+            String name=(String)entry.getKey();
+            ArrayList<ImageFilesTo> filesTos=(ArrayList<ImageFilesTo>)entry.getValue();
+            // 先创建一个标题
+            imageLayout.addView(createTextView(name));
+            // 再显示图片
+            if(null != filesTos && filesTos.size() != 0) {
+                LinearLayout rowsLayout=new LinearLayout(CaseInfoNewActivity.this);
+                LinearLayout relativeLayout=new LinearLayout(CaseInfoNewActivity.this);
+                for(int i=0; i < filesTos.size(); i++) {
+                    if(i % 3 == 0) {
+                        rowsLayout=createLinearLayout();
+                        imageLayout.addView(rowsLayout);
+                    }
+                    relativeLayout=createImage(filesTos.get(i).getLittle_pic_url(), filesTos.get(i).getPic_url());
+                    rowsLayout.addView(relativeLayout);
+                }
+            }
+
+        }
+
+    }
+    
+    private LinearLayout createTextView(String name) {
+        LinearLayout layout=new LinearLayout(CaseInfoNewActivity.this);
+        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        layout.setGravity(Gravity.CENTER_VERTICAL);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+        layout.setLayoutParams(layoutParams);
+
+        TextView textName=new TextView(CaseInfoNewActivity.this);
+        LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        textNameParams.leftMargin=width / 40;
+        textName.setLayoutParams(textNameParams);
+        textName.setText(name);
+        textName.setGravity(Gravity.CENTER_VERTICAL);
+        textName.setTextColor(Color.parseColor("#000000"));
+        textName.setTextSize(17);
+        layout.addView(textName);
+        return layout;
+    }
+
     private void showImageLayout(ArrayList<ImageFilesTo> imageFilesTos) {
         imageLayout.removeAllViews();
         if(null != imageFilesTos && imageFilesTos.size() != 0) {
@@ -492,15 +551,16 @@ public class CaseInfoNewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 展示大图片
-                BigImageActivity.setViewData(mImageLoader, bigPath);
+                BigImageActivity.setViewData(bigPath);
                 startActivity(new Intent(CaseInfoNewActivity.this, BigImageActivity.class));
             }
         });
         imageView.setScaleType(ScaleType.CENTER_CROP);
         imageView.setTag(path);
+        imageView.setImageResource(R.anim.loading_anim);
         if(!"null".equals(path) && !"".equals(path)) {
             ImageListener listener=
-                ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_menu_delete);
+                ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
             mImageLoader.get(path, listener, 200, 200);
         }
         relativeLayout.addView(imageView);
@@ -1430,11 +1490,12 @@ public class CaseInfoNewActivity extends Activity {
                 final String bigImgUrl=discussionList.get(position).getImageFilesTos().get(0).getPic_url();
                 if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
                     if(imgUrl.startsWith("http://")) {
+                        holder.imageView.setImageResource(R.anim.loading_anim);
                         holder.imageView.setTag(imgUrl);
-                            ImageListener listener=
-                                ImageLoader.getImageListener(holder.imageView, android.R.drawable.ic_menu_rotate,
-                                    android.R.drawable.ic_menu_delete);
-                            mImageLoader.get(imgUrl, listener, 200, 200);
+                        ImageListener listener=
+                            ImageLoader.getImageListener(holder.imageView, 0,
+                                android.R.drawable.ic_menu_delete);
+                        mImageLoader.get(imgUrl, listener, 200, 200);
                     } else {
                         Bitmap bitmap=CommonUtil.readBitMap(200, imgUrl);
                         holder.imageView.setImageBitmap(bitmap);
@@ -1443,7 +1504,7 @@ public class CaseInfoNewActivity extends Activity {
 
                         @Override
                         public void onClick(View v) {
-                            BigImageActivity.setViewData(mImageLoader, bigImgUrl);
+                            BigImageActivity.setViewData(bigImgUrl);
                             startActivity(new Intent(CaseInfoNewActivity.this, BigImageActivity.class));
                         }
                     });

@@ -200,7 +200,6 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                         temp.add(pathMap.get(currentPosition).get(i));
                     }
                 }
-                System.out.println(temp.size());
                 if(temp == null || temp.size() == 0) {
                     Toast.makeText(context, "请添加新图片", Toast.LENGTH_LONG).show();
                     return;
@@ -223,7 +222,6 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
                             isAdd=true;
-                            System.out.println(rspContent);
                             Toast.makeText(context, "图片上传成功", Toast.LENGTH_LONG).show();
                         }
 
@@ -297,8 +295,9 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         if(!"null".equals(path) && !"".equals(path)) {
             if(path.startsWith("http:")) {
                 imageView.setTag(path);
+                imageView.setImageResource(R.anim.loading_anim);
                 ImageListener listener=
-                    ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_menu_delete);
+                    ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
                 mImageLoader.get(path, listener, 200, 200);
             } else {
                 Bitmap bitmap=CommonUtil.readBitMap(200, path);

@@ -638,7 +638,7 @@ public class DiscussionCaseActivity extends Activity {
 
                     @Override
                     public void onClick(View v) {
-                        BigImageActivity.setViewData(mImageLoader, imgUrl);
+                        BigImageActivity.setViewData(imgUrl);
                         startActivity(new Intent(DiscussionCaseActivity.this, BigImageActivity.class));
                     }
                 });

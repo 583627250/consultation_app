@@ -242,8 +242,9 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         if(!"null".equals(path) && !"".equals(path)) {
             if(path.startsWith("http:")) {
                 imageView.setTag(path);
+                imageView.setImageResource(R.anim.loading_anim);
                 ImageListener listener=
-                    ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_menu_delete);
+                    ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
                 mImageLoader.get(path, listener, 200, 200);
             } else {
                 Bitmap bitmap=CommonUtil.readBitMap(200, path);
