@@ -180,10 +180,12 @@ public class SymptomActivity extends CaseBaseActivity {
                 case 0:
                     if(null == itemModel.getType() || "".equals(itemModel.getType())) {
                         List<ItemModel> subItemModels=itemModel.getItemModels();
-                        LinearLayout TextViewLayout=createTextView(itemModel.getFirstStr());
-                        layouts.add(TextViewLayout);
-                        maps.put(position, layouts);
-                        rightLayout.addView(TextViewLayout);
+                        if(null != itemModel.getFirstStr() && !"".equals(itemModel.getFirstStr())){
+                            LinearLayout TextViewLayout=createTextView(itemModel.getFirstStr());
+                            layouts.add(TextViewLayout);
+                            maps.put(position, layouts);
+                            rightLayout.addView(TextViewLayout);
+                        }
                         for(int k=0; k < subItemModels.size(); k++) {
                             ItemModel subItemModel=subItemModels.get(k);
                             if(null != subItemModel.getType() && subItemModel.getType().equals("Edit")) {
