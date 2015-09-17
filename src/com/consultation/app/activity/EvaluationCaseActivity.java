@@ -26,21 +26,24 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
-import com.consultation.app.model.CommentsTo;
+import com.consultation.app.model.DoctorCommentsTo;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
@@ -64,7 +67,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
 
     private PullableListView listView;
 
-    private List<CommentsTo> evaluationList=new ArrayList<CommentsTo>();
+    private List<DoctorCommentsTo> evaluationList=new ArrayList<DoctorCommentsTo>();
 
     private MyAdapter myAdapter;
     
@@ -83,6 +86,8 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
     private String doctorUserId,caseId;
 
     private RequestQueue mQueue;
+    
+    private ImageLoader mImageLoader;
 
     private Handler handler=new Handler() {
 
@@ -118,6 +123,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
         doctorUserId=getIntent().getStringExtra("doctorUserId");
         caseId=getIntent().getStringExtra("caseId");
         mQueue=Volley.newRequestQueue(EvaluationCaseActivity.this);
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         initData();
         initView();
     }
@@ -142,7 +148,8 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                         JSONArray infos=responses.getJSONArray("doctorComments");
                         for(int i=0; i < infos.length(); i++) {
                             JSONObject info=infos.getJSONObject(i);
-                            CommentsTo commentsTo=new CommentsTo();
+                            DoctorCommentsTo commentsTo = new DoctorCommentsTo();
+                            commentsTo.setId(info.getString("id"));
                             commentsTo.setComment_desc(info.getString("comment_desc"));
                             commentsTo.setCommenter(info.getString("commenter"));
                             String createTime=info.getString("create_time");
@@ -152,6 +159,8 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
                             commentsTo.setStart_value(info.getInt("star_value"));
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            commentsTo.setPhoto_url(photo_url);
                             evaluationList.add(commentsTo);
                         }
                         if(infos.length() == 10) {
@@ -212,13 +221,6 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
         });
 
         ratingBar=(RatingBar)findViewById(R.id.evalution_feedback_ratingBar);
-        ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-
-            }
-        });
         
         stars_tip=(TextView)findViewById(R.id.case_evaluation_stars_text);
         stars_tip.setTextSize(18);
@@ -240,7 +242,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
         });
 
         submit=(Button)findViewById(R.id.case_evaluation_btn);
-        submit.setTextSize(22);
+        submit.setTextSize(18);
         submit.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -257,7 +259,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                 parmas.put("comment_userid", editor.get("uid", ""));
                 parmas.put("commenter", editor.get("real_name", "医生"));
                 parmas.put("doctor_userid", doctorUserId);
-                parmas.put("star_value", (int)ratingBar.getRating()+"");
+                parmas.put("star_value", (int)(ratingBar.getRating())*10+"");
                 parmas.put("comment_desc", contentEdit.getText().toString());
                 parmas.put("case_id", caseId);
                 parmas.put("accessToken", ClientUtil.getToken());
@@ -346,7 +348,8 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                                     evaluationList.clear();
                                     for(int i=0; i < infos.length(); i++) {
                                         JSONObject info=infos.getJSONObject(i);
-                                        CommentsTo commentsTo=new CommentsTo();
+                                        DoctorCommentsTo commentsTo = new DoctorCommentsTo();
+                                        commentsTo.setId(info.getString("id"));
                                         commentsTo.setComment_desc(info.getString("comment_desc"));
                                         commentsTo.setCommenter(info.getString("commenter"));
                                         String createTime=info.getString("create_time");
@@ -355,7 +358,9 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                                         } else {
                                             commentsTo.setCreate_time(Long.parseLong(createTime));
                                         }
-                                        commentsTo.setStart_value(info.getInt("start_value"));
+                                        commentsTo.setStart_value(info.getInt("star_value"));
+                                        String photo_url = info.getJSONObject("user").getString("icon_url");
+                                        commentsTo.setPhoto_url(photo_url);
                                         evaluationList.add(commentsTo);
                                     }
                                     if(infos.length() == 10) {
@@ -419,13 +424,15 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
 
     private class ViewHolder {
 
-        TextView contents;
+        ImageView photo;
 
         TextView name;
 
-        TextView create_time;
-
-        RatingBar scoreRatingBar;
+        TextView date;
+        
+        TextView message;
+        
+        RatingBar feedbackRatingBar;
 
     }
 
@@ -450,24 +457,32 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
                 holder=new ViewHolder();
-                convertView=LayoutInflater.from(EvaluationCaseActivity.this).inflate(R.layout.evalution_case_list_item, null);
-                holder.contents=(TextView)convertView.findViewById(R.id.evalution_info_item_message_text);
-                holder.create_time=(TextView)convertView.findViewById(R.id.evalution_info_item_createtime_text);
-                holder.name=(TextView)convertView.findViewById(R.id.evalution_info_item_name_text);
-                holder.scoreRatingBar=(RatingBar)convertView.findViewById(R.id.evalution_info_user_feedback_ratingBar);
+                convertView=LayoutInflater.from(EvaluationCaseActivity.this).inflate(R.layout.specialist_feedback_list_item, null);
+                holder.photo=(ImageView)convertView.findViewById(R.id.specialist_info_feedback_item_user_photo);
+                holder.name=(TextView)convertView.findViewById(R.id.specialist_info_item_name_text);
+                holder.date=(TextView)convertView.findViewById(R.id.specialist_info_item_feedbackDate_text);
+                holder.feedbackRatingBar=(RatingBar)convertView.findViewById(R.id.specialist_info_user_feedback_ratingBar);
+                holder.message=(TextView)convertView.findViewById(R.id.specialist_info_item_message_text);
                 convertView.setTag(holder);
             } else {
                 holder=(ViewHolder)convertView.getTag();
             }
-            holder.contents.setTextSize(17);
-            holder.contents.setText(evaluationList.get(position).getComment_desc());
+            final String imgUrl=evaluationList.get(position).getPhoto_url();
+            holder.photo.setTag(imgUrl);
+            holder.photo.setImageResource(R.drawable.photo_primary);
+            holder.name.setText(evaluationList.get(position).getCommenter());
+            holder.name.setTextSize(16);
+            holder.message.setText(evaluationList.get(position).getComment_desc());
+            holder.message.setTextSize(17);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sd=sdf.format(new Date(evaluationList.get(position).getCreate_time()));
-            holder.create_time.setText(sd);
-            holder.create_time.setTextSize(14);
-            holder.name.setTextSize(16);
-            holder.name.setText(evaluationList.get(position).getCommenter());
-            holder.scoreRatingBar.setRating(evaluationList.get(position).getStart_value());
+            holder.date.setText(sd);
+            holder.date.setTextSize(14);
+            holder.feedbackRatingBar.setRating(evaluationList.get(position).getStart_value());
+            if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_primary, R.drawable.photo_primary);
+                mImageLoader.get(imgUrl, listener);
+            }
             return convertView;
         }
     }
@@ -491,7 +506,8 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                         JSONArray infos=responses.getJSONArray("doctorComments");
                         for(int i=0; i < infos.length(); i++) {
                             JSONObject info=infos.getJSONObject(i);
-                            CommentsTo commentsTo=new CommentsTo();
+                            DoctorCommentsTo commentsTo = new DoctorCommentsTo();
+                            commentsTo.setId(info.getString("id"));
                             commentsTo.setComment_desc(info.getString("comment_desc"));
                             commentsTo.setCommenter(info.getString("commenter"));
                             String createTime=info.getString("create_time");
@@ -500,7 +516,9 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                             } else {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            commentsTo.setStart_value(info.getInt("start_value"));
+                            commentsTo.setStart_value(info.getInt("star_value"));
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            commentsTo.setPhoto_url(photo_url);
                             evaluationList.add(commentsTo);
                         }
                         if(infos.length() == 10) {

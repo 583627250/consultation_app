@@ -14,11 +14,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.util.ClientUtil;
+import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
 public class HeartbeatService extends android.app.Service {
 
     private boolean threadDisable;
+    
+    private boolean isGet = false;
     
     private RequestQueue mQueue;
 
@@ -48,11 +51,40 @@ public class HeartbeatService extends android.app.Service {
 
                                 @Override
                                 public void onResponse(String response) {
-                                    System.out.println(response);
                                     try {
                                         JSONObject responses=new JSONObject(response);
                                         if(responses.getInt("rtnCode") == 1) {
                                             ClientUtil.setToken(responses.getString("accessToken"));
+                                            if(!isGet){
+                                                isGet = true;
+                                                Map<String, String> parmas=new HashMap<String, String>();
+                                                parmas.put("uid", editor.get("uid", ""));
+                                                parmas.put("accessToken", ClientUtil.getToken());
+                                                service.getUserInfo(mQueue, parmas, new Response.Listener<String>() {
+
+                                                    @Override
+                                                    public void onResponse(String arg0) {
+                                                        try {
+                                                            JSONObject responses=new JSONObject(arg0);
+                                                            if(responses.getInt("rtnCode") == 1) {
+                                                                JSONObject object=responses.getJSONObject("user");
+                                                                editor.put("uid", object.getString("id"));
+                                                                editor.put("userType", object.getString("tp"));
+                                                                editor.put("real_name", object.getString("real_name"));
+                                                                editor.put("icon_url", object.getString("icon_url"));
+                                                            }
+                                                        } catch(JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    }
+                                                }, new Response.ErrorListener() {
+
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError arg0) {
+                                                        CommonUtil.closeLodingDialog();
+                                                    }
+                                                });
+                                            }
                                         }else{
                                             editor.put("refreshToken", "");
                                             ClientUtil.setToken("");

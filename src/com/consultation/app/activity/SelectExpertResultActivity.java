@@ -101,8 +101,10 @@ public class SelectExpertResultActivity extends Activity {
                             specialistTo.setHospital_name(info.getString("hospital_name"));
                             specialistTo.setId(info.getString("id"));
                             specialistTo.setTitle(info.getString("title"));
+                            specialistTo.setExpert_gardeid(info.getString("expert_gradeid"));
                             JSONObject userToJsonObject = info.getJSONObject("user");
                             UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
+                            userTo.setUser_id(info.getInt("user_id"));
                             JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
                             specialistTo.setUser(userTo);
                             UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
@@ -110,6 +112,12 @@ public class SelectExpertResultActivity extends Activity {
                             specialist_content_list.add(specialistTo);
                         }
                         myAdapter.notifyDataSetChanged();
+                        if(specialist_content_list.size() == 0){
+                            TextView noData = (TextView)findViewById(R.id.recommend_search_no_listView_text);
+                            noData.setTextSize(18);
+                            noData.setText("对不起！没有该专家");
+                            noData.setVisibility(View.VISIBLE);
+                        }
                     }else if(responses.getInt("rtnCode") == 10004){
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
@@ -167,7 +175,7 @@ public class SelectExpertResultActivity extends Activity {
                 Intent intent = new Intent();
               Bundle bundle = new Bundle();
               bundle.putString("expertName", specialist_content_list.get(position).getUser().getUser_name());
-              bundle.putString("expertId", specialist_content_list.get(position).getId());
+              bundle.putString("expertId", specialist_content_list.get(position).getUser().getUser_id()+"");
               intent.putExtras(bundle);
               setResult(Activity.RESULT_OK, intent);
               finish();
@@ -230,22 +238,22 @@ public class SelectExpertResultActivity extends Activity {
             }
             final String imgUrl=specialist_content_list.get(position).getUser().getIcon_url();
             holder.photo.setTag(imgUrl);
-            holder.photo.setImageResource(R.drawable.photo);
+            holder.photo.setImageResource(R.drawable.photo_expert);
             holder.name.setText(specialist_content_list.get(position).getUser().getUser_name());
             holder.name.setTextSize(18);
-            holder.score.setText(specialist_content_list.get(position).getUserTj().getStar_value()+"分");
+            holder.score.setText((float)(specialist_content_list.get(position).getUserTj().getStar_value())+"分");
             holder.score.setTextSize(16);
-            holder.scoreRatingBar.setRating((float)specialist_content_list.get(position).getUserTj().getStar_value());
+            holder.scoreRatingBar.setRating((float)(specialist_content_list.get(position).getUserTj().getStar_value()/10));
             holder.departmen.setText(specialist_content_list.get(position).getDepart_name()+"|"+specialist_content_list.get(position).getTitle());
             holder.departmen.setTextSize(16);
             holder.hospital.setText(specialist_content_list.get(position).getHospital_name());
             holder.hospital.setTextSize(16);
             holder.patients.setTextSize(14);
-            holder.patients.setText("咨询费");
-            holder.patientCount.setText("￥100");
+            holder.patients.setText("专家级别");
+            holder.patientCount.setText(specialist_content_list.get(position).getExpert_gardeid());
             holder.patientCount.setTextSize(16);
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
+            if(imgUrl != null && !imgUrl.equals("") && !imgUrl.equals("null")) {
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;

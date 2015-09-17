@@ -8,7 +8,7 @@ import com.consultation.app.R;
 import com.consultation.app.service.HeartbeatService;
 
 public class SplashActivity extends Activity {
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +20,9 @@ public class SplashActivity extends Activity {
                         Intent serviceIntent=new Intent(SplashActivity.this, HeartbeatService.class);
                         startService(serviceIntent);
                         Thread.sleep(2000);
-                        startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                        Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                        intent.putExtra("selectId", 2);
+                        startActivity(intent);
                         SplashActivity.this.finish();
                     } catch(InterruptedException e) {
                         e.printStackTrace();

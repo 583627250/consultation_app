@@ -40,7 +40,7 @@
                         android:id="@+id/mine_invitation_listView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="#F4F4F4"
+                        android:divider="#DADADA"
                         android:dividerHeight="0.1dp" />
                 </com.consultation.app.view.PullToRefreshLayout>
             </LinearLayout>
@@ -48,25 +48,39 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:background="#000000" >
+                android:background="#DADADA" >
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/consultation_color_F4F4F4"
+                android:paddingBottom="3dp"
                 android:orientation="horizontal" >
+                
+                <Button
+                    android:id="@+id/mine_invitation_btn_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/login_login_btn_shape"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_margin="5dp"
+                    android:text="联系人"
+                    android:textColor="@color/consultation_color_white" />
 
                 <EditText
                     android:id="@+id/mine_invitation_input_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/consultation_color_white"
                     android:gravity="center_vertical"
                     android:hint="请输入邀请人手机号码"
-                    android:inputType="phone"
-                    android:maxLength="11"
+                    android:inputType="number"
+                    android:layout_margin="5dp"
                     android:padding="5dp"
                     android:singleLine="true"
                     android:textColorHint="#D3D3D3" />
@@ -75,11 +89,12 @@
                     android:id="@+id/mine_invitation_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/create_case_submit_selector"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:background="@drawable/login_login_btn_shape"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_margin="5dp"
                     android:text="邀请"
                     android:textColor="@color/consultation_color_white" />
             </LinearLayout>

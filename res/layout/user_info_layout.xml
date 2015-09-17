@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -68,7 +68,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
 
                 <LinearLayout
@@ -117,6 +117,7 @@
 						    android:layout_height="32dp" 
 						    android:paddingRight="10dp"
 						    android:text="男" 
+						    style="@style/CustomRadioBtn"
 						    android:textColor="#000000"
 						    android:checked="true">
 						</RadioButton> 
@@ -127,6 +128,7 @@
 						    android:layout_gravity="center_vertical"
 						    android:gravity="center_vertical"
 						    android:textColor="#000000"
+						    style="@style/CustomRadioBtn"
 						    android:text="女">
 						</RadioButton> 
 					</RadioGroup> 
@@ -136,7 +138,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
 
                 <LinearLayout
@@ -187,7 +189,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
                 
                 <LinearLayout

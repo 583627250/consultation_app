@@ -2,9 +2,9 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
         <item android:state_pressed="true" 
-            android:drawable="@color/consultation_color_919191" />
+            android:drawable="@color/consultation_color_7B7C7C" />
         <item android:state_focused="true"  
-             android:drawable="@color/consultation_color_919191" />
+             android:drawable="@color/consultation_color_7B7C7C" />
         <item android:drawable="@color/consultation_color_2CB67A" />
  </selector>
 

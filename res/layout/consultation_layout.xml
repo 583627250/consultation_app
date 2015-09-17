@@ -6,7 +6,7 @@
     <LinearLayout 
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:background="@color/consultation_color_white"
+       android:background="#EBEBEB"
        android:orientation="vertical" >
        
         <include
@@ -18,6 +18,7 @@
         	<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/consultation_color_white"
                 android:orientation="horizontal" >
         	    <TextView
 		            android:id="@+id/consulation_list_title_1"
@@ -86,7 +87,7 @@
 	        	<LinearLayout 
 			        android:layout_width="match_parent"
 			        android:layout_height="0.3dp"
-		        	android:background="#A2A2A2">
+		        	android:background="#EBEBEB">
 			    </LinearLayout>
 
 			    <android.support.v4.view.ViewPager

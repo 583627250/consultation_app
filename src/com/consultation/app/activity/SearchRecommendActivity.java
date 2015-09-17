@@ -32,38 +32,44 @@ public class SearchRecommendActivity extends Activity {
     private TextView back_text, search_text, hide_text;
 
     private EditText searchEditText;
-    
+
     private ListView historyListView;
-    
+
     private MyAdapter myAdapter;
-    
-    private List<String> historyList = new ArrayList<String>();
-    
+
+    private List<String> historyList=new ArrayList<String>();
+
     private ViewHolder holder;
-    
+
     private SharePreferencesEditor editor;
-    
-    private boolean isHasHistory = false;
+
+    private boolean isHasHistory=false;
 
     private TextView deleteText;
-    
-    private boolean isHave = false;
-    
+
+    private boolean isHave=false;
+
     private ImageView deleteBtn;
+
+    // private SystemBarTintManager mTintManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_search_layout);
+        // mTintManager = new SystemBarTintManager(this);
+        // mTintManager.setStatusBarTintEnabled(true);
+        // mTintManager.setNavigationBarTintEnabled(true);
+        // mTintManager.setTintColor(Color.parseColor("#123456"));
         initDate();
         initView();
     }
 
     private void initDate() {
-        editor = new SharePreferencesEditor(SearchRecommendActivity.this);
-        if(editor.get("history",null) != null && !"".equals(editor.get("history",null))){
-            isHasHistory = true;
-            String[] historys = editor.get("history",null).split(",");
+        editor=new SharePreferencesEditor(SearchRecommendActivity.this);
+        if(editor.get("history", null) != null && !"".equals(editor.get("history", null))) {
+            isHasHistory=true;
+            String[] historys=editor.get("history", null).split(",");
             for(String string: historys) {
                 historyList.add(string);
             }
@@ -83,17 +89,17 @@ public class SearchRecommendActivity extends Activity {
         searchEditText.setTextSize(16);
         searchEditText.setHint("请输入文章标题");
         searchEditText.setHintTextColor(Color.parseColor("#D3D3D3"));
-        deleteBtn = (ImageView)findViewById(R.id.header_image_delete);
+        deleteBtn=(ImageView)findViewById(R.id.header_image_delete);
         deleteBtn.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 searchEditText.setText("");
             }
         });
-        deleteText = (TextView)findViewById(R.id.recommend_search_history_listView_delete);
+        deleteText=(TextView)findViewById(R.id.recommend_search_history_listView_delete);
         deleteText.setTextSize(16);
-        if(!isHasHistory){
+        if(!isHasHistory) {
             deleteText.setVisibility(View.GONE);
         }
         deleteText.setOnClickListener(new OnClickListener() {
@@ -103,20 +109,19 @@ public class SearchRecommendActivity extends Activity {
                 editor.put("history", "");
                 historyList.clear();
                 myAdapter.notifyDataSetChanged();
-                isHasHistory = false;
+                isHasHistory=false;
                 deleteText.setVisibility(View.GONE);
             }
         });
-        
-        
+
         back_layout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive()) {     
-                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );   
-                } 
+                if(imm.isActive()) {
+                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
                 finish();
             }
         });
@@ -124,22 +129,22 @@ public class SearchRecommendActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                String editTextString = searchEditText.getText().toString().trim();
-                if(null != editTextString && !"".equals(editTextString)){
-                    if(editor.get("history",null) == null || "".equals(editor.get("history",null))){
+                String editTextString=searchEditText.getText().toString().trim();
+                if(null != editTextString && !"".equals(editTextString)) {
+                    if(editor.get("history", null) == null || "".equals(editor.get("history", null))) {
                         editor.put("history", editTextString);
-                    }else{
-                        for(String temp: editor.get("history",null).split(",")) {
-                            if(temp.equals(editTextString)){
-                                isHave = true;
+                    } else {
+                        for(String temp: editor.get("history", null).split(",")) {
+                            if(temp.equals(editTextString)) {
+                                isHave=true;
                             }
                         }
-                        if(!isHave){
-                            editor.put("history", editor.get("history",null)+","+editTextString);
+                        if(!isHave) {
+                            editor.put("history", editor.get("history", null) + "," + editTextString);
                         }
-                        isHave = false;
+                        isHave=false;
                     }
-                    Intent intent = new Intent(SearchRecommendActivity.this, SearchRecommendResultActivity.class);
+                    Intent intent=new Intent(SearchRecommendActivity.this, SearchRecommendResultActivity.class);
                     intent.putExtra("titleString", editTextString);
                     startActivity(intent);
                     deleteText.setVisibility(View.VISIBLE);
@@ -148,58 +153,58 @@ public class SearchRecommendActivity extends Activity {
                 }
             }
         });
-        myAdapter = new MyAdapter();
+        myAdapter=new MyAdapter();
         historyListView=(ListView)findViewById(R.id.recommend_search_history_listView);
         historyListView.setAdapter(myAdapter);
         historyListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SearchRecommendActivity.this, SearchRecommendResultActivity.class);
+                Intent intent=new Intent(SearchRecommendActivity.this, SearchRecommendResultActivity.class);
                 intent.putExtra("titleString", historyList.get(position));
                 startActivity(intent);
             }
         });
     }
-    
+
     private static class ViewHolder {
 
-      TextView searchText;
-  }
+        TextView searchText;
+    }
 
-  private class MyAdapter extends BaseAdapter {
+    private class MyAdapter extends BaseAdapter {
 
-      @Override
-      public int getCount() {
-          if(isHasHistory){
-              return historyList.size();
-          }
-          return historyList.size();
-      }
+        @Override
+        public int getCount() {
+            if(isHasHistory) {
+                return historyList.size();
+            }
+            return historyList.size();
+        }
 
-      @Override
-      public Object getItem(int location) {
-          return historyList.get(location);
-      }
+        @Override
+        public Object getItem(int location) {
+            return historyList.get(location);
+        }
 
-      @Override
-      public long getItemId(int position) {
-          return position;
-      }
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
 
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-          if(convertView == null) {
-              convertView=LayoutInflater.from(SearchRecommendActivity.this).inflate(R.layout.search_recommend_list_item, null);
-              holder=new ViewHolder();
-              holder.searchText=(TextView)convertView.findViewById(R.id.search_recommend_list_item_text);
-              convertView.setTag(holder);
-          }else {
-              holder=(ViewHolder)convertView.getTag();
-          }
-          holder.searchText.setTextSize(16);
-          holder.searchText.setText(historyList.get(position));
-          return convertView;
-      }
-  }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                convertView=LayoutInflater.from(SearchRecommendActivity.this).inflate(R.layout.search_recommend_list_item, null);
+                holder=new ViewHolder();
+                holder.searchText=(TextView)convertView.findViewById(R.id.search_recommend_list_item_text);
+                convertView.setTag(holder);
+            } else {
+                holder=(ViewHolder)convertView.getTag();
+            }
+            holder.searchText.setTextSize(16);
+            holder.searchText.setText(historyList.get(position));
+            return convertView;
+        }
+    }
 }

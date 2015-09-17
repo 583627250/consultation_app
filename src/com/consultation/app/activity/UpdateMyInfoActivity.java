@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,6 +26,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -32,11 +37,16 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.PhoneUtil;
@@ -46,14 +56,14 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
 
     private TextView title_text, back_text;
 
-    private LinearLayout back_layout;
+    private LinearLayout back_layout, expert_gradeLine, expert_gradeLayout, invite_codeLine, invite_codeLayout;
 
     private TextView tip_text, titles_text, hospital_text, department_text, good_at_text, glasses_text, certificate_code_text,
-            image_text, image_tip_text, read_text;
+            image_text, image_tip_text, read_text, expert_grade_text, invite_code_text;
 
     private RadioButton primary_RadioButton, expert_RadioButton;
-    
-    private String title_id,department_id,hospital_id;
+
+    private String title_id, department_id, hospital_id,expert_gradeId;
 
     private CheckBox readBox;
 
@@ -65,12 +75,22 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
 
     private SharePreferencesEditor editor;
 
-    private EditText titleEdit, departmentEdit, hospitalEdit, goodAtEdit, codeEdit;
+    private EditText titleEdit, departmentEdit, hospitalEdit, goodAtEdit, codeEdit, expert_gradeEdit, invite_codeEdit;
 
     private int width;
 
     private int height;
     
+    private String headerTitle;
+    
+    private String infos;
+    
+    private RequestQueue mQueue;
+    
+    private ImageLoader mImageLoader;
+    
+    private String doctorId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,17 +99,59 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
         WindowManager wm=this.getWindowManager();
         width=wm.getDefaultDisplay().getWidth();
         height=wm.getDefaultDisplay().getHeight();
-        initData();
+        mQueue=Volley.newRequestQueue(this);
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
+        headerTitle = getIntent().getStringExtra("headerTitle");
+        infos = getIntent().getStringExtra("infos");
         initView();
+        initData();
     }
 
     private void initData() {
-
+        if(!"".equals(infos) && null != infos){
+            try {
+                JSONObject jsonObject = new JSONObject(infos);
+                title_id = jsonObject.getString("title_id");
+                doctorId = jsonObject.getString("id");
+                department_id = jsonObject.getString("depart_id");
+                hospital_id = jsonObject.getString("hospital_id");
+                if(jsonObject.getString("grade").equals("1")){
+                    primary_RadioButton.setChecked(true);
+                    expert_RadioButton.setChecked(false);
+                    titleEdit.setText(jsonObject.getString("title"));
+                    departmentEdit.setText(jsonObject.getString("depart_name"));
+                    hospitalEdit.setText(jsonObject.getString("hospital_name"));
+                    goodAtEdit.setText(jsonObject.getString("goodat_fields"));
+                    codeEdit.setText(jsonObject.getString("certificate_no"));
+                }else{
+                    primary_RadioButton.setChecked(false);
+                    expert_RadioButton.setChecked(true);
+                    expert_gradeLine.setVisibility(View.VISIBLE);
+                    expert_gradeLayout.setVisibility(View.VISIBLE);
+                    invite_codeLine.setVisibility(View.VISIBLE);
+                    invite_codeLayout.setVisibility(View.VISIBLE);
+                    expert_gradeId = jsonObject.getString("expert_gradeid");
+                    titleEdit.setText(jsonObject.getString("title"));
+                    departmentEdit.setText(jsonObject.getString("depart_name"));
+                    hospitalEdit.setText(jsonObject.getString("hospital_name"));
+                    goodAtEdit.setText(jsonObject.getString("goodat_fields"));
+                    codeEdit.setText(jsonObject.getString("certificate_no"));
+                    expert_gradeEdit.setText(jsonObject.getString("expert_grade"));
+                }
+                pathList.clear();
+                pathList.add("add");
+                pathList.add(jsonObject.getString("certif_pic_url"));
+                showRightLayout();
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+            
+        }
     }
 
     private void initView() {
         title_text=(TextView)findViewById(R.id.header_text);
-        title_text.setText("修改我的资料");
+        title_text.setText(headerTitle);
         title_text.setTextSize(20);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
@@ -125,6 +187,12 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
         glasses_text=(TextView)findViewById(R.id.update_my_info_glasses_text);
         glasses_text.setTextSize(18);
 
+        expert_grade_text=(TextView)findViewById(R.id.update_my_info_expert_grade_text);
+        expert_grade_text.setTextSize(18);
+
+        invite_code_text=(TextView)findViewById(R.id.update_my_info_invitation_code_text);
+        invite_code_text.setTextSize(18);
+
         certificate_code_text=(TextView)findViewById(R.id.update_my_info_code_text);
         certificate_code_text.setTextSize(18);
 
@@ -139,11 +207,48 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
         read_text.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); // 下划线
         read_text.getPaint().setAntiAlias(true);// 抗锯齿
 
+        expert_gradeLine=(LinearLayout)findViewById(R.id.update_my_info_expert_grade_line);
+
+        expert_gradeLayout=(LinearLayout)findViewById(R.id.update_my_info_expert_grade_layout);
+
+        invite_codeLine=(LinearLayout)findViewById(R.id.update_my_info_invitation_code_line);
+
+        invite_codeLayout=(LinearLayout)findViewById(R.id.update_my_info_invitation_code_layout);
+
+        expert_gradeLine.setVisibility(View.GONE);
+        expert_gradeLayout.setVisibility(View.GONE);
+        invite_codeLine.setVisibility(View.GONE);
+        invite_codeLayout.setVisibility(View.GONE);
+
         primary_RadioButton=(RadioButton)findViewById(R.id.update_my_info_glasses_primary);
         primary_RadioButton.setTextSize(18);
+        primary_RadioButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    expert_gradeLine.setVisibility(View.GONE);
+                    expert_gradeLayout.setVisibility(View.GONE);
+                    invite_codeLine.setVisibility(View.GONE);
+                    invite_codeLayout.setVisibility(View.GONE);
+                }
+            }
+        });
 
         expert_RadioButton=(RadioButton)findViewById(R.id.update_my_info_glasses_expert);
         expert_RadioButton.setTextSize(18);
+        expert_RadioButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    expert_gradeLine.setVisibility(View.VISIBLE);
+                    expert_gradeLayout.setVisibility(View.VISIBLE);
+                    invite_codeLine.setVisibility(View.VISIBLE);
+                    invite_codeLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         readBox=(CheckBox)findViewById(R.id.update_my_info_read_btn);
         readBox.setTextSize(18);
@@ -154,36 +259,45 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
 
             @Override
             public void onClick(View v) {
-                if(null == hospitalEdit.getText().toString() || "".equals(hospitalEdit.getText().toString())){
+                if(null == hospitalEdit.getText().toString() || "".equals(hospitalEdit.getText().toString())) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请选择医院", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null == departmentEdit.getText().toString() || "".equals(departmentEdit.getText().toString())){
+                if(null == departmentEdit.getText().toString() || "".equals(departmentEdit.getText().toString())) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请选择科室", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null == titleEdit.getText().toString() || "".equals(titleEdit.getText().toString())){
+                if(null == titleEdit.getText().toString() || "".equals(titleEdit.getText().toString())) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请选择职称", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null == goodAtEdit.getText().toString() || "".equals(goodAtEdit.getText().toString())){
+                if(null == goodAtEdit.getText().toString() || "".equals(goodAtEdit.getText().toString())) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请输入擅长领域", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null == codeEdit.getText().toString() || "".equals(codeEdit.getText().toString())){
+                if(null == codeEdit.getText().toString() || "".equals(codeEdit.getText().toString())) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请输入证书编码", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(null == pathList || pathList.size() ==0){
+                if(expert_RadioButton.isChecked()){
+                    if(null == expert_gradeEdit.getText().toString() || "".equals(expert_gradeEdit.getText().toString())) {
+                        Toast.makeText(UpdateMyInfoActivity.this, "请选择专家级别", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                if(null == pathList || pathList.size() == 0) {
                     Toast.makeText(UpdateMyInfoActivity.this, "请添加证书照片", Toast.LENGTH_LONG).show();
                     return;
                 }
-                File[] files=new File[pathList.size()];
-                for(int i=0; i < pathList.size(); i++) {
-                    File file=new File(pathList.get(i));
-                    files[i]=file;
+                File[] files=new File[1];
+                if(!pathList.get(1).startsWith("http:")){
+                    File file=new File(pathList.get(1));
+                    files[0]=file;
                 }
                 Map<String, String> parmas=new HashMap<String, String>();
+                if(!"".equals(doctorId) && null != doctorId){
+                    parmas.put("id", doctorId);
+                }
                 parmas.put("hospital_id", hospital_id);
                 parmas.put("hospital_name", hospitalEdit.getText().toString());
                 parmas.put("depart_id", department_id);
@@ -191,17 +305,29 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
                 parmas.put("goodat_fields", goodAtEdit.getText().toString());
                 parmas.put("title_id", title_id);
                 parmas.put("title", titleEdit.getText().toString());
+                if(primary_RadioButton.isChecked()) {
+                    parmas.put("grade", "1");
+                }
+                if(expert_RadioButton.isChecked()) {
+                    parmas.put("grade", "2");
+                    parmas.put("expert_gradeid", expert_gradeId);
+                    parmas.put("expert_grade", expert_gradeEdit.getText().toString());
+                }
+                if(null != invite_codeEdit.getText().toString() && !"".equals(invite_codeEdit.getText().toString())) {
+                    parmas.put("invite_code", invite_codeEdit.getText().toString());
+                }
                 parmas.put("certificate_no", codeEdit.getText().toString());
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(UpdateMyInfoActivity.this);
-                OpenApiService.getInstance(UpdateMyInfoActivity.this).getUploadFiles(ClientUtil.GET_JION_DOCTOR_URL, UpdateMyInfoActivity.this,
-                    new ConsultationCallbackHandler() {
+                OpenApiService.getInstance(UpdateMyInfoActivity.this).getUploadFiles(ClientUtil.GET_JION_DOCTOR_URL,
+                    UpdateMyInfoActivity.this, new ConsultationCallbackHandler() {
 
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
                             Toast.makeText(UpdateMyInfoActivity.this, "提交成功", Toast.LENGTH_LONG).show();
+                            setResult(Activity.RESULT_OK, new Intent());
                             finish();
                         }
 
@@ -293,6 +419,31 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
         codeEdit=(EditText)findViewById(R.id.update_my_info_code_input_edit);
         codeEdit.setTextSize(18);
 
+        invite_codeEdit=(EditText)findViewById(R.id.update_my_info_invitation_code_input_edit);
+        invite_codeEdit.setTextSize(18);
+
+        expert_gradeEdit=(EditText)findViewById(R.id.update_my_info_expert_grade_input_edit);
+        expert_gradeEdit.setTextSize(18);
+        expert_gradeEdit.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MyExpertGradeActivity.setHandler(new ConsultationCallbackHandler() {
+
+                    @Override
+                    public void onSuccess(String rspContent, int statusCode) {
+                        expert_gradeEdit.setText(rspContent.split(",")[0]);
+                        expert_gradeId=rspContent.split(",")[1];
+                    }
+
+                    @Override
+                    public void onFailure(ConsultationCallbackException exp) {
+
+                    }
+                });
+                startActivity(new Intent(UpdateMyInfoActivity.this, MyExpertGradeActivity.class));
+            }
+        });
         pathList.add("add");
         showRightLayout();
     }
@@ -347,11 +498,19 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
             imageView.setBackgroundResource(R.drawable.update_my_info_add_images);
         } else {
             imageView.setOnLongClickListener(this);
-            Bitmap bitmap=CommonUtil.readBitMap(PhoneUtil.getInstance().getWidth(UpdateMyInfoActivity.this), path);
-            imageView.setImageBitmap(bitmap);
+            if(path.startsWith("http:")){
+                imageView.setTag(path);
+                if(!"null".equals(path) && !"".equals(path)) {
+                    ImageListener listener=
+                        ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_menu_delete);
+                    mImageLoader.get(path, listener, 200, 200);
+                }
+            }else{
+                Bitmap bitmap=CommonUtil.readBitMap(PhoneUtil.getInstance().getWidth(UpdateMyInfoActivity.this), path);
+                imageView.setImageBitmap(bitmap);
+            }
         }
         relativeLayout.addView(imageView);
-
         return relativeLayout;
     }
 
@@ -360,9 +519,8 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
         if(data != null) {
             String photoPath=data.getStringExtra("bitmap");
             pathList.clear();
-            if(!pathList.contains(photoPath)) {
-                pathList.add(photoPath);
-            }
+            pathList.add("add");
+            pathList.add(photoPath);
             showRightLayout();
         }
         super.onActivityResult(requestCode, resultCode, data);

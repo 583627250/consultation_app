@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -54,7 +54,6 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="姓名:章撒"
                     android:textColor="#7B7C7C" />
 
                 <TextView
@@ -65,7 +64,6 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="性别:男"
                     android:textColor="#7B7C7C" />
 
                 <TextView
@@ -76,7 +74,6 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="手机号:13888888888"
                     android:textColor="#7B7C7C" />
 
                 <TextView
@@ -87,7 +84,6 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="出生日期:1990-01-08"
                     android:textColor="#7B7C7C" />
 
                 <TextView
@@ -98,7 +94,6 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="地址:北京市昌平区"
                     android:textColor="#7B7C7C" />
 
                 <TextView
@@ -109,24 +104,15 @@
                     android:gravity="center_vertical"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="余额:100元"
                     android:textColor="#7B7C7C" />
             </LinearLayout>
-
-            <!--
-                <LinearLayout 
-		            android:layout_width="match_parent"
-		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
-		        </LinearLayout>
-            -->
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@color/consultation_color_white"
-                android:paddingBottom="3dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="3dp" >
@@ -141,16 +127,6 @@
                     android:text="验证码"
                     android:textColor="#7B7C7C" />
 
-                <!--
-                    <LinearLayout
-                        android:layout_width="0.1dp"
-                        android:layout_marginRight="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="3dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/consultation_color_E8D8D8">
-                    </LinearLayout>
-                -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -174,10 +150,10 @@
                         android:id="@+id/search_patient_result_phone_get_btn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1.5"
                         android:background="@drawable/login_register_btn_shape"
                         android:singleLine="true"
-                        android:text="验证"
+                        android:text="获取验证"
                         android:textColor="@color/consultation_color_2CB67A" />
                 </LinearLayout>
             </LinearLayout>
@@ -185,7 +161,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:background="@color/consultation_color_F4F4F4" >
+                android:background="#DADADA" >
             </LinearLayout>
 
             <LinearLayout

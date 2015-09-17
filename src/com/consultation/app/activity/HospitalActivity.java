@@ -77,7 +77,6 @@ public class HospitalActivity extends Activity {
     }
 
     private void initView() {
-        initHospitalDatas();
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("选择省");
         title_text.setTextSize(20);
@@ -128,14 +127,19 @@ public class HospitalActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!isSelectProvince) {
                     isSelectProvince=true;
-                    temp.clear();
-                    title_text.setText("选择市");
-                    cityTemp=getCitys(provinces.get(position).getId());
-                    for(int i=0; i < cityTemp.size(); i++) {
-                        temp.add(cityTemp.get(i).getName());
+                    if(position == 0){
+                        h.onSuccess("不限", 1);
+                        finish();
+                    }else{
+                        temp.clear();
+                        title_text.setText("选择市");
+                        cityTemp=getCitys(provinces.get(position).getId());
+                        for(int i=0; i < cityTemp.size(); i++) {
+                            temp.add(cityTemp.get(i).getName());
+                        }
+                        myAdapter.notifyDataSetChanged();
+                        provinceListView.setSelection(0);
                     }
-                    myAdapter.notifyDataSetChanged();
-                    provinceListView.setSelection(0);
                 } else {
                     if(!isSelectCitys) {
                         isSelectCitys=true;
@@ -168,6 +172,8 @@ public class HospitalActivity extends Activity {
             String sql="SELECT * FROM area where pid=? ORDER BY indx ASC";
             String[] selectionArgs={"0"};
             Cursor cursor=myDbHelper.getReadableDatabase().rawQuery(sql, selectionArgs);
+            provinces.add(new ProvinceTo());
+            temp.add("不限");
             if(cursor != null) {
                 for(int j=0; j < cursor.getCount(); j++) {
                     cursor.moveToPosition(j);
@@ -177,41 +183,6 @@ public class HospitalActivity extends Activity {
                     provinceTo.setName(cursor.getString(1));
                     provinceTo.setPid(cursor.getString(2));
                     provinceTo.setStatus(cursor.getString(4));
-                    // sql="SELECT * FROM area where pid=? ORDER BY indx ASC";
-                    // String[] citysSelectionArgs={cursor.getString(0)};
-                    // Cursor citysCursor=myDbHelper.getReadableDatabase().rawQuery(sql, citysSelectionArgs);
-                    // if(citysCursor != null) {
-                    // List<CityTo> citys=new ArrayList<CityTo>();
-                    // for(int k=0; k < citysCursor.getCount(); k++) {
-                    // citysCursor.moveToPosition(k);
-                    // CityTo cityTo=new CityTo();
-                    // cityTo.setId(citysCursor.getString(0));
-                    // cityTo.setIndex(citysCursor.getInt(3));
-                    // cityTo.setName(citysCursor.getString(1));
-                    // cityTo.setPid(citysCursor.getString(2));
-                    // cityTo.setStatus(citysCursor.getString(4));
-                    // sql="SELECT * FROM hospital where area_city_id=?";
-                    // String[] hospiatalsSelectionArgs={citysCursor.getString(0)};
-                    // Cursor hospiatalsCursor=myDbHelper.getReadableDatabase().rawQuery(sql, hospiatalsSelectionArgs);
-                    // if(hospiatalsCursor != null) {
-                    // List<HospitalTo> hospiatals=new ArrayList<HospitalTo>();
-                    // for(int y=0; y < hospiatalsCursor.getCount(); y++) {
-                    // hospiatalsCursor.moveToPosition(y);
-                    // HospitalTo hospitalTo=new HospitalTo();
-                    // hospitalTo.setId(hospiatalsCursor.getString(0));
-                    // hospitalTo.setName(hospiatalsCursor.getString(2));
-                    // hospitalTo.setArea_city_id(hospiatalsCursor.getString(1));
-                    // hospitalTo.setStatus(hospiatalsCursor.getString(3));
-                    // hospiatals.add(hospitalTo);
-                    // }
-                    // cityTo.setHospitalList(hospiatals);
-                    // }
-                    // hospiatalsCursor.close();
-                    // citys.add(cityTo);
-                    // }
-                    // provinceTo.setCityList(citys);
-                    // }
-                    // citysCursor.close();
                     provinces.add(provinceTo);
                     temp.add(provinceTo.getName());
                 }

@@ -58,6 +58,16 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_REGISTER_MOBILEUSABLE_URL, parmas, listener, errorListener);
     }
+    
+    public void getForgetMobileUsable(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_FORGET_MOBILEUSABLE_URL, parmas, listener, errorListener);
+    }
+    
+    public void getPatientMobileUsable(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_PATIENT_MOBILEUSABLE_URL, parmas, listener, errorListener);
+    }
 
     public void getRegister(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
@@ -97,6 +107,11 @@ public class OpenApiService {
     public void getPatientCaseList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_PATIENTCASE_LIST_URL, parmas, listener, errorListener);
+    }
+    
+    public void getHelpPatientList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_HELP_PATIENT_LIST_URL, parmas, listener, errorListener);
     }
 
     public void getPatientCaseListInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -138,6 +153,11 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_INVITATION_LIST_URL, parmas, listener, errorListener);
     }
+    
+    public void getDeleteCaseImage(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_DELETE_CASE_IMAGE_URL, parmas, listener, errorListener);
+    }
 
     public void getSendInvitation(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
@@ -153,6 +173,11 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_DISCUSSION_CASE_LIST_URL, parmas, listener, errorListener);
     }
+    
+    public void getCaseImageList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_CASE_IMAGE_LIST_URL, parmas, listener, errorListener);
+    }
 
     public void getSendDiscussionCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
@@ -167,6 +192,11 @@ public class OpenApiService {
     public void getRejectedCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_REJECTED_CASE_URL, parmas, listener, errorListener);
+    }
+    
+    public void getCaseOpinion(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_CASE_OPINION_URL, parmas, listener, errorListener);
     }
 
     public void getReceivedCase(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -192,6 +222,36 @@ public class OpenApiService {
     public void getUserInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_USERINFO_URL, parmas, listener, errorListener);
+    }
+    
+    public void getMyAcountInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_INFO_URL, parmas, listener, errorListener);
+    }
+    
+    public void getMyAcountRechargeRecord(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_RECHARGE_RECORD_URL, parmas, listener, errorListener);
+    }
+    
+    public void getMyAcountDrawsRecord(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_WITHDRAWALS_RECORD_URL, parmas, listener, errorListener);
+    }
+    
+    public void getMyAcountIncomeRecord(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_INCOME_RECORD_URL, parmas, listener, errorListener);
+    }
+    
+    public void getMyAcountPayRecord(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_PAY_RECORD_URL, parmas, listener, errorListener);
+    }
+    
+    public void getExpertAccept(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_EXPERT_ACCEPT_URL, parmas, listener, errorListener);
     }
 
     public void getHttpsRequest(String url, Context context, Map<String, String> parmas, ConsultationCallbackHandler callbackHandler) {

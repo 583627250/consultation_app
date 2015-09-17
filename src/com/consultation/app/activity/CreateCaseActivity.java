@@ -45,15 +45,17 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
 
     private EditText expert_edit, patient_edit, title_edit, hope_edit;
 
-    private RadioButton radioButton1, radioButton2, radioButton3;
+    private RadioButton radioButton1, radioButton3;
 
     private Button submitBtn;
 
     private RequestQueue mQueue;
 
     private SharePreferencesEditor editor;
+    
+    private boolean isUpdate;
 
-    private String patientId, expertId, departmentId, caseId, expertName, patientName, consultType, titles, problem, content;
+    private String patientId, expertId, departmentId, caseId, expertName, patientName, consultType, titles, problem, content, imageString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +71,10 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         patientName=getIntent().getStringExtra("patientName");
         consultType=getIntent().getStringExtra("consultType");
         titles=getIntent().getStringExtra("titles");
+        isUpdate=getIntent().getBooleanExtra("isUpdate",false);
         problem=getIntent().getStringExtra("problem");
         content=getIntent().getStringExtra("content");
+        imageString=getIntent().getStringExtra("imageString");
         initData();
         initView();
     }
@@ -134,17 +138,6 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                 }
             }
         });
-        radioButton2=(RadioButton)findViewById(R.id.create_case_select_consultation_operation);
-        radioButton2.setTextSize(18);
-        radioButton2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    expert_layout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         radioButton3=(RadioButton)findViewById(R.id.create_case_select_consultation_public);
         radioButton3.setTextSize(18);
         if(radioButton3.isChecked()) {
@@ -169,17 +162,11 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         if(!"".equals(caseId) && null != caseId) {
             expert_edit.setText(expertName);
             patient_edit.setText(patientName);
-            if(consultType.equals("10")) {
+            if(consultType.equals("公开讨论")) {
                 radioButton3.setChecked(true);
                 radioButton1.setChecked(false);
-                radioButton2.setChecked(false);
-            } else if(consultType.equals("20")) {
+            } else if(consultType.equals("明确诊断")) {
                 radioButton1.setChecked(true);
-                radioButton3.setChecked(false);
-                radioButton2.setChecked(false);
-            } else if(consultType.equals("22")) {
-                radioButton2.setChecked(true);
-                radioButton1.setChecked(false);
                 radioButton3.setChecked(false);
             }
             title_edit.setText(titles);
@@ -201,19 +188,40 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                 break;
             case R.id.create_case_btn_submit:
                 // 提交病例基本信息
+                if("".equals(patient_edit.getText().toString()) || null == patient_edit.getText().toString()){
+                    Toast.makeText(CreateCaseActivity.this, "请选择患者", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if("".equals(title_edit.getText().toString()) || null == title_edit.getText().toString()){
+                    Toast.makeText(CreateCaseActivity.this, "请输入标题", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if("".equals(hope_edit.getText().toString()) || null == hope_edit.getText().toString()){
+                    Toast.makeText(CreateCaseActivity.this, "请输入希望专家提供的帮助内容", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(title_edit.getText().toString().length()<5 || title_edit.getText().toString().length()>30){
+                    Toast.makeText(CreateCaseActivity.this, "请输入5~30个字的标题", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(hope_edit.getText().toString().length()<10 || hope_edit.getText().toString().length()>500){
+                    Toast.makeText(CreateCaseActivity.this, "请输入10~500个字的希望专家提供的帮助内容", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Map<String, String> parmas=new HashMap<String, String>();
-                parmas.put("expert_userid", expertId);
-                parmas.put("expert_name", expert_edit.getText().toString());
                 parmas.put("patient_userid", patientId);
                 parmas.put("patient_name", patient_edit.getText().toString());
                 if(radioButton1.isChecked()) {
                     parmas.put("consult_tp", "20");
-                } else if(radioButton2.isChecked()) {
-                    parmas.put("consult_tp", "22");
-                } else if(radioButton3.isChecked()) {
+                    if("".equals(expert_edit.getText().toString()) || null == expert_edit.getText().toString()){
+                        Toast.makeText(CreateCaseActivity.this, "请选择专家", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    parmas.put("expert_userid", expertId);
+                    parmas.put("expert_name", expert_edit.getText().toString());
+                }else if(radioButton3.isChecked()) {
                     parmas.put("consult_tp", "10");
                 }
-                System.out.println(parmas.get("consult_tp"));
                 if(!"".equals(caseId) && null != caseId) {
                     parmas.put("id", caseId);
                 }
@@ -233,6 +241,8 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                                 Intent intent=new Intent(CreateCaseActivity.this, CreateCaseNextActivity.class);
                                 intent.putExtra("caseId", responses.getString("id"));
                                 intent.putExtra("departmentId", departmentId);
+                                intent.putExtra("isUpdate", isUpdate);
+                                intent.putExtra("imageString", imageString);
                                 intent.putExtra("content", content);
                                 startActivity(intent);
                             } else if(responses.getInt("rtnCode") == 10004){

@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -93,7 +93,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -154,129 +154,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/create_case_test_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="10dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/primary_create_cases_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/create_case_test_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="检验"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <TextView
-                            android:id="@+id/create_case_test_status_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:paddingRight="5dp"
-                            android:text="待填写"
-                            android:textColor="#414141" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/create_case_check_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/knowledge_recommend_layout_selector"
-                    android:orientation="horizontal"
-                    android:padding="10dp" >
-
-                    <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="wrap_content" >
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/primary_create_cases_icon" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/create_case_check_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="检查"
-                        android:textColor="#414141" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <TextView
-                            android:id="@+id/create_case_check_status_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:paddingRight="5dp"
-                            android:text="待填写"
-                            android:textColor="#414141" />
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/icon_item_arrow" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -337,7 +215,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -398,7 +276,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -440,6 +318,128 @@
 
                         <TextView
                             android:id="@+id/create_case_family_history_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingRight="5dp"
+                            android:text="待填写"
+                            android:textColor="#414141" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/create_case_test_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/primary_create_cases_icon" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/create_case_test_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="检验"
+                        android:textColor="#414141" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/create_case_test_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingRight="5dp"
+                            android:text="待填写"
+                            android:textColor="#414141" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/create_case_check_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/primary_create_cases_icon" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/create_case_check_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="检查"
+                        android:textColor="#414141" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:id="@+id/create_case_check_status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"

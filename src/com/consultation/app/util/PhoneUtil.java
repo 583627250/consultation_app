@@ -354,7 +354,6 @@ public class PhoneUtil {
 //			            String res= pak.applicationInfo.loadLabel(ctx.getPackageManager()).toString();
 //			            String str2 = res.replaceAll("", "");
 //			            result[i] = str2;
-//			            System.out.println(str2);
 //			        }  
 //			    } 
 //			} 

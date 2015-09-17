@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_white"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -25,12 +25,13 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/consultation_color_white"
                 android:scrollbars="none" >
 
                 <LinearLayout
                     android:id="@+id/syamptom_txt_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
                     android:background="@color/consultation_color_white"
                     android:orientation="vertical" >

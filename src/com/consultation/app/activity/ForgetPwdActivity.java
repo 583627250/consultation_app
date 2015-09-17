@@ -114,73 +114,38 @@ public class ForgetPwdActivity extends Activity {
                 final Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("mobile_ph", phone_edit.getText().toString());
                 CommonUtil.showLoadingDialog(ForgetPwdActivity.this);
-                OpenApiService.getInstance(ForgetPwdActivity.this).getRegisterVerification(mQueue, parmas,
+                OpenApiService.getInstance(ForgetPwdActivity.this).getForgetMobileUsable(mQueue, parmas,
                     new Response.Listener<String>() {
 
                         @Override
                         public void onResponse(String arg0) {
+                            CommonUtil.closeLodingDialog();
                             try {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
-                                    OpenApiService.getInstance(ForgetPwdActivity.this).getRegisterMobileUsable(mQueue, parmas,
-                                        new Response.Listener<String>() {
+                                    getVerification_btn.setEnabled(false);
+                                    Toast.makeText(ForgetPwdActivity.this, "验证码请求成功", Toast.LENGTH_SHORT).show();
+                                    new Thread(new Runnable() {
 
-                                            @Override
-                                            public void onResponse(String arg0) {
-                                                CommonUtil.closeLodingDialog();
+                                        @Override
+                                        public void run() {
+                                            times=30;
+                                            while(times >= 0) {
                                                 try {
-                                                    JSONObject responses=new JSONObject(arg0);
-                                                    if(responses.getInt("rtnCode") == 1) {
-                                                        getVerification_btn.setEnabled(false);
-                                                        Toast.makeText(ForgetPwdActivity.this, "验证码请求成功", Toast.LENGTH_SHORT)
-                                                            .show();
-                                                        new Thread(new Runnable() {
-
-                                                            @Override
-                                                            public void run() {
-                                                                times=30;
-                                                                while(times >= 0) {
-                                                                    try {
-                                                                        Message msg=new Message();
-                                                                        msg.what=times;
-                                                                        h.sendMessage(msg);
-                                                                        Thread.sleep(1000);
-                                                                        times--;
-                                                                    } catch(InterruptedException e) {
-                                                                        e.printStackTrace();
-                                                                    }
-                                                                }
-                                                            }
-                                                        }).start();
-                                                    }else if(responses.getInt("rtnCode") == 10004){
-                                                        Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                                            @Override
-                                                            public void onSuccess(String rspContent, int statusCode) {
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(ConsultationCallbackException exp) {
-                                                            }
-                                                        });
-                                                        startActivity(new Intent(ForgetPwdActivity.this, LoginActivity.class));
-                                                    } 
-                                                } catch(JSONException e) {
+                                                    Message msg=new Message();
+                                                    msg.what=times;
+                                                    h.sendMessage(msg);
+                                                    Thread.sleep(1000);
+                                                    times--;
+                                                } catch(InterruptedException e) {
                                                     e.printStackTrace();
                                                 }
                                             }
-                                        }, new Response.ErrorListener() {
-
-                                            @Override
-                                            public void onErrorResponse(VolleyError arg0) {
-                                                CommonUtil.closeLodingDialog();
-                                                Toast.makeText(ForgetPwdActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
-                                                    .show();
-                                            }
-                                        });
-                                } else if(responses.getInt("rtnCode") == 10004){
-                                    Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).start();
+                                } else if(responses.getInt("rtnCode") == 10004) {
+                                    Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                        .show();
                                     LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                         @Override
@@ -192,9 +157,6 @@ public class ForgetPwdActivity extends Activity {
                                         }
                                     });
                                     startActivity(new Intent(ForgetPwdActivity.this, LoginActivity.class));
-                                } else {
-                                    Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                        .show();
                                 }
                             } catch(JSONException e) {
                                 e.printStackTrace();
@@ -256,7 +218,7 @@ public class ForgetPwdActivity extends Activity {
                             if(responses.getInt("rtnCode") == 1) {
                                 Toast.makeText(ForgetPwdActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
                                 finish();
-                            } else if(responses.getInt("rtnCode") == 10004){
+                            } else if(responses.getInt("rtnCode") == 10004) {
                                 Toast.makeText(ForgetPwdActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                                 LoginActivity.setHandler(new ConsultationCallbackHandler() {
 

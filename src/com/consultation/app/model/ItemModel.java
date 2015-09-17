@@ -21,6 +21,31 @@ public class ItemModel {
     private String childCount = "0";
     
     private String value = "";
+    
+    private String dataType = "";
+
+    private String isShow = "True";
+    
+    
+    public String getIsShow() {
+        return isShow;
+    }
+
+
+    
+    public void setIsShow(String isShow) {
+        this.isShow=isShow;
+    }
+
+
+    public String getDataType() {
+        return dataType;
+    }
+
+    
+    public void setDataType(String dataType) {
+        this.dataType=dataType;
+    }
 
     private List<OptionsModel> optionsModels;
 

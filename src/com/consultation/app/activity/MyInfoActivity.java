@@ -178,7 +178,7 @@ public class MyInfoActivity extends Activity {
         update_pwd=(TextView)findViewById(R.id.header_right);
         update_pwd.setVisibility(View.VISIBLE);
         update_pwd.setText("修改密码");
-        update_pwd.setTextSize(16);
+        update_pwd.setTextSize(14);
         update_pwd.setOnClickListener(new OnClickListener() {
 
             @Override

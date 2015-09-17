@@ -60,16 +60,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
 
     private View specialistLayout;
 
-    // private ExpandTabView expandTabView;
-    //
-    // private ArrayList<View> mViewArray=new ArrayList<View>();
-
-    // private LeftFilterView viewLeft;
-    //
-    // private MiddleFilterView viewMiddle;
-    //
-    // private RightFilterView viewRight;
-
     private TextView header_text, hospital_text, department_text, title_text;
 
     private LinearLayout hospital_layout, department_layout, title_layout;
@@ -135,8 +125,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
         specialistLayout=inflater.inflate(R.layout.specialist_layout, container, false);
         initData();
         initLayout();
-        // initVaule();
-        // initListener();
         return specialistLayout;
     }
 
@@ -178,7 +166,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                             JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                             specialistTo.setUser(userTo);
                             UserStatisticsTo userStatistics=
-                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
                             specialistTo.setUserTj(userStatistics);
                             specialistList.add(specialistTo);
                         }
@@ -209,15 +197,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
         header_text.setText("专家库");
         header_text.setTextSize(20);
 
-        // expandTabView = (ExpandTabView) specialistLayout.findViewById(R.id.specialist_select_expandtab_view);
-        //
-        // viewLeft = new LeftFilterView(mContext);
-        //
-        // viewMiddle = new MiddleFilterView(mContext);
-        //
-        // String names[] = new String[] { "初级医师", "主治医师", "专家" };
-        // viewRight = new RightFilterView(mContext, names);
-
         hospital_text=(TextView)specialistLayout.findViewById(R.id.specialist_select_hospital_text);
         hospital_text.setTextSize(17);
         hospital_layout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_select_hospital_layout);
@@ -229,11 +208,25 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
 
                     @Override
                     public void onSuccess(String rspContent, int statusCode) {
-                        hospital_text.setText(rspContent.split(",")[0]);
-                        Map<String, String> parmas=new HashMap<String, String>();
-                        parmas.put("hospital_id", rspContent.split(",")[1]);
-                        hospital_id=rspContent.split(",")[1];
-                        getData(parmas);
+                        switch(statusCode) {
+                            case 0:
+                                hospital_text.setText(rspContent.split(",")[0]);
+                                Map<String, String> parmas=new HashMap<String, String>();
+                                parmas.put("hospital_id", rspContent.split(",")[1]);
+                                hospital_id=rspContent.split(",")[1];
+                                getData(parmas);
+                                break;
+                            case 2:
+                                hospital_text.setText("选择医院");
+                                hospital_id = null;
+                                Map<String, String> parmas1=new HashMap<String, String>();
+                                getData(parmas1);
+                                break;
+
+                            default:
+                                break;
+                        }
+                            
                     }
 
                     @Override
@@ -258,7 +251,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                     public void onSuccess(String rspContent, int statusCode) {
                         switch(statusCode) {
                             case 0:
-                                department_text.setText(rspContent);
+                                department_text.setText("选择专业");
+                                department_id = null;
                                 Map<String, String> parmas1=new HashMap<String, String>();
                                 if(null != hospital_id) {
                                     parmas1.put("hospital_id", hospital_id);
@@ -303,7 +297,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                     public void onSuccess(String rspContent, int statusCode) {
                         switch(statusCode) {
                             case 0:
-                                title_text.setText(rspContent);
+                                title_text.setText("选择职称");
+                                title_id = null;
                                 Map<String, String> parmas1=new HashMap<String, String>();
                                 if(null != hospital_id) {
                                     parmas1.put("hospital_id", hospital_id);
@@ -386,7 +381,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                                         JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                                         specialistTo.setUser(userTo);
                                         UserStatisticsTo userStatistics=
-                                            new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                                            new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
                                         specialistTo.setUserTj(userStatistics);
                                         specialistList.add(specialistTo);
                                     }
@@ -501,12 +496,12 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             }
             final String imgUrl=specialistList.get(position).getUser().getIcon_url();
             holder.photo.setTag(imgUrl);
-            holder.photo.setImageResource(R.drawable.photo);
+            holder.photo.setImageResource(R.drawable.photo_expert);
             holder.name.setText(specialistList.get(position).getUser().getUser_name());
             holder.name.setTextSize(18);
-            holder.score.setText(specialistList.get(position).getUserTj().getStar_value() + "分");
+            holder.score.setText((float)specialistList.get(position).getUserTj().getStar_value()/10 + "分");
             holder.score.setTextSize(16);
-            holder.scoreRatingBar.setRating((float)specialistList.get(position).getUserTj().getStar_value());
+            holder.scoreRatingBar.setRating((float)specialistList.get(position).getUserTj().getStar_value()/10);
             holder.departmen.setText(specialistList.get(position).getDepart_name() + "|" + specialistList.get(position).getTitle());
             holder.departmen.setTextSize(16);
             holder.hospital.setText(specialistList.get(position).getHospital_name());
@@ -514,77 +509,13 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             holder.patients.setTextSize(14);
             holder.patientCount.setText(specialistList.get(position).getUserTj().getTotal_consult() + "");
             holder.patientCount.setTextSize(16);
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener=
-                    ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
+            if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
                 mImageLoader.get(imgUrl, listener);
             }
-            holder.photo.setImageBitmap(CommonUtil.drawableToRoundBitmap(holder.photo.getDrawable(), 15));
             return convertView;
         }
     }
-
-    // private void initVaule() {
-    // mViewArray.add(viewLeft);
-    // mViewArray.add(viewMiddle);
-    // mViewArray.add(viewRight);
-    // ArrayList<String> mTextArray = new ArrayList<String>();
-    // mTextArray.add("选择医院");
-    // mTextArray.add("选择专业");
-    // mTextArray.add("选择职称");
-    // expandTabView.setValue(mTextArray, mViewArray);
-    // expandTabView.setTitle("选择医院", 0);
-    // expandTabView.setTitle("选择专业", 1);
-    // expandTabView.setTitle("选择职称", 2);
-    // }
-
-    // private void initListener() {
-    // viewLeft.setOnSelectListener(new LeftFilterView.OnItemSelectListener() {
-    //
-    // @Override
-    // public void getValue(String showText) {
-    // onRefresh(viewLeft, showText);
-    // }
-    // });
-    // viewMiddle.setOnSelectListener(new MiddleFilterView.OnItemSelectListener() {
-    //
-    // @Override
-    // public void getValue(String showText) {
-    // onRefresh(viewMiddle, showText);
-    // }
-    // });
-    //
-    // viewRight.setOnSelectListener(new RightFilterView.OnSelectListener() {
-    // @Override
-    // public void getValue(String distance, String showText) {
-    // onRefresh(viewRight, showText);
-    // }
-    // });
-    // }
-    //
-    // private void onRefresh(View view, String showText) {
-    // expandTabView.onPressBack();
-    // int position = getPositon(view);
-    // if (position >= 0 && !expandTabView.getTitle(position).equals(showText)) {
-    // if(showText.length()>4){
-    // expandTabView.setTitle(showText.substring(0, 4)+"...", position);
-    // }else{
-    // expandTabView.setTitle(showText, position);
-    // }
-    // }
-    // if(position == 2){
-    // Toast.makeText(mContext, showText, Toast.LENGTH_SHORT).show();
-    // }
-    // }
-
-    // private int getPositon(View tView) {
-    // for (int i = 0; i < mViewArray.size(); i++) {
-    // if (mViewArray.get(i) == tView) {
-    // return i;
-    // }
-    // }
-    // return -1;
-    // }
 
     @Override
     public void onLoad(final PullableListView pullableListView) {
@@ -686,7 +617,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                             JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                             specialistTo.setUser(userTo);
                             UserStatisticsTo userStatistics=
-                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
                             specialistTo.setUserTj(userStatistics);
                             specialistList.add(specialistTo);
                         }

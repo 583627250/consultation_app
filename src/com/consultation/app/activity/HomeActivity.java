@@ -88,15 +88,21 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
 
     private SharePreferencesEditor editor;
 
+    // private SystemBarTintManager mTintManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.home_layout);
+        // mTintManager = new SystemBarTintManager(this);
+        // mTintManager.setStatusBarTintEnabled(true);
+        // mTintManager.setNavigationBarTintEnabled(true);
+        // mTintManager.setTintColor(Color.parseColor("#2CB679"));
         editor=new SharePreferencesEditor(HomeActivity.this);
         initViews(); // 初始化界面，并设置四个tab的监听
         fragmentManager=getSupportFragmentManager();
-        setTabSelection(2); // 第一次启动时开启第2个tab
+        setTabSelection(getIntent().getIntExtra("selectId", 2)); // 第一次启动时开启第2个tab
     }
 
     /*
@@ -118,6 +124,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                     int type=Integer.parseInt(editor.get("userType", ""));
                     switch(type) {
                         case 0:
+                            consultationText.setText("咨询");
                             if(patientConsultationFragment == null) {
                                 patientConsultationFragment=PatientConsultationFragment.getInstance(HomeActivity.this);
                                 transaction.add(R.id.content_layout, patientConsultationFragment);
@@ -126,6 +133,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                             }
                             break;
                         case 1:
+                            consultationText.setText("诊室");
                             if(primaryConsultationFragment == null) {
                                 primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
                                 transaction.add(R.id.content_layout, primaryConsultationFragment);
@@ -134,6 +142,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                             }
                             break;
                         case 2:
+                            consultationText.setText("诊室");
                             if(expertConsultationFragment == null) {
                                 expertConsultationFragment=ExpertConsultationFragment.getInstance(HomeActivity.this);
                                 transaction.add(R.id.content_layout, expertConsultationFragment);
@@ -153,28 +162,6 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                         transaction.show(patientConsultationFragment);
                     }
                 }
-
-                // if(patientConsultationFragment == null){
-                // patientConsultationFragment = PatientConsultationFragment.getInstance(HomeActivity.this);
-                // transaction.add(R.id.content_layout, patientConsultationFragment);
-                // } else {
-                // transaction.show(patientConsultationFragment);
-                // }
-
-                // if(primaryConsultationFragment == null) {
-                // primaryConsultationFragment=PrimaryConsultationFragment.getInstance(HomeActivity.this);
-                // transaction.add(R.id.content_layout, primaryConsultationFragment);
-                // } else {
-                // transaction.show(primaryConsultationFragment);
-                // }
-
-                // if(expertConsultationFragment == null){
-                // expertConsultationFragment = ExpertConsultationFragment.getInstance(HomeActivity.this);
-                // transaction.add(R.id.content_layout, expertConsultationFragment);
-                // } else {
-                // transaction.show(expertConsultationFragment);
-                // }
-
                 break;
             case 1:
                 specialistImage.setImageResource(R.drawable.specialist_selected);
@@ -266,6 +253,20 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
 
         consultationText=(TextView)findViewById(R.id.consultation_text);
         consultationText.setTextSize(14);
+        if(null != editor.get("userType", "") && !"".equals(editor.get("userType", ""))) {
+            int type=Integer.parseInt(editor.get("userType", ""));
+            switch(type) {
+                case 1:
+                    consultationText.setText("诊室");
+                    break;
+                case 2:
+                    consultationText.setText("诊室");
+                    break;
+
+                default:
+                    break;
+            }
+        }
         specialistText=(TextView)findViewById(R.id.specialist_text);
         specialistText.setTextSize(14);
         knowledgeText=(TextView)findViewById(R.id.knowledge_text);

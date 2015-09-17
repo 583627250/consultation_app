@@ -32,7 +32,7 @@
             android:paddingBottom="3dp"
             android:paddingTop="3dp"
             android:text="风湿骨痛"
-            android:textColor="#414141" />
+            android:textColor="#353535" />
 
         <TextView
             android:id="@+id/consulation_primary_list_all_item_doctor"
@@ -43,7 +43,7 @@
             android:paddingTop="3dp"
             android:singleLine="true"
             android:text="张三丰(患者)|张无忌(专家)"
-            android:textColor="#515151" />
+            android:textColor="#999999" />
 
         <TextView
             android:id="@+id/consulation_primary_list_all_item_date"
@@ -53,7 +53,7 @@
             android:paddingBottom="3dp"
             android:paddingTop="3dp"
             android:text="2015-07-14"
-            android:textColor="#515151" />
+            android:textColor="#999999" />
     </LinearLayout>
 
     <LinearLayout

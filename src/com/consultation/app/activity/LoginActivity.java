@@ -7,13 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,9 +54,9 @@ public class LoginActivity extends Activity {
     
     private Button register_btn;
     
-    private LinearLayout back_layout,code_layout;
+    private LinearLayout code_layout;
     
-    private TextView back_text;
+//    private TextView back_text;
     
     private static ConsultationCallbackHandler handler;
     
@@ -109,21 +107,21 @@ public class LoginActivity extends Activity {
         noAcount = (TextView)findViewById(R.id.login_no_acount_text);
         noAcount.setTextSize(16);
         
-        back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
-        back_layout.setVisibility(View.VISIBLE);
-        back_text = (TextView)findViewById(R.id.header_text_lift);
-        back_text.setTextSize(18);
-        back_layout.setOnClickListener(new OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm.isActive()) {     
-                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );   
-                }
-                finish();
-            }
-        });
+//        back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
+//        back_layout.setVisibility(View.VISIBLE);
+//        back_text = (TextView)findViewById(R.id.header_text_lift);
+//        back_text.setTextSize(18);
+//        back_layout.setOnClickListener(new OnClickListener() {
+//            
+//            @Override
+//            public void onClick(View v) {
+//                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if (imm.isActive()) {     
+//                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );   
+//                }
+//                finish();
+//            }
+//        });
         
         userName_text = (TextView)findViewById(R.id.login_username_text);
         userName_text.setTextSize(18);
@@ -188,13 +186,6 @@ public class LoginActivity extends Activity {
                     }
                 }
                 Map<String, String> parmas = new HashMap<String, String>();
-//                parmas.put("mobile_ph", "13501320011");
-//                parmas.put("mobile_ph", "13501320010");
-//                parmas.put("mobile_ph", "13501324949");
-//                13501320010 111111 初级医生
-//                13501324949 111111 专家
-//                13501320011 111111 患者
-//                parmas.put("pwd", "111111");
                 parmas.put("mobile_ph", account.getText().toString());
                 parmas.put("pwd", password.getText().toString());
                 if(loginCount > 3){
@@ -208,13 +199,13 @@ public class LoginActivity extends Activity {
                         CommonUtil.closeLodingDialog();
                         try {
                             JSONObject responses = new JSONObject(arg0);
-                            System.out.println(arg0);
                             if(responses.getInt("rtnCode") == 1){
                                 editor.put("uid", responses.getString("uid"));
                                 editor.put("userType", responses.getString("userTp"));
                                 editor.put("refreshToken", responses.getString("refreshToken"));
                                 editor.put("real_name", responses.getString("real_name"));
                                 editor.put("icon_url", responses.getString("icon_url"));
+                                editor.put("phone", account.getText().toString());
                                 ClientUtil.setToken(responses.getString("accessToken"));
                                 handler.onSuccess("登陆成功", ConsultionStatusCode.USER_LOGIN_SUCCESS);
                                 finish();

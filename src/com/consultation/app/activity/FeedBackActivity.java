@@ -1,6 +1,8 @@
 package com.consultation.app.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.FeedBackTo;
 import com.consultation.app.service.OpenApiService;
@@ -124,7 +127,6 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                 CommonUtil.closeLodingDialog();
                 try {
                     JSONObject responses=new JSONObject(arg0);
-                    System.out.println(arg0);
                     feedbackList.clear();
                     if(responses.getInt("rtnCode") == 1) {
                         JSONArray infos=responses.getJSONArray("userFeebacks");
@@ -132,17 +134,17 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                             JSONObject info=infos.getJSONObject(i);
                             FeedBackTo feedBackTo=new FeedBackTo();
                             feedBackTo.setContent(info.getString("content"));
-                            String createTime = info.getString("create_time");
-                            if(createTime.equals("null")){
+                            String createTime=info.getString("create_time");
+                            if(createTime.equals("null")) {
                                 feedBackTo.setCreate_time(0);
-                            }else{
+                            } else {
                                 feedBackTo.setCreate_time(Long.parseLong(createTime));
                             }
                             feedBackTo.setReply(info.getString("reply"));
-                            String replyTime = info.getString("reply_time");
-                            if(replyTime.equals("null")){
+                            String replyTime=info.getString("reply_time");
+                            if(replyTime.equals("null")) {
                                 feedBackTo.setReply_time(0);
-                            }else{
+                            } else {
                                 feedBackTo.setReply_time(Long.parseLong(replyTime));
                             }
                             feedbackList.add(feedBackTo);
@@ -152,7 +154,7 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                         } else {
                             listView.setHasMoreData(false);
                         }
-                    } else if(responses.getInt("rtnCode") == 10004){
+                    } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
@@ -185,7 +187,7 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
 
     private void initView() {
         title_text=(TextView)findViewById(R.id.header_text);
-        title_text.setText("邀请列表");
+        title_text.setText("意见反馈");
         title_text.setTextSize(20);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
@@ -208,7 +210,9 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
         contentEdit.setTextSize(18);
 
         submit=(Button)findViewById(R.id.mine_feedback_btn);
-        submit.setTextSize(22);
+        submit.setTextSize(18);
+        submit.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
+            getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
         submit.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -222,46 +226,45 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(FeedBackActivity.this);
-                OpenApiService.getInstance(FeedBackActivity.this).getSendFeedBack(mQueue, parmas,
-                    new Response.Listener<String>() {
+                OpenApiService.getInstance(FeedBackActivity.this).getSendFeedBack(mQueue, parmas, new Response.Listener<String>() {
 
-                        @Override
-                        public void onResponse(String arg0) {
-                            CommonUtil.closeLodingDialog();
-                            try {
-                                JSONObject responses=new JSONObject(arg0);
-                                if(responses.getInt("rtnCode") == 1) {
-                                    Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                    initDate();
-                                } else if(responses.getInt("rtnCode") == 10004){
-                                    Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
+                    @Override
+                    public void onResponse(String arg0) {
+                        CommonUtil.closeLodingDialog();
+                        try {
+                            JSONObject responses=new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1) {
+                                Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                initDate();
+                            } else if(responses.getInt("rtnCode") == 10004) {
+                                Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                                        @Override
-                                        public void onSuccess(String rspContent, int statusCode) {
-                                            initDate();
-                                        }
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initDate();
+                                    }
 
-                                        @Override
-                                        public void onFailure(ConsultationCallbackException exp) {
-                                        }
-                                    });
-                                    startActivity(new Intent(FeedBackActivity.this, LoginActivity.class));
-                                } else {
-                                    Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                }
-                            } catch(JSONException e) {
-                                e.printStackTrace();
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(FeedBackActivity.this, LoginActivity.class));
+                            } else {
+                                Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                             }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
                         }
-                    }, new Response.ErrorListener() {
+                    }
+                }, new Response.ErrorListener() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError arg0) {
-                            CommonUtil.closeLodingDialog();
-                            Toast.makeText(FeedBackActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        CommonUtil.closeLodingDialog();
+                        Toast.makeText(FeedBackActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -274,97 +277,89 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                 parmas.put("rows", "10");
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
-                OpenApiService.getInstance(FeedBackActivity.this).getFeedBackList(mQueue, parmas,
-                    new Response.Listener<String>() {
+                OpenApiService.getInstance(FeedBackActivity.this).getFeedBackList(mQueue, parmas, new Response.Listener<String>() {
 
-                        @Override
-                        public void onResponse(String arg0) {
-                            try {
-                                JSONObject responses=new JSONObject(arg0);
-                                if(responses.getInt("rtnCode") == 1) {
-                                    JSONArray infos=responses.getJSONArray("userFeebacks");
-                                    feedbackList.clear();
-                                    for(int i=0; i < infos.length(); i++) {
-                                        JSONObject info=infos.getJSONObject(i);
-                                        FeedBackTo feedBackTo=new FeedBackTo();
-                                        feedBackTo.setContent(info.getString("content"));
-                                        String createTime = info.getString("create_time");
-                                        if(createTime.equals("null")){
-                                            feedBackTo.setCreate_time(0);
-                                        }else{
-                                            feedBackTo.setCreate_time(Long.parseLong(createTime));
-                                        }
-                                        feedBackTo.setReply(info.getString("reply"));
-                                        String replyTime = info.getString("reply_time");
-                                        if(replyTime.equals("null")){
-                                            feedBackTo.setCreate_time(0);
-                                        }else{
-                                            feedBackTo.setReply_time(Long.parseLong(replyTime));
-                                        }
-                                        feedbackList.add(feedBackTo);
-                                    }
-                                    if(infos.length() == 10) {
-                                        listView.setHasMoreData(true);
+                    @Override
+                    public void onResponse(String arg0) {
+                        try {
+                            JSONObject responses=new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1) {
+                                JSONArray infos=responses.getJSONArray("userFeebacks");
+                                feedbackList.clear();
+                                for(int i=0; i < infos.length(); i++) {
+                                    JSONObject info=infos.getJSONObject(i);
+                                    FeedBackTo feedBackTo=new FeedBackTo();
+                                    feedBackTo.setContent(info.getString("content"));
+                                    String createTime=info.getString("create_time");
+                                    if(createTime.equals("null")) {
+                                        feedBackTo.setCreate_time(0);
                                     } else {
-                                        listView.setHasMoreData(false);
+                                        feedBackTo.setCreate_time(Long.parseLong(createTime));
                                     }
-                                    Message msg=handler.obtainMessage();
-                                    msg.what=0;
-                                    msg.obj=pullToRefreshLayout;
-                                    handler.sendMessage(msg);
-                                } else if(responses.getInt("rtnCode") == 10004){
-                                    Message msg=handler.obtainMessage();
-                                    msg.what=2;
-                                    msg.obj=pullToRefreshLayout;
-                                    handler.sendMessage(msg);
-                                    Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                        @Override
-                                        public void onSuccess(String rspContent, int statusCode) {
-                                            initDate();
-                                        }
-
-                                        @Override
-                                        public void onFailure(ConsultationCallbackException exp) {
-                                        }
-                                    });
-                                    startActivity(new Intent(FeedBackActivity.this, LoginActivity.class));
-                                } else {
-                                    Message msg=handler.obtainMessage();
-                                    msg.what=2;
-                                    msg.obj=pullToRefreshLayout;
-                                    handler.sendMessage(msg);
-                                    Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    feedBackTo.setReply(info.getString("reply"));
+                                    String replyTime=info.getString("reply_time");
+                                    if(replyTime.equals("null")) {
+                                        feedBackTo.setCreate_time(0);
+                                    } else {
+                                        feedBackTo.setReply_time(Long.parseLong(replyTime));
+                                    }
+                                    feedbackList.add(feedBackTo);
                                 }
-                            } catch(JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
+                                if(infos.length() == 10) {
+                                    listView.setHasMoreData(true);
+                                } else {
+                                    listView.setHasMoreData(false);
+                                }
+                                Message msg=handler.obtainMessage();
+                                msg.what=0;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                            } else if(responses.getInt("rtnCode") == 10004) {
+                                Message msg=handler.obtainMessage();
+                                msg.what=2;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                        @Override
-                        public void onErrorResponse(VolleyError arg0) {
-                            Message msg=handler.obtainMessage();
-                            msg.what=2;
-                            msg.obj=pullToRefreshLayout;
-                            handler.sendMessage(msg);
-                            Toast.makeText(FeedBackActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        initDate();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(FeedBackActivity.this, LoginActivity.class));
+                            } else {
+                                Message msg=handler.obtainMessage();
+                                msg.what=2;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        Message msg=handler.obtainMessage();
+                        msg.what=2;
+                        msg.obj=pullToRefreshLayout;
+                        handler.sendMessage(msg);
+                        Toast.makeText(FeedBackActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         myAdapter=new MyAdapter();
         listView=(PullableListView)findViewById(R.id.mine_feedback_listView);
         listView.setAdapter(myAdapter);
         listView.setOnLoadListener(this);
-        // listView.setOnItemClickListener(new OnItemClickListener() {
-        //
-        // @Override
-        // public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //
-        // }
-        // });
     }
 
     private class ViewHolder {
@@ -409,16 +404,22 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
             } else {
                 holder=(ViewHolder)convertView.getTag();
             }
-//            holder.contents.setText(feedbackList.get(position).getContent());
+            holder.contents.setText(feedbackList.get(position).getContent());
             holder.contents.setTextSize(18);
-//            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-//            String sd=sdf.format(new Date(feedbackList.get(position).getCreate_time()));
-//            holder.create_time.setText(sd);
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String sd=sdf.format(new Date(feedbackList.get(position).getCreate_time()));
+            holder.create_time.setText(sd);
             holder.create_time.setTextSize(14);
-//            holder.reply.setText("回复："+feedbackList.get(position).getReply());
+            if(!"".equals(feedbackList.get(position).getReply()) && !"null".equals(feedbackList.get(position).getReply())){
+                holder.reply.setText("回复：" + feedbackList.get(position).getReply());
+            }else{
+                holder.reply.setText("回复：");
+            }
             holder.reply.setTextSize(16);
-//            String codeText=sdf.format(new Date(feedbackList.get(position).getReply_time()));
-//            holder.reply_time.setText(codeText);
+            if(feedbackList.get(position).getReply_time() != 0){
+                String codeText=sdf.format(new Date(feedbackList.get(position).getReply_time()));
+                holder.reply_time.setText(codeText);
+            }
             holder.reply_time.setTextSize(14);
             return convertView;
         }
@@ -444,17 +445,17 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                             JSONObject info=infos.getJSONObject(i);
                             FeedBackTo feedBackTo=new FeedBackTo();
                             feedBackTo.setContent(info.getString("content"));
-                            String createTime = info.getString("create_time");
-                            if(createTime.equals("null")){
+                            String createTime=info.getString("create_time");
+                            if(createTime.equals("null")) {
                                 feedBackTo.setCreate_time(0);
-                            }else{
+                            } else {
                                 feedBackTo.setCreate_time(Long.parseLong(createTime));
                             }
                             feedBackTo.setReply(info.getString("reply"));
-                            String replyTime = info.getString("reply_time");
-                            if(replyTime.equals("null")){
+                            String replyTime=info.getString("reply_time");
+                            if(replyTime.equals("null")) {
                                 feedBackTo.setCreate_time(0);
-                            }else{
+                            } else {
                                 feedBackTo.setReply_time(Long.parseLong(replyTime));
                             }
                             feedbackList.add(feedBackTo);
@@ -468,7 +469,7 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                         msg.what=1;
                         msg.obj=pullableListView;
                         handler.sendMessage(msg);
-                    } else if(responses.getInt("rtnCode") == 10004){
+                    } else if(responses.getInt("rtnCode") == 10004) {
                         hasMore=true;
                         Message msg=handler.obtainMessage();
                         msg.what=1;

@@ -24,8 +24,18 @@ public class DiscussionTo {
     
     private String have_photos;
     
+    private UserTo userTo;
+    
     private List<ImageFilesTo> imageFilesTos;
     
+    public UserTo getUserTo() {
+        return userTo;
+    }
+    
+    public void setUserTo(UserTo userTo) {
+        this.userTo=userTo;
+    }
+
     public String getHave_photos() {
         return have_photos;
     }

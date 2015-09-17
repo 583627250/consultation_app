@@ -12,7 +12,7 @@ public class PatientTo {
 
     private String tp;
 
-    private String doctor;
+    private String userBalance;
 
     private String mobile_ph;
 
@@ -93,13 +93,13 @@ public class PatientTo {
     }
 
     
-    public String getDoctor() {
-        return doctor;
+    public String getUserBalance() {
+        return userBalance;
     }
 
     
-    public void setDoctor(String doctor) {
-        this.doctor=doctor;
+    public void setUserBalance(String userBalance) {
+        this.userBalance=userBalance;
     }
 
     
@@ -241,34 +241,6 @@ public class PatientTo {
     public void setUid(String uid) {
         this.uid=uid;
     }
-
-
-    public PatientTo(String address, String id, String state, long create_time, String tp, String doctor, String mobile_ph,
-        String pwd, String real_name, String sex, String birth_year, String birth_month, String birth_day, String identity_id,
-        String area_province, String area_city, String area_county, String icon_url, String modify_time, String uid) {
-        super();
-        this.address=address;
-        this.id=id;
-        this.state=state;
-        this.create_time=create_time;
-        this.tp=tp;
-        this.doctor=doctor;
-        this.mobile_ph=mobile_ph;
-        this.pwd=pwd;
-        this.real_name=real_name;
-        this.sex=sex;
-        this.birth_year=birth_year;
-        this.birth_month=birth_month;
-        this.birth_day=birth_day;
-        this.identity_id=identity_id;
-        this.area_province=area_province;
-        this.area_city=area_city;
-        this.area_county=area_county;
-        this.icon_url=icon_url;
-        this.modify_time=modify_time;
-        this.uid=uid;
-    }
-
 
     public PatientTo() {
         super();

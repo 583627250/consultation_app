@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,8 +32,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
-import com.consultation.app.model.PatientTo;
+import com.consultation.app.activity.CaseInfoActivity;
+import com.consultation.app.activity.LoginActivity;
+import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.CasesTo;
+import com.consultation.app.model.PatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
@@ -93,103 +99,120 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         patientConsultationHistoryFragment=inflater.inflate(R.layout.consulation_list_all_layout, container, false);
         editor=new SharePreferencesEditor(patientConsultationHistoryFragment.getContext());
+        mQueue=Volley.newRequestQueue(patientConsultationHistoryFragment.getContext());
         initData();
         initLayout();
         return patientConsultationHistoryFragment;
     }
 
     private void initData() {
-        mQueue=Volley.newRequestQueue(patientConsultationHistoryFragment.getContext());
         Map<String, String> parmas=new HashMap<String, String>();
-        if(patientList.size() == 0) {
-            parmas.put("page", "1");
-            parmas.put("rows", "10");
-            parmas.put("accessToken", ClientUtil.getToken());
-            parmas.put("uid", editor.get("uid", ""));
-            parmas.put("userTp", editor.get("userType", ""));
-            parmas.put("status", "his");
-            CommonUtil.showLoadingDialog(patientConsultationHistoryFragment.getContext());
-            OpenApiService.getInstance(patientConsultationHistoryFragment.getContext()).getPatientCaseList(mQueue, parmas,
-                new Response.Listener<String>() {
+        parmas.put("page", "1");
+        parmas.put("rows", "10");
+        parmas.put("accessToken", ClientUtil.getToken());
+        parmas.put("uid", editor.get("uid", ""));
+        parmas.put("userTp", editor.get("userType", ""));
+        parmas.put("status", "his");
+        CommonUtil.showLoadingDialog(patientConsultationHistoryFragment.getContext());
+        OpenApiService.getInstance(patientConsultationHistoryFragment.getContext()).getPatientCaseList(mQueue, parmas,
+            new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String arg0) {
-                        CommonUtil.closeLodingDialog();
-                        try {
-                            JSONObject responses=new JSONObject(arg0);
-                            if(responses.getInt("rtnCode") == 1) {
-                                JSONArray infos=responses.getJSONArray("pcases");
-                                patientList.clear();
-                                for(int i=0; i < infos.length(); i++) {
-                                    JSONObject info=infos.getJSONObject(i);
-                                    CasesTo pcasesTo=new CasesTo();
-                                    pcasesTo.setId(info.getString("id"));
-                                    pcasesTo.setStatus(info.getString("status"));
-                                    pcasesTo.setDestination(info.getString("destination"));
-                                    String createTime=info.getString("create_time");
-                                    if(createTime.equals("null")) {
-                                        pcasesTo.setCreate_time(0);
-                                    } else {
-                                        pcasesTo.setCreate_time(Long.parseLong(createTime));
-                                    }
-                                    pcasesTo.setTitle(info.getString("title"));
-                                    pcasesTo.setDepart_id(info.getString("depart_id"));
-                                    pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                    pcasesTo.setPatient_name(info.getString("patient_name"));
-                                    pcasesTo.setConsult_fee(info.getString("consult_fee"));
-                                    pcasesTo.setDoctor_name(info.getString("doctor_name"));
-                                    pcasesTo.setExpert_userid(info.getString("expert_userid"));
-                                    pcasesTo.setExpert_name(info.getString("expert_name"));
-                                    pcasesTo.setProblem(info.getString("problem"));
-                                    pcasesTo.setConsult_tp(info.getString("consult_tp"));
-                                    pcasesTo.setOpinion(info.getString("opinion"));
-                                    PatientTo patientTo=new PatientTo();
-                                    JSONObject pObject=info.getJSONObject("user");
-                                    patientTo.setAddress(pObject.getString("address"));
-                                    patientTo.setId(pObject.getInt("id") + "");
-                                    patientTo.setState(pObject.getString("state"));
-                                    // patientTo.setCreate_time(pObject.getLong("create_time"));
-                                    patientTo.setTp(pObject.getString("tp"));
-                                    patientTo.setDoctor(pObject.getString("doctor"));
-                                    patientTo.setMobile_ph(pObject.getString("mobile_ph"));
-                                    patientTo.setPwd(pObject.getString("pwd"));
-                                    patientTo.setReal_name(pObject.getString("real_name"));
-                                    patientTo.setSex(pObject.getString("sex"));
-                                    patientTo.setBirth_year(pObject.getString("birth_year"));
-                                    patientTo.setBirth_month(pObject.getString("birth_month"));
-                                    patientTo.setBirth_day(pObject.getString("birth_day"));
-                                    patientTo.setIdentity_id(pObject.getString("identity_id"));
-                                    patientTo.setArea_province(pObject.getString("area_province"));
-                                    patientTo.setArea_city(pObject.getString("area_city"));
-                                    patientTo.setArea_county(pObject.getString("area_county"));
-                                    patientTo.setIcon_url(pObject.getString("icon_url"));
-                                    patientTo.setModify_time(pObject.getString("modify_time"));
-                                    pcasesTo.setPatient(patientTo);
-                                    patientList.add(pcasesTo);
-                                }
-                                if(infos.length() == 10) {
-                                    patientListView.setHasMoreData(true);
+                @Override
+                public void onResponse(String arg0) {
+                    CommonUtil.closeLodingDialog();
+                    try {
+                        JSONObject responses=new JSONObject(arg0);
+                        if(responses.getInt("rtnCode") == 1) {
+                            JSONArray infos=responses.getJSONArray("pcases");
+                            patientList.clear();
+                            for(int i=0; i < infos.length(); i++) {
+                                JSONObject info=infos.getJSONObject(i);
+                                CasesTo pcasesTo=new CasesTo();
+                                pcasesTo.setId(info.getString("id"));
+                                pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setDestination(info.getString("destination"));
+                                String createTime=info.getString("create_time");
+                                if(createTime.equals("null")) {
+                                    pcasesTo.setCreate_time(0);
                                 } else {
-                                    patientListView.setHasMoreData(false);
+                                    pcasesTo.setCreate_time(Long.parseLong(createTime));
                                 }
-                            } else {
-                                Toast.makeText(patientConsultationHistoryFragment.getContext(), responses.getString("rtnMsg"),
-                                    Toast.LENGTH_SHORT).show();
+                                pcasesTo.setTitle(info.getString("title"));
+                                pcasesTo.setDepart_id(info.getString("depart_id"));
+                                pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
+                                pcasesTo.setPatient_name(info.getString("patient_name"));
+                                String consult_fee=info.getString("consult_fee");
+                                if(consult_fee.equals("null")) {
+                                    pcasesTo.setConsult_fee("0");
+                                } else {
+                                    pcasesTo.setConsult_fee(consult_fee);
+                                }
+                                pcasesTo.setDoctor_name(info.getString("doctor_name"));
+                                pcasesTo.setExpert_userid(info.getString("expert_userid"));
+                                pcasesTo.setExpert_name(info.getString("expert_name"));
+                                pcasesTo.setProblem(info.getString("problem"));
+                                pcasesTo.setConsult_tp(info.getString("consult_tp"));
+                                pcasesTo.setOpinion(info.getString("opinion"));
+                                PatientTo patientTo=new PatientTo();
+                                JSONObject pObject=info.getJSONObject("user");
+                                patientTo.setAddress(pObject.getString("address"));
+                                patientTo.setId(pObject.getInt("id") + "");
+                                patientTo.setState(pObject.getString("state"));
+                                patientTo.setTp(pObject.getString("tp"));
+                                patientTo.setUserBalance(pObject.getString("userBalance"));
+                                patientTo.setMobile_ph(pObject.getString("mobile_ph"));
+                                patientTo.setPwd(pObject.getString("pwd"));
+                                patientTo.setReal_name(pObject.getString("real_name"));
+                                patientTo.setSex(pObject.getString("sex"));
+                                patientTo.setBirth_year(pObject.getString("birth_year"));
+                                patientTo.setBirth_month(pObject.getString("birth_month"));
+                                patientTo.setBirth_day(pObject.getString("birth_day"));
+                                patientTo.setIdentity_id(pObject.getString("identity_id"));
+                                patientTo.setArea_province(pObject.getString("area_province"));
+                                patientTo.setArea_city(pObject.getString("area_city"));
+                                patientTo.setArea_county(pObject.getString("area_county"));
+                                patientTo.setIcon_url(pObject.getString("icon_url"));
+                                patientTo.setModify_time(pObject.getString("modify_time"));
+                                pcasesTo.setPatient(patientTo);
+                                patientList.add(pcasesTo);
                             }
-                        } catch(JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+                            if(infos.length() == 10) {
+                                patientListView.setHasMoreData(true);
+                            } else {
+                                patientListView.setHasMoreData(false);
+                            }
+                        } else if(responses.getInt("rtnCode") == 10004) {
 
-                    @Override
-                    public void onErrorResponse(VolleyError arg0) {
-                        CommonUtil.closeLodingDialog();
-                        Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
-                            .show();
+                            Toast.makeText(patientConsultationHistoryFragment.getContext(), responses.getString("rtnMsg"),
+                                Toast.LENGTH_SHORT).show();
+                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    initData();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                }
+                            });
+                            startActivity(new Intent(patientConsultationHistoryFragment.getContext(), LoginActivity.class));
+                        } else {
+                            Toast.makeText(patientConsultationHistoryFragment.getContext(), responses.getString("rtnMsg"),
+                                Toast.LENGTH_SHORT).show();
+                        }
+                    } catch(JSONException e) {
+                        e.printStackTrace();
                     }
-                });
-        }
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError arg0) {
+                    CommonUtil.closeLodingDialog();
+                    Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private void initLayout() {
@@ -230,7 +253,12 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                                             pcasesTo.setTitle(info.getString("title"));
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                            pcasesTo.setConsult_fee(info.getString("consult_fee"));
+                                            String consult_fee=info.getString("consult_fee");
+                                            if(consult_fee.equals("null")) {
+                                                pcasesTo.setConsult_fee("0");
+                                            } else {
+                                                pcasesTo.setConsult_fee(consult_fee);
+                                            }
                                             pcasesTo.setPatient_name(info.getString("patient_name"));
                                             pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                             pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -243,9 +271,8 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                                             patientTo.setAddress(pObject.getString("address"));
                                             patientTo.setId(pObject.getInt("id") + "");
                                             patientTo.setState(pObject.getString("state"));
-                                            // patientTo.setCreate_time(pObject.getLong("create_time"));
                                             patientTo.setTp(pObject.getString("tp"));
-                                            patientTo.setDoctor(pObject.getString("doctor"));
+                                            patientTo.setUserBalance(pObject.getString("userBalance"));
                                             patientTo.setMobile_ph(pObject.getString("mobile_ph"));
                                             patientTo.setPwd(pObject.getString("pwd"));
                                             patientTo.setReal_name(pObject.getString("real_name"));
@@ -266,6 +293,26 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                                         msg.what=0;
                                         msg.obj=pullToRefreshLayout;
                                         handler.sendMessage(msg);
+                                    } else if(responses.getInt("rtnCode") == 10004) {
+                                        Message msg=handler.obtainMessage();
+                                        msg.what=2;
+                                        msg.obj=pullToRefreshLayout;
+                                        handler.sendMessage(msg);
+                                        Toast.makeText(patientConsultationHistoryFragment.getContext(),
+                                            responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                            @Override
+                                            public void onSuccess(String rspContent, int statusCode) {
+                                                initData();
+                                            }
+
+                                            @Override
+                                            public void onFailure(ConsultationCallbackException exp) {
+                                            }
+                                        });
+                                        startActivity(new Intent(patientConsultationHistoryFragment.getContext(),
+                                            LoginActivity.class));
                                     } else {
                                         Message msg=handler.obtainMessage();
                                         msg.what=2;
@@ -282,8 +329,12 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
 
                             @Override
                             public void onErrorResponse(VolleyError arg0) {
-                                Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试",
-                                    Toast.LENGTH_SHORT).show();
+                                Message msg=handler.obtainMessage();
+                                msg.what=2;
+                                msg.obj=pullToRefreshLayout;
+                                handler.sendMessage(msg);
+                                Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT)
+                                    .show();
                             }
                         });
                 }
@@ -296,9 +347,20 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent=new Intent(patientConsultationHistoryFragment.getContext(), CaseInfoActivity.class);
+                intent.putExtra("caseId", patientList.get(position).getId());
+                startActivityForResult(intent, 0);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK) {
+            patientList.clear();
+            initData();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class PatientViewHolder {
@@ -349,8 +411,13 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
             }
             holder.titleText.setText(patientList.get(position).getTitle());
             holder.titleText.setTextSize(20);
-            holder.doctorText.setText(patientList.get(position).getDoctor_name() + "(初诊)|"
-                + patientList.get(position).getExpert_name() + "(专家)");
+            if(patientList.get(position).getConsult_tp().equals("公开讨论")) {
+                holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"
+                    + patientList.get(position).getDoctor_name() + "(初诊)");
+            } else {
+                holder.doctorText.setText(patientList.get(position).getDoctor_name() + "(初诊)|"
+                    + patientList.get(position).getExpert_name() + "(专家)");
+            }
             holder.doctorText.setTextSize(16);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sd=sdf.format(new Date(patientList.get(position).getCreate_time()));
@@ -398,7 +465,12 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                                 pcasesTo.setTitle(info.getString("title"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                pcasesTo.setConsult_fee(info.getString("consult_fee"));
+                                String consult_fee=info.getString("consult_fee");
+                                if(consult_fee.equals("null")) {
+                                    pcasesTo.setConsult_fee("0");
+                                } else {
+                                    pcasesTo.setConsult_fee(consult_fee);
+                                }
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
                                 pcasesTo.setDoctor_name(info.getString("doctor_name"));
                                 pcasesTo.setExpert_userid(info.getString("expert_userid"));
@@ -411,9 +483,8 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                                 patientTo.setAddress(pObject.getString("address"));
                                 patientTo.setId(pObject.getInt("id") + "");
                                 patientTo.setState(pObject.getString("state"));
-                                // patientTo.setCreate_time(pObject.getLong("create_time"));
                                 patientTo.setTp(pObject.getString("tp"));
-                                patientTo.setDoctor(pObject.getString("doctor"));
+                                patientTo.setUserBalance(pObject.getString("userBalance"));
                                 patientTo.setMobile_ph(pObject.getString("mobile_ph"));
                                 patientTo.setPwd(pObject.getString("pwd"));
                                 patientTo.setReal_name(pObject.getString("real_name"));
@@ -439,7 +510,32 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
                             msg.what=1;
                             msg.obj=pullableListView;
                             handler.sendMessage(msg);
+                        } else if(responses.getInt("rtnCode") == 10004) {
+                            hasMore=true;
+                            Message msg=handler.obtainMessage();
+                            msg.what=1;
+                            msg.obj=pullableListView;
+                            handler.sendMessage(msg);
+                            Toast.makeText(patientConsultationHistoryFragment.getContext(), responses.getString("rtnMsg"),
+                                Toast.LENGTH_SHORT).show();
+                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    initData();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                }
+                            });
+                            startActivity(new Intent(patientConsultationHistoryFragment.getContext(), LoginActivity.class));
                         } else {
+                            hasMore=true;
+                            Message msg=handler.obtainMessage();
+                            msg.what=1;
+                            msg.obj=pullableListView;
+                            handler.sendMessage(msg);
                             Toast.makeText(patientConsultationHistoryFragment.getContext(), responses.getString("rtnMsg"),
                                 Toast.LENGTH_SHORT).show();
                         }
@@ -451,6 +547,11 @@ public class PatientConsultationHistoryFragment extends Fragment implements OnLo
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
+                    hasMore=true;
+                    Message msg=handler.obtainMessage();
+                    msg.what=1;
+                    msg.obj=pullableListView;
+                    handler.sendMessage(msg);
                     Toast.makeText(patientConsultationHistoryFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });

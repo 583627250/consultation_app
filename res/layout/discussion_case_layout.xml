@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
             <include
@@ -23,56 +23,45 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@color/consultation_color_white"
                 android:orientation="horizontal" >
 
-                <com.consultation.app.view.PullToRefreshLayout
-                    android:id="@+id/case_disscussion_refresh_view"
+                <com.consultation.app.view.RefreshableView
+                    android:id="@+id/case_disscussion_refreshable_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
-                    <include layout="@layout/refresh_head" />
-
-                    <com.consultation.app.view.PullableListView
+                    <ListView
                         android:id="@+id/case_disscussion_listView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="#000000"
+                        android:divider="@color/consultation_color_white"
                         android:dividerHeight="0.1dp" />
-                </com.consultation.app.view.PullToRefreshLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="#000000" >
+                </com.consultation.app.view.RefreshableView>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/consultation_color_F4F4F4"
-                android:orientation="horizontal" >
-                
+                android:orientation="horizontal"
+                android:paddingBottom="3dp" >
+
                 <Button
                     android:id="@+id/case_disscussion_btn_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/create_case_submit_selector"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:text="图片"
-                    android:textColor="@color/consultation_color_white" />
+                    android:layout_margin="5dp"
+                    android:background="@drawable/discussion_add_image" />
 
                 <EditText
                     android:id="@+id/case_disscussion_input_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:background="@color/consultation_color_white"
                     android:gravity="center_vertical"
@@ -85,11 +74,8 @@
                     android:id="@+id/case_disscussion_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/create_case_submit_selector"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/login_login_btn_shape"
                     android:text="提交"
                     android:textColor="@color/consultation_color_white" />
             </LinearLayout>

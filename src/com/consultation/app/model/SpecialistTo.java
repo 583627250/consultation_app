@@ -13,6 +13,20 @@ public class SpecialistTo {
     private String goodat_fields;
 
     private String approve_status;
+    
+    private String expert_gardeid;
+
+    
+    public String getExpert_gardeid() {
+        return expert_gardeid;
+    }
+
+
+    
+    public void setExpert_gardeid(String expert_gardeid) {
+        this.expert_gardeid=expert_gardeid;
+    }
+
 
     private UserTo user;
 

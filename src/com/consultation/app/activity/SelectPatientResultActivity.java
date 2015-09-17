@@ -6,10 +6,13 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,6 +35,7 @@ import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
+@SuppressLint("HandlerLeak")
 public class SelectPatientResultActivity extends Activity {
 
     private LinearLayout back_layout, info_layout;
@@ -53,6 +57,8 @@ public class SelectPatientResultActivity extends Activity {
     private EditText code_edit;
 
     private SharePreferencesEditor editor;
+
+    private int times;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,13 +102,14 @@ public class SelectPatientResultActivity extends Activity {
                             + infos.getString("birth_day"));
                         address.setText("地址:" + infos.getString("area_province") + infos.getString("area_city")
                             + infos.getString("area_county"));
-                        if(null == infos.getJSONObject("userBalance").getString("current_balance") || "null".equals(infos.getJSONObject("userBalance").getString("current_balance"))){
-                            blance.setText("余额:0元");
-                        }else{
-                            blance.setText("余额:" + infos.getJSONObject("userBalance").getString("current_balance")+"元");
+                        if(null == infos.getJSONObject("userBalance").getString("current_balance")
+                            || "null".equals(infos.getJSONObject("userBalance").getString("current_balance"))) {
+                            blance.setText("余额:0.00元");
+                        } else {
+                            blance.setText("余额:" + (float)Long.parseLong(infos.getJSONObject("userBalance").getString("current_balance"))/100 + "元");
                         }
                         info_layout.setVisibility(View.VISIBLE);
-                    } else if(responses.getInt("rtnCode") == 10004){
+                    } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
@@ -190,7 +197,7 @@ public class SelectPatientResultActivity extends Activity {
                 final Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("mobile_ph", patient.getMobile_ph());
                 CommonUtil.showLoadingDialog(mContext);
-                OpenApiService.getInstance(mContext).getRegisterVerification(mQueue, parmas, new Response.Listener<String>() {
+                OpenApiService.getInstance(mContext).getPatientMobileUsable(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String arg0) {
@@ -198,8 +205,27 @@ public class SelectPatientResultActivity extends Activity {
                         try {
                             JSONObject responses=new JSONObject(arg0);
                             if(responses.getInt("rtnCode") == 1) {
+                                codeBtn.setEnabled(false);
                                 Toast.makeText(mContext, "验证码发送成功", Toast.LENGTH_SHORT).show();
-                            } else if(responses.getInt("rtnCode") == 10004){
+                                new Thread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        times=30;
+                                        while(times >= 0) {
+                                            try {
+                                                Message msg=new Message();
+                                                msg.what=times;
+                                                h.sendMessage(msg);
+                                                Thread.sleep(1000);
+                                                times--;
+                                            } catch(InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                }).start();
+                            } else if(responses.getInt("rtnCode") == 10004) {
                                 Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                                 LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
@@ -264,7 +290,7 @@ public class SelectPatientResultActivity extends Activity {
                                 intent.putExtras(bundle);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
-                            } else if(responses.getInt("rtnCode") == 10004){
+                            } else if(responses.getInt("rtnCode") == 10004) {
                                 Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                                 LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
@@ -298,4 +324,16 @@ public class SelectPatientResultActivity extends Activity {
         OKBtn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
             getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
     }
+
+    private Handler h=new Handler() {
+
+        public void dispatchMessage(Message msg) {
+            if(msg.what == 0) {
+                codeBtn.setEnabled(true);
+                codeBtn.setText("获取验证码");
+            } else {
+                codeBtn.setText(msg.what + "s后重新发送");
+            }
+        };
+    };
 }

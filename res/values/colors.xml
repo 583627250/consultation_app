@@ -13,8 +13,11 @@
          <color name="consultation_color_3F474A">#3F474A</color>
          <color name="consultation_color_4876FF">#4876FF</color>
          <color name="consultation_color_FFAD2B">#FFAD2B</color>
+         <color name="consultation_color_FFAE2C">#FFAE2C</color>
          <color name="consultation_color_3A5FCD">#3A5FCD</color>
          <color name="consultation_color_C4C4C4">#C4C4C4</color>
+         <color name="consultation_color_EE7942">#EE7942</color>
+         <color name="consultation_color_FF802B">#FF802B</color>
          <color name="consultation_color_transparent">#00000000</color>
          
          <color name="province_line_border">#C7C7C7</color>
@@ -25,4 +28,5 @@
          <color name="consultation_color_3CB679">#3CB679</color>
          <color name="consultation_color_919191">#919191</color>
          <color name="consultation_color_595959">#595959</color>
+         <color name="consultation_color_7B7C7C">#7B7C7C</color>
     </resources>

@@ -22,8 +22,7 @@
             android:paddingRight="10dp"
             android:paddingTop="2dp"
             android:singleLine="true"
-            android:text="13333333333"
-            android:textColor="#000000" />
+            android:textColor="#353535" />
 
         <TextView
             android:id="@+id/invitation_item_createDate"
@@ -35,8 +34,7 @@
             android:paddingRight="10dp"
             android:paddingTop="2dp"
             android:singleLine="true"
-            android:text="2015-3-3"
-            android:textColor="#000000" />
+            android:textColor="#353535" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,8 +52,7 @@
             android:paddingRight="10dp"
             android:paddingTop="2dp"
             android:singleLine="true"
-            android:text="ssssss"
-            android:textColor="#7D7D7D" />
+            android:textColor="#999999" />
 
         <TextView
             android:id="@+id/invitation_item_code"
@@ -67,8 +64,7 @@
             android:paddingRight="10dp"
             android:paddingTop="2dp"
             android:singleLine="true"
-            android:text="ssssss"
-            android:textColor="#7D7D7D" />
+            android:textColor="#999999" />
     </LinearLayout>
 
 </LinearLayout>

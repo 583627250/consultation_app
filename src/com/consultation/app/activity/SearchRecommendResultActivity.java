@@ -33,6 +33,7 @@ import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.RecommendTo;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
@@ -70,7 +71,8 @@ public class SearchRecommendResultActivity extends Activity {
     private void initDate() {
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("title", titleString);
-        if(!"".equals(editor.get("uid", ""))){
+        if(!ClientUtil.getToken().equals("")){
+            parmas.put("accessToken", ClientUtil.getToken());
             parmas.put("uid", editor.get("uid", ""));
             parmas.put("userTp", editor.get("userType", ""));
         }
@@ -90,6 +92,12 @@ public class SearchRecommendResultActivity extends Activity {
                             recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
                         }
                         myAdapter.notifyDataSetChanged();
+                        if(recommend_content_list.size() == 0){
+                            TextView noData = (TextView)findViewById(R.id.recommend_search_no_listView_text);
+                            noData.setTextSize(18);
+                            noData.setText("对不起！没有该知识");
+                            noData.setVisibility(View.VISIBLE);
+                        }
                     } else if(responses.getInt("rtnCode") == 10004){
                         Toast.makeText(SearchRecommendResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {

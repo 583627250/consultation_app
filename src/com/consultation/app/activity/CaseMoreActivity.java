@@ -7,8 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +39,8 @@ public class CaseMoreActivity extends Activity {
 
     private TextView textView1, textView2, textView3;
 
-    private String patientId, expertId, departmentId, caseId, expertName, patientName, consultType, titles, problem, content;
+    private String patientId, expertId, departmentId, caseId, expertName, patientName, consultType, titles, problem, content,
+            opinion;
 
     private String btn1, btn2, viewingCount, flag;
 
@@ -67,6 +66,7 @@ public class CaseMoreActivity extends Activity {
         titles=getIntent().getStringExtra("titles");
         problem=getIntent().getStringExtra("problem");
         content=getIntent().getStringExtra("content");
+        opinion=getIntent().getStringExtra("opinion");
         btn1=getIntent().getStringExtra("btn1");
         btn2=getIntent().getStringExtra("btn2");
         viewingCount=getIntent().getStringExtra("viewingCount");
@@ -111,53 +111,7 @@ public class CaseMoreActivity extends Activity {
                     CaseMoreActivity.this.finish();
                 } else if(flag.equals("2")) {
                     // 转住院
-                    Map<String, String> parmas=new HashMap<String, String>();
-                    parmas.put("caseId", caseId);
-                    parmas.put("accessToken", ClientUtil.getToken());
-                    parmas.put("uid", editor.get("uid", ""));
-                    CommonUtil.showLoadingDialog(CaseMoreActivity.this);
-                    OpenApiService.getInstance(CaseMoreActivity.this).getToSurgeryCase(mQueue, parmas,
-                        new Response.Listener<String>() {
-
-                            @Override
-                            public void onResponse(String arg0) {
-                                CommonUtil.closeLodingDialog();
-                                try {
-                                    JSONObject responses=new JSONObject(arg0);
-                                    if(responses.getInt("rtnCode") == 1) {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                        ActivityList.getInstance().closeActivity("CaseInfoActivity");
-                                        CaseMoreActivity.this.finish();
-                                    } else if(responses.getInt("rtnCode") == 10004){
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                            @Override
-                                            public void onSuccess(String rspContent, int statusCode) {
-                                            }
-
-                                            @Override
-                                            public void onFailure(ConsultationCallbackException exp) {
-                                            }
-                                        });
-                                        startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
-                                    } else {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                    }
-                                } catch(JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError arg0) {
-                                CommonUtil.closeLodingDialog();
-                                Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    startActivityForResult(new Intent(CaseMoreActivity.this, DialogActivity.class), 1);
                 } else if(flag.equals("3")) {
                     // 受理
                     Map<String, String> parmas=new HashMap<String, String>();
@@ -178,8 +132,9 @@ public class CaseMoreActivity extends Activity {
                                             .show();
                                         ActivityList.getInstance().closeActivity("CaseInfoActivity");
                                         CaseMoreActivity.this.finish();
-                                    } else if(responses.getInt("rtnCode") == 10004){
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    } else if(responses.getInt("rtnCode") == 10004) {
+                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                            .show();
                                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                             @Override
@@ -209,65 +164,7 @@ public class CaseMoreActivity extends Activity {
                         });
                 } else if(flag.equals("4")) {
                     // 转住院
-                    AlertDialog.Builder builder=new AlertDialog.Builder(CaseMoreActivity.this);
-                    builder.setMessage("确定转手术或住院吗？申请后以往咨询").setCancelable(false)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                Map<String, String> parmas=new HashMap<String, String>();
-                                parmas.put("caseId", caseId);
-                                parmas.put("accessToken", ClientUtil.getToken());
-                                parmas.put("uid", editor.get("uid", ""));
-                                CommonUtil.showLoadingDialog(CaseMoreActivity.this);
-                                OpenApiService.getInstance(CaseMoreActivity.this).getToSurgeryCase(mQueue, parmas,
-                                    new Response.Listener<String>() {
-
-                                        @Override
-                                        public void onResponse(String arg0) {
-                                            CommonUtil.closeLodingDialog();
-                                            try {
-                                                JSONObject responses=new JSONObject(arg0);
-                                                if(responses.getInt("rtnCode") == 1) {
-                                                    Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"),
-                                                        Toast.LENGTH_SHORT).show();
-                                                    ActivityList.getInstance().closeActivity("CaseInfoActivity");
-                                                    CaseMoreActivity.this.finish();
-                                                } else if(responses.getInt("rtnCode") == 10004){
-                                                    Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                                        @Override
-                                                        public void onSuccess(String rspContent, int statusCode) {
-                                                        }
-
-                                                        @Override
-                                                        public void onFailure(ConsultationCallbackException exp) {
-                                                        }
-                                                    });
-                                                    startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
-                                                } else {
-                                                    Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"),
-                                                        Toast.LENGTH_SHORT).show();
-                                                }
-                                            } catch(JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }, new Response.ErrorListener() {
-
-                                        @Override
-                                        public void onErrorResponse(VolleyError arg0) {
-                                            CommonUtil.closeLodingDialog();
-                                            Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                            }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        }).create().show();
+                    startActivityForResult(new Intent(CaseMoreActivity.this, DialogActivity.class), 1);
                 }
             }
         });
@@ -280,57 +177,14 @@ public class CaseMoreActivity extends Activity {
             public void onClick(View v) {
                 if(flag.equals("1")) {
                     // 删除
-                    Map<String, String> parmas=new HashMap<String, String>();
-                    parmas.put("caseId", caseId);
-                    parmas.put("accessToken", ClientUtil.getToken());
-                    parmas.put("uid", editor.get("uid", ""));
-                    CommonUtil.showLoadingDialog(CaseMoreActivity.this);
-                    OpenApiService.getInstance(CaseMoreActivity.this).getDeleteCase(mQueue, parmas,
-                        new Response.Listener<String>() {
-
-                            @Override
-                            public void onResponse(String arg0) {
-                                CommonUtil.closeLodingDialog();
-                                try {
-                                    JSONObject responses=new JSONObject(arg0);
-                                    if(responses.getInt("rtnCode") == 1) {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                        ActivityList.getInstance().closeActivity("CaseInfoActivity");
-                                        CaseMoreActivity.this.finish();
-                                    } else if(responses.getInt("rtnCode") == 10004){
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                            @Override
-                                            public void onSuccess(String rspContent, int statusCode) {
-                                            }
-
-                                            @Override
-                                            public void onFailure(ConsultationCallbackException exp) {
-                                            }
-                                        });
-                                        startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
-                                    } else {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                    }
-                                } catch(JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError arg0) {
-                                CommonUtil.closeLodingDialog();
-                                Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    Intent intent=new Intent(CaseMoreActivity.this, DialogActivity.class);
+                    intent.putExtra("flag", "2");
+                    startActivityForResult(intent, 2);
                 } else if(flag.equals("2")) {
                     // 评论
                     Intent intent=new Intent(CaseMoreActivity.this, DiscussionCaseActivity.class);
                     intent.putExtra("caseId", caseId);
+                    intent.putExtra("opinion", opinion);
                     intent.putExtra("consultType", consultType);
                     startActivity(intent);
                     CaseMoreActivity.this.finish();
@@ -354,8 +208,9 @@ public class CaseMoreActivity extends Activity {
                                             .show();
                                         ActivityList.getInstance().closeActivity("CaseInfoActivity");
                                         CaseMoreActivity.this.finish();
-                                    } else if(responses.getInt("rtnCode") == 10004){
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    } else if(responses.getInt("rtnCode") == 10004) {
+                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                            .show();
                                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                             @Override
@@ -385,54 +240,12 @@ public class CaseMoreActivity extends Activity {
                         });
                 } else if(flag.equals("4")) {
                     // 完成
-                    Map<String, String> parmas=new HashMap<String, String>();
-                    parmas.put("caseId", caseId);
-                    parmas.put("accessToken", ClientUtil.getToken());
-                    parmas.put("uid", editor.get("uid", ""));
-                    CommonUtil.showLoadingDialog(CaseMoreActivity.this);
-                    OpenApiService.getInstance(CaseMoreActivity.this).getDiscussionCaseFinsh(mQueue, parmas,
-                        new Response.Listener<String>() {
-
-                            @Override
-                            public void onResponse(String arg0) {
-                                CommonUtil.closeLodingDialog();
-                                try {
-                                    JSONObject responses=new JSONObject(arg0);
-                                    if(responses.getInt("rtnCode") == 1) {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                        ActivityList.getInstance().closeActivity("DiscussionCaseActivity");
-                                        ActivityList.getInstance().closeActivity("CaseInfoActivity");
-                                        CaseMoreActivity.this.finish();
-                                    } else if(responses.getInt("rtnCode") == 10004){
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                            @Override
-                                            public void onSuccess(String rspContent, int statusCode) {
-                                            }
-
-                                            @Override
-                                            public void onFailure(ConsultationCallbackException exp) {
-                                            }
-                                        });
-                                        startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
-                                    } else {
-                                        Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                            .show();
-                                    }
-                                } catch(JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError arg0) {
-                                CommonUtil.closeLodingDialog();
-                                Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    Intent intent=new Intent(CaseMoreActivity.this, DialogActivity.class);
+                    if("".equals(opinion) || "null".equals(opinion) || opinion == null) {
+                        intent.putExtra("caseId", caseId);
+                        intent.putExtra("flag", "1");
+                    }
+                    startActivityForResult(intent, 0);
                 }
             }
         });
@@ -457,5 +270,179 @@ public class CaseMoreActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK) {
+            switch(requestCode) {
+                case 0:
+                    // 完成
+                    if(data.getIntExtra("flag", -1) == 0) {
+                        Map<String, String> parmas=new HashMap<String, String>();
+                        parmas.put("caseId", caseId);
+                        parmas.put("accessToken", ClientUtil.getToken());
+                        parmas.put("uid", editor.get("uid", ""));
+                        CommonUtil.showLoadingDialog(CaseMoreActivity.this);
+                        OpenApiService.getInstance(CaseMoreActivity.this).getDiscussionCaseFinsh(mQueue, parmas,
+                            new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    try {
+                                        JSONObject responses=new JSONObject(arg0);
+                                        if(responses.getInt("rtnCode") == 1) {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            ActivityList.getInstance().closeActivity("DiscussionCaseActivity");
+                                            ActivityList.getInstance().closeActivity("CaseInfoActivity");
+                                            CaseMoreActivity.this.finish();
+                                        } else if(responses.getInt("rtnCode") == 10004) {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                                @Override
+                                                public void onSuccess(String rspContent, int statusCode) {
+                                                }
+
+                                                @Override
+                                                public void onFailure(ConsultationCallbackException exp) {
+                                                }
+                                            });
+                                            startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
+                                        } else {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                        }
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+                    break;
+                case 1:
+                    if(data.getIntExtra("flag", -1) == 0) {
+                        Map<String, String> parmas=new HashMap<String, String>();
+                        parmas.put("caseId", caseId);
+                        parmas.put("accessToken", ClientUtil.getToken());
+                        parmas.put("uid", editor.get("uid", ""));
+                        CommonUtil.showLoadingDialog(CaseMoreActivity.this);
+                        OpenApiService.getInstance(CaseMoreActivity.this).getToSurgeryCase(mQueue, parmas,
+                            new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    try {
+                                        JSONObject responses=new JSONObject(arg0);
+                                        if(responses.getInt("rtnCode") == 1) {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            ActivityList.getInstance().closeActivity("CaseInfoActivity");
+                                            CaseMoreActivity.this.finish();
+                                        } else if(responses.getInt("rtnCode") == 10004) {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                                @Override
+                                                public void onSuccess(String rspContent, int statusCode) {
+                                                }
+
+                                                @Override
+                                                public void onFailure(ConsultationCallbackException exp) {
+                                                }
+                                            });
+                                            startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
+                                        } else {
+                                            Toast
+                                                .makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                        }
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+                    
+                case 2:
+                    if(data.getIntExtra("flag", -1) == 0) {
+                        Map<String, String> parmas=new HashMap<String, String>();
+                        parmas.put("caseId", caseId);
+                        parmas.put("accessToken", ClientUtil.getToken());
+                        parmas.put("uid", editor.get("uid", ""));
+                        CommonUtil.showLoadingDialog(CaseMoreActivity.this);
+                        OpenApiService.getInstance(CaseMoreActivity.this).getDeleteCase(mQueue, parmas,
+                            new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    try {
+                                        JSONObject responses=new JSONObject(arg0);
+                                        if(responses.getInt("rtnCode") == 1) {
+                                            ActivityList.getInstance().closeActivity("CaseInfoActivity");
+                                            Intent intent = new Intent("com.consultation.app.new.case.action");
+                                            sendBroadcast(intent);
+                                            CaseMoreActivity.this.finish();
+                                        } else if(responses.getInt("rtnCode") == 10004) {
+                                            Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                                @Override
+                                                public void onSuccess(String rspContent, int statusCode) {
+                                                }
+
+                                                @Override
+                                                public void onFailure(ConsultationCallbackException exp) {
+                                                }
+                                            });
+                                            startActivity(new Intent(CaseMoreActivity.this, LoginActivity.class));
+                                        } else {
+                                            Toast.makeText(CaseMoreActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                        }
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    Toast.makeText(CaseMoreActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -22,6 +22,10 @@ public class ClientUtil {
 
     public static String GET_REGISTER_MOBILEUSABLE_URL=SERVICE_DOMAIN + "/api/user/mobileUsable.json";
     
+    public static String GET_FORGET_MOBILEUSABLE_URL=SERVICE_DOMAIN + "/api/user/smsVerifyCode4Forgot.json";
+    
+    public static String GET_PATIENT_MOBILEUSABLE_URL=SERVICE_DOMAIN + "/api/user/sentPatientSmsVerifyCode.json";
+    
     public static String GET_FORGET_PWD_URL=SERVICE_DOMAIN + "/api/user/forgetPwd.json";
 
     public static String GET_REGISTER_URL=SERVICE_DOMAIN + "/api/user/register.json";
@@ -40,7 +44,9 @@ public class ClientUtil {
 
     public static String GET_PATIENTCASE_LIST_URL=SERVICE_DOMAIN + "/api/patientCase/list.json";
     
-    public static String GET_PATIENTCASE_INFO_URL=SERVICE_DOMAIN + "/api/patientCase/getById.json";
+    public static String GET_HELP_PATIENT_LIST_URL=SERVICE_DOMAIN + "/api/patientCase/listCases4Expert.json";
+    
+    public static String GET_PATIENTCASE_INFO_URL=SERVICE_DOMAIN + "/api/patientCase/getById2.json";
     
     public static String GET_PATIENT_INFO_URL =SERVICE_DOMAIN + "/api/user/getByMobile.json";
     
@@ -50,7 +56,7 @@ public class ClientUtil {
     
     public static String GET_CASE_UP_ALL_URL =SERVICE_DOMAIN + "/api/caseContent/save.json";
     
-    public static String GET_UPLOAD_IMAGES_URL =SERVICE_DOMAIN + "/fileUpload/multiUpload.shtml";
+    public static String GET_UPLOAD_IMAGES_URL =SERVICE_DOMAIN + "/api/caseFiles/multiUpload.json";
    
     public static String GET_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/listByDoctorUserid.json";
     
@@ -66,6 +72,8 @@ public class ClientUtil {
     
     public static String GET_DISCUSSION_CASE_LIST_URL =SERVICE_DOMAIN + "/api/caseDiscuss/list.json";
     
+    public static String GET_CASE_IMAGE_LIST_URL =SERVICE_DOMAIN + "/api/caseFiles/list.json";
+    
     public static String GET_SEND_DISCUSSION_CASE_URL =SERVICE_DOMAIN + "/api/caseDiscuss/save.json";
     
     public static String GET_DISCUSSION_CASE_FINSH_URL =SERVICE_DOMAIN + "/api/patientCase/completed.json";
@@ -74,6 +82,8 @@ public class ClientUtil {
     
     public static String GET_REJECTED_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/rejected.json";
     
+    public static String GET_CASE_OPINION_URL =SERVICE_DOMAIN + "/api/patientCase/fillOpinion.json";
+    
     public static String GET_RECEIVED_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/received.json";
     
     public static String GET_TOSURGERY_CASE_URL =SERVICE_DOMAIN + "/api/patientCase/toSurgery.json";
@@ -81,6 +91,24 @@ public class ClientUtil {
     public static String GET_JION_DOCTOR_URL =SERVICE_DOMAIN + "/api/doctor/save.json";
     
     public static String GET_USERINFO_URL =SERVICE_DOMAIN + "/api/user/getUserInfo.json";
+    
+    public static String GET_USER_ICON_URL =SERVICE_DOMAIN + "/api/user/iconUpload.json";
+    
+    public static String GET_DISCUSSION_CASE_IMAGE_URL =SERVICE_DOMAIN + "/api/caseDiscussFiles/multiUpload.json";
+    
+    public static String GET_DELETE_CASE_IMAGE_URL =SERVICE_DOMAIN + "/api/caseFiles/deleteById.json";
+    
+    public static String GET_MY_ACOUNT_INFO_URL =SERVICE_DOMAIN + "/api/userBalance/getDatas.json";
+    
+    public static String GET_MY_ACOUNT_RECHARGE_RECORD_URL =SERVICE_DOMAIN + "/api/userBalanceTopup/list.json";
+    
+    public static String GET_MY_ACOUNT_WITHDRAWALS_RECORD_URL =SERVICE_DOMAIN + "/api/userBalancexxx/list.json";
+    
+    public static String GET_MY_ACOUNT_INCOME_RECORD_URL =SERVICE_DOMAIN + "/api/userBalanceIncome/list.json";
+    
+    public static String GET_MY_ACOUNT_PAY_RECORD_URL =SERVICE_DOMAIN + "/api/userBalancePayment/list.json";
+    
+    public static String GET_EXPERT_ACCEPT_URL =SERVICE_DOMAIN + "/api/patientCase/acceptByExpert.json";
 
     private static CaseParams caseParams=new CaseParams();
 
@@ -114,7 +142,7 @@ public class ClientUtil {
 
     public static boolean isLogin() {
         boolean islogin=false;
-        if(ClientUtil.token != null) {
+        if(ClientUtil.token != null && !"".equals(ClientUtil.token)) {
             islogin=true;
         }
         return islogin;

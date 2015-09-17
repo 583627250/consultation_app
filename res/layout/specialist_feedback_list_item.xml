@@ -26,7 +26,7 @@
                 android:layout_width="45dip"
                 android:layout_height="45dip"
                 android:scaleType="fitXY"
-                android:src="@drawable/photo" />
+                android:src="@drawable/photo_patient" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,8 +62,7 @@
 	                        android:layout_height="match_parent"
 	                        android:gravity="center_vertical"
 	                        android:layout_weight="1"
-	                        android:text="王大妈 :"
-	                        android:textColor="#7B7B7B" />
+	                        android:textColor="#999999" />
 	                    
 	                    <LinearLayout 
 	                        android:layout_width="match_parent"
@@ -79,7 +78,7 @@
 		                        android:layout_height="wrap_content"
 		                        android:layout_gravity="right"
 		                        android:gravity="right"
-		                        android:stepSize="0.1"
+		                        android:stepSize="0.5"
 		                        android:saveEnabled="false"
 		                        android:maxHeight="20dp"
 		                        android:minHeight="20dp" />
@@ -90,8 +89,7 @@
                         android:id="@+id/specialist_info_item_message_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="杨医生真实太好了，治好了我多年的骨质疏松"
-                        android:textColor="#4A4A4A" />
+                        android:textColor="#353535" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -103,8 +101,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
         android:gravity="center_vertical|right"
-        android:text="2015-07-07"
         android:paddingRight="15dp"
-        android:textColor="#7B7B7B" />
+        android:textColor="#999999" />
 
 </LinearLayout>

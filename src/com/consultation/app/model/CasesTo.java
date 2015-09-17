@@ -37,16 +37,11 @@ public class CasesTo {
     private String patient_name;
     
     private String patient_id;
-
     
     public String getPatient_id() {
         return patient_id;
     }
 
-
-
-
-    
     public void setPatient_id(String patient_id) {
         this.patient_id=patient_id;
     }
@@ -59,46 +54,33 @@ public class CasesTo {
     
     private CaseContentTo caseContentTo;
     
-    
-    
     public int getViewingCount() {
         return viewingCount;
     }
-
-
-
     
     public void setViewingCount(int viewingCount) {
         this.viewingCount=viewingCount;
     }
 
-
-
     public CaseContentTo getCaseContentTo() {
         return caseContentTo;
     }
 
-
-    
     public void setCaseContentTo(CaseContentTo caseContentTo) {
         this.caseContentTo=caseContentTo;
     }
 
-
     public DoctorTo getDoctorTo() {
         return doctorTo;
     }
-
     
     public void setDoctorTo(DoctorTo doctorTo) {
         this.doctorTo=doctorTo;
     }
-
     
     public DoctorTo getExpertTo() {
         return expertTo;
     }
-
     
     public void setExpertTo(DoctorTo expertTo) {
         this.expertTo=expertTo;
@@ -135,6 +117,9 @@ public class CasesTo {
                 break;
             case 12:
                 statusText = "已完成";
+                break;
+            case 40:
+                statusText = "已归档";
                 break;
 
             default:
@@ -244,10 +229,6 @@ public class CasesTo {
             case 20:
                 statusText = "明确诊断";
                 break;
-            case 22:
-                statusText = "申请手术";
-                break;
-            
             default:
                 break;
         }

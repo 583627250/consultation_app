@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_white"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -48,7 +48,7 @@
                                 android:layout_height="70dip"
                                 android:layout_marginBottom="5dp"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/photo" />
+                                android:src="@drawable/photo_primary" />
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -73,7 +73,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="张三"
                             android:textColor="#4A4A4A" />
 
                         <TextView
@@ -81,7 +80,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="儿科"
                             android:textColor="#4A4A4A" />
 
                         <TextView
@@ -89,7 +87,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="主治医师"
                             android:textColor="#4A4A4A" />
 
                         <TextView
@@ -98,7 +95,6 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:singleLine="true"
-                            android:text="武警总医院"
                             android:textColor="#7B7B7B" />
                     </LinearLayout>
 
@@ -127,12 +123,15 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/case_info_expert_line"
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="#DDDDDD" >
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/case_info_expert_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -155,7 +154,7 @@
                                 android:layout_height="70dip"
                                 android:layout_marginBottom="5dp"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/photo" />
+                                android:src="@drawable/photo_expert" />
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -188,7 +187,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="儿科"
                             android:textColor="#4A4A4A" />
 
                         <TextView
@@ -196,7 +194,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:text="主治医师"
                             android:textColor="#4A4A4A" />
 
                         <TextView
@@ -205,7 +202,6 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:singleLine="true"
-                            android:text="武警总医院"
                             android:textColor="#7B7B7B" />
                     </LinearLayout>
 
@@ -237,7 +233,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="#DDDDDD" >
+                    android:background="#DADADA" >
                 </LinearLayout>
                 
                 <LinearLayout
@@ -303,7 +299,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="#DDDDDD" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -353,7 +349,6 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:paddingTop="2dp"
-                            android:text="新建"
                             android:textColor="#FFFFFF" />
 
                         <ImageView
@@ -369,7 +364,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="#DDDDDD" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -403,30 +398,6 @@
                         android:paddingLeft="5dp"
                         android:text="标题"
                         android:textColor="#7B7B7B" />
-
-                    <!-- <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:id="@+id/case_info_title_update_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/case_update_icon" />
-                        <ImageView
-                            android:id="@+id/case_info_title_save_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:visibility="gone"
-                            android:src="@drawable/case_save_icon" />
-                    </LinearLayout> -->
                 </LinearLayout>
 
                 <LinearLayout
@@ -453,16 +424,59 @@
                         android:lineSpacingMultiplier="1.3"
                         android:textColor="#7B7B7B" />
                     
-                    <!-- <EditText
-                        android:id="@+id/case_info_title_info_edit"
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/case_info_pic_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/knowledge_recommend_layout_selector"
+                    android:orientation="horizontal"
+                    android:padding="15dp" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/case_status_icon" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/case_info_pic_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:background="#EEF0EF"
-                        android:text="标题"
-                        android:visibility="gone"
-                        android:lineSpacingMultiplier="1.3"
-                        android:textColor="#7B7B7B" /> -->
+                        android:paddingLeft="5dp"
+                        android:text="查看图片资料"
+                        android:textColor="#7B7B7B" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
                 </LinearLayout>
                 
                 <LinearLayout
@@ -497,21 +511,6 @@
                         android:text="病例明细"
                         android:textColor="#7B7B7B" />
 
-                    <!-- <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:id="@+id/case_info_details_update_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/case_update_icon" />
-                    </LinearLayout> -->
                 </LinearLayout>
 
                 <LinearLayout
@@ -571,30 +570,6 @@
                         android:text="待解决问题"
                         android:textColor="#7B7B7B" />
 
-                    <!-- <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="right"
-                        android:orientation="horizontal" >
-
-                        <ImageView
-                            android:id="@+id/case_info_unresolved_update_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:src="@drawable/case_update_icon" />
-                        
-                        <ImageView
-                            android:id="@+id/case_info_unresolved_save_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingRight="7dp"
-                            android:visibility="gone"
-                            android:src="@drawable/case_save_icon" />
-                    </LinearLayout> -->
                 </LinearLayout>
 
                 <LinearLayout
@@ -620,22 +595,12 @@
                         android:lineSpacingMultiplier="1.3"
                         android:textColor="#7B7B7B" />
                     
-                    <!-- <EditText
-                        android:id="@+id/case_info_unresolved_info_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:background="#EEF0EF"
-                        android:visibility="gone"
-                        android:text="待解决问题"
-                        android:lineSpacingMultiplier="1.3"
-                        android:textColor="#7B7B7B" /> -->
                 </LinearLayout>
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="#DDDDDD" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -682,6 +647,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:visibility="gone"
                             android:paddingRight="7dp"
                             android:src="@drawable/case_update_icon" />
                         <ImageView
@@ -731,7 +697,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/consultation_color_white" >
+                    android:background="#EBEBEB" >
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

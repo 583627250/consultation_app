@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_white"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -34,7 +34,7 @@
                     android:id="@+id/specialist_info_help_listView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:divider="#F4F4F4"
+                    android:divider="#DADADA"
                     android:dividerHeight="0.1dp" />
             </com.consultation.app.view.PullToRefreshLayout>
         </LinearLayout>

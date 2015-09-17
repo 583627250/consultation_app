@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -101,7 +101,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -152,7 +152,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -203,7 +203,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,19 +241,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="top"
                         android:background="@color/consultation_color_white"
-                        android:gravity="center_vertical"
-                        android:hint="请输入您擅长的领域"
+                        android:hint="请输入您擅长的领域，200字以内"
                         android:padding="5dp"
                         android:maxLength="200"
-                        android:singleLine="true"
+                        android:lines="2"
                         android:textColorHint="#D3D3D3" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -326,11 +326,120 @@
                         </RadioButton>
                     </RadioGroup>
                 </LinearLayout>
+                
+                
+                <LinearLayout
+                    android:id="@+id/update_my_info_expert_grade_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
+                </LinearLayout>
+                
+                
+                <LinearLayout
+                    android:id="@+id/update_my_info_expert_grade_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_expert_grade_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="专家级别"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_expert_grade_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择专家级别"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/update_my_info_invitation_code_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/update_my_info_invitation_code_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_invitation_code_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="邀请码"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/update_my_info_invitation_code_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="top"
+                        android:background="@color/consultation_color_white"
+                        android:hint="请输入您的邀请码(选填)"
+                        android:padding="5dp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#EBEBEB" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -382,7 +491,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -429,7 +538,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#EBEBEB" >
                 </LinearLayout>
 
                 <LinearLayout
@@ -455,6 +564,7 @@
                         android:drawablePadding="5dp"
                         android:gravity="center_vertical"
                         android:text="我已经阅读"
+                        android:checked="true"
                         android:textColor="#414141" >
                     </CheckBox>
 

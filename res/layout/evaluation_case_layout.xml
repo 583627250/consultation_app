@@ -40,7 +40,7 @@
                         android:id="@+id/case_evaluation_listView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="#000000"
+                        android:divider="#DADADA"
                         android:dividerHeight="0.1dp" />
                 </com.consultation.app.view.PullToRefreshLayout>
             </LinearLayout>
@@ -49,7 +49,7 @@
                 android:id="@+id/case_evaluation_line1"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:background="#000000"
+                android:background="#DADADA"
                 android:orientation="horizontal" >
             </LinearLayout>
 
@@ -83,14 +83,14 @@
                     android:minHeight="24dp"
                     android:numStars="5"
                     android:rating="0"
-                    android:stepSize="1" />
+                    android:stepSize="0.5" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/case_evaluation_line2"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:background="#000000"
+                android:background="#DADADA"
                 android:orientation="horizontal" >
             </LinearLayout>
 
@@ -104,12 +104,14 @@
                 <EditText
                     android:id="@+id/case_evaluation_input_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/consultation_color_white"
                     android:gravity="center_vertical"
                     android:hint="请输入评价内容"
                     android:maxLength="100"
+                    android:layout_margin="5dp"
+                    android:singleLine="true"
                     android:padding="5dp"
                     android:textColorHint="#D3D3D3" />
 
@@ -118,10 +120,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/create_case_submit_selector"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:padding="5dp"
+                    android:layout_margin="5dp"
                     android:text="评价"
                     android:textColor="@color/consultation_color_white" />
             </LinearLayout>

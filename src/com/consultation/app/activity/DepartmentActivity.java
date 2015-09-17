@@ -67,7 +67,6 @@ public class DepartmentActivity extends Activity {
     }
 
     private void initView() {
-        initHospitalDatas();
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("选择专业");
         title_text.setTextSize(20);
@@ -118,7 +117,7 @@ public class DepartmentActivity extends Activity {
                         h.onSuccess(currentString, 1);
                         finish();
                     }else{
-                        h.onSuccess(departmentBranchs.get(position).getName()+","+departmentBranchs.get(position).getId(), 1);
+                        h.onSuccess(departmentBranchs.get(position-1).getName()+","+departmentBranchs.get(position-1).getId(), 1);
                         finish();
                     }
                 }
@@ -171,7 +170,6 @@ public class DepartmentActivity extends Activity {
         } catch(IOException ioe) {
             throw new Error("Unable to create database");
         }
-
     }
 
     private class MyAdapter extends BaseAdapter {

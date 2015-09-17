@@ -69,14 +69,14 @@
              android:layout_width="match_parent"
              android:layout_height="0.1dp"
              android:orientation="horizontal"
-             android:background="#F4F4F4">
+             android:background="#DADADA">
          </LinearLayout>
 
         <ListView
             android:id="@+id/province_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#F4F4F4"
+            android:divider="#DADADA"
             android:dividerHeight="0.1dp" >
         </ListView>
     </LinearLayout>

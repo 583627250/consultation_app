@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -17,24 +17,36 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     
+    <style name="FullBleedTheme" parent="android:Theme.Light.NoTitleBar">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    
     <style name="roomRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/room_rating_bar</item>
-    	 <item name="android:isIndicator">true</item>
+        <item name="android:isIndicator">true</item>
     </style>
-    
+
     <style name="roomRatingBar2" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/room_rating_bar2</item>
-    	 <item name="android:isIndicator">true</item>
+        <item name="android:isIndicator">true</item>
     </style>
-    
+
     <style name="roomRatingBar3" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/room_rating_bar3</item>
-    	 <item name="android:isIndicator">true</item>
+        <item name="android:isIndicator">true</item>
     </style>
-    
-    <style name="PopupWindowAnimation">  
-        <item name="android:windowEnterAnimation">@anim/popshow_anim</item>  
-        <item name="android:windowExitAnimation">@anim/pophidden_anim</item>  
+
+    <style name="PopupWindowAnimation">
+        <item name="android:windowEnterAnimation">@anim/popshow_anim</item>
+        <item name="android:windowExitAnimation">@anim/pophidden_anim</item>
+    </style>
+
+    <style name="CustomRadioBtn">
+        <item name="android:button">@drawable/custom_radio_btn</item>
+    </style>
+
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_style</item>
     </style>
 
 </resources>

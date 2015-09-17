@@ -3,38 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="35dp"
     android:layout_gravity="center_vertical"
-    android:paddingTop="5dp"
+    android:background="#2CB67A"
     android:paddingBottom="5dp"
-    android:background="#2CB67A" >
-    
-    
+    android:paddingTop="5dp" >
+
     <LinearLayout
         android:id="@+id/header_layout_lift"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="invisible"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible" >
 
         <ImageView
             android:id="@+id/header_lift_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
             android:src="@drawable/back_icon" />
-        
+
         <TextView
             android:id="@+id/header_text_lift"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="3dp"
             android:gravity="center_vertical"
+            android:paddingLeft="3dp"
             android:text="返回"
             android:textColor="@color/consultation_color_white" />
-        
     </LinearLayout>
 
     <LinearLayout
@@ -48,45 +46,45 @@
             android:id="@+id/header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="3dp"
             android:textColor="@color/consultation_color_white" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:id="@+id/header_layout_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:paddingRight="15dp"
+        android:gravity="right"
         android:orientation="horizontal"
-        android:gravity="right" >
+        android:paddingRight="15dp" >
 
         <TextView
             android:id="@+id/header_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingLeft="10dp"
             android:layout_marginRight="3dp"
-            android:paddingTop="3dp"
+            android:gravity="center_vertical"
             android:paddingBottom="3dp"
-            android:visibility="invisible"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
             android:text="保存"
-            android:textColor="@color/consultation_color_white" />
+            android:textColor="@color/consultation_color_white"
+            android:visibility="invisible" />
+
         <Button
             android:id="@+id/header_right_tip"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:visibility="gone"
-            android:text="20"
             android:background="@drawable/discussion_count_shape"
-            android:textColor="@color/consultation_color_white" />
+            android:gravity="center"
+            android:text="20"
+            android:textColor="@color/consultation_color_white"
+            android:visibility="gone" />
     </LinearLayout>
-
 
 </LinearLayout>

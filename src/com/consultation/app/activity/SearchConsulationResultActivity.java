@@ -50,14 +50,14 @@ public class SearchConsulationResultActivity extends Activity {
 
     private LinearLayout back_layout;
 
-    private TextView back_text, title_text;
+    private TextView back_text, title_text, noData;
 
     private ListView consulationListView;
 
     private MyAdapter myAdapter;
 
     private ViewHolder holder;
-    
+
     private ImageLoader mImageLoader;
 
     private List<CasesTo> consulationList=new ArrayList<CasesTo>();
@@ -75,7 +75,7 @@ public class SearchConsulationResultActivity extends Activity {
         filterString=getIntent().getStringExtra("filter");
         editor=new SharePreferencesEditor(SearchConsulationResultActivity.this);
         mQueue=Volley.newRequestQueue(SearchConsulationResultActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         initDate();
         initView();
     }
@@ -131,9 +131,8 @@ public class SearchConsulationResultActivity extends Activity {
                                 patientTo.setAddress(pObject.getString("address"));
                                 patientTo.setId(pObject.getInt("id") + "");
                                 patientTo.setState(pObject.getString("state"));
-                                // patientTo.setCreate_time(pObject.getLong("create_time"));
                                 patientTo.setTp(pObject.getString("tp"));
-                                patientTo.setDoctor(pObject.getString("doctor"));
+                                patientTo.setUserBalance(pObject.getString("userBalance"));
                                 patientTo.setMobile_ph(pObject.getString("mobile_ph"));
                                 patientTo.setPwd(pObject.getString("pwd"));
                                 patientTo.setReal_name(pObject.getString("real_name"));
@@ -150,9 +149,15 @@ public class SearchConsulationResultActivity extends Activity {
                                 pcasesTo.setPatient(patientTo);
                                 consulationList.add(pcasesTo);
                             }
-                            myAdapter.notifyDataSetChanged();
-                        } else if(responses.getInt("rtnCode") == 10004){
-                            Toast.makeText(SearchConsulationResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            if(consulationList.size() == 0){
+                                noData = (TextView)findViewById(R.id.recommend_search_no_listView_text);
+                                noData.setTextSize(18);
+                                noData.setText("对不起！没有该专家");
+                                noData.setVisibility(View.VISIBLE);
+                            }
+                        } else if(responses.getInt("rtnCode") == 10004) {
+                            Toast.makeText(SearchConsulationResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                .show();
                             LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                 @Override
@@ -206,15 +211,24 @@ public class SearchConsulationResultActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Intent intent = new Intent(SearchConsulationResultActivity.this, RecommendActivity.class);
-                // intent.putExtra("id", recommend_content_list.get(position).getId());
-                // startActivity(intent);
+                Intent intent=new Intent(SearchConsulationResultActivity.this, CaseInfoActivity.class);
+                intent.putExtra("caseId", consulationList.get(position).getId());
+                startActivityForResult(intent, 0);
             }
         });
     }
 
-private class ViewHolder {
-        
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK) {
+            consulationList.clear();
+            initDate();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private class ViewHolder {
+
         ImageView photo;
 
         TextView titleText;
@@ -250,8 +264,8 @@ private class ViewHolder {
             if(convertView == null) {
                 holder=new ViewHolder();
                 convertView=
-                    LayoutInflater.from(SearchConsulationResultActivity.this).inflate(
-                        R.layout.consulation_primary_list_all_item, null);
+                    LayoutInflater.from(SearchConsulationResultActivity.this).inflate(R.layout.consulation_primary_list_all_item,
+                        null);
                 holder.photo=(ImageView)convertView.findViewById(R.id.consulation_primary_list_all_item_image);
                 holder.titleText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_title);
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_doctor);
@@ -264,22 +278,26 @@ private class ViewHolder {
             }
             holder.titleText.setText(consulationList.get(position).getTitle());
             holder.titleText.setTextSize(20);
-            holder.doctorText.setText(consulationList.get(position).getPatient().getReal_name()+"(患者)|"+consulationList.get(position).getExpert_name()+"(专家)");
-//            holder.doctorText.setText("站三三(患者)|李思思(专家)");
+            if(consulationList.get(position).getConsult_tp().equals("公开讨论")){
+                holder.doctorText.setText(consulationList.get(position).getDoctor_name() + "(初诊)");
+            }else{
+                holder.doctorText.setText(consulationList.get(position).getDoctor_name() + "(初诊)|"
+                        + consulationList.get(position).getExpert_name() + "(专家)");
+            }
             holder.doctorText.setTextSize(16);
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");  
-            String sd = sdf.format(new Date(consulationList.get(position).getCreate_time()));  
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String sd=sdf.format(new Date(consulationList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
             holder.dateText.setTextSize(14);
-            holder.moneyText.setText("￥"+consulationList.get(position).getConsult_fee());
+            holder.moneyText.setText("￥" + consulationList.get(position).getConsult_fee());
             holder.moneyText.setTextSize(18);
             holder.stateText.setText(consulationList.get(position).getStatus());
             holder.stateText.setTextSize(18);
             final String imgUrl=consulationList.get(position).getPatient().getIcon_url();
             holder.photo.setTag(imgUrl);
-            holder.photo.setImageResource(R.drawable.photo);
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
+            holder.photo.setImageResource(R.drawable.photo_patient);
+            if(imgUrl != null && !imgUrl.equals("")&& !imgUrl.equals("null")) {
+                ImageListener listener=ImageLoader.getImageListener(holder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;

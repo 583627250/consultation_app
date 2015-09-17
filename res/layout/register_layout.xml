@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -95,7 +95,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
 
                 <LinearLayout
@@ -160,7 +160,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
 
                 <LinearLayout
@@ -210,7 +210,7 @@
                 <LinearLayout 
 		            android:layout_width="match_parent"
 		            android:layout_height="0.1dp"
-		            android:background="@color/consultation_color_F4F4F4">
+		            android:background="#DADADA">
 		        </LinearLayout>
 
                 <LinearLayout

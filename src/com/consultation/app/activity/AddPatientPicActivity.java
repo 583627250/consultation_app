@@ -129,22 +129,24 @@ public class AddPatientPicActivity extends Activity implements OnClickListener {
                 return;
             }
         }
-        String[] pojo = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(photoUri, pojo, null, null,null); 
-        String picPath = null;
-        if(cursor != null ){
-            int columnIndex = cursor.getColumnIndexOrThrow(pojo[0]);
+        String[] pojo={MediaStore.Images.Media.DATA};
+        Cursor cursor=managedQuery(photoUri, pojo, null, null, null);
+        String picPath=null;
+        if(cursor != null) {
+            int columnIndex=cursor.getColumnIndexOrThrow(pojo[0]);
             cursor.moveToFirst();
-            picPath = cursor.getString(columnIndex);
+            picPath=cursor.getString(columnIndex);
             cursor.close();
+        } else {
+            picPath=photoUri.toString().replace("file://", "");
         }
-        System.out.println(picPath == null);
-        if(picPath != null && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))){
-            Intent intent = new Intent();
+        if(picPath != null
+            && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))) {
+            Intent intent=new Intent();
             intent.putExtra("bitmap", picPath);
             setResult(Activity.RESULT_OK, intent);
             finish();
-        }else{
+        } else {
             Toast.makeText(this, "选择图片文件不正确", Toast.LENGTH_LONG).show();
         }
     }

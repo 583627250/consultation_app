@@ -34,7 +34,8 @@ public class CaseXmlParserHandler extends DefaultHandler {
 	private ItemModel subItemModel;
 	private OptionsModel optionsModel;
 	private String tagName;
-    private boolean isTitle = false;
+	private boolean isCase = false;
+	private boolean isTitle = false;
     private boolean isOptions = false;
     private boolean isSubOptions = false;
 	
@@ -43,10 +44,12 @@ public class CaseXmlParserHandler extends DefaultHandler {
 			Attributes attributes) throws SAXException {
 	    tagName = qName;
 		if (qName.equals("Root")) {
+		    isCase = true;
 		    caseModel = new CaseModel();
 		    caseModel.setId(attributes.getValue("ID"));
 		    caseModel.setName(attributes.getValue("Name"));
 		    caseModel.setLevel(attributes.getValue("Level"));
+		    caseModel.setChildCount(attributes.getValue("ChildCount"));
 		    caseModel.setTitleModels(new ArrayList<TitleModel>());
 		} else if (qName.equals("Group")) {
 		    isTitle = true;
@@ -57,6 +60,7 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    titleModel.setChildCount(attributes.getValue("ChildCount"));
 		    titleModel.setItemModels(new ArrayList<ItemModel>());
 		} else if (qName.equals("SubItem")) {
+		    isSubOptions = true;
 		    subItemModel = new ItemModel();
 		    subItemModel.setId(attributes.getValue("ID"));
 		    subItemModel.setName(attributes.getValue("Name"));
@@ -64,10 +68,11 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    subItemModel.setLastStr(attributes.getValue("LastStr"));
 		    subItemModel.setLevel(attributes.getValue("Level"));
 		    subItemModel.setType(attributes.getValue("Type"));
+		    subItemModel.setIsShow(attributes.getValue("IsShow"));
 		    subItemModel.setInput(attributes.getValue("Input"));
 		    subItemModel.setValue(attributes.getValue("Value"));
+		    subItemModel.setDataType(attributes.getValue("DataType"));
 		    subItemModel.setOptionsModels(new ArrayList<OptionsModel>());
-		    isSubOptions = true;
         } else if (qName.equals("Item")) {
             isSubOptions = false;
             itemModel = new ItemModel();
@@ -80,6 +85,8 @@ public class CaseXmlParserHandler extends DefaultHandler {
             itemModel.setInput(attributes.getValue("Input"));
             itemModel.setChildCount(attributes.getValue("ChildCount"));
             itemModel.setValue(attributes.getValue("Value"));
+            itemModel.setIsShow(attributes.getValue("IsShow"));
+            itemModel.setDataType(attributes.getValue("DataType"));
             itemModel.setOptionsModels(new ArrayList<OptionsModel>());
             itemModel.setItemModels(new ArrayList<ItemModel>());
         } else if (qName.equals("Options")) {
@@ -87,6 +94,12 @@ public class CaseXmlParserHandler extends DefaultHandler {
             optionsModel = new OptionsModel();
             optionsModel.setId(attributes.getValue("ID"));
             optionsModel.setChecked(attributes.getValue("Checked"));
+        } else if (qName.equals("Title")) {
+            if(isTitle){
+                titleModel.setIsShow(attributes.getValue("IsShow"));
+            }else{
+                caseModel.setIsShow(attributes.getValue("IsShow"));
+            }
         }
 	}
 
@@ -95,6 +108,7 @@ public class CaseXmlParserHandler extends DefaultHandler {
 			throws SAXException {
 	    if (qName.equals("Root")) {
 	        caseList.add(caseModel);
+	        isCase = false;
         } else if (qName.equals("Group")) {
             caseModel.getTitleModels().add(titleModel);
             isTitle  = false;
@@ -121,6 +135,8 @@ public class CaseXmlParserHandler extends DefaultHandler {
                 if(null != data && !"".equals(data)){
                     if(titleModel != null && isTitle && (titleModel.getTitle() == null || "".equals(titleModel.getTitle()))){
                         titleModel.setTitle(data);
+                    }else if(caseModel != null && isCase && (caseModel.getTitle() == null || "".equals(caseModel.getTitle()))){
+                        caseModel.setTitle(data);
                     }
                 }
             } else if (this.tagName.equals("Options")) {  
@@ -132,5 +148,4 @@ public class CaseXmlParserHandler extends DefaultHandler {
             }  
         }  
 	}
-
 }

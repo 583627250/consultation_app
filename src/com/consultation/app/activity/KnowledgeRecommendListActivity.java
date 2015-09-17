@@ -36,6 +36,7 @@ import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.RecommendTo;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 import com.consultation.app.view.ExpandTabRecommendedView;
@@ -141,7 +142,8 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
                 Map<String, String> parmas = new HashMap<String, String>();
                 parmas.put("page", "1");
                 parmas.put("rows", "10");
-                if(!"".equals(editor.get("uid", ""))){
+                if(!ClientUtil.getToken().equals("")){
+                    parmas.put("accessToken", ClientUtil.getToken());
                     parmas.put("uid", editor.get("uid", ""));
                     parmas.put("userTp", editor.get("userType", ""));
                 }
@@ -237,7 +239,8 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
         Map<String, String> parmas = new HashMap<String, String>();
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
-        if(!"".equals(editor.get("uid", ""))){
+        if(!ClientUtil.getToken().equals("")){
+            parmas.put("accessToken", ClientUtil.getToken());
             parmas.put("uid", editor.get("uid", ""));
             parmas.put("userTp", editor.get("userType", ""));
         }
@@ -341,7 +344,8 @@ public class KnowledgeRecommendListActivity extends Activity implements OnLoadLi
         page++;
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
-        if(!"".equals(editor.get("uid", ""))){
+        if(!ClientUtil.getToken().equals("")){
+            parmas.put("accessToken", ClientUtil.getToken());
             parmas.put("uid", editor.get("uid", ""));
             parmas.put("userTp", editor.get("userType", ""));
         }

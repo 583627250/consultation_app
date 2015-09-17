@@ -19,12 +19,6 @@ import android.widget.TextView;
 
 import com.consultation.app.R;
 
-
-/**
- * 更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38868463
- * 
- * @author 陈靖
- */
 @SuppressLint("HandlerLeak")
 public class PullToRefreshLayout extends RelativeLayout {
     public static final String TAG = "PullToRefreshLayout";

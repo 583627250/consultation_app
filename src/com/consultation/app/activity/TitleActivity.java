@@ -60,7 +60,6 @@ public class TitleActivity extends Activity {
     }
 
     private void initView() {
-        initHospitalDatas();
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("选择职称");
         title_text.setTextSize(20);
@@ -88,7 +87,7 @@ public class TitleActivity extends Activity {
                     h.onSuccess("不限", 0);
                     finish();
                 }else{
-                    h.onSuccess(titles.get(position).getName()+","+titles.get(position).getId(), 1);
+                    h.onSuccess(titles.get(position-1).getName()+","+titles.get(position-1).getId(), 1);
                     finish();
                 }
             }
@@ -109,8 +108,10 @@ public class TitleActivity extends Activity {
                     titleTo.setId(cursor.getString(0));
                     titleTo.setIndex(cursor.getInt(2));
                     titleTo.setName(cursor.getString(1));
-                    titles.add(titleTo);
-                    temp.add(titleTo.getName());
+                    if(!temp.contains(titleTo.getName())){
+                        titles.add(titleTo);
+                        temp.add(titleTo.getName());
+                    }
                 }
             }
             cursor.close();

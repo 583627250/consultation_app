@@ -38,74 +38,105 @@ import com.consultation.app.activity.KnowledgeRecommendListActivity;
 import com.consultation.app.activity.RecommendActivity;
 import com.consultation.app.model.RecommendTo;
 import com.consultation.app.service.OpenApiService;
+import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.SharePreferencesEditor;
 import com.consultation.app.view.MyImgScroll;
 
 public class KnowledgeFragment extends Fragment {
-    
+
     private View knowledgeLayout;
 
     private RequestQueue mQueue;
-    
+
     private TextView header_text;
 
-    private TextView department_text,more_text;
-    
-    private TextView fckText,ekText,ctText,gkText,pfkText,nkText,lrkfText,moreText;
+    private TextView department_text, more_text;
+
+    private TextView fckText, ekText, ctText, gkText, pfkText, nkText, lrkfText, moreText;
 
     private MyImgScroll myPager;
 
-    private LinearLayout ovalLayout,fckLayout,ekLayout,ctLayout,gkLayout,pfkLayout,nkLayout,lrkfLayout,moreLayout; // 圆点容器
+    private LinearLayout ovalLayout, fckLayout, ekLayout, ctLayout, gkLayout, pfkLayout, nkLayout, lrkfLayout, moreLayout; // 圆点容器
 
     private List<View> listViews;
 
     private ListView listView;
 
     private LayoutInflater knowledgeInflater;
-    
+
     private List<RecommendTo> recommend_content_list=new ArrayList<RecommendTo>();
 
     private static Context context;
-    
+
     private ViewHolder holder;
+
+    private SharePreferencesEditor editor;
     
-    private int[] imageResId = new int[] { R.drawable.a, R.drawable.b,
-        R.drawable.c, R.drawable.d, R.drawable.e };
-    
+    private MyAdapter myAdapter = new MyAdapter();
+
+    private int[] imageResId=new int[]{R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e};
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         knowledgeLayout=inflater.inflate(R.layout.knowledge_layout, container, false);
         knowledgeInflater=inflater;
+        editor=new SharePreferencesEditor(knowledgeLayout.getContext());
         initLayout();
         return knowledgeLayout;
     }
-    
-    public static KnowledgeFragment getInstance(Context ctx) { 
-        context = ctx;
+
+    public static KnowledgeFragment getInstance(Context ctx) {
+        context=ctx;
         return new KnowledgeFragment();
-    } 
-    
+    }
+
     private void initData() {
-        mQueue = Volley.newRequestQueue(context);
-        Map<String, String> parmas = new HashMap<String, String>();
+        if(!"".equals(editor.get("recommends", ""))) {
+            JSONArray infos;
+            try {
+                infos=new JSONArray(editor.get("recommends", ""));
+                for(int i=0; i < infos.length(); i++) {
+                    JSONObject info=infos.getJSONObject(i);
+                    recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info
+                        .getString("depart_name"), info.getString("user_name")));
+                }
+                myAdapter.notifyDataSetChanged();
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        mQueue=Volley.newRequestQueue(context);
+        Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("rows", "5");
+        if(!ClientUtil.getToken().equals("")) {
+            parmas.put("accessToken", ClientUtil.getToken());
+            parmas.put("uid", editor.get("uid", ""));
+            parmas.put("userTp", editor.get("userType", ""));
+        }
         CommonUtil.showLoadingDialog(context);
         OpenApiService.getInstance(context).getKnowledgeList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String arg0) {
+                recommend_content_list.clear();
                 CommonUtil.closeLodingDialog();
                 try {
-                    JSONObject responses = new JSONObject(arg0);
-                    if(responses.getInt("rtnCode") == 1){
-                        JSONArray infos = responses.getJSONArray("knowledges");
+                    JSONObject responses=new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1) {
+                        JSONArray infos=responses.getJSONArray("knowledges");
+                        if(infos.length() != 0) {
+                            editor.put("recommends", infos.toString());
+                        }
                         for(int i=0; i < infos.length(); i++) {
-                            JSONObject info = infos.getJSONObject(i);
-                            recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info.getString("depart_name"), info.getString("user_name")));
+                            JSONObject info=infos.getJSONObject(i);
+                            recommend_content_list.add(new RecommendTo(info.getString("id"), info.getString("title"), info
+                                .getString("depart_name"), info.getString("user_name")));
                         }
                         setListViewHeightBasedOnChildren(listView);
-                    }else{
+                        myAdapter.notifyDataSetChanged();
+                    } else {
                         Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -128,13 +159,12 @@ public class KnowledgeFragment extends Fragment {
         header_text.setText("科普知识");
         header_text.setTextSize(20);
 
-        myPager = (MyImgScroll)knowledgeLayout.findViewById(R.id.image_scroll);
-        ovalLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.image_scroll_layout);
-        InitViewPager();//初始化图片
-        //开始滚动
-        myPager.start((Activity)context, listViews, 4000, ovalLayout,
-                R.layout.ad_bottom_item, R.id.ad_item_v,
-                R.drawable.dot_focused, R.drawable.dot_normal);
+        myPager=(MyImgScroll)knowledgeLayout.findViewById(R.id.image_scroll);
+        ovalLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.image_scroll_layout);
+        InitViewPager();// 初始化图片
+        // 开始滚动
+        myPager.start((Activity)context, listViews, 4000, ovalLayout, R.layout.ad_bottom_item, R.id.ad_item_v,
+            R.drawable.dot_focused, R.drawable.dot_normal);
 
         department_text=(TextView)knowledgeLayout.findViewById(R.id.department_text);
         department_text.setTextSize(16);
@@ -155,106 +185,106 @@ public class KnowledgeFragment extends Fragment {
         lrkfText.setTextSize(14);
         moreText=(TextView)knowledgeLayout.findViewById(R.id.hot_department_8_text);
         moreText.setTextSize(14);
-        
+
         more_text=(TextView)knowledgeLayout.findViewById(R.id.knowledge_listView_more);
         more_text.setTextSize(18);
         more_text.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(context, KnowledgeRecommendListActivity.class));
             }
         });
         listView=(ListView)knowledgeLayout.findViewById(R.id.knowledge_listView);
-        listView.setAdapter(new MyAdapter());
+        listView.setAdapter(myAdapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
                 // 推荐详情
-                Intent intent = new Intent(context, RecommendActivity.class);
+                Intent intent=new Intent(context, RecommendActivity.class);
                 intent.putExtra("id", recommend_content_list.get(position).getId());
                 startActivity(intent);
             }
         });
-        fckLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_fck);
+        setListViewHeightBasedOnChildren(listView);
+        fckLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_fck);
         fckLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击妇产科", Toast.LENGTH_SHORT).show();
             }
         });
-        ekLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_ek);
+        ekLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_ek);
         ekLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击儿科", Toast.LENGTH_SHORT).show();
             }
         });
-        ctLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_ct);
+        ctLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_ct);
         ctLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击内科", Toast.LENGTH_SHORT).show();
             }
         });
-        gkLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_gk);
+        gkLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_gk);
         gkLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击骨科", Toast.LENGTH_SHORT).show();
             }
         });
-        pfkLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_pfk);
+        pfkLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_pfk);
         pfkLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击皮肤科", Toast.LENGTH_SHORT).show();
             }
         });
-        nkLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_nk);
+        nkLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_nk);
         nkLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击脑科", Toast.LENGTH_SHORT).show();
             }
         });
-        lrkfLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_lrkf);
+        lrkfLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_lrkf);
         lrkfLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击老人康复", Toast.LENGTH_SHORT).show();
             }
         });
-        moreLayout = (LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_more);
+        moreLayout=(LinearLayout)knowledgeLayout.findViewById(R.id.knowledge_hot_department_more);
         moreLayout.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "点击更多", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    
+
     /**
      * 初始化图片
      */
     private void InitViewPager() {
-        listViews = new ArrayList<View>();
-        for (int i = 0; i < imageResId.length; i++) {
-            ImageView imageView = new ImageView(context);
+        listViews=new ArrayList<View>();
+        for(int i=0; i < imageResId.length; i++) {
+            ImageView imageView=new ImageView(context);
             imageView.setOnClickListener(new OnClickListener() {
+
                 public void onClick(View v) {// 设置图片点击事件
-                    Toast.makeText(context,
-                            "点击了:" + myPager.getCurIndex(), Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(context, "点击了:" + myPager.getCurIndex(), Toast.LENGTH_SHORT).show();
                 }
             });
             imageView.setImageResource(imageResId[i]);
@@ -278,7 +308,7 @@ public class KnowledgeFragment extends Fragment {
         params.height=totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
-    
+
     private static class ViewHolder {
 
         TextView title;
@@ -311,7 +341,7 @@ public class KnowledgeFragment extends Fragment {
                 holder.title=(TextView)convertView.findViewById(R.id.recommend_list_item_text_title);
                 holder.author=(TextView)convertView.findViewById(R.id.recommend_list_item_text_author);
                 convertView.setTag(holder);
-            }else {
+            } else {
                 holder=(ViewHolder)convertView.getTag();
             }
             holder.title.setTextSize(18);

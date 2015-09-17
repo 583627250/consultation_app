@@ -19,7 +19,7 @@
 		    android:id="@+id/specialist_info_item_user_photo"
 		    android:layout_width="45dip"
 		    android:layout_height="45dip"
-		    android:src="@drawable/photo"
+		    android:src="@drawable/photo_patient"
 		    android:scaleType="fitXY" /> 
      </LinearLayout>
      
@@ -49,9 +49,8 @@
 			          android:layout_width="match_parent"
 			          android:layout_height="match_parent"
 			          android:layout_weight="1"
-			          android:textColor="#4A4A4A"
-			          android:singleLine="true"
-			          android:text="如何防止骨质疏松"/>
+			          android:textColor="#353535"
+			          android:singleLine="true"/>
 	             
 	             <TextView
 			          android:id="@+id/specialist_info_item_nameAndDate_text"
@@ -59,8 +58,7 @@
 			          android:layout_width="match_parent"
 			          android:layout_height="match_parent"
 			          android:layout_weight="1"
-			          android:textColor="#7B7B7B"
-			          android:text="王大妈  2015-06-09"/>
+			          android:textColor="#999999"/>
 		         
 	         </LinearLayout>
 	         <LinearLayout 

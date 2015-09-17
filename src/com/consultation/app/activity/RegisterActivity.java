@@ -141,14 +141,14 @@ public class RegisterActivity extends Activity {
                 final Map<String, String> parmas = new HashMap<String, String>();
                 parmas.put("mobile_ph", phone_edit.getText().toString());
                 CommonUtil.showLoadingDialog(RegisterActivity.this);
-                OpenApiService.getInstance(RegisterActivity.this).getRegisterVerification(mQueue, parmas, new Response.Listener<String>() {
+                OpenApiService.getInstance(RegisterActivity.this).getRegisterMobileUsable(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String arg0) {
                         try {
                             JSONObject responses = new JSONObject(arg0);
                             if(responses.getInt("rtnCode") == 1){
-                                OpenApiService.getInstance(RegisterActivity.this).getRegisterMobileUsable(mQueue, parmas, new Response.Listener<String>() {
+                                OpenApiService.getInstance(RegisterActivity.this).getRegisterVerification(mQueue, parmas, new Response.Listener<String>() {
 
                                     @Override
                                     public void onResponse(String arg0) {
@@ -176,6 +176,8 @@ public class RegisterActivity extends Activity {
                                                         }
                                                     }
                                                 }).start();
+                                            }else{
+                                                Toast.makeText(RegisterActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                                             }
                                         } catch(JSONException e) {
                                             e.printStackTrace();
@@ -190,6 +192,7 @@ public class RegisterActivity extends Activity {
                                     }
                                 });
                             }else{
+                                CommonUtil.closeLodingDialog();
                                 Toast.makeText(RegisterActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                             }
                         } catch(JSONException e) {
@@ -259,6 +262,8 @@ public class RegisterActivity extends Activity {
                             if(responses.getInt("rtnCode") == 1){
                                 editor.put("uid", responses.getString("uid"));
                                 editor.put("userType", responses.getString("userTp"));
+                                editor.put("refreshToken", responses.getString("refreshToken"));
+                                editor.put("phone", phone_edit.getText().toString());
                                 ClientUtil.setToken(responses.getString("accessToken"));
                                 UserInfoSumbitActivity.setHandler(handler);
                                 startActivity(new Intent(RegisterActivity.this, UserInfoSumbitActivity.class));

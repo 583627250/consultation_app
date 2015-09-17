@@ -39,13 +39,10 @@ import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
-import com.consultation.app.model.CasesTo;
-import com.consultation.app.model.PatientTo;
+import com.consultation.app.model.HelpPatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
-import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
-import com.consultation.app.util.SharePreferencesEditor;
 import com.consultation.app.view.PullToRefreshLayout;
 import com.consultation.app.view.PullToRefreshLayout.OnRefreshListener;
 import com.consultation.app.view.PullableListView;
@@ -60,7 +57,7 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
 
     private PullableListView helpListView;
 
-    private List<CasesTo> helpList=new ArrayList<CasesTo>();
+    private List<HelpPatientTo> helpList=new ArrayList<HelpPatientTo>();
 
     private HelpAdapter helpAdapter;
 
@@ -77,8 +74,6 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
     private boolean hasMore=true;
 
     private String id;
-
-    private SharePreferencesEditor editor;
 
     private Handler handler=new Handler() {
 
@@ -115,7 +110,6 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
         mContext=this;
-        editor=new SharePreferencesEditor(mContext);
         id=getIntent().getStringExtra("id");
         mQueue=Volley.newRequestQueue(SpecialistInfoHelpActivity.this);
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
@@ -127,10 +121,9 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("rows", "10");
-        parmas.put("accessToken", ClientUtil.getToken());
-        parmas.put("uid", editor.get("uid", ""));
+        parmas.put("expert_userid", id);
         CommonUtil.showLoadingDialog(mContext);
-        OpenApiService.getInstance(mContext).getPatientCaseList(mQueue, parmas, new Response.Listener<String>() {
+        OpenApiService.getInstance(mContext).getHelpPatientList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String arg0) {
@@ -141,54 +134,20 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
                         JSONArray infos=responses.getJSONArray("pcases");
                         for(int i=0; i < infos.length(); i++) {
                             JSONObject info=infos.getJSONObject(i);
-                            CasesTo pcasesTo=new CasesTo();
-                            pcasesTo.setId(info.getString("id"));
-                            pcasesTo.setStatus(info.getString("status"));
-                            pcasesTo.setDestination(info.getString("destination"));
-                            String createTime=info.getString("create_time");
-                            if(createTime.equals("null")) {
-                                pcasesTo.setCreate_time(0);
-                            } else {
-                                pcasesTo.setCreate_time(Long.parseLong(createTime));
+                            HelpPatientTo helpPatientTo = new HelpPatientTo();
+                            helpPatientTo.setId(info.getString("id"));
+                            helpPatientTo.setPatient_name(info.getString("patient_name"));
+                            helpPatientTo.setStatus(info.getString("status"));
+                            helpPatientTo.setTitle(info.getString("title"));
+                            String time = info.getString("create_time");
+                            if("".equals(time) || "null".equals(time)){
+                                helpPatientTo.setCreate_time(0l);
+                            }else{
+                                helpPatientTo.setCreate_time(Long.parseLong(time));
                             }
-                            pcasesTo.setTitle(info.getString("title"));
-                            pcasesTo.setDepart_id(info.getString("depart_id"));
-                            pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                            pcasesTo.setPatient_name(info.getString("patient_name"));
-                            String consult_fee=info.getString("consult_fee");
-                            if(consult_fee.equals("null")) {
-                                pcasesTo.setConsult_fee("0");
-                            } else {
-                                pcasesTo.setConsult_fee(consult_fee);
-                            }
-                            pcasesTo.setDoctor_name(info.getString("doctor_name"));
-                            pcasesTo.setExpert_userid(info.getString("expert_userid"));
-                            pcasesTo.setExpert_name(info.getString("expert_name"));
-                            pcasesTo.setProblem(info.getString("problem"));
-                            pcasesTo.setConsult_tp(info.getString("consult_tp"));
-                            pcasesTo.setOpinion(info.getString("opinion"));
-                            PatientTo patientTo=new PatientTo();
-                            JSONObject pObject=info.getJSONObject("user");
-                            patientTo.setAddress(pObject.getString("address"));
-                            patientTo.setId(pObject.getInt("id") + "");
-                            patientTo.setState(pObject.getString("state"));
-                            patientTo.setTp(pObject.getString("tp"));
-                            patientTo.setDoctor(pObject.getString("doctor"));
-                            patientTo.setMobile_ph(pObject.getString("mobile_ph"));
-                            patientTo.setPwd(pObject.getString("pwd"));
-                            patientTo.setReal_name(pObject.getString("real_name"));
-                            patientTo.setSex(pObject.getString("sex"));
-                            patientTo.setBirth_year(pObject.getString("birth_year"));
-                            patientTo.setBirth_month(pObject.getString("birth_month"));
-                            patientTo.setBirth_day(pObject.getString("birth_day"));
-                            patientTo.setIdentity_id(pObject.getString("identity_id"));
-                            patientTo.setArea_province(pObject.getString("area_province"));
-                            patientTo.setArea_city(pObject.getString("area_city"));
-                            patientTo.setArea_county(pObject.getString("area_county"));
-                            patientTo.setIcon_url(pObject.getString("icon_url"));
-                            patientTo.setModify_time(pObject.getString("modify_time"));
-                            pcasesTo.setPatient(patientTo);
-                            helpList.add(pcasesTo);
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            helpPatientTo.setPhoto_url(photo_url);
+                            helpList.add(helpPatientTo);
                         }
                         if(infos.length() == 10) {
                             helpListView.setHasMoreData(true);
@@ -249,10 +208,8 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("page", "1");
                 parmas.put("rows", "10");
-                parmas.put("accessToken", ClientUtil.getToken());
-                parmas.put("uid", editor.get("uid", ""));
-                parmas.put("userTp", editor.get("userType", ""));
-                OpenApiService.getInstance(mContext).getPatientCaseList(mQueue, parmas, new Response.Listener<String>() {
+                parmas.put("expert_userid", id);
+                OpenApiService.getInstance(mContext).getHelpPatientList(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
                     public void onResponse(String arg0) {
@@ -263,50 +220,20 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
                                 helpList.clear();
                                 for(int i=0; i < infos.length(); i++) {
                                     JSONObject info=infos.getJSONObject(i);
-                                    CasesTo pcasesTo=new CasesTo();
-                                    pcasesTo.setId(info.getString("id"));
-                                    pcasesTo.setStatus(info.getString("status"));
-                                    pcasesTo.setDestination(info.getString("destination"));
-                                    String createTime=info.getString("create_time");
-                                    if(createTime.equals("null")) {
-                                        pcasesTo.setCreate_time(0);
-                                    } else {
-                                        pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                    HelpPatientTo helpPatientTo = new HelpPatientTo();
+                                    helpPatientTo.setId(info.getString(""));
+                                    helpPatientTo.setPatient_name(info.getString("patient_name"));
+                                    helpPatientTo.setStatus(info.getString("status"));
+                                    helpPatientTo.setTitle(info.getString("title"));
+                                    String time = info.getString("create_time");
+                                    if("".equals(time) || "null".equals(time)){
+                                        helpPatientTo.setCreate_time(0l);
+                                    }else{
+                                        helpPatientTo.setCreate_time(Long.parseLong(time));
                                     }
-                                    pcasesTo.setTitle(info.getString("title"));
-                                    pcasesTo.setDepart_id(info.getString("depart_id"));
-                                    pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                                    pcasesTo.setConsult_fee(info.getString("consult_fee"));
-                                    pcasesTo.setPatient_name(info.getString("patient_name"));
-                                    pcasesTo.setDoctor_name(info.getString("doctor_name"));
-                                    pcasesTo.setExpert_userid(info.getString("expert_userid"));
-                                    pcasesTo.setExpert_name(info.getString("expert_name"));
-                                    pcasesTo.setProblem(info.getString("problem"));
-                                    pcasesTo.setConsult_tp(info.getString("consult_tp"));
-                                    pcasesTo.setOpinion(info.getString("opinion"));
-                                    PatientTo patientTo=new PatientTo();
-                                    JSONObject pObject=info.getJSONObject("user");
-                                    patientTo.setAddress(pObject.getString("address"));
-                                    patientTo.setId(pObject.getInt("id") + "");
-                                    patientTo.setState(pObject.getString("state"));
-                                    // patientTo.setCreate_time(pObject.getLong("create_time"));
-                                    patientTo.setTp(pObject.getString("tp"));
-                                    patientTo.setDoctor(pObject.getString("doctor"));
-                                    patientTo.setMobile_ph(pObject.getString("mobile_ph"));
-                                    patientTo.setPwd(pObject.getString("pwd"));
-                                    patientTo.setReal_name(pObject.getString("real_name"));
-                                    patientTo.setSex(pObject.getString("sex"));
-                                    patientTo.setBirth_year(pObject.getString("birth_year"));
-                                    patientTo.setBirth_month(pObject.getString("birth_month"));
-                                    patientTo.setBirth_day(pObject.getString("birth_day"));
-                                    patientTo.setIdentity_id(pObject.getString("identity_id"));
-                                    patientTo.setArea_province(pObject.getString("area_province"));
-                                    patientTo.setArea_city(pObject.getString("area_city"));
-                                    patientTo.setArea_county(pObject.getString("area_county"));
-                                    patientTo.setIcon_url(pObject.getString("icon_url"));
-                                    patientTo.setModify_time(pObject.getString("modify_time"));
-                                    pcasesTo.setPatient(patientTo);
-                                    helpList.add(pcasesTo);
+                                    String photo_url = info.getJSONObject("user").getString("icon_url");
+                                    helpPatientTo.setPhoto_url(photo_url);
+                                    helpList.add(helpPatientTo);
                                 }
                                 if(infos.length() == 10) {
                                     helpListView.setHasMoreData(true);
@@ -415,9 +342,9 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
             } else {
                 helpViewHolder=(HelpViewHolder)convertView.getTag();
             }
-            final String imgUrl=helpList.get(position).getPatient().getIcon_url();
+            final String imgUrl=helpList.get(position).getPhoto_url();
             helpViewHolder.photo.setTag(imgUrl);
-            helpViewHolder.photo.setImageResource(R.drawable.photo);
+            helpViewHolder.photo.setImageResource(R.drawable.photo_patient);
             helpViewHolder.titles.setText(helpList.get(position).getTitle());
             helpViewHolder.titles.setTextSize(18);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -425,8 +352,8 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
             helpViewHolder.nameDate.setText(helpList.get(position).getPatient_name() + "  " + sd);
             helpViewHolder.nameDate.setTextSize(14);
             helpViewHolder.state.setImageResource(R.drawable.specialist_help_complete);
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener=ImageLoader.getImageListener(helpViewHolder.photo, R.drawable.photo, R.drawable.photo);
+            if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
+                ImageListener listener=ImageLoader.getImageListener(helpViewHolder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;
@@ -439,10 +366,8 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
         page++;
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
-        parmas.put("accessToken", ClientUtil.getToken());
-        parmas.put("uid", editor.get("uid", ""));
-        parmas.put("userTp", editor.get("userType", ""));
-        OpenApiService.getInstance(mContext).getPatientCaseList(mQueue, parmas, new Response.Listener<String>() {
+        parmas.put("expert_userid", id);
+        OpenApiService.getInstance(mContext).getHelpPatientList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String arg0) {
@@ -452,50 +377,20 @@ public class SpecialistInfoHelpActivity extends Activity implements OnLoadListen
                         JSONArray infos=responses.getJSONArray("pcases");
                         for(int i=0; i < infos.length(); i++) {
                             JSONObject info=infos.getJSONObject(i);
-                            CasesTo pcasesTo=new CasesTo();
-                            pcasesTo.setId(info.getString("id"));
-                            pcasesTo.setStatus(info.getString("status"));
-                            pcasesTo.setDestination(info.getString("destination"));
-                            String createTime=info.getString("create_time");
-                            if(createTime.equals("null")) {
-                                pcasesTo.setCreate_time(0);
-                            } else {
-                                pcasesTo.setCreate_time(Long.parseLong(createTime));
+                            HelpPatientTo helpPatientTo = new HelpPatientTo();
+                            helpPatientTo.setId(info.getString(""));
+                            helpPatientTo.setPatient_name(info.getString("patient_name"));
+                            helpPatientTo.setStatus(info.getString("status"));
+                            helpPatientTo.setTitle(info.getString("title"));
+                            String time = info.getString("create_time");
+                            if("".equals(time) || "null".equals(time)){
+                                helpPatientTo.setCreate_time(0l);
+                            }else{
+                                helpPatientTo.setCreate_time(Long.parseLong(time));
                             }
-                            pcasesTo.setTitle(info.getString("title"));
-                            pcasesTo.setDepart_id(info.getString("depart_id"));
-                            pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
-                            pcasesTo.setConsult_fee(info.getString("consult_fee"));
-                            pcasesTo.setPatient_name(info.getString("patient_name"));
-                            pcasesTo.setDoctor_name(info.getString("doctor_name"));
-                            pcasesTo.setExpert_userid(info.getString("expert_userid"));
-                            pcasesTo.setExpert_name(info.getString("expert_name"));
-                            pcasesTo.setProblem(info.getString("problem"));
-                            pcasesTo.setConsult_tp(info.getString("consult_tp"));
-                            pcasesTo.setOpinion(info.getString("opinion"));
-                            PatientTo patientTo=new PatientTo();
-                            JSONObject pObject=info.getJSONObject("user");
-                            patientTo.setAddress(pObject.getString("address"));
-                            patientTo.setId(pObject.getInt("id") + "");
-                            patientTo.setState(pObject.getString("state"));
-                            // patientTo.setCreate_time(pObject.getLong("create_time"));
-                            patientTo.setTp(pObject.getString("tp"));
-                            patientTo.setDoctor(pObject.getString("doctor"));
-                            patientTo.setMobile_ph(pObject.getString("mobile_ph"));
-                            patientTo.setPwd(pObject.getString("pwd"));
-                            patientTo.setReal_name(pObject.getString("real_name"));
-                            patientTo.setSex(pObject.getString("sex"));
-                            patientTo.setBirth_year(pObject.getString("birth_year"));
-                            patientTo.setBirth_month(pObject.getString("birth_month"));
-                            patientTo.setBirth_day(pObject.getString("birth_day"));
-                            patientTo.setIdentity_id(pObject.getString("identity_id"));
-                            patientTo.setArea_province(pObject.getString("area_province"));
-                            patientTo.setArea_city(pObject.getString("area_city"));
-                            patientTo.setArea_county(pObject.getString("area_county"));
-                            patientTo.setIcon_url(pObject.getString("icon_url"));
-                            patientTo.setModify_time(pObject.getString("modify_time"));
-                            pcasesTo.setPatient(patientTo);
-                            helpList.add(pcasesTo);
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            helpPatientTo.setPhoto_url(photo_url);
+                            helpList.add(helpPatientTo);
                         }
                         if(infos.length() == 10) {
                             hasMore=true;

@@ -16,13 +16,46 @@ public class DoctorTo {
 
     private String approve_status;
 
+    private String expert_gradeid;
+
+    private String expert_grade;
+
     private UserTo user;
 
     private UserStatisticsTo userTj;
 
-    private ArrayList<CasesTo> cases;
+    private ArrayList<HelpPatientTo> helpPatientTos;
 
-    private ArrayList<CommentsTo> comments;
+    private ArrayList<DoctorCommentsTo> comments;
+
+    
+    public String getExpert_gradeid() {
+        return expert_gradeid;
+    }
+
+    
+    public void setExpert_gradeid(String expert_gradeid) {
+        this.expert_gradeid=expert_gradeid;
+    }
+
+    
+    public String getExpert_grade() {
+        return expert_grade;
+    }
+
+    
+    public void setExpert_grade(String expert_grade) {
+        this.expert_grade=expert_grade;
+    }
+    
+    public ArrayList<HelpPatientTo> getHelpPatientTos() {
+        return helpPatientTos;
+    }
+
+    
+    public void setHelpPatientTos(ArrayList<HelpPatientTo> helpPatientTos) {
+        this.helpPatientTos=helpPatientTos;
+    }
 
     public String getId() {
         return id;
@@ -88,34 +121,11 @@ public class DoctorTo {
         this.userTj=userTj;
     }
 
-    public ArrayList<CasesTo> getCases() {
-        return cases;
-    }
-
-    public void setCases(ArrayList<CasesTo> cases) {
-        this.cases=cases;
-    }
-
-    public ArrayList<CommentsTo> getComments() {
+    public ArrayList<DoctorCommentsTo> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<CommentsTo> comments) {
-        this.comments=comments;
-    }
-
-    public DoctorTo(String id, String hospital_name, String depart_name, String title, String goodat_fields, String approve_status,
-        UserTo user, UserStatisticsTo userTj, ArrayList<CasesTo> cases, ArrayList<CommentsTo> comments) {
-        super();
-        this.id=id;
-        this.hospital_name=hospital_name;
-        this.depart_name=depart_name;
-        this.title=title;
-        this.goodat_fields=goodat_fields;
-        this.approve_status=approve_status;
-        this.user=user;
-        this.userTj=userTj;
-        this.cases=cases;
+    public void setComments(ArrayList<DoctorCommentsTo> comments) {
         this.comments=comments;
     }
 

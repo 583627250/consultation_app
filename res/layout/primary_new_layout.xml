@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/consultation_color_F4F4F4"
+        android:background="#EBEBEB"
         android:orientation="vertical" >
 
         <include
@@ -29,7 +29,82 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#EBEBEB" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3.3" >
+
+                        <TextView
+                            android:id="@+id/create_case_select_consultation_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="咨询方式"
+                            android:textColor="#414141" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_F4F4F4" >
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/create_case_select_consultation_radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <RadioButton
+                            android:id="@+id/create_case_select_consultation_explicit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            style="@style/CustomRadioBtn"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:text="明确诊断"
+                            android:checked="true"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                        <RadioButton
+                            android:id="@+id/create_case_select_consultation_public"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            style="@style/CustomRadioBtn"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingRight="10dp"
+                            android:text="公开讨论"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
+                
+               <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
                 </LinearLayout>
                 
                 <LinearLayout
@@ -95,90 +170,10 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp" >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3.3" >
-
-                        <TextView
-                            android:id="@+id/create_case_select_consultation_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="咨询方式"
-                            android:textColor="#414141" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0.1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/consultation_color_F4F4F4" >
-                    </LinearLayout>
-
-                    <RadioGroup
-                        android:id="@+id/create_case_select_consultation_radioGroup"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical" >
-
-                        <RadioButton
-                            android:id="@+id/create_case_select_consultation_explicit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:text="明确诊断"
-                            android:checked="true"
-                            android:textColor="#414141" >
-                        </RadioButton>
-                        <RadioButton
-                            android:id="@+id/create_case_select_consultation_operation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:text="手术或住院"
-                            android:textColor="#414141" >
-                        </RadioButton>
-                        <RadioButton
-                            android:id="@+id/create_case_select_consultation_public"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:paddingRight="10dp"
-                            android:text="公开讨论"
-                            android:textColor="#414141" >
-                        </RadioButton>
-                    </RadioGroup>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/consultation_color_F4F4F4" >
+                    android:background="#DADADA" >
                 </LinearLayout>
                 
                 <LinearLayout

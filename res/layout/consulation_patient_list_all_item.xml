@@ -22,8 +22,7 @@
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
             android:layout_weight="1"
-            android:text="风湿骨痛"
-            android:textColor="#414141" />
+            android:textColor="#353535" />
 
         <TextView
             android:id="@+id/consulation_patient_list_all_item_doctor"
@@ -32,9 +31,8 @@
             android:layout_weight="1"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:text="张三丰(初诊)|张无忌(专家)"
             android:singleLine="true"
-            android:textColor="#515151" />
+            android:textColor="#999999" />
 
         <TextView
             android:id="@+id/consulation_patient_list_all_item_date"
@@ -43,8 +41,7 @@
             android:layout_weight="1"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:text="2015-07-14"
-            android:textColor="#515151" />
+            android:textColor="#999999" />
     </LinearLayout>
 
     <LinearLayout
@@ -75,7 +72,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="￥10"
                     android:textColor="@color/consultation_color_white" />
             </LinearLayout>
 
@@ -86,25 +82,9 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:text="新建"
                 android:textColor="#FFAF2C" />
         </LinearLayout>
 
-        <!-- <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_weight="4"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/recommend_item_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="10dp"
-                android:layout_gravity="right"
-                android:src="@drawable/icon_item_arrow" />
-        </LinearLayout> -->
     </LinearLayout>
 
 </LinearLayout>

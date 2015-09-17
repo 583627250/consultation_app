@@ -1,17 +1,22 @@
 package com.consultation.app.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,11 +36,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
+import com.consultation.app.model.DoctorCommentsTo;
 import com.consultation.app.model.DoctorTo;
+import com.consultation.app.model.HelpPatientTo;
 import com.consultation.app.model.UserStatisticsTo;
 import com.consultation.app.model.UserTo;
 import com.consultation.app.service.OpenApiService;
@@ -44,13 +52,14 @@ import com.consultation.app.util.CommonUtil;
 import com.consultation.app.view.CircularImage;
 
 
+@SuppressLint({"HandlerLeak", "SimpleDateFormat"})
 public class SpecialistInfoActivity extends Activity {
 
     private LinearLayout back_layout;
     
     private TextView back_text;
     
-    private TextView nameText,titleText,goodAt,helpText,helpCountText,feedbackScoreText,feedbackScoreCountText;
+    private TextView nameText,titleText,goodAt,goodAtText,helpText,helpCountText,feedbackScoreText,feedbackScoreCountText;
     
     private RatingBar feedbackRatingBar;
     
@@ -60,10 +69,6 @@ public class SpecialistInfoActivity extends Activity {
     
     private ListView helpListView,feedbackListView;
     
-    private List<String> helpList = new ArrayList<String>();
-    
-    private List<String> feedbackList = new ArrayList<String>();
-    
     private HelpAdapter helpAdapter;
     
     private FeedbackAdapter feedbackAdapter;
@@ -71,6 +76,10 @@ public class SpecialistInfoActivity extends Activity {
     private HelpViewHolder helpViewHolder;
     
     private FeedbackHolder feedbackViewHolder;
+    
+    private ArrayList<DoctorCommentsTo> commentsTos = new ArrayList<DoctorCommentsTo>();
+    
+    private ArrayList<HelpPatientTo> helpPatientTos = new ArrayList<HelpPatientTo>();
     
     private RequestQueue mQueue;
     
@@ -118,9 +127,12 @@ public class SpecialistInfoActivity extends Activity {
                         doctorTo.setDepart_name(infos.getString("depart_name"));
                         doctorTo.setTitle(infos.getString("title"));
                         doctorTo.setGoodat_fields(infos.getString("goodat_fields"));
+                        doctorTo.setApprove_status(infos.getString("approve_status"));
+                        doctorTo.setExpert_gradeid(infos.getString("expert_gradeid"));
                         UserTo userTo = new UserTo();
                         JSONObject userJsonObject = infos.getJSONObject("user");
                         userTo.setUser_name(userJsonObject.getString("real_name"));
+                        userTo.setUser_id(infos.getInt("user_id"));
                         userTo.setSex(userJsonObject.getString("sex"));
                         userTo.setIcon_url(userJsonObject.getString("icon_url"));
                         doctorTo.setUser(userTo);
@@ -130,13 +142,46 @@ public class SpecialistInfoActivity extends Activity {
                         userStatisticsTo.setStar_value(userStatisticsJsonObject.getInt("star_value"));
                         userStatisticsTo.setTotal_comment(userStatisticsJsonObject.getInt("total_apply"));
                         doctorTo.setUserTj(userStatisticsTo);
-                        
-//                        doctorTo.setCases(infos.getString("approve_status"));
-//                        doctorTo.setComments(infos.getString("approve_status"));
-                        
-                        
+                        JSONArray helps=responses.getJSONArray("cases");
+                        for(int i=0; i < helps.length(); i++) {
+                            JSONObject info=helps.getJSONObject(i);
+                            HelpPatientTo helpPatientTo = new HelpPatientTo();
+                            helpPatientTo.setId(info.getString("id"));
+                            helpPatientTo.setPatient_name(info.getString("patient_name"));
+                            helpPatientTo.setStatus(info.getString("status"));
+                            helpPatientTo.setTitle(info.getString("title"));
+                            String time = info.getString("create_time");
+                            if("".equals(time) || "null".equals(time)){
+                                helpPatientTo.setCreate_time(0l);
+                            }else{
+                                helpPatientTo.setCreate_time(Long.parseLong(time));
+                            }
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            helpPatientTo.setPhoto_url(photo_url);
+                            helpPatientTos.add(helpPatientTo);
+                        }
+                        doctorTo.setHelpPatientTos(helpPatientTos);
+                        JSONArray comments=responses.getJSONArray("comments");
+                        for(int i=0; i < comments.length(); i++) {
+                            JSONObject info=comments.getJSONObject(i);
+                            DoctorCommentsTo commentsTo = new DoctorCommentsTo();
+                            commentsTo.setId(info.getString("id"));
+                            commentsTo.setComment_desc(info.getString("comment_desc"));
+                            commentsTo.setCommenter(info.getString("commenter"));
+                            String createTime=info.getString("create_time");
+                            if(createTime.equals("null")) {
+                                commentsTo.setCreate_time(0);
+                            } else {
+                                commentsTo.setCreate_time(Long.parseLong(createTime));
+                            }
+                            commentsTo.setStart_value(info.getInt("star_value"));
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            commentsTo.setPhoto_url(photo_url);
+                            commentsTos.add(commentsTo);
+                        }
                         setListViewHeightBasedOnChildren(helpListView);
                         setListViewHeightBasedOnChildren(feedbackListView);
+                        handler.sendEmptyMessage(0);
                     }else if(responses.getInt("rtnCode") == 10004){
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
@@ -166,12 +211,19 @@ public class SpecialistInfoActivity extends Activity {
                 Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
-        helpList.add("");
-        helpList.add("");
-        feedbackList.add("");
-        feedbackList.add("");
-        feedbackList.add("");
     }
+    
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            goodAtText.setText("总"+doctorTo.getGoodat_fields());
+            helpCountText.setText(doctorTo.getUserTj().getTotal_consult()+"名");
+            feedbackScoreText.setText((float)doctorTo.getUserTj().getStar_value()/10+"分");
+            feedbackRatingBar.setRating((float)doctorTo.getUserTj().getStar_value()/10);
+            feedbackScoreCountText.setText("总"+doctorTo.getUserTj().getTotal_comment()+"条评论");
+        }
+    };
     
     private void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter=listView.getAdapter();
@@ -203,11 +255,11 @@ public class SpecialistInfoActivity extends Activity {
         });
         
         photo = (CircularImage)findViewById(R.id.specialist_info_user_photo);
-//        if(photoUrl != null && !photoUrl.equals("")) {
-//            ImageListener listener = ImageLoader.getImageListener(photo, R.drawable.photo, R.drawable.photo);
-//            mImageLoader.get(photoUrl, listener);
-//        }
-        photo.setImageResource(R.drawable.photo);
+        photo.setImageResource(R.drawable.photo_expert);
+        if(photoUrl != null && !photoUrl.equals("") && !"null".equals(photoUrl)) {
+            ImageListener listener = ImageLoader.getImageListener(photo, R.drawable.photo_expert, R.drawable.photo_expert);
+            mImageLoader.get(photoUrl, listener);
+        }
         
         nameText = (TextView)findViewById(R.id.specialist_info_user_name_text);
         nameText.setTextSize(22);
@@ -219,6 +271,9 @@ public class SpecialistInfoActivity extends Activity {
         
         goodAt = (TextView)findViewById(R.id.specialist_info_user_goodAt);
         goodAt.setTextSize(18);
+        
+        goodAtText = (TextView)findViewById(R.id.specialist_info_user_goodAt_text);
+        goodAtText.setTextSize(18);
        
         helpText = (TextView)findViewById(R.id.specialist_info_user_help_text);
         helpText.setTextSize(18);
@@ -233,7 +288,7 @@ public class SpecialistInfoActivity extends Activity {
         feedbackScoreCountText.setTextSize(18);
         
         feedbackRatingBar = (RatingBar)findViewById(R.id.specialist_info_user_ratingBar);
-        feedbackRatingBar.setRating(4.5f);
+        feedbackRatingBar.setRating(0f);
         
         
         helpLayout = (LinearLayout)findViewById(R.id.specialist_info_user_help_layout);
@@ -244,7 +299,7 @@ public class SpecialistInfoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SpecialistInfoHelpActivity.class);
-                intent.putExtra("id",id);
+                intent.putExtra("id",doctorTo.getUser().getUser_id()+"");
                 startActivity(intent);
             }
         });
@@ -253,7 +308,7 @@ public class SpecialistInfoActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, SpecialistInfoFeedbackActivity.class);
-                intent.putExtra("id",id);
+                intent.putExtra("id",doctorTo.getUser().getUser_id()+"");
                 startActivity(intent);
             }
         });
@@ -265,8 +320,6 @@ public class SpecialistInfoActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-//                Intent intent = new Intent(context, RecommendActivity.class);
-//                startActivity(intent);
             }
         });
         setListViewHeightBasedOnChildren(helpListView);
@@ -278,8 +331,6 @@ public class SpecialistInfoActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg3) {
-//                Intent intent = new Intent(context, RecommendActivity.class);
-//                startActivity(intent);
             }
         });
         setListViewHeightBasedOnChildren(feedbackListView);
@@ -315,12 +366,12 @@ public class SpecialistInfoActivity extends Activity {
 
         @Override
         public int getCount() {
-            return helpList.size();
+            return helpPatientTos.size();
         }
 
         @Override
         public Object getItem(int location) {
-            return helpList.get(location);
+            return helpPatientTos.get(location);
         }
 
         @Override
@@ -341,18 +392,20 @@ public class SpecialistInfoActivity extends Activity {
             } else {
                 helpViewHolder=(HelpViewHolder)convertView.getTag();
             }
-            final String imgUrl="";
+            final String imgUrl=helpPatientTos.get(position).getPhoto_url();
             helpViewHolder.photo.setTag(imgUrl);
-            helpViewHolder.photo.setImageResource(R.drawable.photo);
-//            helpViewHolder.titles.setText();
+            helpViewHolder.photo.setImageResource(R.drawable.photo_patient);
+            helpViewHolder.titles.setText(helpPatientTos.get(position).getTitle());
             helpViewHolder.titles.setTextSize(18);
-//            helpViewHolder.nameDate.setText();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String sd=sdf.format(new Date(helpPatientTos.get(position).getCreate_time()));
+            helpViewHolder.nameDate.setText(helpPatientTos.get(position).getPatient_name() + "  " + sd);
             helpViewHolder.nameDate.setTextSize(14);
             helpViewHolder.state.setImageResource(R.drawable.specialist_help_complete);
-//            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
-//                mImageLoader.get(imgUrl, listener);
-//            }
+            if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(helpViewHolder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
+                mImageLoader.get(imgUrl, listener);
+            }
             return convertView;
         }
     }   
@@ -361,12 +414,12 @@ public class SpecialistInfoActivity extends Activity {
 
         @Override
         public int getCount() {
-            return feedbackList.size();
+            return commentsTos.size();
         }
 
         @Override
         public Object getItem(int location) {
-            return feedbackList.get(location);
+            return commentsTos.get(location);
         }
 
         @Override
@@ -388,21 +441,22 @@ public class SpecialistInfoActivity extends Activity {
             } else {
                 feedbackViewHolder=(FeedbackHolder)convertView.getTag();
             }
-            final String imgUrl="";
+            final String imgUrl=commentsTos.get(position).getPhoto_url();
             feedbackViewHolder.photo.setTag(imgUrl);
-            feedbackViewHolder.photo.setImageResource(R.drawable.photo);
-//            feedbackViewHolder.name.setText("");
+            feedbackViewHolder.photo.setImageResource(R.drawable.photo_patient);
+            feedbackViewHolder.name.setText(commentsTos.get(position).getCommenter());
             feedbackViewHolder.name.setTextSize(16);
-//            feedbackViewHolder.message.setText("");
+            feedbackViewHolder.message.setText(commentsTos.get(position).getComment_desc());
             feedbackViewHolder.message.setTextSize(17);
-//            feedbackViewHolder.date.setText("");
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String sd=sdf.format(new Date(commentsTos.get(position).getCreate_time()));
+            feedbackViewHolder.date.setText(sd);
             feedbackViewHolder.date.setTextSize(14);
-            feedbackViewHolder.feedbackRatingBar.setRating(4.5f);
-            
-//            if(imgUrl != null && !imgUrl.equals("")) {
-//                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo, R.drawable.photo);
-//                mImageLoader.get(imgUrl, listener);
-//            }
+            feedbackViewHolder.feedbackRatingBar.setRating((float)commentsTos.get(position).getStart_value()/10);
+            if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(feedbackViewHolder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
+                mImageLoader.get(imgUrl, listener);
+            }
             return convertView;
         }
     }    

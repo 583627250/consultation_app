@@ -13,6 +13,18 @@ public class TitleModel {
     private String childCount = "0";
 
     private String title = "";
+    
+    private String isShow = "True";
+
+    
+    public String getIsShow() {
+        return isShow;
+    }
+
+    
+    public void setIsShow(String isShow) {
+        this.isShow=isShow;
+    }
 
     private List<ItemModel> itemModels;
 
@@ -67,15 +79,4 @@ public class TitleModel {
     public TitleModel() {
         super();
     }
-
-    public TitleModel(String id, String name, String level, String childCount, String title, List<ItemModel> itemModels) {
-        super();
-        this.id=id;
-        this.name=name;
-        this.level=level;
-        this.childCount=childCount;
-        this.title=title;
-        this.itemModels=itemModels;
-    }
-
 }

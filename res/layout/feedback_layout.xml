@@ -40,7 +40,7 @@
                         android:id="@+id/mine_feedback_listView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:divider="#000000"
+                        android:divider="#DADADA"
                         android:dividerHeight="0.1dp" />
                 </com.consultation.app.view.PullToRefreshLayout>
             </LinearLayout>
@@ -48,7 +48,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
-                android:background="#000000" >
+                android:background="#DADADA" >
             </LinearLayout>
 
             <LinearLayout
@@ -60,12 +60,14 @@
                 <EditText
                     android:id="@+id/mine_feedback_input_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/consultation_color_white"
                     android:gravity="center_vertical"
                     android:hint="请输入反馈内容(100个汉字以内)"
                     android:maxLength="100"
+                    android:singleLine="true"
+                    android:layout_margin="5dp"
                     android:padding="5dp"
                     android:textColorHint="#D3D3D3" />
 
@@ -73,11 +75,12 @@
                     android:id="@+id/mine_feedback_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/create_case_submit_selector"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
+                    android:background="@drawable/login_login_btn_shape"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_margin="5dp"
                     android:text="反馈"
                     android:textColor="@color/consultation_color_white" />
             </LinearLayout>

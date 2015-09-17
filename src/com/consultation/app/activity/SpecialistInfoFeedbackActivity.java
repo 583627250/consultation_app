@@ -127,8 +127,10 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("rows", "10");
-        parmas.put("accessToken", ClientUtil.getToken());
-        parmas.put("uid", editor.get("uid", ""));
+        if(!"".equals(ClientUtil.getToken())){
+            parmas.put("accessToken", ClientUtil.getToken());
+            parmas.put("uid", editor.get("uid", ""));
+        }
         parmas.put("doctor_userid", id);
         CommonUtil.showLoadingDialog(mContext);
         OpenApiService.getInstance(mContext).getDoctorComment(mQueue, parmas, new Response.Listener<String>() {
@@ -153,6 +155,8 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
                             commentsTo.setStart_value(info.getInt("star_value"));
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            commentsTo.setPhoto_url(photo_url);
                             feedbackList.add(commentsTo);
                         }
                         if(infos.length() == 10) {
@@ -214,8 +218,10 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("page", "1");
                 parmas.put("rows", "10");
-                parmas.put("accessToken", ClientUtil.getToken());
-                parmas.put("uid", editor.get("uid", ""));
+                if(!"".equals(ClientUtil.getToken())){
+                    parmas.put("accessToken", ClientUtil.getToken());
+                    parmas.put("uid", editor.get("uid", ""));
+                }
                 parmas.put("doctor_userid", id);
                 OpenApiService.getInstance(mContext).getDoctorComment(mQueue, parmas, new Response.Listener<String>() {
 
@@ -239,6 +245,8 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                                         commentsTo.setCreate_time(Long.parseLong(createTime));
                                     }
                                     commentsTo.setStart_value(info.getInt("star_value"));
+                                    String photo_url = info.getJSONObject("user").getString("icon_url");
+                                    commentsTo.setPhoto_url(photo_url);
                                     feedbackList.add(commentsTo);
                                 }
                                 if(infos.length() == 10) {
@@ -351,9 +359,9 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
             } else {
                 feedbackViewHolder=(FeedbackHolder)convertView.getTag();
             }
-            final String imgUrl="";
+            final String imgUrl=feedbackList.get(position).getPhoto_url();
             feedbackViewHolder.photo.setTag(imgUrl);
-            feedbackViewHolder.photo.setImageResource(R.drawable.photo);
+            feedbackViewHolder.photo.setImageResource(R.drawable.photo_patient);
             feedbackViewHolder.name.setText(feedbackList.get(position).getCommenter());
             feedbackViewHolder.name.setTextSize(16);
             feedbackViewHolder.message.setText(feedbackList.get(position).getComment_desc());
@@ -362,9 +370,9 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
             String sd=sdf.format(new Date(feedbackList.get(position).getCreate_time()));
             feedbackViewHolder.date.setText(sd);
             feedbackViewHolder.date.setTextSize(14);
-            feedbackViewHolder.feedbackRatingBar.setRating(feedbackList.get(position).getStart_value());
-            if(imgUrl != null && !imgUrl.equals("")) {
-                ImageListener listener = ImageLoader.getImageListener(feedbackViewHolder.photo, R.drawable.photo, R.drawable.photo);
+            feedbackViewHolder.feedbackRatingBar.setRating((float)feedbackList.get(position).getStart_value()/10);
+            if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
+                ImageListener listener = ImageLoader.getImageListener(feedbackViewHolder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;
@@ -377,8 +385,10 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
         page++;
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
-        parmas.put("accessToken", ClientUtil.getToken());
-        parmas.put("uid", editor.get("uid", ""));
+        if(!"".equals(ClientUtil.getToken())){
+            parmas.put("accessToken", ClientUtil.getToken());
+            parmas.put("uid", editor.get("uid", ""));
+        }
         parmas.put("doctor_userid", id);
         OpenApiService.getInstance(mContext).getDoctorComment(mQueue, parmas, new Response.Listener<String>() {
 
@@ -401,6 +411,8 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
                             commentsTo.setStart_value(info.getInt("star_value"));
+                            String photo_url = info.getJSONObject("user").getString("icon_url");
+                            commentsTo.setPhoto_url(photo_url);
                             feedbackList.add(commentsTo);
                         }
                         if(infos.length() == 10) {

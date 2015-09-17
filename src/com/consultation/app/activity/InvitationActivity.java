@@ -36,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.InvitationTo;
 import com.consultation.app.service.OpenApiService;
@@ -53,7 +54,7 @@ public class InvitationActivity extends Activity implements OnLoadListener {
 
     private EditText phoneEdit;
 
-    private Button submit;
+    private Button submit, person;
 
     private TextView title_text;
 
@@ -108,7 +109,7 @@ public class InvitationActivity extends Activity implements OnLoadListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invitation_layout);
         mQueue=Volley.newRequestQueue(InvitationActivity.this);
-        editor = new SharePreferencesEditor(InvitationActivity.this);
+        editor=new SharePreferencesEditor(InvitationActivity.this);
         initDate();
         initView();
     }
@@ -120,67 +121,65 @@ public class InvitationActivity extends Activity implements OnLoadListener {
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
         CommonUtil.showLoadingDialog(InvitationActivity.this);
-        OpenApiService.getInstance(InvitationActivity.this).getInvitationList(mQueue, parmas,
-            new Response.Listener<String>() {
+        OpenApiService.getInstance(InvitationActivity.this).getInvitationList(mQueue, parmas, new Response.Listener<String>() {
 
-                @Override
-                public void onResponse(String arg0) {
-                    CommonUtil.closeLodingDialog();
-                    try {
-                        JSONObject responses=new JSONObject(arg0);
-                        if(responses.getInt("rtnCode") == 1) {
-                            JSONArray infos=responses.getJSONArray("doctorInvitCodes");
-                            invitationList.clear();
-                            for(int i=0; i < infos.length(); i++) {
-                                JSONObject info=infos.getJSONObject(i);
-                                InvitationTo invitationTo = new InvitationTo();
-                                invitationTo.setCode(info.getString("code"));
-                                String createTime=info.getString("create_time");
-                                if(createTime.equals("null")) {
-                                    invitationTo.setCreate_time(0);
-                                } else {
-                                    invitationTo.setCreate_time(Long.parseLong(createTime));
-                                }
-                                invitationTo.setIs_joined(info.getString("is_joined"));
-                                invitationTo.setMobile_ph(info.getString("mobile_ph"));
-                                invitationTo.setValid_date(info.getInt("valid_date"));
-                                invitationList.add(invitationTo);
-                            }
-                            if(infos.length() == 10) {
-                                listView.setHasMoreData(true);
+            @Override
+            public void onResponse(String arg0) {
+                CommonUtil.closeLodingDialog();
+                try {
+                    JSONObject responses=new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1) {
+                        JSONArray infos=responses.getJSONArray("doctorInvitCodes");
+                        invitationList.clear();
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info=infos.getJSONObject(i);
+                            InvitationTo invitationTo=new InvitationTo();
+                            invitationTo.setCode(info.getString("code"));
+                            String createTime=info.getString("create_time");
+                            if(createTime.equals("null")) {
+                                invitationTo.setCreate_time(0);
                             } else {
-                                listView.setHasMoreData(false);
+                                invitationTo.setCreate_time(Long.parseLong(createTime));
                             }
-                        } else if(responses.getInt("rtnCode") == 10004){
-                            Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                @Override
-                                public void onSuccess(String rspContent, int statusCode) {
-                                    initDate();
-                                }
-
-                                @Override
-                                public void onFailure(ConsultationCallbackException exp) {
-                                }
-                            });
-                            startActivity(new Intent(InvitationActivity.this, LoginActivity.class));
-                        } else {
-                            Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                .show();
+                            invitationTo.setIs_joined(info.getString("is_joined"));
+                            invitationTo.setMobile_ph(info.getString("mobile_ph"));
+                            invitationTo.setValid_date(info.getInt("valid_date"));
+                            invitationList.add(invitationTo);
                         }
-                    } catch(JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
+                        if(infos.length() == 10) {
+                            listView.setHasMoreData(true);
+                        } else {
+                            listView.setHasMoreData(false);
+                        }
+                    } else if(responses.getInt("rtnCode") == 10004) {
+                        Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                @Override
-                public void onErrorResponse(VolleyError arg0) {
-                    CommonUtil.closeLodingDialog();
-                    Toast.makeText(InvitationActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(InvitationActivity.this, LoginActivity.class));
+                    } else {
+                        Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                CommonUtil.closeLodingDialog();
+                Toast.makeText(InvitationActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initView() {
@@ -207,17 +206,31 @@ public class InvitationActivity extends Activity implements OnLoadListener {
         phoneEdit=(EditText)findViewById(R.id.mine_invitation_input_edit);
         phoneEdit.setTextSize(18);
 
+        person=(Button)findViewById(R.id.mine_invitation_btn_person);
+        person.setTextSize(18);
+        person.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
+            getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
+        person.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //到联系人界面
+                startActivityForResult(new Intent(InvitationActivity.this, ContactActivity.class), 0);
+            }
+        });
         submit=(Button)findViewById(R.id.mine_invitation_btn);
-        submit.setTextSize(22);
+        submit.setTextSize(18);
+        submit.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
+            getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
         submit.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(null == phoneEdit.getText().toString() || "".equals(phoneEdit.getText().toString())){
+                if(null == phoneEdit.getText().toString() || "".equals(phoneEdit.getText().toString())) {
                     Toast.makeText(InvitationActivity.this, "请输入被邀请人的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!AccountUtil.isPhoneNum(phoneEdit.getText().toString())){
+                if(!AccountUtil.isPhoneNum(phoneEdit.getText().toString())) {
                     Toast.makeText(InvitationActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -236,10 +249,11 @@ public class InvitationActivity extends Activity implements OnLoadListener {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
                                     Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                    .show();
+                                        .show();
                                     initDate();
-                                }  else if(responses.getInt("rtnCode") == 10004){
-                                    Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                } else if(responses.getInt("rtnCode") == 10004) {
+                                    Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                        .show();
                                     LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                         @Override
@@ -292,7 +306,7 @@ public class InvitationActivity extends Activity implements OnLoadListener {
                                     invitationList.clear();
                                     for(int i=0; i < infos.length(); i++) {
                                         JSONObject info=infos.getJSONObject(i);
-                                        InvitationTo invitationTo = new InvitationTo();
+                                        InvitationTo invitationTo=new InvitationTo();
                                         invitationTo.setCode(info.getString("code"));
                                         String createTime=info.getString("create_time");
                                         if(createTime.equals("null")) {
@@ -314,12 +328,13 @@ public class InvitationActivity extends Activity implements OnLoadListener {
                                     msg.what=0;
                                     msg.obj=pullToRefreshLayout;
                                     handler.sendMessage(msg);
-                                }  else if(responses.getInt("rtnCode") == 10004){
+                                } else if(responses.getInt("rtnCode") == 10004) {
                                     Message msg=handler.obtainMessage();
                                     msg.what=2;
                                     msg.obj=pullToRefreshLayout;
                                     handler.sendMessage(msg);
-                                    Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                        .show();
                                     LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                                         @Override
@@ -361,13 +376,6 @@ public class InvitationActivity extends Activity implements OnLoadListener {
         listView=(PullableListView)findViewById(R.id.mine_invitation_listView);
         listView.setAdapter(myAdapter);
         listView.setOnLoadListener(this);
-//        listView.setOnItemClickListener(new OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//        });
     }
 
     private class ViewHolder {
@@ -418,21 +426,29 @@ public class InvitationActivity extends Activity implements OnLoadListener {
             String sd=sdf.format(new Date(invitationList.get(position).getCreate_time()));
             holder.create_time.setText(sd);
             holder.create_time.setTextSize(20);
-            if(invitationList.get(position).getIs_joined().equals("1")){
+            if(invitationList.get(position).getIs_joined().equals("1")) {
                 holder.valid_date.setText("已加入");
                 holder.valid_date.setTextSize(16);
                 String codeText=sdf.format(new Date(invitationList.get(position).getJoined_time()));
                 holder.code.setText(codeText);
                 holder.code.setTextSize(16);
-            }else{
+            } else {
                 String validText=sdf.format(new Date(invitationList.get(position).getValid_date()));
-                holder.valid_date.setText("有效期至"+validText);
+                holder.valid_date.setText("有效期至" + validText);
                 holder.valid_date.setTextSize(14);
-                holder.code.setText("邀请码："+invitationList.get(position).getCode());
+                holder.code.setText("邀请码：" + invitationList.get(position).getCode());
                 holder.code.setTextSize(14);
             }
             return convertView;
         }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            phoneEdit.setText(data.getStringExtra("phone"));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -443,83 +459,81 @@ public class InvitationActivity extends Activity implements OnLoadListener {
         parmas.put("rows", "10");
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
-        OpenApiService.getInstance(InvitationActivity.this).getInvitationList(mQueue, parmas,
-            new Response.Listener<String>() {
+        OpenApiService.getInstance(InvitationActivity.this).getInvitationList(mQueue, parmas, new Response.Listener<String>() {
 
-                @Override
-                public void onResponse(String arg0) {
-                    try {
-                        JSONObject responses=new JSONObject(arg0);
-                        if(responses.getInt("rtnCode") == 1) {
-                            JSONArray infos=responses.getJSONArray("doctorInvitCodes");
-                            for(int i=0; i < infos.length(); i++) {
-                                JSONObject info=infos.getJSONObject(i);
-                                InvitationTo invitationTo = new InvitationTo();
-                                invitationTo.setCode(info.getString("code"));
-                                String createTime=info.getString("create_time");
-                                if(createTime.equals("null")) {
-                                    invitationTo.setCreate_time(0);
-                                } else {
-                                    invitationTo.setCreate_time(Long.parseLong(createTime));
-                                }
-                                invitationTo.setIs_joined(info.getString("is_joined"));
-                                invitationTo.setMobile_ph(info.getString("mobile_ph"));
-                                invitationTo.setValid_date(info.getInt("valid_date"));
-                                invitationList.add(invitationTo);
-                            }
-                            if(infos.length() == 10) {
-                                hasMore=true;
+            @Override
+            public void onResponse(String arg0) {
+                try {
+                    JSONObject responses=new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1) {
+                        JSONArray infos=responses.getJSONArray("doctorInvitCodes");
+                        for(int i=0; i < infos.length(); i++) {
+                            JSONObject info=infos.getJSONObject(i);
+                            InvitationTo invitationTo=new InvitationTo();
+                            invitationTo.setCode(info.getString("code"));
+                            String createTime=info.getString("create_time");
+                            if(createTime.equals("null")) {
+                                invitationTo.setCreate_time(0);
                             } else {
-                                hasMore=false;
+                                invitationTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            Message msg=handler.obtainMessage();
-                            msg.what=1;
-                            msg.obj=pullableListView;
-                            handler.sendMessage(msg);
-                        }  else if(responses.getInt("rtnCode") == 10004){
-                            hasMore=true;
-                            Message msg=handler.obtainMessage();
-                            msg.what=1;
-                            msg.obj=pullableListView;
-                            handler.sendMessage(msg);
-                            Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
-
-                                @Override
-                                public void onSuccess(String rspContent, int statusCode) {
-                                    initDate();
-                                }
-
-                                @Override
-                                public void onFailure(ConsultationCallbackException exp) {
-                                }
-                            });
-                            startActivity(new Intent(InvitationActivity.this, LoginActivity.class));
-                        } else {
-                            hasMore=true;
-                            Message msg=handler.obtainMessage();
-                            msg.what=1;
-                            msg.obj=pullableListView;
-                            handler.sendMessage(msg);
-                            Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                .show();
+                            invitationTo.setIs_joined(info.getString("is_joined"));
+                            invitationTo.setMobile_ph(info.getString("mobile_ph"));
+                            invitationTo.setValid_date(info.getInt("valid_date"));
+                            invitationList.add(invitationTo);
                         }
-                    } catch(JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
+                        if(infos.length() == 10) {
+                            hasMore=true;
+                        } else {
+                            hasMore=false;
+                        }
+                        Message msg=handler.obtainMessage();
+                        msg.what=1;
+                        msg.obj=pullableListView;
+                        handler.sendMessage(msg);
+                    } else if(responses.getInt("rtnCode") == 10004) {
+                        hasMore=true;
+                        Message msg=handler.obtainMessage();
+                        msg.what=1;
+                        msg.obj=pullableListView;
+                        handler.sendMessage(msg);
+                        Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                        LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                @Override
-                public void onErrorResponse(VolleyError arg0) {
-                    hasMore=true;
-                    Message msg=handler.obtainMessage();
-                    msg.what=1;
-                    msg.obj=pullableListView;
-                    handler.sendMessage(msg);
-                    Toast.makeText(InvitationActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onSuccess(String rspContent, int statusCode) {
+                                initDate();
+                            }
+
+                            @Override
+                            public void onFailure(ConsultationCallbackException exp) {
+                            }
+                        });
+                        startActivity(new Intent(InvitationActivity.this, LoginActivity.class));
+                    } else {
+                        hasMore=true;
+                        Message msg=handler.obtainMessage();
+                        msg.what=1;
+                        msg.obj=pullableListView;
+                        handler.sendMessage(msg);
+                        Toast.makeText(InvitationActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+                hasMore=true;
+                Message msg=handler.obtainMessage();
+                msg.what=1;
+                msg.obj=pullableListView;
+                handler.sendMessage(msg);
+                Toast.makeText(InvitationActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

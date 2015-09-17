@@ -11,9 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -23,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,13 +39,16 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.activity.FeedBackActivity;
+import com.consultation.app.activity.HomeActivity;
 import com.consultation.app.activity.InvitationActivity;
 import com.consultation.app.activity.LoginActivity;
+import com.consultation.app.activity.MyAccountActivity;
 import com.consultation.app.activity.MyInfoActivity;
 import com.consultation.app.activity.MyInfoSetActivity;
 import com.consultation.app.activity.SelectHeadPicActivity;
 import com.consultation.app.activity.UpdateMyInfoActivity;
 import com.consultation.app.exception.ConsultationCallbackException;
+import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.UserTo;
 import com.consultation.app.service.OpenApiService;
@@ -57,11 +63,13 @@ public class MineFragment extends Fragment implements OnClickListener {
     private View mineLayout;
 
     private TextView header_text, header_right, myInfo_text, pay_text, blance_text, share_text, invitation_text, jion_text,
-            feedback_text, help_text;
+            feedback_text, help_text, userName, phone, title, hospital, grade, status, description;
 
-    private LinearLayout info_layout, pay_layout, share_layout, invitation_layout, jion_layout, feedback_layout, help_layout;
+    private LinearLayout info_layout, pay_layout, share_layout, invitation_layout, jion_layout, feedback_layout, help_layout, line, doctor_layout;
 
     private ImageView photos;
+    
+    private Button logoutBtn;
 
     private SharePreferencesEditor editor;
 
@@ -72,7 +80,9 @@ public class MineFragment extends Fragment implements OnClickListener {
     private ImageLoader mImageLoader;
 
     private long blance;
-
+    
+    private String doctorInfo;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mineLayout=inflater.inflate(R.layout.mine_layout, container, false);
@@ -94,7 +104,6 @@ public class MineFragment extends Fragment implements OnClickListener {
             @Override
             public void onResponse(String arg0) {
                 CommonUtil.closeLodingDialog();
-                System.out.println(arg0);
                 try {
                     JSONObject responses=new JSONObject(arg0);
                     if(responses.getInt("rtnCode") == 1) {
@@ -102,6 +111,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                         JSONObject jsonObject=new JSONObject(arg0);
                         JSONObject object=jsonObject.getJSONObject("user");
                         userTo.setIcon_url(object.getString("icon_url"));
+                        userTo.setUser_name(object.getString("real_name"));
                         Message msg=new Message();
                         msg.obj=object.getString("icon_url");
                         if(object.getJSONObject("userBalance").getString("current_balance").equals("null")){
@@ -109,6 +119,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                         }else{
                             blance=object.getJSONObject("userBalance").getLong("current_balance");
                         }
+                        doctorInfo = jsonObject.getString("doctor");
                         handler.dispatchMessage(msg);
                     } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(mineLayout.getContext(), responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
@@ -145,12 +156,89 @@ public class MineFragment extends Fragment implements OnClickListener {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             String icon_url=(String)msg.obj;
-            if(!"null".equals(icon_url) && !"".equals(icon_url) && null != icon_url) {
-                ImageListener listener=ImageLoader.getImageListener(photos, R.drawable.photo, R.drawable.photo);
-                mImageLoader.get(icon_url, listener);
-                photos.setImageBitmap(CommonUtil.drawableToRoundBitmap(photos.getDrawable(), 15));
+            int photoId = 0;
+            if(editor.get("userType", "").equals("1")){
+                photos.setBackgroundResource(R.drawable.photo_primary);
+                photoId = R.drawable.photo_primary;
+            }else if(editor.get("userType", "").equals("2")){
+                photos.setBackgroundResource(R.drawable.photo_expert);
+                photoId = R.drawable.photo_expert;
+            }else if(editor.get("userType", "").equals("0")){
+                photos.setBackgroundResource(R.drawable.photo_patient);
+                photoId = R.drawable.photo_patient;
             }
-            blance_text.setText("余额" + blance + "元");
+            if(!"null".equals(icon_url) && !"".equals(icon_url) && null != icon_url) {
+                ImageListener listener=ImageLoader.getImageListener(photos, photoId, photoId);
+                mImageLoader.get(icon_url, listener);
+            }
+            if(!"null".equals(userTo.getUser_name()) && !"".equals(userTo.getUser_name()) && userTo.getUser_name() != null){
+                userName.setVisibility(View.VISIBLE);
+                phone.setVisibility(View.VISIBLE);
+                userName.setText(userTo.getUser_name());
+                phone.setText(editor.get("phone", ""));
+            }else{
+                userName.setVisibility(View.GONE);
+                phone.setVisibility(View.GONE);
+                myInfo_text.setText("请填写个人信息");
+            }
+            if(!editor.get("userType", "").equals("0")) {
+                line.setVisibility(View.GONE);
+                jion_layout.setVisibility(View.GONE);
+            }else{
+                line.setVisibility(View.VISIBLE);
+                jion_layout.setVisibility(View.VISIBLE);
+            }
+            if(editor.get("userType", "").equals("0")) {
+                invitation_layout.setVisibility(View.GONE);
+            }else{
+                invitation_layout.setVisibility(View.VISIBLE);
+            }
+            blance_text.setText("余额" + (float)blance/100 + "元");
+            if(null != doctorInfo && !"null".equals(doctorInfo) && !"".equals(doctorInfo)){
+                doctor_layout.setVisibility(View.VISIBLE);
+                line.setVisibility(View.GONE);
+                jion_layout.setVisibility(View.GONE);
+                try {
+                    JSONObject jsonObject = new JSONObject(doctorInfo);
+                    title.setText(jsonObject.getString("depart_name")+"|"+jsonObject.getString("title"));
+                    hospital.setText(jsonObject.getString("hospital_name"));
+                    if(jsonObject.getString("grade").equals("1")){
+                        status.setVisibility(View.INVISIBLE);
+                        if(jsonObject.getString("approve_status").equals("0")){
+                            grade.setText("待认证");
+                            grade.setTextColor(Color.parseColor("#990000"));
+                            description.setVisibility(View.GONE);
+                        }else if(jsonObject.getString("approve_status").equals("1")){
+                            grade.setText("已认证");
+                            grade.setTextColor(Color.parseColor("#006633"));
+                            description.setVisibility(View.GONE);
+                        }else if(jsonObject.getString("approve_status").equals("2")){
+                            grade.setText("未认证通过");
+                            grade.setTextColor(Color.parseColor("#990000"));
+                            description.setText(jsonObject.getString("approve_desc"));
+                        }
+                    }else{
+                        grade.setText(jsonObject.getString("expert_grade"));
+                        if(jsonObject.getString("approve_status").equals("0")){
+                            status.setText("待认证");
+                            description.setVisibility(View.GONE);
+                        }else if(jsonObject.getString("approve_status").equals("1")){
+                            status.setText("已认证");
+                            status.setTextColor(Color.parseColor("#006633"));
+                            description.setVisibility(View.GONE);
+                        }else if(jsonObject.getString("approve_status").equals("2")){
+                            status.setText("未认证通过");
+                            description.setText(jsonObject.getString("approve_desc"));
+                        }
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }else{
+                doctor_layout.setVisibility(View.GONE);
+                line.setVisibility(View.VISIBLE);
+                jion_layout.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -175,14 +263,22 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(intent);
             }
         });
-
+        
+        doctor_layout = (LinearLayout)mineLayout.findViewById(R.id.mine_my_doctor_info_layout);
+        doctor_layout.setOnClickListener(this);
+        
         photos=(ImageView)mineLayout.findViewById(R.id.mine_info_imageView);
         photos.setOnClickListener(this);
-        photos.setImageBitmap(CommonUtil.drawableToRoundBitmap(photos.getDrawable(), 15));
 
         myInfo_text=(TextView)mineLayout.findViewById(R.id.mine_info_my_text);
         myInfo_text.setTextSize(18);
-
+        
+        userName=(TextView)mineLayout.findViewById(R.id.mine_info_my_name_text);
+        userName.setTextSize(18);
+        
+        phone=(TextView)mineLayout.findViewById(R.id.mine_info_my_phone_text);
+        phone.setTextSize(16);
+        
         pay_text=(TextView)mineLayout.findViewById(R.id.mine_info_pay_text);
         pay_text.setTextSize(18);
 
@@ -203,6 +299,17 @@ public class MineFragment extends Fragment implements OnClickListener {
 
         help_text=(TextView)mineLayout.findViewById(R.id.mine_info_help_text);
         help_text.setTextSize(18);
+        
+        title=(TextView)mineLayout.findViewById(R.id.mine_info_doctor_info_title_text);
+        title.setTextSize(16);
+        hospital=(TextView)mineLayout.findViewById(R.id.mine_info_doctor_info_hospital_text);
+        hospital.setTextSize(16);
+        grade=(TextView)mineLayout.findViewById(R.id.mine_info_doctor_info_grede_text);
+        grade.setTextSize(16);
+        status=(TextView)mineLayout.findViewById(R.id.mine_info_doctor_info_status_text);
+        status.setTextSize(16);
+        description=(TextView)mineLayout.findViewById(R.id.mine_info_doctor_info_desc_text);
+        description.setTextSize(16);
 
         info_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_info_icon_layout);
         info_layout.setOnClickListener(this);
@@ -212,7 +319,7 @@ public class MineFragment extends Fragment implements OnClickListener {
 
         jion_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_jion_layout);
         jion_layout.setOnClickListener(this);
-        LinearLayout line=(LinearLayout)mineLayout.findViewById(R.id.mine_my_jion_layout_line);
+        line=(LinearLayout)mineLayout.findViewById(R.id.mine_my_jion_layout_line);
         if(!editor.get("userType", "").equals("0")) {
             line.setVisibility(View.GONE);
             jion_layout.setVisibility(View.GONE);
@@ -232,6 +339,11 @@ public class MineFragment extends Fragment implements OnClickListener {
 
         help_layout=(LinearLayout)mineLayout.findViewById(R.id.mine_my_help_layout);
         help_layout.setOnClickListener(this);
+        
+        logoutBtn = (Button)mineLayout.findViewById(R.id.mine_info_logout_btn);
+        logoutBtn.setTextSize(18);
+        logoutBtn.setOnClickListener(this);
+        logoutBtn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.mine_logout_btn_shape),getResources().getDrawable(R.drawable.mine_logout_press_btn_shape)).getBtnTouchListener());
     }
 
     @Override
@@ -254,15 +366,20 @@ public class MineFragment extends Fragment implements OnClickListener {
                             params.put("accessToken", ClientUtil.getToken());
                             params.put("uid", editor.get("uid", ""));
                             CommonUtil.showLoadingDialog(mineLayout.getContext());
-                            OpenApiService.getInstance(mineLayout.getContext()).getUploadFiles(ClientUtil.GET_UPLOAD_IMAGES_URL,
+                            OpenApiService.getInstance(mineLayout.getContext()).getUploadFiles(ClientUtil.GET_USER_ICON_URL,
                                 mineLayout.getContext(), new ConsultationCallbackHandler() {
 
                                     @Override
                                     public void onSuccess(String rspContent, int statusCode) {
                                         CommonUtil.closeLodingDialog();
-                                        System.out.println(rspContent);
                                         photos.setImageBitmap(photo);
-                                        photos.setImageBitmap(CommonUtil.drawableToRoundBitmap(photos.getDrawable(), 15));
+                                        JSONObject jsonObject;
+                                        try {
+                                            jsonObject=new JSONObject(rspContent);
+                                            editor.put("icon_url", jsonObject.getString("filePath"));
+                                        } catch(JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                         Toast.makeText(mineLayout.getContext(), "图片上传成功", Toast.LENGTH_LONG).show();
                                     }
 
@@ -279,7 +396,11 @@ public class MineFragment extends Fragment implements OnClickListener {
                     }
                 }
                 break;
-
+            case 1:
+                if(resultCode == Activity.RESULT_OK){
+                    initDate();
+                }
+                break;
             default:
                 break;
         }
@@ -297,13 +418,18 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivityForResult(new Intent(mineLayout.getContext(), SelectHeadPicActivity.class), 0);
                 break;
             case R.id.mine_my_pay_layout:
-                // startActivityForResult(new Intent(mineLayout.getContext(), SelectHeadPicActivity.class), 1);
+                Intent intent4 = new Intent(mineLayout.getContext(), MyAccountActivity.class);
+//                intent4.putExtra("headerTitle", "我的资料");
+                startActivityForResult(intent4, 1);
                 break;
             case R.id.mine_my_share_layout:
 
                 break;
             case R.id.mine_my_jion_layout:
-                startActivity(new Intent(mineLayout.getContext(), UpdateMyInfoActivity.class));
+                Intent intent3 = new Intent(mineLayout.getContext(), UpdateMyInfoActivity.class);
+                intent3.putExtra("headerTitle", "我的资料");
+                intent3.putExtra("infos", "");
+                startActivityForResult(intent3, 1);
                 break;
             case R.id.mine_my_invitation_layout:
                 startActivity(new Intent(mineLayout.getContext(), InvitationActivity.class));
@@ -312,6 +438,32 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(new Intent(mineLayout.getContext(), FeedBackActivity.class));
                 break;
             case R.id.mine_my_help_layout:
+                break;
+            case R.id.mine_my_doctor_info_layout:
+                //进入修改医生信息的界面
+                Intent intent2 = new Intent(mineLayout.getContext(), UpdateMyInfoActivity.class);
+                intent2.putExtra("headerTitle", "修改我的资料");
+                intent2.putExtra("infos", doctorInfo);
+                startActivityForResult(intent2, 1);
+                break;
+            case R.id.mine_info_logout_btn:
+                ClientUtil.setToken("");
+                editor.put("refreshToken", "");
+                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                    @Override
+                    public void onSuccess(String rspContent, int statusCode) {
+                        Intent intent = new Intent(mineLayout.getContext(), HomeActivity.class);
+                        intent.putExtra("selectId", 3);
+                        startActivity(intent);
+                        ((Activity)mineLayout.getContext()).finish();
+                    }
+
+                    @Override
+                    public void onFailure(ConsultationCallbackException exp) {
+                    }
+                });
+                startActivity(new Intent(mineLayout.getContext(), LoginActivity.class));
                 break;
             default:
                 break;

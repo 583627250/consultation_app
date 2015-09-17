@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/case_more_all_layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:id="@+id/case_more_all_layout"
+    android:background="@drawable/cancel_dialog_bg"
     android:orientation="vertical" >
     
     <LinearLayout
@@ -30,7 +31,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="1"
                 android:textColor="@color/consultation_color_black" />
         </LinearLayout>
 
@@ -52,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="2"
                 android:textColor="@color/consultation_color_black" />
 
             <Button
@@ -62,7 +61,6 @@
                 android:layout_gravity="center"
                 android:background="@drawable/discussion_count_shape"
                 android:gravity="center"
-                android:text="20"
                 android:textColor="@color/consultation_color_white"
                 android:visibility="gone" />
         </LinearLayout>
