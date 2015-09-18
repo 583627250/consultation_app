@@ -70,6 +70,8 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
     private List<String> pathList=new ArrayList<String>();
 
     private List<String> idList=new ArrayList<String>();
+    
+    private List<String> bigPathList=new ArrayList<String>();
 
     private SharePreferencesEditor editor;
 
@@ -209,7 +211,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                     rowsLayout=createLinearLayout();
                     rightLayout.addView(rowsLayout);
                 }
-                relativeLayout=createImage(pathList.get(i), i);
+                relativeLayout=createImage(pathList.get(i), i, bigPathList.get(i));
                 rowsLayout.addView(relativeLayout);
             }
         }
@@ -226,7 +228,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         return linearLayout;
     }
 
-    private LinearLayout createImage(String path, int id) {
+    private LinearLayout createImage(String path, int id, final String bigPath) {
         LinearLayout relativeLayout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         layoutParams.gravity=Gravity.CENTER;
@@ -236,15 +238,23 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         ImageView imageView=new ImageView(context);
         imageView.setId(id);
         imageView.setOnLongClickListener(this);
+        imageView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 展示大图片
+                BigImageActivity.setViewData(bigPath);
+                startActivity(new Intent(CaseTestTxtActivity.this, BigImageActivity.class));
+            }
+        });
         LayoutParams imageViewParams=new LayoutParams(width / 15 * 4, width / 15 * 4);
         imageView.setLayoutParams(imageViewParams);
         imageView.setScaleType(ScaleType.CENTER_CROP);
         if(!"null".equals(path) && !"".equals(path)) {
             if(path.startsWith("http:")) {
                 imageView.setTag(path);
-                imageView.setImageResource(R.anim.loading_anim);
-                ImageListener listener=
-                    ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
+                imageView.setImageResource(R.anim.loading_anim_test);
+                ImageListener listener=ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
                 mImageLoader.get(path, listener, 200, 200);
             } else {
                 Bitmap bitmap=CommonUtil.readBitMap(200, path);
@@ -263,6 +273,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                     JSONObject imageFilesObject=jsonArray.getJSONObject(i);
                     pathList.add(imageFilesObject.getString("little_pic_url"));
                     idList.add(imageFilesObject.getString("id"));
+                    bigPathList.add(imageFilesObject.getString("pic_url"));
                 }
                 showRightLayout();
             } catch(JSONException e) {
@@ -279,6 +290,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                     String photoPath=data.getStringExtra("bitmap");
                     if(!pathList.contains(photoPath)) {
                         pathList.add(photoPath);
+                        bigPathList.add(photoPath);
                     }
                     showRightLayout();
                 }

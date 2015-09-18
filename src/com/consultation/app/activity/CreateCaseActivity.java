@@ -39,7 +39,7 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
 
     private TextView title_text, back_text;
 
-    private LinearLayout back_layout, expert_layout;
+    private LinearLayout back_layout, expert_layout, expert_layout_line;
 
     private TextView expert_text, consulatioan_text, patient_text, titles_text, hope_text;
 
@@ -134,6 +134,7 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
+                    expert_layout_line.setVisibility(View.VISIBLE);
                     expert_layout.setVisibility(View.VISIBLE);
                 }
             }
@@ -141,6 +142,7 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         radioButton3=(RadioButton)findViewById(R.id.create_case_select_consultation_public);
         radioButton3.setTextSize(18);
         if(radioButton3.isChecked()) {
+            expert_layout_line.setVisibility(View.GONE);
             expert_layout.setVisibility(View.GONE);
         }
         radioButton3.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -149,10 +151,12 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     expert_layout.setVisibility(View.GONE);
+                    expert_layout_line.setVisibility(View.GONE);
                 }
             }
         });
 
+        expert_layout_line=(LinearLayout)findViewById(R.id.create_case_select_expert_layout_line);
         expert_layout=(LinearLayout)findViewById(R.id.create_case_select_expert_layout);
 
         submitBtn=(Button)findViewById(R.id.create_case_btn_submit);

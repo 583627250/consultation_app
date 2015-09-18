@@ -102,6 +102,8 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
     private Map<Integer, List<String>> pathMap=new HashMap<Integer, List<String>>();
 
     private Map<Integer, List<String>> idMap=new HashMap<Integer, List<String>>();
+    
+    private Map<Integer, List<String>> bigPathMap=new HashMap<Integer, List<String>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +264,7 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                     rowsLayout=createLinearLayout();
                     rightLayout.addView(rowsLayout);
                 }
-                relativeLayout=createImage(imagePaths.get(i), i);
+                relativeLayout=createImage(imagePaths.get(i), i,bigPathMap.get(currentPosition).get(i));
                 rowsLayout.addView(relativeLayout);
             }
         }
@@ -279,7 +281,7 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         return linearLayout;
     }
 
-    private RelativeLayout createImage(String path, int id) {
+    private RelativeLayout createImage(String path, int id, final String bigPath) {
         RelativeLayout relativeLayout=new RelativeLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         layoutParams.gravity=Gravity.CENTER;
@@ -289,13 +291,22 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
         ImageView imageView=new ImageView(context);
         imageView.setId(id);
         imageView.setOnLongClickListener(this);
+        imageView.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+             // 展示大图片
+                BigImageActivity.setViewData(bigPath);
+                startActivity(new Intent(CaseTestActivity.this, BigImageActivity.class));
+            }
+        });
         LayoutParams imageViewParams=new LayoutParams(width / 15 * 4, width / 15 * 4);
         imageView.setLayoutParams(imageViewParams);
         imageView.setScaleType(ScaleType.CENTER_CROP);
         if(!"null".equals(path) && !"".equals(path)) {
             if(path.startsWith("http:")) {
                 imageView.setTag(path);
-                imageView.setImageResource(R.anim.loading_anim);
+                imageView.setImageResource(R.anim.loading_anim_test);
                 ImageListener listener=
                     ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
                 mImageLoader.get(path, listener, 200, 200);
@@ -321,6 +332,7 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                     JSONObject imageFilesObject=jsonArray.getJSONObject(i);
                     int index=leftList.indexOf(imageFilesObject.getString("test_name"));
                     List<String> paths=pathMap.get(index);
+                    List<String> bigPaths=bigPathMap.get(index);
                     List<String> ids=idMap.get(index);
                     if(null == paths) {
                         paths=new ArrayList<String>();
@@ -336,6 +348,13 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                     } else {
                         ids.add(imageFilesObject.getString("id"));
                     }
+                    if(null == bigPaths) {
+                        bigPaths=new ArrayList<String>();
+                        bigPaths.add(imageFilesObject.getString("pic_url"));
+                        idMap.put(index, bigPaths);
+                    } else {
+                        bigPaths.add(imageFilesObject.getString("pic_url"));
+                    }
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
@@ -350,6 +369,7 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                 if(data != null) {
                     String photoPath=data.getStringExtra("bitmap");
                     List<String> paths=pathMap.get(currentPosition);
+                    List<String> bigPaths=bigPathMap.get(currentPosition);
                     if(null == paths) {
                         paths=new ArrayList<String>();
                         paths.add(photoPath);
@@ -357,6 +377,15 @@ public class CaseTestActivity extends CaseBaseActivity implements OnLongClickLis
                     } else {
                         if(!paths.contains(photoPath)) {
                             paths.add(photoPath);
+                        }
+                    }
+                    if(null == bigPaths) {
+                        bigPaths=new ArrayList<String>();
+                        bigPaths.add(photoPath);
+                        bigPathMap.put(currentPosition, bigPaths);
+                    } else {
+                        if(!bigPaths.contains(photoPath)) {
+                            bigPaths.add(photoPath);
                         }
                     }
                     showRightLayout(currentPosition);

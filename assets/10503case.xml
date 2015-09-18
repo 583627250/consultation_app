@@ -48,7 +48,7 @@
 			<Item ID="1.2.10" Name="Quality" FirstStr="放射痛" Level="2" IsShow="False"/>
 			<Item ID="1.2.11" Name="years" FirstStr="疼痛放射至 " Level="2" Type="Edit" Input="True" IsShow="True" DataType="Text" Value=""/>
 			
-			<Item ID="1.2.12" Name="add" FirstStr="加重、缓解方式" Level="2" Type="CheckBoxList">
+			<Item ID="1.2.12" Name="add" FirstStr="加重、缓解方式" Level="2"  Type="CheckBoxList">
 				<Options ID="1.2.12-1" Checked="0">饮酒后疼痛加重</Options>
 				<Options ID="1.2.12-2" Checked="0">久坐加重</Options>
 				<SubItem ID="1.2.12-3" Name="Transparent tube type" FirstStr="其他" Level="3" IsShow="False" Type="Edit" Input="True" DataType="Text"/>

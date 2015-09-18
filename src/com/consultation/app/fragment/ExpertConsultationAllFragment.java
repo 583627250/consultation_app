@@ -80,7 +80,6 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
             switch(msg.what) {
                 case 0:
                     myAdapter.notifyDataSetChanged();
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
@@ -93,7 +92,6 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                     myAdapter.notifyDataSetChanged();
                     break;
                 case 2:
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.FAIL);
                     break;
@@ -190,7 +188,6 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                                 patientListView.setHasMoreData(false);
                             }
                         } else if(responses.getInt("rtnCode") == 10004) {
-
                             Toast.makeText(expertConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
                                 Toast.LENGTH_SHORT).show();
                             LoginActivity.setHandler(new ConsultationCallbackHandler() {
@@ -295,6 +292,11 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                                             patientTo.setModify_time(pObject.getString("modify_time"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
+                                        }
+                                        if(infos.length() == 10) {
+                                            patientListView.setHasMoreData(true);
+                                        } else {
+                                            patientListView.setHasMoreData(false);
                                         }
                                         Message msg=handler.obtainMessage();
                                         msg.what=0;

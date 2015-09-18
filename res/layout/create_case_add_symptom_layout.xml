@@ -61,6 +61,7 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:layout_gravity="center_horizontal"
+	                android:paddingBottom="5dp"
 	                android:background="@color/consultation_color_white"
 	                android:orientation="vertical" >
 	            </LinearLayout>

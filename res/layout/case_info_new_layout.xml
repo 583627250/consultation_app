@@ -226,7 +226,6 @@
                     android:background="@color/consultation_color_white"
                     android:orientation="vertical"
                     android:padding="10dp" >
-
                     
                 </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.consultation.app.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ import com.consultation.app.model.ItemModel;
 import com.consultation.app.model.OptionsModel;
 import com.consultation.app.model.TitleModel;
 import com.consultation.app.util.ClientUtil;
+import com.consultation.app.util.CommonUtil;
 
 @SuppressLint("UseSparseArrays")
 public class SymptomActivity extends CaseBaseActivity {
@@ -85,7 +88,7 @@ public class SymptomActivity extends CaseBaseActivity {
     private String content="";
 
     private String departmentId="10503";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,7 +183,7 @@ public class SymptomActivity extends CaseBaseActivity {
                 case 0:
                     if(null == itemModel.getType() || "".equals(itemModel.getType())) {
                         List<ItemModel> subItemModels=itemModel.getItemModels();
-                        if(null != itemModel.getFirstStr() && !"".equals(itemModel.getFirstStr())){
+                        if(null != itemModel.getFirstStr() && !"".equals(itemModel.getFirstStr())) {
                             LinearLayout TextViewLayout=createTextView(itemModel.getFirstStr());
                             layouts.add(TextViewLayout);
                             maps.put(position, layouts);
@@ -193,7 +196,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                 views.put(subItemModel.getId(), input);
                                 LinearLayout editTextLayout=
                                     createEditText(subItemModel.getFirstStr(), subItemModel.getLastStr(), input,
-                                        subItemModel.getValue(), subItemModel.getDataType());
+                                        subItemModel.getValue(), subItemModel.getDataType(),0);
                                 layouts.add(editTextLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(editTextLayout);
@@ -236,7 +239,7 @@ public class SymptomActivity extends CaseBaseActivity {
                             views.put(itemModel.getId(), input);
                             LinearLayout editTextLayout=
                                 createEditText(itemModel.getFirstStr(), itemModel.getLastStr(), input, itemModel.getValue(),
-                                    itemModel.getDataType());
+                                    itemModel.getDataType(),0);
                             layouts.add(editTextLayout);
                             maps.put(position, layouts);
                             rightLayout.addView(editTextLayout);
@@ -253,8 +256,20 @@ public class SymptomActivity extends CaseBaseActivity {
                             }
                             LinearLayout spinnerLayout=createCheckBox(itemModel.getFirstStr(), data_list, checkBoxs, values);
                             layouts.add(spinnerLayout);
-                            maps.put(position, layouts);
                             rightLayout.addView(spinnerLayout);
+                            if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
+                                for(int j=0; j < itemModel.getItemModels().size(); j++) {
+                                    ItemModel suItemModel3=itemModel.getItemModels().get(j);
+                                    EditText input=new EditText(context);
+                                    views.put(suItemModel3.getId(), input);
+                                    LinearLayout editTextLayout=
+                                        createEditText(suItemModel3.getFirstStr(), suItemModel3.getLastStr(), input,
+                                            suItemModel3.getValue(), suItemModel3.getDataType(),1);
+                                    layouts.add(editTextLayout);
+                                    rightLayout.addView(editTextLayout);
+                                }
+                            }
+                            maps.put(position, layouts);
                         } else if(null != itemModel.getType() && itemModel.getType().equals("RadioButtonGroup")) {
                             List<RadioButton> rBtns=new ArrayList<RadioButton>();
                             String[] date=new String[itemModel.getOptionsModels().size()];
@@ -268,8 +283,21 @@ public class SymptomActivity extends CaseBaseActivity {
                             }
                             LinearLayout radioButtonLayout=createRadioButton(itemModel.getFirstStr(), date, rBtns, values);
                             layouts.add(radioButtonLayout);
-                            maps.put(position, layouts);
                             rightLayout.addView(radioButtonLayout);
+                            if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
+                                for(int j=0; j < itemModel.getItemModels().size(); j++) {
+                                    ItemModel suItemModel3=itemModel.getItemModels().get(j);
+                                    EditText input=new EditText(context);
+                                    views.put(suItemModel3.getId(), input);
+                                    LinearLayout editTextLayout=
+                                        createEditText(suItemModel3.getFirstStr(), suItemModel3.getLastStr(), input,
+                                            suItemModel3.getValue(), suItemModel3.getDataType(),1);
+                                    layouts.add(editTextLayout);
+                                    rightLayout.addView(editTextLayout);
+                                }
+                            }
+                            // 再有一个LinearLayout 是垂直方向的 长是match宽是包含
+                            maps.put(position, layouts);
                         }
                     }
                     break;
@@ -322,11 +350,25 @@ public class SymptomActivity extends CaseBaseActivity {
     private void setValue(String id, String value, int type) {
         int titleIds=Integer.parseInt(id.split("\\.")[1]) - 1;
         List<ItemModel> list=titleModels.get(titleIds).getItemModels();
-        ItemModel model=list.get(Integer.parseInt(id.split("\\.")[2]) - 1);
+        int itemId = 0;
+        if(id.split("\\.")[2].contains("-")){
+            itemId = Integer.parseInt(id.split("\\.")[2].split("-")[0]) - 1;
+        }else{
+            itemId = Integer.parseInt(id.split("\\.")[2]) - 1;
+        }
+        ItemModel model=list.get(itemId);
         if(type == 0) {
             if(id.split("\\.").length == 3) {
-                if(model.getId().equals(id)) {
-                    model.setValue(value);
+                if(id.split("\\.")[2].contains("-")){
+                    for(int i=0; i < model.getItemModels().size(); i++) {
+                        if(model.getItemModels().get(i).getId().equals(id)) {
+                            model.getItemModels().get(i).setValue(value);
+                        }
+                    }
+                }else{
+                    if(model.getId().equals(id)) {
+                        model.setValue(value);
+                    }
                 }
             } else if(id.split("\\.").length == 4) {
                 if(model.getItemModels().get(Integer.parseInt(id.split("\\.")[3]) - 1).getId().equals(id)) {
@@ -389,7 +431,6 @@ public class SymptomActivity extends CaseBaseActivity {
         } else {
             caseModel=caseList.get(page);
         }
-        
         StringBuilder stringBuffer=new StringBuilder();
         stringBuffer.append("<Root ID=\"" + caseModel.getId() + "\" Name=\"" + caseModel.getName() + "\" Level=\""
             + caseModel.getLevel() + "\" ChildCount=\"" + caseModel.getChildCount() + "\">");
@@ -489,11 +530,41 @@ public class SymptomActivity extends CaseBaseActivity {
                     } else {
                         List<OptionsModel> optionsModels=itemModel.getOptionsModels();
                         if(optionsModels.size() != 0 && null != optionsModels) {
+                            stringBuffer.append(" Type=\"" + itemModel.getType() + "\"");
                             stringBuffer.append(">");
                             for(int k=0; k < optionsModels.size(); k++) {
                                 stringBuffer.append("<Options ID=\"" + optionsModels.get(k).getId() + "\" Checked=\""
                                     + optionsModels.get(k).getChecked() + "\">");
                                 stringBuffer.append(optionsModels.get(k).getName() + "</Options>");
+                            }
+                            List<ItemModel> subItemModels=itemModel.getItemModels();
+                            for(int z=0; z < subItemModels.size(); z++) {
+                                ItemModel subItemModel3 = subItemModels.get(z);
+                                stringBuffer.append("<SubItem ID=\"" + subItemModel3.getId() + "\" Name=\"" + subItemModel3.getName() + "\" ");
+                                if(subItemModel3.getFirstStr() != null && !"".equals(subItemModel3.getFirstStr())) {
+                                    stringBuffer.append("FirstStr=\"" + subItemModel3.getFirstStr() + "\" ");
+                                }
+                                if(subItemModel3.getLastStr() != null && !"".equals(subItemModel3.getLastStr())) {
+                                    stringBuffer.append("LastStr=\"" + subItemModel3.getLastStr() + "\" ");
+                                }
+                                stringBuffer.append("Level=\"" + subItemModel3.getLevel() + "\"");
+                                if(subItemModel3.getIsShow() != null && !"".equals(subItemModel3.getIsShow())) {
+                                    stringBuffer.append(" IsShow=\"" + subItemModel3.getIsShow() + "\"");
+                                }
+                                if(subItemModel3.getInput() != null && !"".equals(subItemModel3.getInput())) {
+                                    stringBuffer.append(" Input=\"" + subItemModel3.getInput() + "\"");
+                                }
+                                if(subItemModel3.getType() != null && subItemModel3.getType().equals("Edit")) {
+                                    stringBuffer.append(" Type=\"" + subItemModel3.getType() + "\"");
+                                    if(subItemModel3.getDataType() != null && !"".equals(subItemModel3.getDataType())) {
+                                        stringBuffer.append(" DataType=\"" + subItemModel3.getDataType() + "\"");
+                                    }
+                                    if(!"".equals(subItemModel3.getValue()) && !"null".equals(subItemModel3.getValue()) && null != subItemModel3.getValue()) {
+                                        stringBuffer.append(" Value=\"" + subItemModel3.getValue() + "\"/>");
+                                    } else {
+                                        stringBuffer.append(" Value=\"" + "\"/>");
+                                    }
+                                }
                             }
                             stringBuffer.append("</Item>");
                         } else {
@@ -505,8 +576,8 @@ public class SymptomActivity extends CaseBaseActivity {
             stringBuffer.append("</Group>");
         }
         stringBuffer.append("</Root>");
-//         CommonUtil.appendToFile(stringBuffer.toString(), new File(Environment.getExternalStorageDirectory() + File.separator +
-//         "text1.txt"));
+         CommonUtil.appendToFile(stringBuffer.toString(), new File(Environment.getExternalStorageDirectory() + File.separator +
+         "text1.txt"));
         ClientUtil.getCaseParams().add(String.valueOf(page), stringBuffer.toString());
         Intent intent=new Intent();
         Bundle bundle=new Bundle();
@@ -572,10 +643,15 @@ public class SymptomActivity extends CaseBaseActivity {
         }
     }
 
-    private LinearLayout createEditText(String name, String company, EditText input, String value, String dataType) {
+    private LinearLayout createEditText(String name, String company, EditText input, String value, String dataType, int isTop) {
         LinearLayout layout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin=height / 50;
+        if(isTop == 0) {
+            layoutParams.topMargin=height / 50;
+        }else{
+            layoutParams.leftMargin=width / 40;
+            layoutParams.bottomMargin=height / 50;
+        }
         layout.setGravity(Gravity.CENTER_VERTICAL);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setLayoutParams(layoutParams);

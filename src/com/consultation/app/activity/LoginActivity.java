@@ -147,7 +147,8 @@ public class LoginActivity extends Activity {
             
             @Override
             public void onClick(View v) {
-                ImageListener listener = ImageLoader.getImageListener(verification_image, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                verification_image.setImageResource(R.anim.loading_anim_test);
+                ImageListener listener = ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
                 mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL+"??mobile_ph="+account.getText().toString()+"&ts="+System.currentTimeMillis(), listener);
             }
         });
@@ -217,7 +218,7 @@ public class LoginActivity extends Activity {
                                     Map<String, String> imageParmas = new HashMap<String, String>();
                                     imageParmas.put("mobile_ph", account.getText().toString());
                                     imageParmas.put("ts", System.currentTimeMillis()+"");
-                                    ImageListener listener = ImageLoader.getImageListener(verification_image, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+                                    ImageListener listener = ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
                                     mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL+"??mobile_ph="+account.getText().toString()+"&ts="+System.currentTimeMillis(), listener);
                                 }
                             }

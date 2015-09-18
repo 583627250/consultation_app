@@ -56,6 +56,8 @@ public class ClientUtil {
     
     public static String GET_CASE_UP_ALL_URL =SERVICE_DOMAIN + "/api/caseContent/save.json";
     
+    public static String GET_CASE_SUBMIT_ALL_URL =SERVICE_DOMAIN + "/api/patientCase/submitById.json";
+    
     public static String GET_UPLOAD_IMAGES_URL =SERVICE_DOMAIN + "/api/caseFiles/multiUpload.json";
    
     public static String GET_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/listByDoctorUserid.json";

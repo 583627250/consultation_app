@@ -557,7 +557,7 @@ public class CaseInfoNewActivity extends Activity {
         });
         imageView.setScaleType(ScaleType.CENTER_CROP);
         imageView.setTag(path);
-        imageView.setImageResource(R.anim.loading_anim);
+        imageView.setImageResource(R.anim.loading_anim_test);
         if(!"null".equals(path) && !"".equals(path)) {
             ImageListener listener=
                 ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
@@ -707,17 +707,11 @@ public class CaseInfoNewActivity extends Activity {
             public void onClick(View v) {
                 // 提交申请
                 Map<String, String> parmas=new HashMap<String, String>();
-                parmas.put("case_id", caseId);
-                parmas.put("is_submit", "1");
-                if(isXml) {
-                    parmas.put("fill_tp", "2");
-                } else {
-                    parmas.put("fill_tp", "1");
-                }
+                parmas.put("id", caseId);
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(CaseInfoNewActivity.this);
-                OpenApiService.getInstance(CaseInfoNewActivity.this).getCaseSaveInfo(mQueue, parmas,
+                OpenApiService.getInstance(CaseInfoNewActivity.this).getCaseSubmitInfo(mQueue, parmas,
                     new Response.Listener<String>() {
 
                         @Override
@@ -727,6 +721,8 @@ public class CaseInfoNewActivity extends Activity {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
                                     Toast.makeText(CaseInfoNewActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent("com.consultation.app.update.case.action");
+                                    sendBroadcast(intent);
                                     finish();
                                 } else if(responses.getInt("rtnCode") == 10004) {
                                     Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
@@ -1490,7 +1486,7 @@ public class CaseInfoNewActivity extends Activity {
                 final String bigImgUrl=discussionList.get(position).getImageFilesTos().get(0).getPic_url();
                 if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
                     if(imgUrl.startsWith("http://")) {
-                        holder.imageView.setImageResource(R.anim.loading_anim);
+                        holder.imageView.setImageResource(R.anim.loading_anim_test);
                         holder.imageView.setTag(imgUrl);
                         ImageListener listener=
                             ImageLoader.getImageListener(holder.imageView, 0,

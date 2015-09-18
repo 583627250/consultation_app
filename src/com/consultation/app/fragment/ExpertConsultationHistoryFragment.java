@@ -80,7 +80,6 @@ public class ExpertConsultationHistoryFragment extends Fragment implements OnLoa
             switch(msg.what) {
                 case 0:
                     myAdapter.notifyDataSetChanged();
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
@@ -93,7 +92,6 @@ public class ExpertConsultationHistoryFragment extends Fragment implements OnLoa
                     myAdapter.notifyDataSetChanged();
                     break;
                 case 2:
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.FAIL);
                     break;
@@ -296,6 +294,11 @@ public class ExpertConsultationHistoryFragment extends Fragment implements OnLoa
                                             patientTo.setModify_time(pObject.getString("modify_time"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
+                                        }
+                                        if(infos.length() == 10) {
+                                            patientListView.setHasMoreData(true);
+                                        } else {
+                                            patientListView.setHasMoreData(false);
                                         }
                                         Message msg=handler.obtainMessage();
                                         msg.what=0;

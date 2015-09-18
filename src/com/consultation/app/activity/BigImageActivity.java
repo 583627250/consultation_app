@@ -50,6 +50,7 @@ public class BigImageActivity extends Activity {
             
             @Override
             public void onSuccess(String rspContent, int statusCode) {
+                imageView.setVisibility(View.VISIBLE);
                 loading.setVisibility(View.GONE);
             }
             

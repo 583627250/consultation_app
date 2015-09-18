@@ -74,7 +74,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
             switch(msg.what) {
                 case 0:
                     myAdapter.notifyDataSetChanged();
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
@@ -87,7 +86,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                     myAdapter.notifyDataSetChanged();
                     break;
                 case 2:
-                    patientListView.setHasMoreData(true);
                     page=1;
                     ((PullToRefreshLayout)msg.obj).refreshFinish(PullToRefreshLayout.FAIL);
                     break;
@@ -287,6 +285,11 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                             patientTo.setModify_time(pObject.getString("modify_time"));
                                             pcasesTo.setPatient(patientTo);
                                             patientList.add(pcasesTo);
+                                        }
+                                        if(infos.length() == 10) {
+                                            patientListView.setHasMoreData(true);
+                                        } else {
+                                            patientListView.setHasMoreData(false);
                                         }
                                         Message msg=handler.obtainMessage();
                                         msg.what=0;

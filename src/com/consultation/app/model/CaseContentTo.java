@@ -30,6 +30,10 @@ public class CaseContentTo {
 
     private String content_jy_txt;
 
+    private String content_jc_xml;
+
+    private String content_jc_txt;
+
     public String getCaseId() {
         return caseId;
     }
@@ -140,6 +144,22 @@ public class CaseContentTo {
 
     public void setContent_jy_txt(String content_jy_txt) {
         this.content_jy_txt=content_jy_txt;
+    }
+
+    public String getContent_jc_xml() {
+        return content_jc_xml;
+    }
+
+    public void setContent_jc_xml(String content_jc_xml) {
+        this.content_jc_xml=content_jc_xml;
+    }
+
+    public String getContent_jc_txt() {
+        return content_jc_txt;
+    }
+
+    public void setContent_jc_txt(String content_jc_txt) {
+        this.content_jc_txt=content_jc_txt;
     }
 
     public CaseContentTo() {

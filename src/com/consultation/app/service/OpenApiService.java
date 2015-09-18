@@ -133,6 +133,11 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_CASE_UP_ALL_URL, parmas, listener, errorListener);
     }
+    
+    public void getCaseSubmitInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_CASE_SUBMIT_ALL_URL, parmas, listener, errorListener);
+    }
 
     public void getIsPatient(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
