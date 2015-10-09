@@ -111,6 +111,8 @@ public class ClientUtil {
     public static String GET_MY_ACOUNT_PAY_RECORD_URL =SERVICE_DOMAIN + "/api/userBalancePayment/list.json";
     
     public static String GET_EXPERT_ACCEPT_URL =SERVICE_DOMAIN + "/api/patientCase/acceptByExpert.json";
+    
+    public static String GET_READ_TOTAL_COUNT_URL =SERVICE_DOMAIN + "/api/caseDiscuss/toReadTotalCount.json";
 
     private static CaseParams caseParams=new CaseParams();
 

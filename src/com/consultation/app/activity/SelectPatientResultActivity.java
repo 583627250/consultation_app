@@ -59,6 +59,8 @@ public class SelectPatientResultActivity extends Activity {
     private SharePreferencesEditor editor;
 
     private int times;
+    
+    private boolean isPublic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class SelectPatientResultActivity extends Activity {
         setContentView(R.layout.search_select_patient_result_layout);
         nameString=getIntent().getStringExtra("nameString");
         mContext=this;
+        isPublic = getIntent().getBooleanExtra("isPublic", false);
         editor=new SharePreferencesEditor(mContext);
         mQueue=Volley.newRequestQueue(SelectPatientResultActivity.this);
         initDate();
@@ -104,7 +107,7 @@ public class SelectPatientResultActivity extends Activity {
                             + infos.getString("area_county"));
                         if(null == infos.getJSONObject("userBalance").getString("current_balance")
                             || "null".equals(infos.getJSONObject("userBalance").getString("current_balance"))) {
-                            blance.setText("余额:0.00元");
+                            blance.setText("余额:0.0元");
                         } else {
                             blance.setText("余额:" + (float)Long.parseLong(infos.getJSONObject("userBalance").getString("current_balance"))/100 + "元");
                         }
@@ -186,6 +189,11 @@ public class SelectPatientResultActivity extends Activity {
 
         code_edit=(EditText)findViewById(R.id.search_patient_result_code_input_edit);
         code_edit.setTextSize(18);
+        
+        LinearLayout codeLayout=(LinearLayout)findViewById(R.id.search_patient_result_code_layout);
+        if(isPublic){
+            codeLayout.setVisibility(View.GONE);
+        }
 
         codeBtn=(Button)findViewById(R.id.search_patient_result_phone_get_btn);
         codeBtn.setTextSize(14);
@@ -265,60 +273,70 @@ public class SelectPatientResultActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                if(null == code_edit.getText().toString() || "".equals(code_edit.getText().toString())) {
-                    Toast.makeText(mContext, "请输入验证码", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                final Map<String, String> parmas=new HashMap<String, String>();
-                parmas.put("patient_id", patient.getId());
-                parmas.put("sms_code", code_edit.getText().toString());
-                parmas.put("accessToken", ClientUtil.getToken());
-                parmas.put("uid", editor.get("uid", ""));
-                CommonUtil.showLoadingDialog(mContext);
-                OpenApiService.getInstance(mContext).getIsPatient(mQueue, parmas, new Response.Listener<String>() {
+                if(isPublic){
+                    Intent intent=new Intent();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("patientName", patient.getReal_name());
+                    bundle.putString("patientId", patient.getId());
+                    intent.putExtras(bundle);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                }else{
+                    if(null == code_edit.getText().toString() || "".equals(code_edit.getText().toString())) {
+                        Toast.makeText(mContext, "请输入验证码", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    final Map<String, String> parmas=new HashMap<String, String>();
+                    parmas.put("patient_id", patient.getId());
+                    parmas.put("sms_code", code_edit.getText().toString());
+                    parmas.put("accessToken", ClientUtil.getToken());
+                    parmas.put("uid", editor.get("uid", ""));
+                    CommonUtil.showLoadingDialog(mContext);
+                    OpenApiService.getInstance(mContext).getIsPatient(mQueue, parmas, new Response.Listener<String>() {
 
-                    @Override
-                    public void onResponse(String arg0) {
-                        CommonUtil.closeLodingDialog();
-                        try {
-                            JSONObject responses=new JSONObject(arg0);
-                            if(responses.getInt("rtnCode") == 1) {
-                                Intent intent=new Intent();
-                                Bundle bundle=new Bundle();
-                                bundle.putString("patientName", patient.getReal_name());
-                                bundle.putString("patientId", patient.getId());
-                                intent.putExtras(bundle);
-                                setResult(Activity.RESULT_OK, intent);
-                                finish();
-                            } else if(responses.getInt("rtnCode") == 10004) {
-                                Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+                        @Override
+                        public void onResponse(String arg0) {
+                            CommonUtil.closeLodingDialog();
+                            try {
+                                JSONObject responses=new JSONObject(arg0);
+                                if(responses.getInt("rtnCode") == 1) {
+                                    Intent intent=new Intent();
+                                    Bundle bundle=new Bundle();
+                                    bundle.putString("patientName", patient.getReal_name());
+                                    bundle.putString("patientId", patient.getId());
+                                    intent.putExtras(bundle);
+                                    setResult(Activity.RESULT_OK, intent);
+                                    finish();
+                                } else if(responses.getInt("rtnCode") == 10004) {
+                                    Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                    LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                                    @Override
-                                    public void onSuccess(String rspContent, int statusCode) {
-                                        initDate();
-                                    }
+                                        @Override
+                                        public void onSuccess(String rspContent, int statusCode) {
+                                            initDate();
+                                        }
 
-                                    @Override
-                                    public void onFailure(ConsultationCallbackException exp) {
-                                    }
-                                });
-                                startActivity(new Intent(SelectPatientResultActivity.this, LoginActivity.class));
-                            } else {
-                                Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();
+                                        @Override
+                                        public void onFailure(ConsultationCallbackException exp) {
+                                        }
+                                    });
+                                    startActivity(new Intent(SelectPatientResultActivity.this, LoginActivity.class));
+                                } else {
+                                    Toast.makeText(mContext, "验证码错误", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch(JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch(JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                }, new Response.ErrorListener() {
+                    }, new Response.ErrorListener() {
 
-                    @Override
-                    public void onErrorResponse(VolleyError arg0) {
-                        CommonUtil.closeLodingDialog();
-                        Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onErrorResponse(VolleyError arg0) {
+                            CommonUtil.closeLodingDialog();
+                            Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
         OKBtn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),

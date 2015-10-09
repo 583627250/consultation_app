@@ -125,8 +125,12 @@ public class CaseInfoNewActivity extends Activity {
     private int width;
 
     private int height;
+    
+    private TextView jyTextView,jcTextView;
 
     private Map<String, ArrayList<ImageFilesTo>> ImageMap=new HashMap<String, ArrayList<ImageFilesTo>>();
+
+    private Map<String, String> ImageTextMap=new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +183,7 @@ public class CaseInfoNewActivity extends Activity {
                             }
                             patientCaseTo.setStatus_desc(patientCaseObject.getString("status_desc"));
                             patientCaseTo.setPatient_name(patientCaseObject.getString("patient_name"));
+                            patientCaseTo.setCase_templ_id(patientCaseObject.getString("case_templ_id"));
                             patientCaseTo.setPatient_userid(patientCaseObject.getString("patient_userid"));
                             patientCaseTo.setOpinion(patientCaseObject.getString("opinion"));
                             patientCaseTo.setDoctor_name(patientCaseObject.getString("doctor_name"));
@@ -228,7 +233,7 @@ public class CaseInfoNewActivity extends Activity {
                                     caseContentTo.setContent_jws_xml(caseContentJsonObject.getString("content_jws_xml"));
                                 }
                                 if(!caseContentJsonObject.getString("content_jws_txt").equals("null")) {
-                                    caseContentTo.setContent_jws_txt(caseContentJsonObject.getString("content_jws_xml"));
+                                    caseContentTo.setContent_jws_txt(caseContentJsonObject.getString("content_jws_txt"));
                                 }
                                 if(!caseContentJsonObject.getString("content_jzs_xml").equals("null")) {
                                     caseContentTo.setContent_jzs_xml(caseContentJsonObject.getString("content_jzs_xml"));
@@ -241,6 +246,12 @@ public class CaseInfoNewActivity extends Activity {
                                 }
                                 if(!caseContentJsonObject.getString("content_jy_txt").equals("null")) {
                                     caseContentTo.setContent_jy_txt(caseContentJsonObject.getString("content_jy_txt"));
+                                }
+                                if(!caseContentJsonObject.getString("content_jc_xml").equals("null")) {
+                                    caseContentTo.setContent_jc_xml(caseContentJsonObject.getString("content_jc_xml"));
+                                }
+                                if(!caseContentJsonObject.getString("content_jc_txt").equals("null")) {
+                                    caseContentTo.setContent_jc_txt(caseContentJsonObject.getString("content_jc_txt"));
                                 }
                                 caseTo.setCaseContentTo(caseContentTo);
                             }
@@ -264,6 +275,7 @@ public class CaseInfoNewActivity extends Activity {
                             if(!responses.getString("caseDiscusss").equals("null")) {
                                 JSONArray discussionJSONArray=responses.getJSONArray("caseDiscusss");
                                 for(int i=0; i < discussionJSONArray.length(); i++) {
+                                    System.out.println(discussionJSONArray.getJSONObject(i).toString());
                                     DiscussionTo discussionTo=new DiscussionTo();
                                     JSONObject discussionObject=discussionJSONArray.getJSONObject(i);
                                     discussionTo.setId(discussionObject.getString("id"));
@@ -279,7 +291,7 @@ public class CaseInfoNewActivity extends Activity {
                                     discussionTo.setAt_username(discussionObject.getString("at_username"));
                                     discussionTo.setDiscusser(discussionObject.getString("discusser"));
                                     discussionTo.setDiscusser_userid(discussionObject.getString("discusser_userid"));
-                                    discussionTo.setIs_view(discussionObject.getString("is_view"));
+//                                    discussionTo.setIs_view(discussionObject.getString("is_view"));
                                     discussionTo.setHave_photos(discussionObject.getString("have_photos"));
                                     JSONObject userObject1=discussionObject.getJSONObject("user");
                                     UserTo userTo1=new UserTo();
@@ -348,13 +360,18 @@ public class CaseInfoNewActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            scrollView.scrollTo(0, 0);
+            new Handler().post(new Runnable() {  
+                @Override  
+                public void run() {  
+                    scrollView.fullScroll(ScrollView.FOCUS_UP);  
+                }  
+            });
             setListViewHeightBasedOnChildren(discussionListView);
             AssetManager assetManager=getAssets();
             try {
                 for(String str: assetManager.list("")) {
                     if(str.endsWith("case.xml")) {
-                        if(str.equals(caseTo.getPatientCase().getDepart_id() + "case.xml")) {
+                        if(str.equals(caseTo.getPatientCase().getCase_templ_id() + "case.xml")) {
                             isXml=true;
                         }
                     }
@@ -377,11 +394,15 @@ public class CaseInfoNewActivity extends Activity {
                 zljgText.setText(caseTo.getCaseContentTo().getContent_zljg_txt());
                 jwsText.setText(caseTo.getCaseContentTo().getContent_jws_txt());
                 jzsText.setText(caseTo.getCaseContentTo().getContent_jzs_txt());
-                tgjcText.setText(caseTo.getCaseContentTo().getContent_jy_txt());
+                tgjcText.setText(caseTo.getCaseContentTo().getContent_tz_txt());
+                jyTextView.setText("检验：\r\n");
+                if(caseTo.getCaseContentTo().getContent_jy_txt()!=null && !"".equals(caseTo.getCaseContentTo().getContent_jy_txt()) && !"null".equals(caseTo.getCaseContentTo().getContent_jy_txt())){
+                    jyTextView.setText("检验：\r\n"+caseTo.getCaseContentTo().getContent_jy_txt());
+                }
             }
             xqText.setText(caseTo.getPatientCase().getProblem());
             zxfsText.setText(caseTo.getPatientCase().getConsult_tp());
-            ztText.setText(caseTo.getPatientCase().getStatus());
+            ztText.setText(caseTo.getPatientCase().getStatus_desc());
             if(havaImage) {
                 // 显示图片
                 if(isXml) {
@@ -392,57 +413,57 @@ public class CaseInfoNewActivity extends Activity {
                     showImageLayout(caseTo.getImageFilesTos());
                 }
             }
-            if(caseTo.getPatientCase().getStatus().equals("已驳回") || caseTo.getPatientCase().getStatus().equals("已拒绝")) {
+            if(caseTo.getPatientCase().getStatus().equals("21") || caseTo.getPatientCase().getStatus().equals("30")) {
                 bhyyTitle.setVisibility(View.VISIBLE);
                 bhyyLayout.setVisibility(View.VISIBLE);
                 bhyyText.setVisibility(View.VISIBLE);
                 bhyyText.setText(caseTo.getHandleReason());
             }
-            if(caseTo.getPatientCase().getStatus().equals("讨论中") || caseTo.getPatientCase().getStatus().equals("已完成")
-                || caseTo.getPatientCase().getStatus().equals("已归档")) {
+            if(caseTo.getPatientCase().getStatus().equals("31") || caseTo.getPatientCase().getStatus().equals("12")
+                || caseTo.getPatientCase().getStatus().equals("40")) {
                 bltlTitle.setVisibility(View.VISIBLE);
                 discussionListView.setVisibility(View.VISIBLE);
                 discussionLayout.setVisibility(View.VISIBLE);
             }
-            if(caseTo.getPatientCase().getConsult_tp().equals("明确诊断")) {
+            if(caseTo.getPatientCase().getConsult_tp().equals("专家咨询")) {
                 if(editor.get("userType", "").equals("1")) {
-                    if(caseTo.getPatientCase().getStatus().equals("新建") || caseTo.getPatientCase().getStatus().equals("已驳回")
-                        || caseTo.getPatientCase().getStatus().equals("拒受理")) {
+                    if(caseTo.getPatientCase().getStatus().equals("10") || caseTo.getPatientCase().getStatus().equals("21")
+                        || caseTo.getPatientCase().getStatus().equals("30")) {
                         showNewLayout.setVisibility(View.VISIBLE);
                         showDiscussionLayout.setVisibility(View.GONE);
                         showFinshLayout.setVisibility(View.GONE);
-                    } else if(caseTo.getPatientCase().getStatus().equals("讨论中")) {
+                    } else if(caseTo.getPatientCase().getStatus().equals("31")) {
                         showNewLayout.setVisibility(View.GONE);
                         showDiscussionLayout.setVisibility(View.VISIBLE);
                         showFinshLayout.setVisibility(View.GONE);
-                    } else if(caseTo.getPatientCase().getStatus().equals("完成")) {
+                    } else if(caseTo.getPatientCase().getStatus().equals("12")) {
                         showNewLayout.setVisibility(View.GONE);
                         showDiscussionLayout.setVisibility(View.GONE);
                         showFinshLayout.setVisibility(View.VISIBLE);
                     }
                 } else if(editor.get("userType", "").equals("2")) {
-                    if(caseTo.getPatientCase().getStatus().equals("已审核")) {
+                    if(caseTo.getPatientCase().getStatus().equals("20")) {
                         examineLayout.setVisibility(View.VISIBLE);
                         expertDisLayout.setVisibility(View.GONE);
-                    } else if(caseTo.getPatientCase().getStatus().equals("讨论中")) {
+                    } else if(caseTo.getPatientCase().getStatus().equals("31")) {
                         examineLayout.setVisibility(View.GONE);
                         expertDisLayout.setVisibility(View.VISIBLE);
                     }
                 }
             } else if(caseTo.getPatientCase().getConsult_tp().equals("公开讨论")) {
                 if(editor.get("userType", "").equals("1")) {
-                    if(caseTo.getPatientCase().getStatus().equals("新建") || caseTo.getPatientCase().getStatus().equals("已驳回")
-                        || caseTo.getPatientCase().getStatus().equals("拒受理")) {
+                    if(caseTo.getPatientCase().getStatus().equals("10") || caseTo.getPatientCase().getStatus().equals("21")
+                        || caseTo.getPatientCase().getStatus().equals("30")) {
                         showNewLayout.setVisibility(View.VISIBLE);
                         showDiscussionLayout.setVisibility(View.GONE);
                         showFinshLayout.setVisibility(View.GONE);
-                    } else if(caseTo.getPatientCase().getStatus().equals("讨论中")) {
+                    } else if(caseTo.getPatientCase().getStatus().equals("31")) {
                         showNewLayout.setVisibility(View.GONE);
                         showDiscussionLayout.setVisibility(View.VISIBLE);
                         showFinshLayout.setVisibility(View.GONE);
                     }
                 } else if(editor.get("userType", "").equals("2")) {
-                    if(caseTo.getPatientCase().getStatus().equals("讨论中")) {
+                    if(caseTo.getPatientCase().getStatus().equals("31")) {
                         // 专家讨论的界面
                         expertDiscussionLayout.setVisibility(View.VISIBLE);
                     }
@@ -454,14 +475,31 @@ public class CaseInfoNewActivity extends Activity {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void showListImageLayout(ArrayList<ImageFilesTo> imageFilesTos) {
+        ArrayList<String> TestNames=new ArrayList<String>();
         for(int i=0; i < imageFilesTos.size(); i++) {
             String testName=imageFilesTos.get(i).getTest_name();
+            TestNames.add(testName);
             if(ImageMap.get(testName) == null) {
                 ArrayList<ImageFilesTo> temp=new ArrayList<ImageFilesTo>();
                 temp.add(imageFilesTos.get(i));
                 ImageMap.put(testName, temp);
             } else {
                 ImageMap.get(testName).add(imageFilesTos.get(i));
+            }
+        }
+        if(havaCase) {
+            if(null != caseTo.getCaseContentTo().getContent_jc_txt() && !"".equals(caseTo.getCaseContentTo().getContent_jc_txt())
+                && !"null".equals(caseTo.getCaseContentTo().getContent_jc_txt())) {
+                try {
+                    JSONObject imageTextObject=new JSONObject(caseTo.getCaseContentTo().getContent_jc_txt());
+                    for(int i=0; i < TestNames.size(); i++) {
+                        if(imageTextObject.toString().contains(TestNames.get(i))) {
+                            ImageTextMap.put(TestNames.get(i), imageTextObject.getString(TestNames.get(i)));
+                        }
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
         imageLayout.removeAllViews();
@@ -471,7 +509,12 @@ public class CaseInfoNewActivity extends Activity {
             String name=(String)entry.getKey();
             ArrayList<ImageFilesTo> filesTos=(ArrayList<ImageFilesTo>)entry.getValue();
             // 先创建一个标题
-            imageLayout.addView(createTextView(name));
+            imageLayout.addView(createTextView(name, 17, "#000000"));
+            if(ImageTextMap.size() != 0) {
+                if(ImageTextMap.get(name) != null && !"".equals(ImageTextMap.get(name))) {
+                    imageLayout.addView(createTextView(ImageTextMap.get(name), 17, "#7B7B7B"));
+                }
+            }
             // 再显示图片
             if(null != filesTos && filesTos.size() != 0) {
                 LinearLayout rowsLayout=new LinearLayout(CaseInfoNewActivity.this);
@@ -485,12 +528,10 @@ public class CaseInfoNewActivity extends Activity {
                     rowsLayout.addView(relativeLayout);
                 }
             }
-
         }
-
     }
-    
-    private LinearLayout createTextView(String name) {
+
+    private LinearLayout createTextView(String name, int textSize, String textColor) {
         LinearLayout layout=new LinearLayout(CaseInfoNewActivity.this);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         layout.setGravity(Gravity.CENTER_VERTICAL);
@@ -499,12 +540,12 @@ public class CaseInfoNewActivity extends Activity {
 
         TextView textName=new TextView(CaseInfoNewActivity.this);
         LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        textNameParams.leftMargin=width / 40;
+        textNameParams.leftMargin=width / 50;
         textName.setLayoutParams(textNameParams);
         textName.setText(name);
         textName.setGravity(Gravity.CENTER_VERTICAL);
-        textName.setTextColor(Color.parseColor("#000000"));
-        textName.setTextSize(17);
+        textName.setTextColor(Color.parseColor(textColor));
+        textName.setTextSize(textSize);
         layout.addView(textName);
         return layout;
     }
@@ -559,8 +600,7 @@ public class CaseInfoNewActivity extends Activity {
         imageView.setTag(path);
         imageView.setImageResource(R.anim.loading_anim_test);
         if(!"null".equals(path) && !"".equals(path)) {
-            ImageListener listener=
-                ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
+            ImageListener listener=ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
             mImageLoader.get(path, listener, 200, 200);
         }
         relativeLayout.addView(imageView);
@@ -601,6 +641,12 @@ public class CaseInfoNewActivity extends Activity {
         expertDisLayout=(LinearLayout)findViewById(R.id.case_info_new_show_expert_dis_layout);
         imageLayout=(LinearLayout)findViewById(R.id.case_info_new_title_fzjc_layout);
 
+        jyTextView=(TextView)findViewById(R.id.case_info_new_jy_text);
+        jyTextView.setTextSize(17);
+        jcTextView=(TextView)findViewById(R.id.case_info_new_jc_text);
+        jcTextView.setTextSize(17);
+        
+        
         titleTitle=(TextView)findViewById(R.id.case_info_new_title_zs_text);
         titleTitle.setTextSize(18);
 
@@ -721,7 +767,7 @@ public class CaseInfoNewActivity extends Activity {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
                                     Toast.makeText(CaseInfoNewActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent("com.consultation.app.update.case.action");
+                                    Intent intent=new Intent("com.consultation.app.new.case.action");
                                     sendBroadcast(intent);
                                     finish();
                                 } else if(responses.getInt("rtnCode") == 10004) {
@@ -768,7 +814,7 @@ public class CaseInfoNewActivity extends Activity {
                 // 修改病例
                 Intent intent=new Intent(CaseInfoNewActivity.this, CreateCaseActivity.class);
                 intent.putExtra("caseId", caseId);
-                intent.putExtra("departmentId", caseTo.getPatientCase().getDepart_id());
+                intent.putExtra("departmentId", caseTo.getPatientCase().getCase_templ_id());
                 intent.putExtra("expertId", caseTo.getPatientCase().getExpert_userid());
                 intent.putExtra("expertName", caseTo.getPatientCase().getExpert_name());
                 intent.putExtra("patientId", caseTo.getPatientCase().getPatient_userid());
@@ -782,21 +828,22 @@ public class CaseInfoNewActivity extends Activity {
                 if(havaCase) {
                     if(caseTo.getCaseContentTo().getFill_tp().equals("1")) {
                         // txt
-                        buffer.append(caseTo.getCaseContentTo().getContent_zs_txt());
+                        buffer.append(caseTo.getCaseContentTo().getContent_zs_txt()).append("&");
                         buffer.append(caseTo.getCaseContentTo().getContent_tz_txt()).append("&");
                         buffer.append(caseTo.getCaseContentTo().getContent_jy_txt()).append("&");
                         buffer.append(caseTo.getCaseContentTo().getContent_zljg_txt()).append("&");
                         buffer.append(caseTo.getCaseContentTo().getContent_jws_txt()).append("&");
-                        buffer.append(caseTo.getCaseContentTo().getContent_jzs_txt()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_jzs_txt());
                         intent.putExtra("content", buffer.toString());
                     } else if(caseTo.getCaseContentTo().getFill_tp().equals("2")) {
                         // xml
-                        buffer.append(caseTo.getCaseContentTo().getContent_zs_xml()).append(",");
-                        buffer.append(caseTo.getCaseContentTo().getContent_tz_xml()).append(",");
-                        buffer.append(caseTo.getCaseContentTo().getContent_jy_xml()).append(",");
-                        buffer.append(caseTo.getCaseContentTo().getContent_zljg_xml()).append(",");
-                        buffer.append(caseTo.getCaseContentTo().getContent_jws_xml()).append(",");
-                        buffer.append(caseTo.getCaseContentTo().getContent_jzs_xml()).append(",");
+                        buffer.append(caseTo.getCaseContentTo().getContent_zs_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_tz_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_jy_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_zljg_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_jws_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_jzs_xml()).append("&");
+                        buffer.append(caseTo.getCaseContentTo().getContent_jc_xml());
                         intent.putExtra("content", buffer.toString());
                     }
                 }
@@ -952,7 +999,7 @@ public class CaseInfoNewActivity extends Activity {
                                     discussionTo.setDiscusser(editor.get("real_name", "医生"));
                                     discussionTo.setDiscusser_userid(editor.get("uid", ""));
                                     discussionTo.setContent(discussion_edit.getText().toString());
-                                    discussionTo.setIs_view("1");
+//                                    discussionTo.setIs_view("1");
                                     discussionTo.setHave_photos("0");
                                     UserTo userTo=new UserTo();
                                     userTo.setTp(editor.get("userType", ""));
@@ -968,7 +1015,14 @@ public class CaseInfoNewActivity extends Activity {
                                     discussionTo.setImageFilesTos(list);
                                     discussionList.add(discussionTo);
                                     myAdapter.notifyDataSetChanged();
-                                    discussionListView.setSelection(discussionList.size());
+                                    setListViewHeightBasedOnChildren(discussionListView);
+//                                    discussionListView.setSelection(discussionList.size());
+                                    new Handler().post(new Runnable() {  
+                                        @Override  
+                                        public void run() {  
+                                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);  
+                                        }  
+                                    });
                                     discussion_edit.setText("");
                                 } else if(responses.getInt("rtnCode") == 10004) {
                                     Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
@@ -1038,7 +1092,7 @@ public class CaseInfoNewActivity extends Activity {
                                     discussionTo.setDiscusser(editor.get("real_name", "医生"));
                                     discussionTo.setDiscusser_userid(editor.get("uid", ""));
                                     discussionTo.setContent(discussion_edit.getText().toString());
-                                    discussionTo.setIs_view("1");
+//                                    discussionTo.setIs_view("1");
                                     discussionTo.setHave_photos("0");
                                     UserTo userTo=new UserTo();
                                     userTo.setTp(editor.get("userType", ""));
@@ -1054,7 +1108,14 @@ public class CaseInfoNewActivity extends Activity {
                                     discussionTo.setImageFilesTos(list);
                                     discussionList.add(discussionTo);
                                     myAdapter.notifyDataSetChanged();
-                                    discussionListView.setSelection(discussionList.size());
+                                    setListViewHeightBasedOnChildren(discussionListView);
+//                                    discussionListView.setSelection(discussionList.size());
+                                    new Handler().post(new Runnable() {  
+                                        @Override  
+                                        public void run() {  
+                                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);  
+                                        }  
+                                    });
                                     discussion_edit.setText("");
                                 } else if(responses.getInt("rtnCode") == 10004) {
                                     Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
@@ -1096,10 +1157,10 @@ public class CaseInfoNewActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                // 初级医师更多，根据咨询类型 明确诊断的多一个转住院或手术的功能
-                if(caseTo.getPatientCase().getConsult_tp().equals("明确诊断")) {
+                // 初级医师更多，根据咨询类型 专家咨询的多一个转住院或手术的功能
+                if(caseTo.getPatientCase().getConsult_tp().equals("专家咨询")) {
                     // 上传图片、转手术或住院、完成，点击完成时，弹出取消、确认框
-                    Intent intent=new Intent();
+                    Intent intent=new Intent(CaseInfoNewActivity.this, CaseMoreNewActivity.class);
                     intent.putExtra("caseId", caseId);
                     intent.putExtra("btn1", "上传图片");
                     intent.putExtra("btn2", "转手术或住院");
@@ -1108,7 +1169,7 @@ public class CaseInfoNewActivity extends Activity {
                     startActivityForResult(intent, 1);
                 } else if(caseTo.getPatientCase().getConsult_tp().equals("公开讨论")) {
                     // 上传图片、完成，点击完成时，弹出取消、确认框
-                    Intent intent=new Intent();
+                    Intent intent=new Intent(CaseInfoNewActivity.this, CaseMoreNewActivity.class);
                     intent.putExtra("caseId", caseId);
                     intent.putExtra("btn1", "上传图片");
                     intent.putExtra("btn3", "完成");
@@ -1140,8 +1201,9 @@ public class CaseInfoNewActivity extends Activity {
                             try {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
-                                    initData();
-                                    initView();
+                                    Intent intent=new Intent("com.consultation.app.new.case.action");
+                                    sendBroadcast(intent);
+                                    finish();
                                 } else if(responses.getInt("rtnCode") == 10004) {
                                     Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
                                         .show();
@@ -1186,7 +1248,7 @@ public class CaseInfoNewActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 不受理
-                Intent intent=new Intent();
+                Intent intent=new Intent(CaseInfoNewActivity.this, DialogNewActivity.class);
                 intent.putExtra("flag", 1);
                 intent.putExtra("titleText", "请输入不受理原因");
                 startActivityForResult(intent, 0);
@@ -1211,23 +1273,41 @@ public class CaseInfoNewActivity extends Activity {
                     return;
                 }
                 StringBuffer sb=new StringBuffer();
+                boolean haveString = false;
                 if(!(null == bcbsEdit.getText().toString() || "".equals(bcbsEdit.getText().toString()))) {
-                    sb.append("补充病史：").append(bcbsEdit.getText().toString()).append("\r\n");
+                    if(haveString){
+                        sb.append("\r\n");
+                    }
+                    haveString = true;
+                    sb.append("补充病史：").append(bcbsEdit.getText().toString());
                 }
                 if(!(null == wsjcEdit.getText().toString() || "".equals(wsjcEdit.getText().toString()))) {
-                    sb.append("完善检查：").append(wsjcEdit.getText().toString()).append("\r\n");
+                    if(haveString){
+                        sb.append("\r\n");
+                    }
+                    haveString = true;
+                    sb.append("完善检查：").append(wsjcEdit.getText().toString());
                 }
                 if(!(null == zdyjEdit.getText().toString() || "".equals(zdyjEdit.getText().toString()))) {
-                    sb.append("诊断建议：").append(zdyjEdit.getText().toString()).append("\r\n");
+                    if(haveString){
+                        sb.append("\r\n");
+                    }
+                    haveString = true;
+                    sb.append("诊断建议：").append(zdyjEdit.getText().toString());
                 }
                 if(!(null == jyssEdit.getText().toString() || "".equals(jyssEdit.getText().toString()))) {
-                    sb.append("建议术式：").append(jyssEdit.getText().toString()).append("\r\n");
+                    if(haveString){
+                        sb.append("\r\n");
+                    }
+                    haveString = true;
+                    sb.append("建议术式：").append(jyssEdit.getText().toString());
                 }
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("case_id", caseId);
                 parmas.put("discusser_userid", editor.get("uid", ""));
                 parmas.put("discusser", editor.get("real_name", "专家"));
                 parmas.put("content", sb.toString());
+                final String contents = sb.toString();
                 parmas.put("accessToken", ClientUtil.getToken());
                 parmas.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(CaseInfoNewActivity.this);
@@ -1240,8 +1320,40 @@ public class CaseInfoNewActivity extends Activity {
                             try {
                                 JSONObject responses=new JSONObject(arg0);
                                 if(responses.getInt("rtnCode") == 1) {
-                                    Toast.makeText(CaseInfoNewActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    DiscussionTo discussionTo=new DiscussionTo();
+                                    discussionTo.setCreate_time(System.currentTimeMillis());
+                                    discussionTo.setCase_id(caseId);
+                                    discussionTo.setDiscusser(editor.get("real_name", "医生"));
+                                    discussionTo.setDiscusser_userid(editor.get("uid", ""));
+                                    discussionTo.setContent(contents);
+//                                    discussionTo.setIs_view("1");
+                                    discussionTo.setHave_photos("0");
+                                    UserTo userTo=new UserTo();
+                                    userTo.setTp(editor.get("userType", ""));
+                                    userTo.setIcon_url(editor.get("icon_url", ""));
+                                    userTo.setUser_name(editor.get("real_name", ""));
+                                    discussionTo.setUserTo(userTo);
+                                    ImageFilesTo filesTo=new ImageFilesTo();
+                                    filesTo.setCase_id(caseId);
+                                    filesTo.setPic_url("");
+                                    filesTo.setTest_name("");
+                                    List<ImageFilesTo> list=new ArrayList<ImageFilesTo>();
+                                    list.add(filesTo);
+                                    discussionTo.setImageFilesTos(list);
+                                    discussionList.add(discussionTo);
+                                    myAdapter.notifyDataSetChanged();
+                                    setListViewHeightBasedOnChildren(discussionListView);
+//                                    discussionListView.setSelection(discussionList.size());
+                                    new Handler().post(new Runnable() {  
+                                        @Override  
+                                        public void run() {  
+                                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);  
+                                        }  
+                                    });
+                                    bcbsEdit.setText("");
+                                    wsjcEdit.setText("");
+                                    zdyjEdit.setText("");
+                                    jyssEdit.setText("");
                                 } else if(responses.getInt("rtnCode") == 10004) {
                                     Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
                                         .show();
@@ -1303,6 +1415,8 @@ public class CaseInfoNewActivity extends Activity {
                                 try {
                                     JSONObject responses=new JSONObject(arg0);
                                     if(responses.getInt("rtnCode") == 1) {
+                                        Intent intent=new Intent("com.consultation.app.new.case.action");
+                                        sendBroadcast(intent);
                                         finish();
                                     } else if(responses.getInt("rtnCode") == 10004) {
                                         Toast.makeText(CaseInfoNewActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
@@ -1338,8 +1452,12 @@ public class CaseInfoNewActivity extends Activity {
                     break;
                 case 1:
                     if(data.getStringExtra("status").equals("3")) {
+                        Intent intent=new Intent("com.consultation.app.new.case.action");
+                        sendBroadcast(intent);
                         finish();
                     } else if(data.getStringExtra("status").equals("2")) {
+                        Intent intent=new Intent("com.consultation.app.new.case.action");
+                        sendBroadcast(intent);
                         finish();
                     } else if(data.getStringExtra("status").equals("1")) {
                         uploadImage(data.getStringExtra("path"));
@@ -1347,6 +1465,8 @@ public class CaseInfoNewActivity extends Activity {
                     break;
                 case 2:
                     if(data.getStringExtra("status").equals("3")) {
+                        Intent intent=new Intent("com.consultation.app.new.case.action");
+                        sendBroadcast(intent);
                         finish();
                     } else if(data.getStringExtra("status").equals("1")) {
                         uploadImage(data.getStringExtra("path"));
@@ -1382,7 +1502,7 @@ public class CaseInfoNewActivity extends Activity {
                     discussionTo.setCase_id(caseId);
                     discussionTo.setDiscusser(editor.get("real_name", "医生"));
                     discussionTo.setDiscusser_userid(editor.get("uid", ""));
-                    discussionTo.setIs_view("1");
+//                    discussionTo.setIs_view("1");
                     discussionTo.setHave_photos("1");
                     UserTo userTo=new UserTo();
                     userTo.setTp(editor.get("userType", ""));
@@ -1392,13 +1512,21 @@ public class CaseInfoNewActivity extends Activity {
                     ImageFilesTo filesTo=new ImageFilesTo();
                     filesTo.setCase_id(caseId);
                     filesTo.setPic_url(photoPath);
+                    filesTo.setLittle_pic_url(photoPath);
                     filesTo.setTest_name("");
                     List<ImageFilesTo> list=new ArrayList<ImageFilesTo>();
                     list.add(filesTo);
                     discussionTo.setImageFilesTos(list);
                     discussionList.add(discussionTo);
                     myAdapter.notifyDataSetChanged();
-                    discussionListView.setSelection(discussionList.size());
+//                    discussionListView.setSelection(discussionList.size());
+                    new Handler().post(new Runnable() {  
+                        @Override  
+                        public void run() {  
+                            scrollView.fullScroll(ScrollView.FOCUS_DOWN);  
+                        }  
+                    }); 
+                    setListViewHeightBasedOnChildren(discussionListView);
                 }
 
                 @Override
@@ -1488,9 +1616,7 @@ public class CaseInfoNewActivity extends Activity {
                     if(imgUrl.startsWith("http://")) {
                         holder.imageView.setImageResource(R.anim.loading_anim_test);
                         holder.imageView.setTag(imgUrl);
-                        ImageListener listener=
-                            ImageLoader.getImageListener(holder.imageView, 0,
-                                android.R.drawable.ic_menu_delete);
+                        ImageListener listener=ImageLoader.getImageListener(holder.imageView, 0, android.R.drawable.ic_menu_delete);
                         mImageLoader.get(imgUrl, listener, 200, 200);
                     } else {
                         Bitmap bitmap=CommonUtil.readBitMap(200, imgUrl);

@@ -257,6 +257,12 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
+            android:name="com.consultation.app.activity.SelectCaseTemplateActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
             android:name="com.consultation.app.activity.SelectPatientActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:screenOrientation="portrait"
@@ -314,6 +320,7 @@
             android:name="com.consultation.app.activity.SymptomTxtActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity

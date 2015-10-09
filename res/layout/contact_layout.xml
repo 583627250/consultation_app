@@ -73,9 +73,13 @@
             <Button
                 android:id="@+id/contact_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/create_case_submit_selector"
+                android:background="@drawable/login_login_btn_shape"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
                 android:text="确定"
                 android:textColor="@color/consultation_color_white" />
         </LinearLayout>

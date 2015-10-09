@@ -5,7 +5,9 @@ public class CasesTo {
     private String id;
 
     private String status;
-    
+
+    private String status_des;
+
     private int viewingCount;
 
     private String destination;
@@ -33,11 +35,13 @@ public class CasesTo {
     private String opinion;
 
     private String uid;
-    
+
+    private int ToReadMsgCount;
+
     private String patient_name;
-    
+
     private String patient_id;
-    
+
     public String getPatient_id() {
         return patient_id;
     }
@@ -47,17 +51,17 @@ public class CasesTo {
     }
 
     private PatientTo patient;
-    
+
     private DoctorTo doctorTo;
-    
+
     private DoctorTo expertTo;
-    
+
     private CaseContentTo caseContentTo;
-    
+
     public int getViewingCount() {
         return viewingCount;
     }
-    
+
     public void setViewingCount(int viewingCount) {
         this.viewingCount=viewingCount;
     }
@@ -73,15 +77,15 @@ public class CasesTo {
     public DoctorTo getDoctorTo() {
         return doctorTo;
     }
-    
+
     public void setDoctorTo(DoctorTo doctorTo) {
         this.doctorTo=doctorTo;
     }
-    
+
     public DoctorTo getExpertTo() {
         return expertTo;
     }
-    
+
     public void setExpertTo(DoctorTo expertTo) {
         this.expertTo=expertTo;
     }
@@ -95,41 +99,19 @@ public class CasesTo {
     }
 
     public String getStatus() {
-        String statusText = "新建";
-        switch(Integer.parseInt(status)) {
-            case 10:
-                statusText = "新建";
-                break;
-            case 11:
-                statusText = "审核中";
-                break;
-            case 20:
-                statusText = "已审核";
-                break;
-            case 21:
-                statusText = "已驳回";
-                break;
-            case 30:
-                statusText = "拒受理";
-                break;
-            case 31:
-                statusText = "讨论中";
-                break;
-            case 12:
-                statusText = "已完成";
-                break;
-            case 40:
-                statusText = "已归档";
-                break;
-
-            default:
-                break;
-        }
-        return statusText;
+        return status;
     }
 
     public void setStatus(String status) {
         this.status=status;
+    }
+
+    public String getStatus_des() {
+        return status_des;
+    }
+
+    public void setStatus_des(String status_des) {
+        this.status_des=status_des;
     }
 
     public String getDestination() {
@@ -162,6 +144,14 @@ public class CasesTo {
 
     public void setDepart_id(String depart_id) {
         this.depart_id=depart_id;
+    }
+
+    public int getToReadMsgCount() {
+        return ToReadMsgCount;
+    }
+
+    public void setToReadMsgCount(int toReadMsgCount) {
+        ToReadMsgCount=toReadMsgCount;
     }
 
     public String getDoctor_userid() {
@@ -221,13 +211,13 @@ public class CasesTo {
     }
 
     public String getConsult_tp() {
-        String statusText = "公开讨论";
+        String statusText="公开讨论";
         switch(Integer.parseInt(consult_tp)) {
             case 10:
-                statusText = "公开讨论";
+                statusText="公开讨论";
                 break;
             case 20:
-                statusText = "明确诊断";
+                statusText="专家咨询";
                 break;
             default:
                 break;

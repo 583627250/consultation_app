@@ -103,6 +103,7 @@ public class SearchConsulationResultActivity extends Activity {
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {
@@ -237,8 +238,6 @@ public class SearchConsulationResultActivity extends Activity {
 
         TextView dateText;
 
-        TextView moneyText;
-
         TextView stateText;
     }
 
@@ -270,7 +269,6 @@ public class SearchConsulationResultActivity extends Activity {
                 holder.titleText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_title);
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_date);
-                holder.moneyText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_money);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_state);
                 convertView.setTag(holder);
             } else {
@@ -289,10 +287,8 @@ public class SearchConsulationResultActivity extends Activity {
             String sd=sdf.format(new Date(consulationList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
             holder.dateText.setTextSize(14);
-            holder.moneyText.setText("￥" + consulationList.get(position).getConsult_fee());
-            holder.moneyText.setTextSize(18);
-            holder.stateText.setText(consulationList.get(position).getStatus());
-            holder.stateText.setTextSize(18);
+            holder.stateText.setText(consulationList.get(position).getStatus_des());
+            holder.stateText.setTextSize(14);
             final String imgUrl=consulationList.get(position).getPatient().getIcon_url();
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo_patient);

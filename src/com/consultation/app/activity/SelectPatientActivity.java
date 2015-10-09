@@ -53,11 +53,14 @@ public class SelectPatientActivity extends Activity {
     private boolean isHave = false;
     
     private ImageView deleteBtn;
+    
+    private boolean isPublic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_search_layout);
+        isPublic = getIntent().getBooleanExtra("isPublic", false);
         initDate();
         initView();
     }
@@ -149,6 +152,7 @@ public class SelectPatientActivity extends Activity {
                     }
                     Intent intent = new Intent(SelectPatientActivity.this, SelectPatientResultActivity.class);
                     intent.putExtra("nameString", editTextString);
+                    intent.putExtra("isPublic", isPublic);
                     startActivityForResult(intent, 0);
                     deleteText.setVisibility(View.VISIBLE);
                     historyList.add(editTextString);
@@ -165,6 +169,7 @@ public class SelectPatientActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SelectPatientActivity.this, SelectPatientResultActivity.class);
                 intent.putExtra("nameString", historyList.get(position));
+                intent.putExtra("isPublic", isPublic);
                 startActivityForResult(intent, 0);
             }
         });

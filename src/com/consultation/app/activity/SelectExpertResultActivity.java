@@ -44,41 +44,41 @@ import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.CommonUtil;
 
 public class SelectExpertResultActivity extends Activity {
-    
+
     private LinearLayout back_layout;
 
-    private TextView back_text,title_text;
-    
+    private TextView back_text, title_text;
+
     private ListView recommendListView;
 
     private MyAdapter myAdapter;
-    
+
     private ViewHolder holder;
-    
+
     private List<SpecialistTo> specialist_content_list=new ArrayList<SpecialistTo>();
-    
+
     private RequestQueue mQueue;
-    
+
     private ImageLoader mImageLoader;
-    
+
     private String nameString;
-    
+
     private Context mContext;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
-        nameString = getIntent().getStringExtra("nameString");
-        mContext = this;
-        mQueue = Volley.newRequestQueue(SelectExpertResultActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
+        nameString=getIntent().getStringExtra("nameString");
+        mContext=this;
+        mQueue=Volley.newRequestQueue(SelectExpertResultActivity.this);
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         initDate();
         initView();
     }
 
     private void initDate() {
-        Map<String, String> parmas = new HashMap<String, String>();
+        Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("real_name", nameString);
         CommonUtil.showLoadingDialog(mContext);
@@ -88,13 +88,13 @@ public class SelectExpertResultActivity extends Activity {
             public void onResponse(String arg0) {
                 CommonUtil.closeLodingDialog();
                 try {
-                    JSONObject responses = new JSONObject(arg0);
-                    if(responses.getInt("rtnCode") == 1){
-                        JSONArray infos = responses.getJSONArray("experts");
+                    JSONObject responses=new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1) {
+                        JSONArray infos=responses.getJSONArray("experts");
                         specialist_content_list.clear();
                         for(int i=0; i < infos.length(); i++) {
-                            JSONObject info = infos.getJSONObject(i);
-                            SpecialistTo specialistTo = new SpecialistTo();
+                            JSONObject info=infos.getJSONObject(i);
+                            SpecialistTo specialistTo=new SpecialistTo();
                             specialistTo.setApprove_status(info.getString("approve_status"));
                             specialistTo.setDepart_name(info.getString("depart_name"));
                             specialistTo.setGoodat_fields(info.getString("goodat_fields"));
@@ -102,23 +102,27 @@ public class SelectExpertResultActivity extends Activity {
                             specialistTo.setId(info.getString("id"));
                             specialistTo.setTitle(info.getString("title"));
                             specialistTo.setExpert_gardeid(info.getString("expert_gradeid"));
-                            JSONObject userToJsonObject = info.getJSONObject("user");
-                            UserTo userTo = new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"), userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject.getString("icon_url"));
+                            JSONObject userToJsonObject=info.getJSONObject("user");
+                            UserTo userTo=
+                                new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"),
+                                    userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject
+                                        .getString("icon_url"));
                             userTo.setUser_id(info.getInt("user_id"));
-                            JSONObject userStatisticsJsonObject = info.getJSONObject("userTj");
+                            JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                             specialistTo.setUser(userTo);
-                            UserStatisticsTo userStatistics = new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
+                            UserStatisticsTo userStatistics=
+                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), 1);
                             specialistTo.setUserTj(userStatistics);
                             specialist_content_list.add(specialistTo);
                         }
                         myAdapter.notifyDataSetChanged();
-                        if(specialist_content_list.size() == 0){
-                            TextView noData = (TextView)findViewById(R.id.recommend_search_no_listView_text);
+                        if(specialist_content_list.size() == 0) {
+                            TextView noData=(TextView)findViewById(R.id.recommend_search_no_listView_text);
                             noData.setTextSize(18);
                             noData.setText("对不起！没有该专家");
                             noData.setVisibility(View.VISIBLE);
                         }
-                    }else if(responses.getInt("rtnCode") == 10004){
+                    } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
@@ -132,7 +136,7 @@ public class SelectExpertResultActivity extends Activity {
                             }
                         });
                         startActivity(new Intent(SelectExpertResultActivity.this, LoginActivity.class));
-                    } else{
+                    } else {
                         Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
@@ -154,7 +158,7 @@ public class SelectExpertResultActivity extends Activity {
         back_layout.setVisibility(View.VISIBLE);
         back_text=(TextView)findViewById(R.id.header_text_lift);
         back_text.setTextSize(18);
-        title_text = (TextView)findViewById(R.id.header_text);
+        title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("专家库");
         title_text.setTextSize(20);
         back_layout.setOnClickListener(new OnClickListener() {
@@ -164,25 +168,25 @@ public class SelectExpertResultActivity extends Activity {
                 finish();
             }
         });
-        
-        myAdapter = new MyAdapter();
+
+        myAdapter=new MyAdapter();
         recommendListView=(ListView)findViewById(R.id.knowledge_recommend_list_search_result_listView);
         recommendListView.setAdapter(myAdapter);
         recommendListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-              Bundle bundle = new Bundle();
-              bundle.putString("expertName", specialist_content_list.get(position).getUser().getUser_name());
-              bundle.putString("expertId", specialist_content_list.get(position).getUser().getUser_id()+"");
-              intent.putExtras(bundle);
-              setResult(Activity.RESULT_OK, intent);
-              finish();
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putString("expertName", specialist_content_list.get(position).getUser().getUser_name());
+                bundle.putString("expertId", specialist_content_list.get(position).getUser().getUser_id() + "");
+                intent.putExtras(bundle);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
-    
+
     private static class ViewHolder {
 
         ImageView photo;
@@ -196,9 +200,9 @@ public class SelectExpertResultActivity extends Activity {
         TextView patients;
 
         TextView patientCount;
-        
+
         TextView score;
-        
+
         RatingBar scoreRatingBar;
     }
 
@@ -241,10 +245,11 @@ public class SelectExpertResultActivity extends Activity {
             holder.photo.setImageResource(R.drawable.photo_expert);
             holder.name.setText(specialist_content_list.get(position).getUser().getUser_name());
             holder.name.setTextSize(18);
-            holder.score.setText((float)(specialist_content_list.get(position).getUserTj().getStar_value())+"分");
+            holder.score.setText((float)(specialist_content_list.get(position).getUserTj().getStar_value()) + "分");
             holder.score.setTextSize(16);
-            holder.scoreRatingBar.setRating((float)(specialist_content_list.get(position).getUserTj().getStar_value()/10));
-            holder.departmen.setText(specialist_content_list.get(position).getDepart_name()+"|"+specialist_content_list.get(position).getTitle());
+            holder.scoreRatingBar.setRating((float)(specialist_content_list.get(position).getUserTj().getStar_value() / 10));
+            holder.departmen.setText(specialist_content_list.get(position).getDepart_name() + "|"
+                + specialist_content_list.get(position).getTitle());
             holder.departmen.setTextSize(16);
             holder.hospital.setText(specialist_content_list.get(position).getHospital_name());
             holder.hospital.setTextSize(16);
@@ -253,10 +258,10 @@ public class SelectExpertResultActivity extends Activity {
             holder.patientCount.setText(specialist_content_list.get(position).getExpert_gardeid());
             holder.patientCount.setTextSize(16);
             if(imgUrl != null && !imgUrl.equals("") && !imgUrl.equals("null")) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
+                ImageListener listener=ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;
         }
-    }  
+    }
 }

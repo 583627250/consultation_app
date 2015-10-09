@@ -30,6 +30,8 @@ public class PatientCaseTo {
 
     private String depart_id;
 
+    private String case_templ_id;
+
     private String patient_name;
 
     private String patient_userid;
@@ -70,6 +72,14 @@ public class PatientCaseTo {
 
     public String getDepart_id() {
         return depart_id;
+    }
+
+    public String getCase_templ_id() {
+        return case_templ_id;
+    }
+
+    public void setCase_templ_id(String case_templ_id) {
+        this.case_templ_id=case_templ_id;
     }
 
     public void setDepart_id(String depart_id) {
@@ -161,37 +171,7 @@ public class PatientCaseTo {
     }
 
     public String getStatus() {
-        String statusText="新建";
-        switch(Integer.parseInt(status)) {
-            case 10:
-                statusText="新建";
-                break;
-            case 11:
-                statusText="审核中";
-                break;
-            case 20:
-                statusText="已审核";
-                break;
-            case 21:
-                statusText="已驳回";
-                break;
-            case 30:
-                statusText="拒受理";
-                break;
-            case 31:
-                statusText="讨论中";
-                break;
-            case 12:
-                statusText="已完成";
-                break;
-            case 40:
-                statusText="已归档";
-                break;
-
-            default:
-                break;
-        }
-        return statusText;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -205,7 +185,7 @@ public class PatientCaseTo {
                 statusText="公开讨论";
                 break;
             case 20:
-                statusText="明确诊断";
+                statusText="专家咨询";
                 break;
             default:
                 break;

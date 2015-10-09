@@ -57,7 +57,7 @@ public class PatientConsultationFragment extends Fragment {
 
     private void initLayout() {
         header_text=(TextView)consultationLayout.findViewById(R.id.header_text);
-        header_text.setText("病例讨论");
+        header_text.setText("我的病例");
         header_text.setTextSize(20);
 
         t1 = (TextView)consultationLayout.findViewById(R.id.consulation_list_title_1);

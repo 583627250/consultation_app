@@ -137,6 +137,8 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
                     goodAtEdit.setText(jsonObject.getString("goodat_fields"));
                     codeEdit.setText(jsonObject.getString("certificate_no"));
                     expert_gradeEdit.setText(jsonObject.getString("expert_grade"));
+                    invite_codeLine.setVisibility(View.GONE);
+                    invite_codeLayout.setVisibility(View.GONE);
                 }
                 pathList.clear();
                 pathList.add("add");

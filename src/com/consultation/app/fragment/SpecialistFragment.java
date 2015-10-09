@@ -505,7 +505,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             holder.departmen.setText(specialistList.get(position).getDepart_name() + "|" + specialistList.get(position).getTitle());
             holder.departmen.setTextSize(16);
             holder.hospital.setText(specialistList.get(position).getHospital_name());
-            holder.hospital.setTextSize(16);
+            holder.hospital.setTextSize(14);
             holder.patients.setTextSize(14);
             holder.patientCount.setText(specialistList.get(position).getUserTj().getTotal_consult() + "");
             holder.patientCount.setTextSize(16);

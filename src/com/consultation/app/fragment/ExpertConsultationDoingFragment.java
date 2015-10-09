@@ -35,7 +35,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
-import com.consultation.app.activity.CaseInfoActivity;
+import com.consultation.app.activity.CaseInfoNewActivity;
 import com.consultation.app.activity.LoginActivity;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
@@ -43,6 +43,7 @@ import com.consultation.app.model.CasesTo;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
+import com.consultation.app.util.CaseBroadcastReceiver;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
@@ -136,6 +137,7 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {
@@ -249,6 +251,7 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
                                             CasesTo pcasesTo=new CasesTo();
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
+                                            pcasesTo.setStatus_des(info.getString("status_desc"));
                                             pcasesTo.setDestination(info.getString("destination"));
                                             String createTime=info.getString("create_time");
                                             if(createTime.equals("null")) {
@@ -356,9 +359,23 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(expertConsultationDoingFragment.getContext(), CaseInfoActivity.class);
+                Intent intent=new Intent(expertConsultationDoingFragment.getContext(), CaseInfoNewActivity.class);
                 intent.putExtra("caseId", patientList.get(position).getId());
                 startActivityForResult(intent, 0);
+            }
+        });
+        CaseBroadcastReceiver.setHander(new ConsultationCallbackHandler() {
+
+            @Override
+            public void onSuccess(String rspContent, int statusCode) {
+                patientList.clear();
+                initData();
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(ConsultationCallbackException exp) {
+
             }
         });
     }
@@ -381,8 +398,6 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
         TextView doctorText;
 
         TextView dateText;
-
-        TextView moneyText;
 
         TextView stateText;
     }
@@ -415,24 +430,21 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
                 holder.titleText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_title);
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_date);
-                holder.moneyText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_money);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_state);
                 convertView.setTag(holder);
             } else {
                 holder=(PatientViewHolder)convertView.getTag();
             }
             holder.titleText.setText(patientList.get(position).getTitle());
-            holder.titleText.setTextSize(20);
+            holder.titleText.setTextSize(18);
             holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"+patientList.get(position).getDoctor_name() + "(初诊)");
             holder.doctorText.setTextSize(16);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sd=sdf.format(new Date(patientList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
             holder.dateText.setTextSize(14);
-            holder.moneyText.setText("￥" + patientList.get(position).getConsult_fee());
-            holder.moneyText.setTextSize(18);
-            holder.stateText.setText(patientList.get(position).getStatus());
-            holder.stateText.setTextSize(18);
+            holder.stateText.setText(patientList.get(position).getStatus_des());
+            holder.stateText.setTextSize(14);
             final String imgUrl=patientList.get(position).getPatient().getIcon_url();
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo_patient);
@@ -468,6 +480,7 @@ public class ExpertConsultationDoingFragment extends Fragment implements OnLoadL
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {

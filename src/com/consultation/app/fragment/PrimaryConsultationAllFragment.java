@@ -138,8 +138,8 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 JSONObject info=infos.getJSONObject(i);
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
-                                System.out.println(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {
@@ -148,6 +148,7 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                     pcasesTo.setCreate_time(Long.parseLong(createTime));
                                 }
                                 pcasesTo.setTitle(info.getString("title"));
+                                pcasesTo.setToReadMsgCount(info.getInt("toReadMsgCount"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
@@ -254,6 +255,7 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                             CasesTo pcasesTo=new CasesTo();
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
+                                            pcasesTo.setStatus_des(info.getString("status_desc"));
                                             pcasesTo.setDestination(info.getString("destination"));
                                             String createTime=info.getString("create_time");
                                             if(createTime.equals("null")) {
@@ -361,6 +363,8 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PatientViewHolder holder=(PatientViewHolder)view.getTag();
+                holder.countButton.setVisibility(View.INVISIBLE);
                 Intent intent=new Intent(primaryConsultationAllFragment.getContext(), CaseInfoNewActivity.class);
                 intent.putExtra("caseId", patientList.get(position).getId());
                 startActivityForResult(intent, 0);
@@ -409,9 +413,9 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
 
         TextView dateText;
 
-        TextView moneyText;
-
         TextView stateText;
+
+        TextView countButton;
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -442,29 +446,33 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                 holder.titleText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_title);
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_date);
-                holder.moneyText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_money);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_state);
+                holder.countButton=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_image_count);
                 convertView.setTag(holder);
             } else {
                 holder=(PatientViewHolder)convertView.getTag();
             }
             holder.titleText.setText(patientList.get(position).getTitle());
-            holder.titleText.setTextSize(20);
+            holder.titleText.setTextSize(18);
             if(patientList.get(position).getConsult_tp().equals("公开讨论")) {
-                holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"+patientList.get(position).getDoctor_name() + "(初诊)");
+                holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"
+                    + patientList.get(position).getDoctor_name() + "(初诊)");
             } else {
                 holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"
                     + patientList.get(position).getExpert_name() + "(专家)");
             }
             holder.doctorText.setTextSize(16);
+            if(patientList.get(position).getToReadMsgCount() != 0) {
+                holder.countButton.setText(patientList.get(position).getToReadMsgCount()+"");
+                holder.countButton.setTextSize(12);
+                holder.countButton.setVisibility(View.VISIBLE);
+            }
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sd=sdf.format(new Date(patientList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
             holder.dateText.setTextSize(14);
-            holder.moneyText.setText("￥" + patientList.get(position).getConsult_fee());
-            holder.moneyText.setTextSize(18);
-            holder.stateText.setText(patientList.get(position).getStatus());
-            holder.stateText.setTextSize(18);
+            holder.stateText.setText(patientList.get(position).getStatus_des());
+            holder.stateText.setTextSize(14);
             final String imgUrl=patientList.get(position).getPatient().getIcon_url();
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo_patient);
@@ -476,68 +484,64 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
             return convertView;
         }
     }
-    
-    private void show(final Context context,final int index) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);  
-        builder.setMessage("删除该病例?")  
-               .setCancelable(false)  
-               .setPositiveButton("确定", new DialogInterface.OnClickListener() {  
-                   public void onClick(DialogInterface dialog, int id) {  
-                       Map<String, String> parmas=new HashMap<String, String>();
-                       parmas.put("caseId", patientList.get(index).getId());
-                       parmas.put("accessToken", ClientUtil.getToken());
-                       parmas.put("uid", editor.get("uid", ""));
-                       CommonUtil.showLoadingDialog(context);
-                       OpenApiService.getInstance(context).getDeleteCase(mQueue, parmas,
-                           new Response.Listener<String>() {
 
-                               @Override
-                               public void onResponse(String arg0) {
-                                   try {
-                                       JSONObject responses=new JSONObject(arg0);
-                                       if(responses.getInt("rtnCode") == 1) {
-                                           patientList.remove(index);
-                                           myAdapter.notifyDataSetChanged();
-                                           CommonUtil.closeLodingDialog();
-                                       } else if(responses.getInt("rtnCode") == 10004) {
-                                           CommonUtil.closeLodingDialog();
-                                           Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                               .show();
-                                           LoginActivity.setHandler(new ConsultationCallbackHandler() {
+    private void show(final Context context, final int index) {
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder.setMessage("删除该病例?").setCancelable(false).setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-                                               @Override
-                                               public void onSuccess(String rspContent, int statusCode) {
-                                               }
+            public void onClick(DialogInterface dialog, int id) {
+                Map<String, String> parmas=new HashMap<String, String>();
+                parmas.put("caseId", patientList.get(index).getId());
+                parmas.put("accessToken", ClientUtil.getToken());
+                parmas.put("uid", editor.get("uid", ""));
+                CommonUtil.showLoadingDialog(context);
+                OpenApiService.getInstance(context).getDeleteCase(mQueue, parmas, new Response.Listener<String>() {
 
-                                               @Override
-                                               public void onFailure(ConsultationCallbackException exp) {
-                                               }
-                                           });
-                                           startActivity(new Intent(context, LoginActivity.class));
-                                       } else {
-                                           CommonUtil.closeLodingDialog();
-                                           Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
-                                               .show();
-                                       }
-                                   } catch(JSONException e) {
-                                       e.printStackTrace();
-                                   }
-                               }
-                           }, new Response.ErrorListener() {
+                    @Override
+                    public void onResponse(String arg0) {
+                        try {
+                            JSONObject responses=new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1) {
+                                patientList.remove(index);
+                                myAdapter.notifyDataSetChanged();
+                                CommonUtil.closeLodingDialog();
+                            } else if(responses.getInt("rtnCode") == 10004) {
+                                CommonUtil.closeLodingDialog();
+                                Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
-                               @Override
-                               public void onErrorResponse(VolleyError arg0) {
-                                   CommonUtil.closeLodingDialog();
-                                   Toast.makeText(context, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-                               }
-                           });
-                   }  
-               })  
-               .setNegativeButton("取消", new DialogInterface.OnClickListener() {  
-                   public void onClick(DialogInterface dialog, int id) {  
-                        dialog.cancel();  
-                   }  
-               }).create().show();  
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(context, LoginActivity.class));
+                            } else {
+                                CommonUtil.closeLodingDialog();
+                                Toast.makeText(context, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        CommonUtil.closeLodingDialog();
+                        Toast.makeText(context, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        }).create().show();
     }
 
     @Override
@@ -563,6 +567,7 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {

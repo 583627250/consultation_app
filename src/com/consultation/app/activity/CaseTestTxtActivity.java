@@ -172,6 +172,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
+                            isAdd = true;
                             Toast.makeText(context, "上传成功", Toast.LENGTH_LONG).show();
                         }
 
@@ -202,6 +203,9 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
     }
 
     private void showRightLayout() {
+        if(rightLayout == null){
+            rightLayout=(LinearLayout)findViewById(R.id.test_txt_layout);
+        }
         rightLayout.removeAllViews();
         if(null != pathList && pathList.size() != 0) {
             LinearLayout rowsLayout=new LinearLayout(context);

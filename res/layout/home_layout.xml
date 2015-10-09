@@ -4,167 +4,187 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout 
+    <FrameLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"  >    
+        android:layout_weight="1" >
     </FrameLayout>
-        
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/consultation_color_white" >
-        
+
         <RelativeLayout
             android:id="@+id/consultation_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-            <LinearLayout 
-	            android:layout_width="match_parent"
-	            android:layout_height="0.1dp"
-	            android:background="#DADADA"/>
+
             <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_centerVertical="true" 
-               android:orientation="vertical" >
-               
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#DADADA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical" >
+
                 <LinearLayout
-                    android:layout_width="wrap_content"  
-                    android:layout_height="wrap_content"
-                    android:background="#CCCCCC"/>         
-               
-                <ImageView
-                    android:id="@+id/consultation_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/consultation_unselected" />
-                
+                    android:background="#CCCCCC" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal" >
+
+                    <ImageView
+                        android:id="@+id/consultation_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="3dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/consultation_unselected" />
+
+                    <TextView
+                        android:id="@+id/consulation_home_image_count"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="-10dp"
+                        android:background="@drawable/discussion_count_shape"
+                        android:gravity="center"
+                        android:textColor="@color/consultation_color_white"
+                        android:visibility="invisible" />
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/consultation_text" 
-                    android:layout_width="wrap_content"  
+                    android:id="@+id/consultation_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="咨询"
                     android:paddingBottom="3dp"
-                    android:textColor="@color/consultation_color_black"/>         
-                           
+                    android:text="咨询"
+                    android:textColor="@color/consultation_color_black" />
             </LinearLayout>
-            
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:id="@+id/specialist_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-            <LinearLayout 
-	            android:layout_width="match_parent"
-	            android:layout_height="0.1dp"
-	            android:background="#DADADA"/>
+
             <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_centerVertical="true" 
-               android:orientation="vertical"  >
-                
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#DADADA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical" >
+
                 <ImageView
                     android:id="@+id/specialist_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
                     android:layout_gravity="center_horizontal"
+                    android:paddingTop="3dp"
+                    android:layout_marginTop="5dp"
                     android:src="@drawable/specialist_unselected" />
-                
+
                 <TextView
-                    android:id="@+id/specialist_text" 
-                    android:layout_width="wrap_content"  
+                    android:id="@+id/specialist_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="专家"
                     android:paddingBottom="3dp"
-                    android:textColor="@color/consultation_color_black"/>         
-                           
+                    android:text="专家"
+                    android:textColor="@color/consultation_color_black" />
             </LinearLayout>
-            
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:id="@+id/knowledge_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-            <LinearLayout 
-	            android:layout_width="match_parent"
-	            android:layout_height="0.1dp"
-	            android:background="#DADADA"/>
+
             <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_centerVertical="true" 
-               android:orientation="vertical"  >
-                
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#DADADA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical" >
+
                 <ImageView
                     android:id="@+id/knowledge_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
                     android:layout_gravity="center_horizontal"
+                    android:paddingTop="3dp"
+                    android:layout_marginTop="5dp"
                     android:src="@drawable/knowledge_unselected" />
-                
+
                 <TextView
-                    android:id="@+id/knowledge_text" 
-                    android:layout_width="wrap_content"  
+                    android:id="@+id/knowledge_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="知识"
                     android:paddingBottom="3dp"
-                    android:textColor="@color/consultation_color_black"/>         
-                           
+                    android:text="知识"
+                    android:textColor="@color/consultation_color_black" />
             </LinearLayout>
-            
         </RelativeLayout>
-        
+
         <RelativeLayout
             android:id="@+id/mine_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" >
-            <LinearLayout 
-	            android:layout_width="match_parent"
-	            android:layout_height="0.1dp"
-	            android:background="#DADADA"/>
+
             <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_centerVertical="true" 
-               android:orientation="vertical"  >
-                
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#DADADA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical" >
+
                 <ImageView
                     android:id="@+id/mine_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:paddingTop="3dp"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
                     android:src="@drawable/mine_unselected" />
-                
+
                 <TextView
-                    android:id="@+id/mine_text" 
-                    android:layout_width="wrap_content"  
+                    android:id="@+id/mine_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="3dp"
                     android:layout_gravity="center_horizontal"
+                    android:paddingBottom="3dp"
                     android:text="我的"
-                    android:textColor="@color/consultation_color_black" />         
-                           
+                    android:textColor="@color/consultation_color_black" />
             </LinearLayout>
-            
         </RelativeLayout>
-              
     </LinearLayout>
-    
+
 </LinearLayout>

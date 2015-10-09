@@ -1,5 +1,11 @@
 package com.consultation.app.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.consultation.app.ConsultionStatusCode;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
@@ -27,6 +37,7 @@ import com.consultation.app.fragment.PatientConsultationFragment;
 import com.consultation.app.fragment.PrimaryConsultationFragment;
 import com.consultation.app.fragment.SpecialistFragment;
 import com.consultation.app.listener.ConsultationCallbackHandler;
+import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
@@ -80,6 +91,10 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
     private TextView knowledgeText;
 
     private TextView mineText;
+    
+    private TextView count;
+
+    private RequestQueue mQueue;
 
     /*
      * 对Fragment进行管理
@@ -100,10 +115,55 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
         // mTintManager.setNavigationBarTintEnabled(true);
         // mTintManager.setTintColor(Color.parseColor("#2CB679"));
         editor=new SharePreferencesEditor(HomeActivity.this);
+        mQueue=Volley.newRequestQueue(this);
+        initData();
         initViews(); // 初始化界面，并设置四个tab的监听
         fragmentManager=getSupportFragmentManager();
         setTabSelection(getIntent().getIntExtra("selectId", 2)); // 第一次启动时开启第2个tab
     }
+
+    private void initData() {
+        Map<String, String> parmas=new HashMap<String, String>();
+        parmas.put("accessToken", ClientUtil.getToken());
+        parmas.put("uid", editor.get("uid", ""));
+        parmas.put("userTp", editor.get("userType", ""));
+        OpenApiService.getInstance(HomeActivity.this).getReadTotalCount(mQueue, parmas, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String arg0) {
+                try {
+                    JSONObject responses=new JSONObject(arg0);
+                    if(responses.getInt("rtnCode") == 1) {
+                        Message msg=new Message();
+                        msg.obj=responses.getInt("totalCount");
+                        handler.dispatchMessage(msg);
+                    }
+                } catch(JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError arg0) {
+            }
+        });
+    }
+
+    Handler handler=new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            count = (TextView)findViewById(R.id.consulation_home_image_count);
+            int countNumber = (Integer)msg.obj;
+            if(countNumber != 0){
+                count.setVisibility(View.VISIBLE);
+                count.setTextSize(12);
+                count.setText(countNumber+"");
+            }
+        }
+    };
 
     /*
      * 根据传入的index，来设置开启的tab页面
@@ -192,6 +252,8 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                     transaction.add(R.id.content_layout, mineFragment);
                 } else {
                     transaction.show(mineFragment);
+                    // 刷新界面的信息
+                    mineFragment.initDate();
                 }
                 break;
         }
@@ -296,6 +358,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
 
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
+                            initData();
                             switch(statusCode) {
                                 case ConsultionStatusCode.SUCCESS:
                                     setTabSelection(3);

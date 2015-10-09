@@ -46,7 +46,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="3.3" >
+                        android:layout_weight="2.5" >
 
                         <TextView
                             android:id="@+id/create_case_select_consultation_text"
@@ -68,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
+                        android:layout_weight="0.85"
                         android:gravity="center_vertical"
                         android:orientation="vertical" >
 
@@ -81,7 +81,7 @@
                             style="@style/CustomRadioBtn"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:text="明确诊断"
+                            android:text="专家咨询"
                             android:checked="true"
                             android:textColor="#414141" >
                         </RadioButton>
@@ -145,7 +145,7 @@
                         android:id="@+id/create_case_select_expert_input_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="1.2"
                         android:background="@color/consultation_color_white"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
@@ -213,12 +213,80 @@
                         android:id="@+id/create_case_patient_name_input_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="1.2"
                         android:background="@color/consultation_color_white"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:gravity="center_vertical"
                         android:hint="请选择您的患者"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="3"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5" >
+
+                        <TextView
+                            android:id="@+id/create_case_department_name_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="科室模板"
+                            android:textColor="#414141" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_F4F4F4" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/create_case_department_name_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择就诊科室"
                         android:padding="5dp"
                         android:singleLine="true"
                         android:textColorHint="#D3D3D3" />
@@ -247,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="标题"
+                    android:text="主诉"
                     android:textColor="#414141" />
 
                 <LinearLayout
@@ -264,9 +332,9 @@
                         android:layout_height="wrap_content"
                         android:background="@color/consultation_color_white"
                         android:gravity="top"
-                        android:hint="(必填)用一句话简单描述患者的问题，限定字数5~30个字"
+                        android:hint="(必填)用一句话简单描述患者的问题，20个字以内"
                         android:lines="2"
-                        android:maxLength="35"
+                        android:maxLength="20"
                         android:textColorHint="#D3D3D3" />
                 </LinearLayout>
 
@@ -276,7 +344,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="希望专家提供的帮助"
+                    android:text="问题与需求"
                     android:textColor="#414141" />
 
                 <LinearLayout
@@ -293,7 +361,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/consultation_color_white"
                         android:gravity="top"
-                        android:hint="(必填)请准确表述希望专家提供什么样的帮助，限定字数10~500个字"
+                        android:hint="(必填)请准确表述希望专家提供什么样的帮助，限定字数10~100个字"
                         android:lines="5"
                         android:maxLength="500"
                         android:textColorHint="#D3D3D3" />

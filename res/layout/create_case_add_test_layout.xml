@@ -19,6 +19,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="horizontal" >
 
             <LinearLayout
@@ -64,6 +65,14 @@
                     android:orientation="vertical"
                     android:padding="10dp" >
 
+                    <LinearLayout
+                        android:id="@+id/test_right_text_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/consultation_color_white"
+                        android:orientation="vertical" >
+                    </LinearLayout>
+
                     <TextView
                         android:id="@+id/test_add_image_text"
                         android:layout_width="wrap_content"
@@ -85,8 +94,8 @@
                         android:id="@+id/test_image_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
                         android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
                         android:text="提示:长按已选图片可以删除该图片"
                         android:textColor="@color/consultation_color_red" />
 
@@ -102,21 +111,21 @@
             </ScrollView>
         </LinearLayout>
 
-        <!-- <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/consultation_color_F4F4F4"
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/test_btn_save"
+                android:id="@+id/test_text_btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/create_case_submit_selector"
                 android:padding="10dp"
-                android:text="提交"
+                android:text="保存"
                 android:textColor="@color/consultation_color_white" />
-        </LinearLayout> -->
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

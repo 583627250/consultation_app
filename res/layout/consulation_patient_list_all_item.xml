@@ -11,17 +11,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
 
         <TextView
             android:id="@+id/consulation_patient_list_all_item_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:layout_weight="1"
+            android:paddingTop="3dp"
+            android:singleLine="true"
             android:textColor="#353535" />
 
         <TextView
@@ -29,62 +29,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingTop="3dp"
             android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:singleLine="true"
             android:textColor="#999999" />
-
-        <TextView
-            android:id="@+id/consulation_patient_list_all_item_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:textColor="#999999" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:paddingRight="10dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical" >
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/consulation_patient_list_all_item_money"
-                android:gravity="center" >
-
-                <TextView
-                    android:id="@+id/consulation_patient_list_all_item_money"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/consultation_color_white" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/consulation_patient_list_all_item_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
+                android:textColor="#999999" />
 
             <TextView
                 android:id="@+id/consulation_patient_list_all_item_state"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
                 android:textColor="#FFAF2C" />
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>

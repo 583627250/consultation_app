@@ -20,7 +20,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:padding="8dp"
             android:background="@color/consultation_color_white"
             android:layout_gravity="center_vertical" >

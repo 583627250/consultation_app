@@ -254,6 +254,11 @@ public class OpenApiService {
         httpRequest(mQueue, ClientUtil.GET_MY_ACOUNT_PAY_RECORD_URL, parmas, listener, errorListener);
     }
     
+    public void getReadTotalCount(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_READ_TOTAL_COUNT_URL, parmas, listener, errorListener);
+    }
+    
     public void getExpertAccept(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_EXPERT_ACCEPT_URL, parmas, listener, errorListener);

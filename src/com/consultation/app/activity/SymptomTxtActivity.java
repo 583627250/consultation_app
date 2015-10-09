@@ -21,16 +21,16 @@ public class SymptomTxtActivity extends Activity {
     private TextView title_text, back_text;
 
     private LinearLayout back_layout;
-    
+
     private EditText editText;
 
     private Button saveBtn;
 
     private String titleText;
-    
+
     private int page;
-    
-    private String content = "";
+
+    private String content="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +68,10 @@ public class SymptomTxtActivity extends Activity {
                 finish();
             }
         });
-        
-        editText = (EditText)findViewById(R.id.syamptom_txt_input_edit);
+
+        editText=(EditText)findViewById(R.id.syamptom_txt_input_edit);
         editText.setTextSize(16);
-        if(null != content && !"".equals(content) && !"null".equals(content)){
+        if(null != content && !"".equals(content) && !"null".equals(content)) {
             editText.setText(content);
         }
 
@@ -82,7 +82,7 @@ public class SymptomTxtActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 保存数据
-                if(null == editText.getText().toString() || "".equals(editText.getText().toString())){
+                if(null == editText.getText().toString() || "".equals(editText.getText().toString())) {
                     Toast.makeText(SymptomTxtActivity.this, "请输入病例内容", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -95,9 +95,13 @@ public class SymptomTxtActivity extends Activity {
                 finish();
             }
         });
+        if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(String.valueOf(page)) != null
+            && !"".equals(ClientUtil.getCaseParams().getValue(String.valueOf(page)))) {
+            editText.setText(ClientUtil.getCaseParams().getValue(String.valueOf(page)));
+        }
     }
 
     private void initData() {
-        
+
     }
 }

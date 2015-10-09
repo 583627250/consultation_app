@@ -9,20 +9,36 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp" >
 
-    <ImageView
-        android:id="@+id/consulation_primary_list_all_item_image"
-        android:layout_width="70dip"
-        android:layout_height="70dip"
-        android:layout_gravity="center_vertical"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_launcher" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/consulation_primary_list_all_item_image"
+            android:layout_width="70dip"
+            android:layout_height="70dip"
+            android:layout_marginTop="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/photo_primary" />
+
+        <TextView
+            android:id="@+id/consulation_primary_list_all_item_image_count"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="-15dp"
+            android:background="@drawable/discussion_count_shape"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:textColor="@color/consultation_color_white" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.1"
         android:orientation="vertical"
-        android:paddingLeft="10dp" >
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
 
         <TextView
             android:id="@+id/consulation_primary_list_all_item_title"
@@ -31,7 +47,7 @@
             android:layout_weight="1"
             android:paddingBottom="3dp"
             android:paddingTop="3dp"
-            android:text="风湿骨痛"
+            android:singleLine="true"
             android:textColor="#353535" />
 
         <TextView
@@ -42,60 +58,33 @@
             android:paddingBottom="3dp"
             android:paddingTop="3dp"
             android:singleLine="true"
-            android:text="张三丰(患者)|张无忌(专家)"
             android:textColor="#999999" />
-
-        <TextView
-            android:id="@+id/consulation_primary_list_all_item_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp"
-            android:text="2015-07-14"
-            android:textColor="#999999" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:paddingRight="10dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical" >
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/consulation_patient_list_all_item_money"
-                android:gravity="center" >
-
-                <TextView
-                    android:id="@+id/consulation_primary_list_all_item_money"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="￥10"
-                    android:textColor="@color/consultation_color_white" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/consulation_primary_list_all_item_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
+                android:textColor="#999999" />
 
             <TextView
                 android:id="@+id/consulation_primary_list_all_item_state"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="新建"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"
                 android:textColor="#FFAF2C" />
         </LinearLayout>
     </LinearLayout>

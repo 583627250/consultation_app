@@ -61,7 +61,7 @@ public class PrimaryConsultationFragment extends Fragment {
 
     private void initLayout() {
         header_text=(TextView)consultationLayout.findViewById(R.id.header_text);
-        header_text.setText("病例讨论");
+        header_text.setText("我的病例");
         header_text.setTextSize(20);
         
         searchImage = (ImageView)consultationLayout.findViewById(R.id.header_right_image);

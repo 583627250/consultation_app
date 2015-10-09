@@ -32,7 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
-import com.consultation.app.activity.CaseInfoActivity;
+import com.consultation.app.activity.CaseInfoNewActivity;
 import com.consultation.app.activity.LoginActivity;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
@@ -128,6 +128,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                             CasesTo pcasesTo=new CasesTo();
                             pcasesTo.setId(info.getString("id"));
                             pcasesTo.setStatus(info.getString("status"));
+                            pcasesTo.setStatus_des(info.getString("status_desc"));
                             pcasesTo.setDestination(info.getString("destination"));
                             String createTime=info.getString("create_time");
                             if(createTime.equals("null")) {
@@ -240,6 +241,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                             CasesTo pcasesTo=new CasesTo();
                                             pcasesTo.setId(info.getString("id"));
                                             pcasesTo.setStatus(info.getString("status"));
+                                            pcasesTo.setStatus_des(info.getString("status_desc"));
                                             pcasesTo.setDestination(info.getString("destination"));
                                             String createTime=info.getString("create_time");
                                             if(createTime.equals("null")) {
@@ -347,7 +349,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(patientConsultationDoingFragment.getContext(), CaseInfoActivity.class);
+                Intent intent = new Intent(patientConsultationDoingFragment.getContext(), CaseInfoNewActivity.class);
                 intent.putExtra("caseId", patientList.get(position).getId());
                 startActivityForResult(intent, 0);
             }
@@ -370,8 +372,6 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
         TextView doctorText;
 
         TextView dateText;
-
-        TextView moneyText;
 
         TextView stateText;
     }
@@ -403,14 +403,13 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                 holder.titleText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_title);
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_date);
-                holder.moneyText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_money);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_state);
                 convertView.setTag(holder);
             } else {
                 holder=(PatientViewHolder)convertView.getTag();
             }
             holder.titleText.setText(patientList.get(position).getTitle());
-            holder.titleText.setTextSize(20);
+            holder.titleText.setTextSize(18);
             if(patientList.get(position).getConsult_tp().equals("公开讨论")) {
                 holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"+patientList.get(position).getDoctor_name() + "(初诊)");
             } else {
@@ -422,10 +421,8 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
             String sd=sdf.format(new Date(patientList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
             holder.dateText.setTextSize(14);
-            holder.moneyText.setText("￥" + patientList.get(position).getConsult_fee());
-            holder.moneyText.setTextSize(18);
-            holder.stateText.setText(patientList.get(position).getStatus());
-            holder.stateText.setTextSize(18);
+            holder.stateText.setText(patientList.get(position).getStatus_des());
+            holder.stateText.setTextSize(14);
             return convertView;
         }
     }
@@ -454,6 +451,7 @@ public class PatientConsultationDoingFragment extends Fragment implements OnLoad
                                 CasesTo pcasesTo=new CasesTo();
                                 pcasesTo.setId(info.getString("id"));
                                 pcasesTo.setStatus(info.getString("status"));
+                                pcasesTo.setStatus_des(info.getString("status_desc"));
                                 pcasesTo.setDestination(info.getString("destination"));
                                 String createTime=info.getString("create_time");
                                 if(createTime.equals("null")) {

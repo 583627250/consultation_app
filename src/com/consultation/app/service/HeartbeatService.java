@@ -19,7 +19,7 @@ import com.consultation.app.util.SharePreferencesEditor;
 
 public class HeartbeatService extends android.app.Service {
 
-    private boolean threadDisable;
+    private boolean threadDisable = false;
     
     private boolean isGet = false;
     
@@ -72,6 +72,11 @@ public class HeartbeatService extends android.app.Service {
                                                                 editor.put("userType", object.getString("tp"));
                                                                 editor.put("real_name", object.getString("real_name"));
                                                                 editor.put("icon_url", object.getString("icon_url"));
+                                                                String doctorInfo = responses.getString("doctor");
+                                                                if(null != doctorInfo && !"null".equals(doctorInfo) && !"".equals(doctorInfo)){
+                                                                    JSONObject jsonObject=responses.getJSONObject("doctor");
+                                                                    editor.put("depart_id", jsonObject.getString("depart_id"));
+                                                                }
                                                             }
                                                         } catch(JSONException e) {
                                                             e.printStackTrace();

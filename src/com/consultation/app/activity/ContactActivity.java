@@ -34,13 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.consultation.app.R;
+import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.model.ContactTo;
+import com.consultation.app.util.AccountUtil;
 import com.consultation.app.util.Trans2PinYin;
 
 @SuppressLint("DefaultLocale")
 public class ContactActivity extends Activity {
 
-    private static final String[] PHONES_PROJECTION=new String[]{Phone.DISPLAY_NAME, Phone.NUMBER};
+    private static final String[] PHONES_PROJECTION=new String[]{Phone.DISPLAY_NAME, Phone.NUMBER, Phone.SORT_KEY_PRIMARY};
 
     private static final int PHONES_DISPLAY_NAME_INDEX=0;
 
@@ -65,7 +67,7 @@ public class ContactActivity extends Activity {
     private Button button;
 
     private EditText editText;
-    
+
     private ImageView delete;
 
     @Override
@@ -79,19 +81,30 @@ public class ContactActivity extends Activity {
     private void initData() {
         // 获取联系人数据
         ContentResolver resolver=ContactActivity.this.getContentResolver();
-        Cursor phoneCursor=resolver.query(Phone.CONTENT_URI, PHONES_PROJECTION, null, null, null);
+        Cursor phoneCursor=resolver.query(Phone.CONTENT_URI, PHONES_PROJECTION, null, null, Phone.SORT_KEY_PRIMARY);
         if(phoneCursor != null) {
             while(phoneCursor.moveToNext()) {
                 String phoneNumber=phoneCursor.getString(PHONES_NUMBER_INDEX);
                 if(TextUtils.isEmpty(phoneNumber))
                     continue;
+                if(phoneNumber.contains(" ")) {
+                    phoneNumber = phoneNumber.replace(" ", "");
+                }
+                if(phoneNumber.contains("-")) {
+                    phoneNumber = phoneNumber.replace("-", "");
+                }
+                if(phoneNumber.contains("+86")) {
+                    phoneNumber = phoneNumber.replace("+86", "");
+                }
                 String contactName=phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);
                 ContactTo contactTo=new ContactTo();
                 contactTo.setCheck(false);
                 contactTo.setName(contactName);
                 contactTo.setPhone(phoneNumber);
-                contacts.add(contactTo);
-                temp.add(contactTo);
+                if(AccountUtil.isPhoneNum(phoneNumber)){
+                    contacts.add(contactTo);
+                    temp.add(contactTo);
+                }
             }
             phoneCursor.close();
         }
@@ -117,10 +130,10 @@ public class ContactActivity extends Activity {
                 finish();
             }
         });
-        
-        delete = (ImageView)findViewById(R.id.contact_image_delete);
+
+        delete=(ImageView)findViewById(R.id.contact_image_delete);
         delete.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 editText.setText("");
@@ -147,22 +160,28 @@ public class ContactActivity extends Activity {
 
         button=(Button)findViewById(R.id.contact_btn);
         button.setTextSize(18);
+        button.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
+            getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
         button.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent();
                 StringBuffer buffer=new StringBuffer();
-                for(int i=0; i < contacts.size(); i++) {
+                for(int i=0; i < temp.size(); i++) {
                     if(temp.get(i).isCheck()) {
-                        buffer.append(temp.get(i).getPhone()).append(" ");
+                        if(i != 0) {
+                            buffer.append(" ").append(temp.get(i).getPhone());
+                        } else {
+                            buffer.append(temp.get(i).getPhone());
+                        }
                     }
                 }
                 if("".equals(buffer.toString()) || buffer.toString() == null) {
                     Toast.makeText(ContactActivity.this, "请选择联系人", Toast.LENGTH_LONG).show();
                     return;
                 }
-                String str=buffer.substring(0, buffer.length() - 1);
+                String str=buffer.toString();
                 intent.putExtra("phone", str);
                 setResult(Activity.RESULT_OK, intent);
                 finish();

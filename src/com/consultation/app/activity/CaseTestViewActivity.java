@@ -85,7 +85,7 @@ public class CaseTestViewActivity extends CaseBaseActivity{
 
     private List<ImageFilesTo> imageFilesTos=new ArrayList<ImageFilesTo>();
 
-    private String caseId, departmentId="10503";
+    private String caseId, departmentId="";
 
     private SharePreferencesEditor editor;
     

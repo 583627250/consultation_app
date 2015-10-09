@@ -1,5 +1,6 @@
 package com.consultation.app.activity;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +35,7 @@ import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.ActivityList;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.SelectHospitalDB;
 import com.consultation.app.util.SharePreferencesEditor;
 
 public class CreateCaseActivity extends Activity implements OnClickListener {
@@ -41,9 +44,9 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
 
     private LinearLayout back_layout, expert_layout, expert_layout_line;
 
-    private TextView expert_text, consulatioan_text, patient_text, titles_text, hope_text;
+    private TextView expert_text, consulatioan_text, patient_text, depart_text,titles_text, hope_text;
 
-    private EditText expert_edit, patient_edit, title_edit, hope_edit;
+    private EditText expert_edit, patient_edit, depart_edit,title_edit, hope_edit;
 
     private RadioButton radioButton1, radioButton3;
 
@@ -55,7 +58,7 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
     
     private boolean isUpdate;
 
-    private String patientId, expertId, departmentId, caseId, expertName, patientName, consultType, titles, problem, content, imageString;
+    private String patientId, expertId, caseId, expertName, patientName, consultType, titles, problem, content, imageString, departmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +68,8 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         editor=new SharePreferencesEditor(CreateCaseActivity.this);
         patientId=getIntent().getStringExtra("patientId");
         expertId=getIntent().getStringExtra("expertId");
-        departmentId=getIntent().getStringExtra("departmentId");
         caseId=getIntent().getStringExtra("caseId");
+        departmentId=getIntent().getStringExtra("departmentId");
         expertName=getIntent().getStringExtra("expertName");
         patientName=getIntent().getStringExtra("patientName");
         consultType=getIntent().getStringExtra("consultType");
@@ -110,6 +113,8 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         consulatioan_text.setTextSize(18);
         patient_text=(TextView)findViewById(R.id.create_case_patient_name_text);
         patient_text.setTextSize(18);
+        depart_text=(TextView)findViewById(R.id.create_case_department_name_text);
+        depart_text.setTextSize(18);
         titles_text=(TextView)findViewById(R.id.create_case_title_text);
         titles_text.setTextSize(18);
         hope_text=(TextView)findViewById(R.id.create_case_hope_text);
@@ -121,6 +126,9 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         patient_edit=(EditText)findViewById(R.id.create_case_patient_name_input_edit);
         patient_edit.setTextSize(18);
         patient_edit.setOnClickListener(this);
+        depart_edit=(EditText)findViewById(R.id.create_case_department_name_input_edit);
+        depart_edit.setTextSize(18);
+        depart_edit.setOnClickListener(this);
 
         title_edit=(EditText)findViewById(R.id.create_case_title_input_edit);
         title_edit.setTextSize(18);
@@ -166,16 +174,42 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         if(!"".equals(caseId) && null != caseId) {
             expert_edit.setText(expertName);
             patient_edit.setText(patientName);
+            depart_edit.setText(getTemplates(departmentId));
             if(consultType.equals("公开讨论")) {
                 radioButton3.setChecked(true);
                 radioButton1.setChecked(false);
-            } else if(consultType.equals("明确诊断")) {
+            } else if(consultType.equals("专家咨询")) {
                 radioButton1.setChecked(true);
                 radioButton3.setChecked(false);
             }
             title_edit.setText(titles);
             title_edit.setSelection(title_edit.getText().length());
             hope_edit.setText(problem);
+        }
+    }
+    
+    private String getTemplates(String templateId){
+        String templateName="";
+        SelectHospitalDB myDbHelper=new SelectHospitalDB(CreateCaseActivity.this);
+        try {
+            myDbHelper.createDataBase();
+            myDbHelper.openDataBase();
+            String sql="SELECT * FROM depart_case_template where templ_id=? ";
+            String[] selectionArgs={templateId};
+            Cursor cursor=myDbHelper.getReadableDatabase().rawQuery(sql, selectionArgs);
+            if(cursor != null) {
+                for(int j=0; j < cursor.getCount(); j++) {
+                    cursor.moveToPosition(j);
+                    if(cursor.getString(1).equals(templateId)){
+                        templateName = cursor.getString(2);
+                        break;
+                    }
+                }
+            }
+            cursor.close();
+            return templateName;
+        } catch(IOException ioe) {
+            throw new Error("Unable to create database");
         }
     }
 
@@ -188,7 +222,17 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                 break;
             case R.id.create_case_patient_name_input_edit:
                 // 选择患者
-                startActivityForResult(new Intent(CreateCaseActivity.this, SelectPatientActivity.class), 1);
+                Intent intent = new Intent(CreateCaseActivity.this, SelectPatientActivity.class);
+                if(radioButton1.isChecked()){
+                    intent.putExtra("isPublic", false);
+                }else{
+                    intent.putExtra("isPublic", true);
+                }
+                startActivityForResult(intent, 1);
+                break;
+            case R.id.create_case_department_name_input_edit:
+                // 选择科室
+                startActivityForResult(new Intent(CreateCaseActivity.this, SelectCaseTemplateActivity.class), 2);
                 break;
             case R.id.create_case_btn_submit:
                 // 提交病例基本信息
@@ -196,24 +240,29 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                     Toast.makeText(CreateCaseActivity.this, "请选择患者", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if("".equals(depart_edit.getText().toString()) || null == depart_edit.getText().toString()){
+                    Toast.makeText(CreateCaseActivity.this, "请选择就诊科室", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if("".equals(title_edit.getText().toString()) || null == title_edit.getText().toString()){
-                    Toast.makeText(CreateCaseActivity.this, "请输入标题", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateCaseActivity.this, "请输入主诉", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if("".equals(hope_edit.getText().toString()) || null == hope_edit.getText().toString()){
-                    Toast.makeText(CreateCaseActivity.this, "请输入希望专家提供的帮助内容", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateCaseActivity.this, "请输入问题与需求", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(title_edit.getText().toString().length()<5 || title_edit.getText().toString().length()>30){
-                    Toast.makeText(CreateCaseActivity.this, "请输入5~30个字的标题", Toast.LENGTH_LONG).show();
+                if(title_edit.getText().toString().length()>20){
+                    Toast.makeText(CreateCaseActivity.this, "请输入20个字以内的主诉", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(hope_edit.getText().toString().length()<10 || hope_edit.getText().toString().length()>500){
-                    Toast.makeText(CreateCaseActivity.this, "请输入10~500个字的希望专家提供的帮助内容", Toast.LENGTH_LONG).show();
+                if(hope_edit.getText().toString().length()<10 || hope_edit.getText().toString().length()>100){
+                    Toast.makeText(CreateCaseActivity.this, "请输入10~100个字以内的问题与需求", Toast.LENGTH_LONG).show();
                     return;
                 }
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("patient_userid", patientId);
+                parmas.put("case_templ_id", departmentId);
                 parmas.put("patient_name", patient_edit.getText().toString());
                 if(radioButton1.isChecked()) {
                     parmas.put("consult_tp", "20");
@@ -291,11 +340,16 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                 case 0:
                     expert_edit.setText(data.getExtras().getString("expertName"));
                     expertId=data.getExtras().getString("expertId");
-                    departmentId=data.getExtras().getString("departmentId");
                     break;
                 case 1:
                     patient_edit.setText(data.getExtras().getString("patientName"));
                     patientId=data.getExtras().getString("patientId");
+                    break;
+                case 2:
+                    if(resultCode == Activity.RESULT_OK){
+                        depart_edit.setText(data.getExtras().getString("departName"));
+                        departmentId=data.getExtras().getString("departId");
+                    }
                     break;
                 default:
                     break;

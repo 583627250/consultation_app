@@ -20,9 +20,8 @@
 		    
 		    <LinearLayout
 		        android:id="@+id/header_layout_lift"
-		        android:layout_width="match_parent"
+		        android:layout_width="wrap_content"
 		        android:layout_height="match_parent"
-		        android:layout_weight="1"
 		        android:visibility="invisible"
 		        android:gravity="center_vertical"
 		        android:orientation="horizontal">
@@ -41,6 +40,7 @@
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:paddingLeft="3dp"
+		            android:layout_marginRight="15dp"
 		            android:gravity="center_vertical"
 		            android:text="返回"
 		            android:textColor="@color/consultation_color_white" />
@@ -52,7 +52,7 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"
 		        android:background="@drawable/recommend_search_edit_shape"
-		        android:layout_weight="0.5"
+		        android:layout_weight="1"
 		        android:gravity="center" >
 		        
 		         <TextView
@@ -89,9 +89,8 @@
 		    
 		    <LinearLayout
 		        android:id="@+id/header_layout_right"
-		        android:layout_width="match_parent"
+		        android:layout_width="wrap_content"
 		        android:layout_height="match_parent"
-		        android:layout_weight="1"
 		        android:gravity="right" >
 		
 		       <TextView
@@ -100,6 +99,7 @@
 		            android:layout_height="match_parent"
 		            android:gravity="center_vertical"
 		            android:layout_marginRight="15dp"
+		            android:layout_marginLeft="15dp"
 		            android:layout_marginTop="3dp"
 		            android:layout_marginBottom="3dp"
 		            android:text="搜索"
@@ -128,7 +128,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@color/consultation_color_white"
             android:orientation="horizontal" >
@@ -136,7 +136,7 @@
             <ListView
                 android:id="@+id/recommend_search_history_listView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:divider="#DADADA"
                 android:dividerHeight="0.1dp" >
             </ListView>

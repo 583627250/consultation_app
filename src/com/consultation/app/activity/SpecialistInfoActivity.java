@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,8 @@ public class SpecialistInfoActivity extends Activity {
     private Context mContext;
     
     private DoctorTo doctorTo;
+    
+    private ScrollView scrollView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,11 +220,17 @@ public class SpecialistInfoActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            goodAtText.setText("总"+doctorTo.getGoodat_fields());
+            new Handler().post(new Runnable() {  
+                @Override  
+                public void run() {  
+                    scrollView.fullScroll(ScrollView.FOCUS_UP);  
+                }  
+            });
+            goodAtText.setText(doctorTo.getGoodat_fields());
             helpCountText.setText(doctorTo.getUserTj().getTotal_consult()+"名");
             feedbackScoreText.setText((float)doctorTo.getUserTj().getStar_value()/10+"分");
             feedbackRatingBar.setRating((float)doctorTo.getUserTj().getStar_value()/10);
-            feedbackScoreCountText.setText("总"+doctorTo.getUserTj().getTotal_comment()+"条评论");
+            feedbackScoreCountText.setText(doctorTo.getUserTj().getTotal_comment()+"条评论");
         }
     };
     
@@ -253,7 +262,7 @@ public class SpecialistInfoActivity extends Activity {
                 finish();
             }
         });
-        
+        scrollView=(ScrollView)findViewById(R.id.specialist_info_scrollView);
         photo = (CircularImage)findViewById(R.id.specialist_info_user_photo);
         photo.setImageResource(R.drawable.photo_expert);
         if(photoUrl != null && !photoUrl.equals("") && !"null".equals(photoUrl)) {
@@ -273,7 +282,7 @@ public class SpecialistInfoActivity extends Activity {
         goodAt.setTextSize(18);
         
         goodAtText = (TextView)findViewById(R.id.specialist_info_user_goodAt_text);
-        goodAtText.setTextSize(18);
+        goodAtText.setTextSize(16);
        
         helpText = (TextView)findViewById(R.id.specialist_info_user_help_text);
         helpText.setTextSize(18);

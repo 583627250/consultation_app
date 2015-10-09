@@ -22,9 +22,9 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
 
     private static final String DATABASE_PATH="/data/data/com.consultation.app/databases/";
 
-    private static final String DATABASE_NAME="huizhen.db";
-
     private static final int DATABASE_VERSION=1;
+
+    private static final String DATABASE_NAME="huizhen"+DATABASE_VERSION+".db";
 
     public SelectHospitalDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,7 +57,6 @@ public class SelectHospitalDB extends SQLiteOpenHelper {
             checkDB=SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         } catch(SQLiteException e) {
         }
-
         if(checkDB != null) {
             checkDB.close();
         }

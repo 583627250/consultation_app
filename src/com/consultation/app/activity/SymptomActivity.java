@@ -87,7 +87,7 @@ public class SymptomActivity extends CaseBaseActivity {
 
     private String content="";
 
-    private String departmentId="10503";
+    private String departmentId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +167,20 @@ public class SymptomActivity extends CaseBaseActivity {
                 saveData();
             }
         });
+        currentPosition=0;
+        if(ids.contains(currentPosition)) {
+            // 显示界面，并影藏其他界面
+            showRightLayout(currentPosition, 1);
+        } else {
+            // 创建界面
+            showRightLayout(currentPosition, 0);
+            ids.add(currentPosition);
+        }
+        for(int i=0; i < leftList.size(); i++) {
+            if(i != currentPosition) {
+                showRightLayout(i, 2);
+            }
+        }
     }
 
     private void showRightLayout(int position, int status) {
@@ -211,7 +225,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                     checkBoxs.add(box);
                                     views.put(subItemModel.getOptionsModels().get(j).getId(), box);
                                 }
-                                LinearLayout spinnerLayout=createCheckBox(subItemModel.getFirstStr(), data_list, checkBoxs, values);
+                                LinearLayout spinnerLayout=createCheckBox(subItemModel.getFirstStr(), data_list, checkBoxs, values, subItemModel.getLastStr());
                                 layouts.add(spinnerLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(spinnerLayout);
@@ -227,7 +241,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                     date[j]=subItemModel.getOptionsModels().get(j).getName();
                                     values[j]=subItemModel.getOptionsModels().get(j).getChecked();
                                 }
-                                LinearLayout radioButtonLayout=createRadioButton(subItemModel.getFirstStr(), date, rBtns, values);
+                                LinearLayout radioButtonLayout=createRadioButton(subItemModel.getFirstStr(), date, rBtns, values, subItemModel.getLastStr());
                                 layouts.add(radioButtonLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(radioButtonLayout);
@@ -254,7 +268,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                 checkBoxs.add(box);
                                 views.put(itemModel.getOptionsModels().get(j).getId(), box);
                             }
-                            LinearLayout spinnerLayout=createCheckBox(itemModel.getFirstStr(), data_list, checkBoxs, values);
+                            LinearLayout spinnerLayout=createCheckBox(itemModel.getFirstStr(), data_list, checkBoxs, values,itemModel.getLastStr());
                             layouts.add(spinnerLayout);
                             rightLayout.addView(spinnerLayout);
                             if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
@@ -281,7 +295,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                 date[j]=itemModel.getOptionsModels().get(j).getName();
                                 values[j]=itemModel.getOptionsModels().get(j).getChecked();
                             }
-                            LinearLayout radioButtonLayout=createRadioButton(itemModel.getFirstStr(), date, rBtns, values);
+                            LinearLayout radioButtonLayout=createRadioButton(itemModel.getFirstStr(), date, rBtns, values, itemModel.getLastStr());
                             layouts.add(radioButtonLayout);
                             rightLayout.addView(radioButtonLayout);
                             if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
@@ -428,6 +442,8 @@ public class SymptomActivity extends CaseBaseActivity {
         CaseModel caseModel;
         if(null != content && !"".equals(content) && !"null".equals(content)) {
             caseModel=caseList.get(0);
+        } else if(ClientUtil.getCaseParams().size()!=0 && ClientUtil.getCaseParams().getValue(page+"") != null && !"".equals(ClientUtil.getCaseParams().getValue(page+""))){
+            caseModel=caseList.get(0);
         } else {
             caseModel=caseList.get(page);
         }
@@ -489,6 +505,7 @@ public class SymptomActivity extends CaseBaseActivity {
                         } else {
                             List<OptionsModel> optionsModels=itemModel2.getOptionsModels();
                             if(null != optionsModels && optionsModels.size() != 0) {
+                                stringBuffer.append(" Type=\"" + itemModel2.getType() + "\"");
                                 stringBuffer.append(">");
                                 for(int x=0; x < optionsModels.size(); x++) {
                                     stringBuffer.append("<Options ID=\"" + optionsModels.get(x).getId() + "\" Checked=\""
@@ -589,10 +606,13 @@ public class SymptomActivity extends CaseBaseActivity {
 
     private void initData() {
         if(null != content && !"".equals(content) && !"null".equals(content)) {
-            // CommonUtil.appendToFile(content, new File(Environment.getExternalStorageDirectory() + File.separator + "text.txt"));
+//            CommonUtil.appendToFile(content, new File(Environment.getExternalStorageDirectory() + File.separator + "text.txt"));
             XMLCaseDatas(content);
             titleModels=caseList.get(0).getTitleModels();
-        } else {
+        } else if(ClientUtil.getCaseParams().size()!=0 && ClientUtil.getCaseParams().getValue(page+"") != null && !"".equals(ClientUtil.getCaseParams().getValue(page+""))){
+            XMLCaseDatas(ClientUtil.getCaseParams().getValue(page+""));
+            titleModels=caseList.get(0).getTitleModels();
+        } else{
             initCaseDatas(departmentId + "case.xml");
             titleModels=caseList.get(page).getTitleModels();
         }
@@ -722,7 +742,7 @@ public class SymptomActivity extends CaseBaseActivity {
         return layout;
     }
 
-    private LinearLayout createRadioButton(String name, String[] selectTexts, final List<RadioButton> radioButtons, String[] value) {
+    private LinearLayout createRadioButton(String name, String[] selectTexts, final List<RadioButton> radioButtons, String[] value, String lastStr) {
         LinearLayout layout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin=height / 50;
@@ -779,11 +799,21 @@ public class SymptomActivity extends CaseBaseActivity {
             group.addView(button);
         }
         layout.addView(group);
-
+        if(lastStr != null && !"".equals(lastStr) && !"null".equals(lastStr)) {
+            TextView lastStrText=new TextView(context);
+            LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+            textNameParams.leftMargin=width / 40;
+            lastStrText.setLayoutParams(textNameParams);
+            lastStrText.setText(lastStr);
+            lastStrText.setGravity(Gravity.CENTER_VERTICAL);
+            lastStrText.setTextColor(Color.parseColor("#414141"));
+            lastStrText.setTextSize(16);
+            layout.addView(lastStrText);
+        }
         return layout;
     }
 
-    private LinearLayout createCheckBox(String name, String[] data_list, List<CheckBox> checkBoxs, String[] value) {
+    private LinearLayout createCheckBox(String name, String[] data_list, List<CheckBox> checkBoxs, String[] value, String lastStr) {
         LinearLayout layout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin=height / 50;
@@ -816,6 +846,18 @@ public class SymptomActivity extends CaseBaseActivity {
             }
             box.setTextColor(Color.parseColor("#414141"));
             layout.addView(box);
+        }
+        
+        if(lastStr != null && !"".equals(lastStr) && !"null".equals(lastStr)) {
+            TextView lastStrText=new TextView(context);
+            LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+            textNameParams.leftMargin=width / 40;
+            lastStrText.setLayoutParams(textNameParams);
+            lastStrText.setText(lastStr);
+            lastStrText.setGravity(Gravity.CENTER_VERTICAL);
+            lastStrText.setTextColor(Color.parseColor("#414141"));
+            lastStrText.setTextSize(16);
+            layout.addView(lastStrText);
         }
         return layout;
     }

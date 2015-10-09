@@ -94,7 +94,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         return mineLayout;
     }
 
-    private void initDate() {
+    public void initDate() {
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("accessToken", ClientUtil.getToken());
@@ -212,6 +212,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                             grade.setText("已认证");
                             grade.setTextColor(Color.parseColor("#006633"));
                             description.setVisibility(View.GONE);
+                            editor.put("depart_id", jsonObject.getString("depart_id"));
                         }else if(jsonObject.getString("approve_status").equals("2")){
                             grade.setText("未认证通过");
                             grade.setTextColor(Color.parseColor("#990000"));
@@ -226,6 +227,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                             status.setText("已认证");
                             status.setTextColor(Color.parseColor("#006633"));
                             description.setVisibility(View.GONE);
+                            editor.put("depart_id", jsonObject.getString("depart_id"));
                         }else if(jsonObject.getString("approve_status").equals("2")){
                             status.setText("未认证通过");
                             description.setText(jsonObject.getString("approve_desc"));
@@ -419,11 +421,11 @@ public class MineFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.mine_my_pay_layout:
                 Intent intent4 = new Intent(mineLayout.getContext(), MyAccountActivity.class);
-//                intent4.putExtra("headerTitle", "我的资料");
                 startActivityForResult(intent4, 1);
                 break;
             case R.id.mine_my_share_layout:
-
+                //分享
+                
                 break;
             case R.id.mine_my_jion_layout:
                 Intent intent3 = new Intent(mineLayout.getContext(), UpdateMyInfoActivity.class);
