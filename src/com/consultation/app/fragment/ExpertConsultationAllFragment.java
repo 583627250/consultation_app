@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,11 +20,13 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +39,13 @@ import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.activity.CaseInfoNewActivity;
 import com.consultation.app.activity.LoginActivity;
+import com.consultation.app.activity.SearchConsulationActivity;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.CasesTo;
 import com.consultation.app.model.PatientTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
-import com.consultation.app.util.CaseBroadcastReceiver;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
@@ -70,6 +72,8 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
     private int page=1;
 
     private boolean hasMore=true;
+
+    private boolean isInit=false;
 
     private RequestQueue mQueue;
 
@@ -107,25 +111,151 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
         myAdapter=new MyAdapter();
         mQueue=Volley.newRequestQueue(expertConsultationAllFragment.getContext());
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
-        initData();
+        initData(1);
         initLayout();
         return expertConsultationAllFragment;
     }
 
-    private void initData() {
+    public static ExpertConsultationAllFragment getInstance(Context context) {
+        return new ExpertConsultationAllFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!isInit) {
+            Map<String, String> parmas=new HashMap<String, String>();
+            parmas.put("page", "1");
+            parmas.put("rows", "10");
+            parmas.put("accessToken", ClientUtil.getToken());
+            parmas.put("uid", editor.get("uid", ""));
+            parmas.put("userTp", editor.get("userType", ""));
+            OpenApiService.getInstance(expertConsultationAllFragment.getContext()).getPatientCaseList(mQueue, parmas,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String arg0) {
+                        try {
+                            JSONObject responses=new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1) {
+                                JSONArray infos=responses.getJSONArray("pcases");
+                                patientList.clear();
+                                for(int i=0; i < infos.length(); i++) {
+                                    JSONObject info=infos.getJSONObject(i);
+                                    CasesTo pcasesTo=new CasesTo();
+                                    pcasesTo.setId(info.getString("id"));
+                                    pcasesTo.setStatus(info.getString("status"));
+                                    pcasesTo.setStatus_des(info.getString("status_desc"));
+                                    pcasesTo.setDestination(info.getString("destination"));
+                                    String createTime=info.getString("create_time");
+                                    if(createTime.equals("null")) {
+                                        pcasesTo.setCreate_time(0);
+                                    } else {
+                                        pcasesTo.setCreate_time(Long.parseLong(createTime));
+                                    }
+                                    pcasesTo.setTitle(info.getString("title"));
+                                    pcasesTo.setToReadMsgCount(info.getInt("toReadMsgCount"));
+                                    pcasesTo.setDepart_id(info.getString("depart_id"));
+                                    pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
+                                    pcasesTo.setPatient_name(info.getString("patient_name"));
+                                    String consult_fee=info.getString("consult_fee");
+                                    if(consult_fee.equals("null")) {
+                                        pcasesTo.setConsult_fee("0");
+                                    } else {
+                                        pcasesTo.setConsult_fee(consult_fee);
+                                    }
+                                    pcasesTo.setDoctor_name(info.getString("doctor_name"));
+                                    pcasesTo.setExpert_userid(info.getString("expert_userid"));
+                                    pcasesTo.setExpert_name(info.getString("expert_name"));
+                                    pcasesTo.setProblem(info.getString("problem"));
+                                    pcasesTo.setConsult_tp(info.getString("consult_tp"));
+                                    pcasesTo.setOpinion(info.getString("opinion"));
+                                    PatientTo patientTo=new PatientTo();
+                                    JSONObject pObject=info.getJSONObject("user");
+                                    patientTo.setAddress(pObject.getString("address"));
+                                    patientTo.setId(pObject.getInt("id") + "");
+                                    patientTo.setState(pObject.getString("state"));
+                                    patientTo.setTp(pObject.getString("tp"));
+                                    patientTo.setUserBalance(pObject.getString("userBalance"));
+                                    patientTo.setMobile_ph(pObject.getString("mobile_ph"));
+                                    patientTo.setPwd(pObject.getString("pwd"));
+                                    patientTo.setReal_name(pObject.getString("real_name"));
+                                    patientTo.setSex(pObject.getString("sex"));
+                                    patientTo.setBirth_year(pObject.getString("birth_year"));
+                                    patientTo.setBirth_month(pObject.getString("birth_month"));
+                                    patientTo.setBirth_day(pObject.getString("birth_day"));
+                                    patientTo.setIdentity_id(pObject.getString("identity_id"));
+                                    patientTo.setArea_province(pObject.getString("area_province"));
+                                    patientTo.setArea_city(pObject.getString("area_city"));
+                                    patientTo.setArea_county(pObject.getString("area_county"));
+                                    patientTo.setIcon_url(pObject.getString("icon_url"));
+                                    patientTo.setModify_time(pObject.getString("modify_time"));
+                                    pcasesTo.setPatient(patientTo);
+                                    patientList.add(pcasesTo);
+                                }
+                                if(infos.length() == 10) {
+                                    patientListView.setHasMoreData(true);
+                                } else {
+                                    patientListView.setHasMoreData(false);
+                                }
+                                Intent broadcastIntent=new Intent("com.consultation.app.count.case.action");
+                                broadcastIntent.putExtra("type", "refresh");
+                                broadcastIntent.putExtra("count", 0);
+                                expertConsultationAllFragment.getContext().sendBroadcast(broadcastIntent);
+                                myAdapter.notifyDataSetChanged();
+                            } else if(responses.getInt("rtnCode") == 10004) {
+                                Toast.makeText(expertConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
+                                    Toast.LENGTH_SHORT).show();
+                                LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                    @Override
+                                    public void onSuccess(String rspContent, int statusCode) {
+                                        // initData();
+                                    }
+
+                                    @Override
+                                    public void onFailure(ConsultationCallbackException exp) {
+                                    }
+                                });
+                                startActivity(new Intent(expertConsultationAllFragment.getContext(), LoginActivity.class));
+                            } else {
+                                Toast.makeText(expertConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
+                                    Toast.LENGTH_SHORT).show();
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError arg0) {
+                        Toast.makeText(expertConsultationAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        }
+        isInit=false;
+    }
+
+    public void initData(final int isShow) {
+        isInit=true;
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
         parmas.put("rows", "10");
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("userTp", editor.get("userType", ""));
-        CommonUtil.showLoadingDialog(expertConsultationAllFragment.getContext());
+        if(isShow == 1) {
+            CommonUtil.showLoadingDialog(expertConsultationAllFragment.getContext());
+        }
         OpenApiService.getInstance(expertConsultationAllFragment.getContext()).getPatientCaseList(mQueue, parmas,
             new Response.Listener<String>() {
 
                 @Override
                 public void onResponse(String arg0) {
-                    CommonUtil.closeLodingDialog();
+                    if(isShow == 1) {
+                        CommonUtil.closeLodingDialog();
+                    }
                     try {
                         JSONObject responses=new JSONObject(arg0);
                         if(responses.getInt("rtnCode") == 1) {
@@ -145,6 +275,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                                     pcasesTo.setCreate_time(Long.parseLong(createTime));
                                 }
                                 pcasesTo.setTitle(info.getString("title"));
+                                pcasesTo.setToReadMsgCount(info.getInt("toReadMsgCount"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 pcasesTo.setPatient_name(info.getString("patient_name"));
@@ -195,7 +326,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
 
                                 @Override
                                 public void onSuccess(String rspContent, int statusCode) {
-                                    initData();
+                                    // initData();
                                 }
 
                                 @Override
@@ -215,13 +346,29 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
 
                 @Override
                 public void onErrorResponse(VolleyError arg0) {
-                    CommonUtil.closeLodingDialog();
+                    if(isShow == 1) {
+                        CommonUtil.closeLodingDialog();
+                    }
                     Toast.makeText(expertConsultationAllFragment.getContext(), "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                 }
             });
     }
 
     private void initLayout() {
+        TextView header_text=(TextView)expertConsultationAllFragment.findViewById(R.id.header_text);
+        header_text.setText("我的病例");
+        header_text.setTextSize(20);
+        TextView searchText=(TextView)expertConsultationAllFragment.findViewById(R.id.consulation_list_search_text);
+        searchText.setTextSize(15);
+        LinearLayout searchLayout=(LinearLayout)expertConsultationAllFragment.findViewById(R.id.consulation_list_search_layout);
+        searchLayout.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 搜索
+                startActivity(new Intent(expertConsultationAllFragment.getContext(), SearchConsulationActivity.class));
+            }
+        });
         ((PullToRefreshLayout)expertConsultationAllFragment.findViewById(R.id.consulation_list_all_refresh_view))
             .setOnRefreshListener(new OnRefreshListener() {
 
@@ -257,6 +404,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                                                 pcasesTo.setCreate_time(Long.parseLong(createTime));
                                             }
                                             pcasesTo.setTitle(info.getString("title"));
+                                            pcasesTo.setToReadMsgCount(info.getInt("toReadMsgCount"));
                                             pcasesTo.setDepart_id(info.getString("depart_id"));
                                             pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                             String consult_fee=info.getString("consult_fee");
@@ -315,7 +463,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
 
                                             @Override
                                             public void onSuccess(String rspContent, int statusCode) {
-                                                initData();
+                                                // initData();
                                             }
 
                                             @Override
@@ -356,35 +504,44 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                PatientViewHolder holder=(PatientViewHolder)view.getTag();
+//                holder.countButton.setVisibility(View.INVISIBLE);
+//                if(null != holder.countButton.getText().toString() && !"".equals(holder.countButton.getText().toString())) {
+//                    Intent broadcastIntent=new Intent("com.consultation.app.count.case.action");
+//                    broadcastIntent.putExtra("type", "minus");
+//                    broadcastIntent.putExtra("count", Integer.parseInt(holder.countButton.getText().toString()));
+//                    expertConsultationAllFragment.getContext().sendBroadcast(broadcastIntent);
+//                }
                 Intent intent=new Intent(expertConsultationAllFragment.getContext(), CaseInfoNewActivity.class);
                 intent.putExtra("caseId", patientList.get(position).getId());
+                intent.putExtra("type", 1);
                 startActivityForResult(intent, 0);
             }
         });
-        CaseBroadcastReceiver.setHander(new ConsultationCallbackHandler() {
-
-            @Override
-            public void onSuccess(String rspContent, int statusCode) {
-                patientList.clear();
-                initData();
-                myAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(ConsultationCallbackException exp) {
-
-            }
-        });
+        // CaseBroadcastReceiver.setHander(new ConsultationCallbackHandler() {
+        //
+        // @Override
+        // public void onSuccess(String rspContent, int statusCode) {
+        // patientList.clear();
+        // initData();
+        // myAdapter.notifyDataSetChanged();
+        // }
+        //
+        // @Override
+        // public void onFailure(ConsultationCallbackException exp) {
+        //
+        // }
+        // });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == Activity.RESULT_OK) {
-            patientList.clear();
-            initData();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    // @Override
+    // public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    // if(resultCode == Activity.RESULT_OK) {
+    // patientList.clear();
+    // initData();
+    // }
+    // super.onActivityResult(requestCode, resultCode, data);
+    // }
 
     private class PatientViewHolder {
 
@@ -397,6 +554,8 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
         TextView dateText;
 
         TextView stateText;
+
+        TextView countButton;
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -428,14 +587,23 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_date);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_state);
+                holder.countButton=(TextView)convertView.findViewById(R.id.consulation_primary_list_all_item_image_count);
                 convertView.setTag(holder);
             } else {
                 holder=(PatientViewHolder)convertView.getTag();
             }
             holder.titleText.setText(patientList.get(position).getTitle());
             holder.titleText.setTextSize(18);
-            holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"+patientList.get(position).getDoctor_name() + "(初诊)");
+            holder.doctorText.setText(patientList.get(position).getPatient_name() + "(患者)|"
+                + patientList.get(position).getDoctor_name() + "(初诊)");
             holder.doctorText.setTextSize(16);
+            if(patientList.get(position).getToReadMsgCount() != 0) {
+                holder.countButton.setText(patientList.get(position).getToReadMsgCount() + "");
+                holder.countButton.setTextSize(12);
+                holder.countButton.setVisibility(View.VISIBLE);
+            }else{
+                holder.countButton.setVisibility(View.INVISIBLE);
+            }
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             String sd=sdf.format(new Date(patientList.get(position).getCreate_time()));
             holder.dateText.setText(sd);
@@ -446,7 +614,8 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
             holder.photo.setTag(imgUrl);
             holder.photo.setImageResource(R.drawable.photo_patient);
             if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
-                ImageListener listener=ImageLoader.getImageListener(holder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
+                ImageListener listener=
+                    ImageLoader.getImageListener(holder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;
@@ -485,6 +654,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                                     pcasesTo.setCreate_time(Long.parseLong(createTime));
                                 }
                                 pcasesTo.setTitle(info.getString("title"));
+                                pcasesTo.setToReadMsgCount(info.getInt("toReadMsgCount"));
                                 pcasesTo.setDepart_id(info.getString("depart_id"));
                                 pcasesTo.setDoctor_userid(info.getString("doctor_userid"));
                                 String consult_fee=info.getString("consult_fee");
@@ -544,7 +714,7 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
 
                                 @Override
                                 public void onSuccess(String rspContent, int statusCode) {
-                                    initData();
+                                    // initData();
                                 }
 
                                 @Override

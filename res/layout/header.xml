@@ -39,17 +39,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:orientation="horizontal"
         android:gravity="center" >
+        
+        <Button
+            android:id="@+id/header_mid_tip_invisible"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/discussion_count_shape"
+            android:gravity="center"
+            android:textColor="@color/consultation_color_white"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/header_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginTop="3dp"
             android:textColor="@color/consultation_color_white" />
+        
+        <Button
+            android:id="@+id/header_mid_tip"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/discussion_count_shape"
+            android:gravity="center"
+            android:textColor="@color/consultation_color_white"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,16 +94,15 @@
             android:textColor="@color/consultation_color_white"
             android:visibility="invisible" />
 
-        <Button
+        <!-- <Button
             android:id="@+id/header_right_tip"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:background="@drawable/discussion_count_shape"
             android:gravity="center"
-            android:text="20"
             android:textColor="@color/consultation_color_white"
-            android:visibility="gone" />
+            android:visibility="invisible" /> -->
     </LinearLayout>
 
 </LinearLayout>

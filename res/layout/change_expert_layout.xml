@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5" >
+
+                        <TextView
+                            android:id="@+id/change_expert_select_consultation_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="咨询方式"
+                            android:textColor="#414141" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_F4F4F4" >
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/change_expert_select_consultation_radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.85"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical" >
+
+                        <RadioButton
+                            android:id="@+id/change_expert_select_consultation_explicit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            style="@style/CustomRadioBtn"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:text="专家咨询"
+                            android:checked="true"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                        <RadioButton
+                            android:id="@+id/change_expert_select_consultation_public"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="3dp"
+                            android:paddingBottom="3dp"
+                            style="@style/CustomRadioBtn"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingRight="10dp"
+                            android:text="公开讨论"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
+                
+               <LinearLayout
+                    android:id="@+id/change_expert_select_expert_layout_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/change_expert_select_expert_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5" >
+
+                        <TextView
+                            android:id="@+id/change_expert_select_expert_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="专家"
+                            android:textColor="#414141" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_F4F4F4" >
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/change_expert_select_expert_input_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:background="@color/consultation_color_white"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:gravity="center_vertical"
+                        android:hint="请选择您的专家"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:textColorHint="#D3D3D3" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="3"
+                        android:gravity="right"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingRight="7dp"
+                            android:src="@drawable/icon_item_arrow" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/change_expert_code_layout_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:id="@+id/change_expert_code_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5" >
+
+                        <TextView
+                            android:id="@+id/change_expert_code_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="验证码"
+                            android:textColor="#414141" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/consultation_color_F4F4F4" >
+                    </LinearLayout>
+                    
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.85"
+                        android:orientation="horizontal" >
+
+	                    <EditText
+	                        android:id="@+id/change_expert_code_input_edit"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="match_parent"
+	                        android:layout_weight="1"
+	                        android:background="@color/consultation_color_white"
+	                        android:gravity="center_vertical"
+	                        android:hint="请输入验证码"
+	                        android:padding="5dp"
+	                        android:singleLine="true"
+	                        android:textColorHint="#D3D3D3" />
+
+                        <Button
+	                        android:id="@+id/change_expert_phone_get_btn"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="match_parent"
+	                        android:paddingLeft="5dp"
+	                        android:paddingRight="5dp"
+	                        android:background="@drawable/login_register_btn_shape"
+	                        android:singleLine="true"
+	                        android:text="获取验证码"
+	                        android:textColor="@color/consultation_color_2CB67A" />
+                    </LinearLayout>
+                </LinearLayout>
+                
+                <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical" >
+            
+            <Button
+	            android:id="@+id/change_expert_btn_submit"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:padding="10dp"
+	            android:background="@drawable/login_login_btn_shape"
+	            android:textColor="@color/consultation_color_white"
+	            android:text="提交" />
+            
+        </LinearLayout>
+                
+            </LinearLayout>
+        </ScrollView>
+        
+        <!-- <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/consultation_color_F4F4F4"
+	        android:orientation="vertical" >
+            
+            <Button
+	            android:id="@+id/change_expert_btn_submit"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:padding="10dp"
+	            android:background="@drawable/create_case_submit_selector"
+	            android:textColor="@color/consultation_color_white"
+	            android:text="提交" />
+        </LinearLayout> -->
+    </LinearLayout>
+
+</LinearLayout>

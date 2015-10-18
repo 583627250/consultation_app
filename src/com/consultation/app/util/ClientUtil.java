@@ -63,6 +63,8 @@ public class ClientUtil {
     public static String GET_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/listByDoctorUserid.json";
     
     public static String GET_SAVE_DOCTOR_COMMENT_URL =SERVICE_DOMAIN + "/api/doctorComment/save.json";
+   
+    public static String GET_LASTED_DISCUSS_URL =SERVICE_DOMAIN + "/api/caseDiscuss/getLastedDiscussById.json";
     
     public static String GET_INVITATION_LIST_URL =SERVICE_DOMAIN + "/api/doctorInvitCode/list.json";
     
@@ -113,6 +115,10 @@ public class ClientUtil {
     public static String GET_EXPERT_ACCEPT_URL =SERVICE_DOMAIN + "/api/patientCase/acceptByExpert.json";
     
     public static String GET_READ_TOTAL_COUNT_URL =SERVICE_DOMAIN + "/api/caseDiscuss/toReadTotalCount.json";
+    
+    public static String GET_CHANGE_EXPERT_URL =SERVICE_DOMAIN + "/api/patientCase/copy.json";
+   
+    public static String GET_CONTACT_STATUS_URL =SERVICE_DOMAIN + "/api/doctorInvitCode/listConditions.json";
 
     private static CaseParams caseParams=new CaseParams();
 

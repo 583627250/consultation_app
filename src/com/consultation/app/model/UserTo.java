@@ -22,6 +22,16 @@ public class UserTo {
 
     private int user_id;
 
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber=phoneNumber;
+    }
+
     public int getUser_id() {
         return user_id;
     }

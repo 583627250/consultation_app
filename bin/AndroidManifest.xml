@@ -30,6 +30,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
+        android:persistent="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -46,20 +47,20 @@
         <service android:name="com.consultation.app.service.HeartbeatService" />
         <activity
             android:name="com.consultation.app.activity.HomeActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.LoginActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.RegisterActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -67,63 +68,63 @@
         
         <activity
             android:name="com.consultation.app.activity.ProvinceActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyHospitalActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyDepartmentActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.HospitalActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.DepartmentActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyTitleActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyExpertGradeActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.TitleActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.BirthdayDateActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
@@ -131,25 +132,26 @@
         
         <activity 
             android:name="com.consultation.app.activity.SelectHeadPicActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        
         <activity 
             android:name="com.consultation.app.activity.AddPatientPicActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard|screenSize|screenLayout"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         
         <activity
             android:name="com.consultation.app.activity.InvitationActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.FeedBackActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:hardwareAccelerated="false"
@@ -158,7 +160,7 @@
         
         <activity
             android:name="com.consultation.app.activity.MyAccountActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
@@ -166,259 +168,280 @@
         
         <activity
             android:name="com.consultation.app.activity.SpecialistInfoActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.ForgetPwdActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.KnowledgeRecommendListActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchRecommendActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.RecommendActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchRecommendResultActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.UserInfoSumbitActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchSpecialistActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchSpecialistResultActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchConsulationActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SearchConsulationResultActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CreateCaseActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CreateCaseNextActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SelectExpertActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SelectCaseTemplateActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SelectPatientActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SelectExpertResultActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SelectPatientResultActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SymptomActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseTestActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseInfoActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseInfoNewActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SpecialistInfoHelpActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SpecialistInfoFeedbackActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.SymptomTxtActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseTestTxtActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.UpdateMyInfoActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.DiscussionCaseActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.EvaluationCaseActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseMoreActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseMoreNewActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyInfoActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.MyInfoSetActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.DialogActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.DialogNewActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.ContactActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.consultation.app.activity.MatchContactActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.BigImageActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseTestViewActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.CaseTestViewTxtActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.RechargeRecordActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         <activity
             android:name="com.consultation.app.activity.WithdrawalsRecordActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
             android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.consultation.app.activity.CaseSelelctSymptomActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.consultation.app.activity.ChangeExpertActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout|keyboard"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         
@@ -434,6 +457,13 @@
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.consultation.app.update.case.action" />
+            </intent-filter>
+        </receiver> 
+        <receiver
+            android:name="com.consultation.app.util.CaseCountBroadcastReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.consultation.app.count.case.action" />
             </intent-filter>
         </receiver> 
     </application>

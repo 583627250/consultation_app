@@ -12,7 +12,9 @@ public class CaseBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context arg0, Intent arg1) {
-        callbackHandler.onSuccess("", 0);
+        if(callbackHandler != null){
+            callbackHandler.onSuccess("", 0);
+        }
     }
 
     public static void setHander(ConsultationCallbackHandler handler) {

@@ -21,7 +21,7 @@ public class SplashActivity extends Activity {
                         startService(serviceIntent);
                         Thread.sleep(2000);
                         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-                        intent.putExtra("selectId", 2);
+                        intent.putExtra("selectId", 0);
                         startActivity(intent);
                         SplashActivity.this.finish();
                     } catch(InterruptedException e) {

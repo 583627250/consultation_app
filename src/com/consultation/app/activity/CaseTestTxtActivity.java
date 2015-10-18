@@ -70,7 +70,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
     private List<String> pathList=new ArrayList<String>();
 
     private List<String> idList=new ArrayList<String>();
-    
+
     private List<String> bigPathList=new ArrayList<String>();
 
     private SharePreferencesEditor editor;
@@ -82,6 +82,8 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
     private ImageLoader mImageLoader;
 
     private boolean isAdd=false;
+
+    private int page;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         width=wm.getDefaultDisplay().getWidth();
         height=wm.getDefaultDisplay().getHeight();
         caseId=getIntent().getStringExtra("caseId");
+        page=getIntent().getIntExtra("page", -1);
         imageString=getIntent().getStringExtra("imageString");
         initData();
         initView();
@@ -102,7 +105,11 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
 
     private void initView() {
         title_text=(TextView)findViewById(R.id.header_text);
-        title_text.setText("检验");
+        if(page == 5) {
+            title_text.setText("检验");
+        } else {
+            title_text.setText("检查");
+        }
         title_text.setTextSize(20);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
@@ -163,6 +170,11 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                 }
                 Map<String, String> params=new HashMap<String, String>();
                 params.put("case_id", caseId);
+                if(page == 5) {
+                    params.put("case_item", "jy");
+                } else {
+                    params.put("case_item", "jc");
+                }
                 params.put("accessToken", ClientUtil.getToken());
                 params.put("uid", editor.get("uid", ""));
                 CommonUtil.showLoadingDialog(context);
@@ -172,7 +184,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
-                            isAdd = true;
+                            isAdd=true;
                             Toast.makeText(context, "上传成功", Toast.LENGTH_LONG).show();
                         }
 
@@ -203,7 +215,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
     }
 
     private void showRightLayout() {
-        if(rightLayout == null){
+        if(rightLayout == null) {
             rightLayout=(LinearLayout)findViewById(R.id.test_txt_layout);
         }
         rightLayout.removeAllViews();
@@ -275,9 +287,15 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                 JSONArray jsonArray=new JSONArray(imageString);
                 for(int i=0; i < jsonArray.length(); i++) {
                     JSONObject imageFilesObject=jsonArray.getJSONObject(i);
-                    pathList.add(imageFilesObject.getString("little_pic_url"));
-                    idList.add(imageFilesObject.getString("id"));
-                    bigPathList.add(imageFilesObject.getString("pic_url"));
+                    if(page == 5 && imageFilesObject.getString("case_item").equals("jy")) {
+                        pathList.add(imageFilesObject.getString("little_pic_url"));
+                        idList.add(imageFilesObject.getString("id"));
+                        bigPathList.add(imageFilesObject.getString("pic_url"));
+                    } else if(page == 6 && imageFilesObject.getString("case_item").equals("jc")) {
+                        pathList.add(imageFilesObject.getString("little_pic_url"));
+                        idList.add(imageFilesObject.getString("id"));
+                        bigPathList.add(imageFilesObject.getString("pic_url"));
+                    }
                 }
                 showRightLayout();
             } catch(JSONException e) {

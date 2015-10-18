@@ -134,6 +134,11 @@ public class OpenApiService {
         httpRequest(mQueue, ClientUtil.GET_CASE_UP_ALL_URL, parmas, listener, errorListener);
     }
     
+    public void getContactStatus(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_CONTACT_STATUS_URL, parmas, listener, errorListener);
+    }
+    
     public void getCaseSubmitInfo(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_CASE_SUBMIT_ALL_URL, parmas, listener, errorListener);
@@ -142,6 +147,11 @@ public class OpenApiService {
     public void getIsPatient(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_IS_PATIENT_URL, parmas, listener, errorListener);
+    }
+    
+    public void getChangeExpert(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_CHANGE_EXPERT_URL, parmas, listener, errorListener);
     }
 
     public void getDoctorComment(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
@@ -152,6 +162,11 @@ public class OpenApiService {
     public void getSaveDoctorComment(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_SAVE_DOCTOR_COMMENT_URL, parmas, listener, errorListener);
+    }
+    
+    public void getLastedDiscuss(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_LASTED_DISCUSS_URL, parmas, listener, errorListener);
     }
 
     public void getInvitationList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,

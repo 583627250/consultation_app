@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EBEBEB"
+        android:background="@color/consultation_color_white"
         android:orientation="vertical" >
 
         <include
@@ -49,41 +49,62 @@
                 android:layout_height="match_parent"
                 android:background="#DADADA" >
             </LinearLayout>
-            
-            <ScrollView 
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
+                android:layout_weight="1"
                 android:background="@color/consultation_color_white"
-                android:layout_weight="1">
-	            <LinearLayout
-	                android:id="@+id/syamptom_right_layout"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_gravity="center_horizontal"
-	                android:paddingBottom="5dp"
-	                android:background="@color/consultation_color_white"
-	                android:orientation="vertical" >
-	            </LinearLayout>
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/syamptom_right_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp" >
+
+                    <RadioGroup
+                        android:id="@+id/syamptom_select_isNormal_radioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <RadioButton
+                            android:id="@+id/syamptom_select_normal"
+                            style="@style/CustomRadioBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="true"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="3dp"
+                            android:paddingTop="3dp"
+                            android:text="正常"
+                            android:textColor="#414141" >
+                        </RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/syamptom_select_abnormal"
+                            style="@style/CustomRadioBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="3dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="3dp"
+                            android:text="异常"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
             </ScrollView>
         </LinearLayout>
-        
-        <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background="@color/consultation_color_F4F4F4"
-	        android:orientation="vertical" >
-            
-            <Button
-	            android:id="@+id/syamptom_btn_save"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:padding="10dp"
-	            android:background="@drawable/create_case_submit_selector"
-	            android:textColor="@color/consultation_color_white"
-	            android:text="保存" />
-        
-        </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

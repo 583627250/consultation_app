@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <LinearLayout
+            android:id="@+id/contact_all_layout"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/recommend_search_edit_shape"
+            android:gravity="center" >
+
+            <EditText
+                android:id="@+id/contact_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="3"
+                android:background="@color/consultation_color_white"
+                android:hint="请输入联系人姓名"
+                android:singleLine="true"
+                android:textColor="@color/consultation_color_black" />
+
+            <ImageView
+                android:id="@+id/contact_image_delete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingRight="7dp"
+                android:src="@drawable/delete_icon" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/contact_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:divider="#DADADA"
+            android:dividerHeight="0.1dp" >
+        </ListView>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -104,7 +104,7 @@ public class HeartbeatService extends android.app.Service {
                                     }
                                 });
                         }
-                        Thread.sleep(1000 * 60 * 60 * 1);
+                        Thread.sleep(100 * 60 * 60 * 19);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }

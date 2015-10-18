@@ -48,7 +48,7 @@
             </ScrollView>
         </LinearLayout>
 
-        <LinearLayout
+       <!--  <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/consultation_color_F4F4F4"
@@ -62,7 +62,7 @@
                 android:padding="10dp"
                 android:text="保存"
                 android:textColor="@color/consultation_color_white" />
-        </LinearLayout>
+        </LinearLayout> -->
     </LinearLayout>
 
 </LinearLayout>

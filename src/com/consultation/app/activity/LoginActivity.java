@@ -10,6 +10,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,159 +40,161 @@ import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
 
-
 public class LoginActivity extends Activity {
-    
+
     private TextView title_text;
-    
+
     private TextView userName_text;
-    
+
     private TextView pwd_text;
-    
+
     private TextView verification_code_text;
-    
+
     private ImageView verification_image;
-    
+
     private Button login_btn;
-    
+
     private Button register_btn;
-    
+
     private LinearLayout code_layout;
-    
-//    private TextView back_text;
-    
+
     private static ConsultationCallbackHandler handler;
-    
-    private EditText account,password,code;
-    
-    private TextView forgetPwd,noAcount;
-    
-    private int loginCount = 0;
-    
+
+    private EditText account, password, code;
+
+    private TextView forgetPwd, noAcount;
+
+    private int loginCount=0;
+
     private RequestQueue mQueue;
-    
+
     private SharePreferencesEditor editor;
-    
+
     private ImageLoader mImageLoader;
     
+    private int flag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        mQueue = Volley.newRequestQueue(LoginActivity.this);
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
-        editor = new SharePreferencesEditor(LoginActivity.this);
+        mQueue=Volley.newRequestQueue(LoginActivity.this);
+        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
+        editor=new SharePreferencesEditor(LoginActivity.this);
+        flag= getIntent().getIntExtra("flag", -1);
         init();
     }
-    
-    public static void setHandler(ConsultationCallbackHandler h){
-        handler = h;
+
+    public static void setHandler(ConsultationCallbackHandler h) {
+        handler=h;
     }
 
     private void init() {
-        title_text = (TextView)findViewById(R.id.header_text);
+        title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("用户登陆");
         title_text.setTextSize(20);
-        
-        forgetPwd = (TextView)findViewById(R.id.login_forget_pwd_text);
+
+        forgetPwd=(TextView)findViewById(R.id.login_forget_pwd_text);
         forgetPwd.setTextSize(17);
-        forgetPwd.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG );
+        forgetPwd.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         forgetPwd.getPaint().setAntiAlias(true);
         forgetPwd.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
-                //去忘记密码
+                // 去忘记密码
                 startActivity(new Intent(LoginActivity.this, ForgetPwdActivity.class));
             }
         });
-        
-        noAcount = (TextView)findViewById(R.id.login_no_acount_text);
+
+        noAcount=(TextView)findViewById(R.id.login_no_acount_text);
         noAcount.setTextSize(16);
-        
-//        back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
-//        back_layout.setVisibility(View.VISIBLE);
-//        back_text = (TextView)findViewById(R.id.header_text_lift);
-//        back_text.setTextSize(18);
-//        back_layout.setOnClickListener(new OnClickListener() {
-//            
-//            @Override
-//            public void onClick(View v) {
-//                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//                if (imm.isActive()) {     
-//                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );   
-//                }
-//                finish();
-//            }
-//        });
-        
-        userName_text = (TextView)findViewById(R.id.login_username_text);
+
+        // back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
+        // back_layout.setVisibility(View.VISIBLE);
+        // back_text = (TextView)findViewById(R.id.header_text_lift);
+        // back_text.setTextSize(18);
+        // back_layout.setOnClickListener(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        // if (imm.isActive()) {
+        // imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0 );
+        // }
+        // finish();
+        // }
+        // });
+
+        userName_text=(TextView)findViewById(R.id.login_username_text);
         userName_text.setTextSize(18);
-    
-        pwd_text = (TextView)findViewById(R.id.login_pwd_text);
+
+        pwd_text=(TextView)findViewById(R.id.login_pwd_text);
         pwd_text.setTextSize(18);
-        
-        verification_code_text = (TextView)findViewById(R.id.login_code_text);
+
+        verification_code_text=(TextView)findViewById(R.id.login_code_text);
         verification_code_text.setTextSize(18);
-    
-        verification_image = (ImageView)findViewById(R.id.login_code_imageView);
-        
-        account = (EditText)findViewById(R.id.login_username_input_edit);
+
+        verification_image=(ImageView)findViewById(R.id.login_code_imageView);
+
+        account=(EditText)findViewById(R.id.login_username_input_edit);
         account.setTextSize(18);
-        password = (EditText)findViewById(R.id.login_pwd_input_edit);
+        password=(EditText)findViewById(R.id.login_pwd_input_edit);
         password.setTextSize(18);
-        code = (EditText)findViewById(R.id.login_code_input_edit);
-        code.setTextSize(18);   
-        
-        code_layout = (LinearLayout)findViewById(R.id.login_code_layout);
-        
+        code=(EditText)findViewById(R.id.login_code_input_edit);
+        code.setTextSize(18);
+
+        code_layout=(LinearLayout)findViewById(R.id.login_code_layout);
+
         verification_image.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 verification_image.setImageResource(R.anim.loading_anim_test);
-                ImageListener listener = ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
-                mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL+"??mobile_ph="+account.getText().toString()+"&ts="+System.currentTimeMillis(), listener);
+                ImageListener listener=ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
+                mImageLoader.get(
+                    ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString() + "&ts="
+                        + System.currentTimeMillis(), listener);
             }
         });
-    
-        login_btn = (Button)findViewById(R.id.login_btn_login);
+
+        login_btn=(Button)findViewById(R.id.login_btn_login);
         login_btn.setTextSize(20);
-        
-        register_btn = (Button)findViewById(R.id.login_btn_register);
+
+        register_btn=(Button)findViewById(R.id.login_btn_register);
         register_btn.setTextSize(20);
-        
+
         login_btn.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
-                //登陆
-                if(account.getText().toString() == null || "".equals(account.getText().toString())){
+                // 登陆
+                if(account.getText().toString() == null || "".equals(account.getText().toString())) {
                     Toast.makeText(LoginActivity.this, "手机号不能位空,请输入手机号!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(!AccountUtil.isPhoneNum(account.getText().toString())){
+                if(!AccountUtil.isPhoneNum(account.getText().toString())) {
                     Toast.makeText(LoginActivity.this, "手机号输入有误,请输入正确的手机号!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password.getText().toString() == null || "".equals(password.getText().toString())){
+                if(password.getText().toString() == null || "".equals(password.getText().toString())) {
                     Toast.makeText(LoginActivity.this, "密码不能位空,请输入密码!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(password.getText().toString().length()<6){
+                if(password.getText().toString().length() < 6) {
                     Toast.makeText(LoginActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(loginCount > 3){
-                    if(code.getText().toString() == null || "".equals(code.getText().toString())){
+                if(loginCount > 3) {
+                    if(code.getText().toString() == null || "".equals(code.getText().toString())) {
                         Toast.makeText(LoginActivity.this, "验证码不能位空,请输入验证码!", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
-                Map<String, String> parmas = new HashMap<String, String>();
+                Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("mobile_ph", account.getText().toString());
                 parmas.put("pwd", password.getText().toString());
-                if(loginCount > 3){
+                if(loginCount > 3) {
                     parmas.put("smsVerifyCode", code.getText().toString());
                 }
                 CommonUtil.showLoadingDialog(LoginActivity.this);
@@ -199,8 +204,8 @@ public class LoginActivity extends Activity {
                     public void onResponse(String arg0) {
                         CommonUtil.closeLodingDialog();
                         try {
-                            JSONObject responses = new JSONObject(arg0);
-                            if(responses.getInt("rtnCode") == 1){
+                            JSONObject responses=new JSONObject(arg0);
+                            if(responses.getInt("rtnCode") == 1) {
                                 editor.put("uid", responses.getString("uid"));
                                 editor.put("userType", responses.getString("userTp"));
                                 editor.put("refreshToken", responses.getString("refreshToken"));
@@ -210,16 +215,18 @@ public class LoginActivity extends Activity {
                                 ClientUtil.setToken(responses.getString("accessToken"));
                                 handler.onSuccess("登陆成功", ConsultionStatusCode.USER_LOGIN_SUCCESS);
                                 finish();
-                            }else{
+                            } else {
                                 Toast.makeText(LoginActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                                 loginCount++;
-                                if(loginCount == 3){
+                                if(loginCount == 3) {
                                     code_layout.setVisibility(View.VISIBLE);
-                                    Map<String, String> imageParmas = new HashMap<String, String>();
+                                    Map<String, String> imageParmas=new HashMap<String, String>();
                                     imageParmas.put("mobile_ph", account.getText().toString());
-                                    imageParmas.put("ts", System.currentTimeMillis()+"");
-                                    ImageListener listener = ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
-                                    mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL+"??mobile_ph="+account.getText().toString()+"&ts="+System.currentTimeMillis(), listener);
+                                    imageParmas.put("ts", System.currentTimeMillis() + "");
+                                    ImageListener listener=
+                                        ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
+                                    mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString()
+                                        + "&ts=" + System.currentTimeMillis(), listener);
                                 }
                             }
                         } catch(JSONException e) {
@@ -236,20 +243,21 @@ public class LoginActivity extends Activity {
                 });
             }
         });
-        login_btn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
+        login_btn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_login_btn_shape),
+            getResources().getDrawable(R.drawable.login_login_btn_press_shape)).getBtnTouchListener());
         register_btn.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
-                //注册
+                // 注册
                 RegisterActivity.setHandler(new ConsultationCallbackHandler() {
-                    
+
                     @Override
                     public void onSuccess(String rspContent, int statusCode) {
                         handler.onSuccess("注册", ConsultionStatusCode.SUCCESS);
                         finish();
                     }
-                    
+
                     @Override
                     public void onFailure(ConsultationCallbackException exp) {
                     }
@@ -257,6 +265,44 @@ public class LoginActivity extends Activity {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
-        register_btn.setOnTouchListener(new ButtonListener().setImage(getResources().getDrawable(R.drawable.login_register_btn_shape),getResources().getDrawable(R.drawable.login_register_press_btn_shape)).getBtnTouchListener());
+        register_btn.setOnTouchListener(new ButtonListener().setImage(
+            getResources().getDrawable(R.drawable.login_register_btn_shape),
+            getResources().getDrawable(R.drawable.login_register_press_btn_shape)).getBtnTouchListener());
+    }
+
+    private static boolean isExit=false;
+
+    Handler mHandler=new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit=false;
+        }
+    };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && flag == 1) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if(!isExit) {
+            isExit=true;
+            Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            Intent intent=new Intent();
+            Bundle bundle=new Bundle();
+            bundle.putBoolean("logout", true);
+            intent.putExtras(bundle);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
     }
 }

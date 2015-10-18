@@ -328,8 +328,7 @@ public class UpdateMyInfoActivity extends Activity implements OnLongClickListene
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
-                            Toast.makeText(UpdateMyInfoActivity.this, "提交成功", Toast.LENGTH_LONG).show();
-                            setResult(Activity.RESULT_OK, new Intent());
+//                            Toast.makeText(UpdateMyInfoActivity.this, "提交成功", Toast.LENGTH_LONG).show();
                             finish();
                         }
 

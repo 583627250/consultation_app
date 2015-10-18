@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="DefaultLocale">
+        <ignore path="src/com/consultation/app/activity/MatchContactActivity.java" />
+    </issue>
+    <issue id="HandlerLeak">
+        <ignore path="src/com/consultation/app/activity/LoginActivity.java" />
+    </issue>
     <issue id="SimpleDateFormat">
         <ignore path="src/com/consultation/app/activity/DiscussionCaseActivity.java" />
     </issue>

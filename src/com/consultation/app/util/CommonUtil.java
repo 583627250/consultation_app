@@ -36,7 +36,9 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 /**
@@ -331,6 +333,16 @@ public class CommonUtil {
         return bitmap;
     }
 
+    public static int getFontSize(Context context, int textSize) {
+        DisplayMetrics dm=new DisplayMetrics();
+        WindowManager windowManager=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        int screenHeight=dm.heightPixels;
+        // screenWidth = screenWidth > screenHeight ? screenWidth : screenHeight;
+        int rate=(int)(textSize * (float)screenHeight / 1280);
+        return rate;
+    }
+
     public static Bitmap readBitMap(int widths, String filepath) {
         BitmapFactory.Options opts=new BitmapFactory.Options();
         // 设置为ture只获取图片大小
@@ -341,7 +353,7 @@ public class CommonUtil {
         int width=opts.outWidth;
         int height=opts.outHeight;
         float scaleWidth=0.f, scaleHeight=0.f;
-        int heights = (height * widths) / width;
+        int heights=(height * widths) / width;
         if(width > widths || height > heights) {
             // 缩放
             scaleWidth=((float)width) / widths;
@@ -367,18 +379,17 @@ public class CommonUtil {
         }
         return 0;
     }
-    
+
     /**
      * 加载本地图片
-     * 
      * @param path
      * @return
      */
     public static Bitmap getLoacalBitmap(String path) {
         try {
-            FileInputStream fis = new FileInputStream(path);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inTempStorage = new byte[100 * 1024];
+            FileInputStream fis=new FileInputStream(path);
+            BitmapFactory.Options options=new BitmapFactory.Options();
+            options.inTempStorage=new byte[100 * 1024];
             // 3.设置位图颜色显示优化方式
             // ALPHA_8：每个像素占用1byte内存（8位）
             // ARGB_4444:每个像素占用2byte内存（16位）
@@ -386,18 +397,18 @@ public class CommonUtil {
             // RGB_565:每个像素占用2byte内存（16位）
             // Android默认的颜色模式为ARGB_8888，这个颜色模式色彩最细腻，显示质量最高。但同样的，占用的内存//也最大。也就意味着一个像素点占用4个字节的内存。我们来做一个简单的计算题：3200*2400*4
             // bytes //=30M。如此惊人的数字！哪怕生命周期超不过10s，Android也不会答应的。
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            options.inPreferredConfig=Bitmap.Config.RGB_565;
             // 4.设置图片可以被回收，创建Bitmap用于存储Pixel的内存空间在系统内存不足时可以被回收
-            options.inPurgeable = true;
+            options.inPurgeable=true;
             // 5.设置位图缩放比例
             // width，hight设为原来的四分一（该参数请使用2的整数倍）,这也减小了位图占用的内存大小；例如，一张//分辨率为2048*1536px的图像使用inSampleSize值为4的设置来解码，产生的Bitmap大小约为//512*384px。相较于完整图片占用12M的内存，这种方式只需0.75M内存(假设Bitmap配置为//ARGB_8888)。
-            options.inSampleSize = 1;
+            options.inSampleSize=1;
             // 6.设置解码位图的尺寸信息
-            options.inInputShareable = true;
+            options.inInputShareable=true;
             // 7.解码位图
             return BitmapFactory.decodeStream(fis, null, options);
             // return BitmapFactory.decodeStream(fis); // /把流转化为Bitmap图片
-        } catch (FileNotFoundException e) {
+        } catch(FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }
@@ -405,18 +416,17 @@ public class CommonUtil {
 
     /**
      * 把图片转换成字符串
-     * 
      * @param path
      * @return
      */
     public static String bitmapToString(Bitmap bitmap) {
-        int rate = 100;
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        int rate=100;
+        ByteArrayOutputStream os=new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, rate, os);
-        while (os.size() > 200 * 1024) {
+        while(os.size() > 200 * 1024) {
             os.reset();
-            rate = rate - 10;
-            if (rate < 0) {
+            rate=rate - 10;
+            if(rate < 0) {
                 return null;
             } else {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, rate, os);
@@ -424,19 +434,19 @@ public class CommonUtil {
         }
         return new String(Base64Coder.encodeLines(os.toByteArray()));
     }
-    
-    public static Bitmap drawableToRoundBitmap(Drawable drawable, int pixels){  
-        int width = drawable.getIntrinsicWidth();  
-        int height = drawable.getIntrinsicHeight();  
-        Bitmap bitmap = Bitmap.createBitmap(width, height,  
-                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888  
-                        : Bitmap.Config.RGB_565);  
-        Canvas canvas = new Canvas(bitmap);  
-        drawable.setBounds(0,0,width,height);  
-        drawable.draw(canvas);  
-        return toRoundCorner(bitmap, pixels);  
-    } 
-    
+
+    public static Bitmap drawableToRoundBitmap(Drawable drawable, int pixels) {
+        int width=drawable.getIntrinsicWidth();
+        int height=drawable.getIntrinsicHeight();
+        Bitmap bitmap=
+            Bitmap.createBitmap(width, height, drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565);
+        Canvas canvas=new Canvas(bitmap);
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);
+        return toRoundCorner(bitmap, pixels);
+    }
+
     public static void appendToFile(String content, File file) {
         File dir=file.getParentFile();
         if(!dir.exists()) {

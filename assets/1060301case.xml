@@ -3,7 +3,7 @@
 	<Root ID="1" Name="Symptoms" Level="0" ChildCount="8">
 		<Title IsShow="False">症状</Title>
 		<!-- 发热 -->
-		<Group ID="1.1" Name="Fever" Level="1" ChildCount="3">
+		<Group ID="1.1" Name="Fever" Level="1" ChildCount="3" Type="" isNormal="True">
 			<Title IsShow="True">发热</Title>
 			<Item ID="1.1.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
 			<Item ID="1.1.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
@@ -13,7 +13,7 @@
 		</Group>
 		
 		<!-- 疼痛 -->
-		<Group ID="1.2" Name="Pain" Level="1" ChildCount="7" IsShow="False">
+		<Group ID="1.2" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" isNormal="True">
 			<Title IsShow="False">疼痛</Title>
 			<Item ID="1.2.1" Name="ease" FirstStr="疼痛发作性质" Level="2" Type="RadioButtonGroup" IsShow="False">
 				<Options ID="1.2.1-1" Checked="0">间歇</Options>
@@ -56,7 +56,7 @@
 		</Group>
 		
 		<!-- 排尿相关症状 -->
-		<Group ID="1.3" Name="Pain" Level="1" ChildCount="7" IsShow="False">
+		<Group ID="1.3" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" isNormal="True">
 			<Title IsShow="False">排尿相关症状</Title>
 			<Item ID="1.3.1" Name="Voiding symptoms" Level="1" Type="CheckBoxList">
 				<Options ID="1.3.1-1" Checked="0">尿频</Options>
@@ -88,7 +88,7 @@
 		</Group>
 		
 		<!-- 血尿相关症状 -->
-		<Group ID="1.4" Name="Hematuria associated symptoms" Level="1" ChildCount="3">
+		<Group ID="1.4" Name="Hematuria associated symptoms" Level="1" ChildCount="3" Type="" isNormal="True">
 			<Title IsShow="False">血尿相关症状</Title>
 			<!-- 镜下观察 -->
 			<Item ID="1.4.1" Name="microscopy" Level="2" Type="RadioButtonGroup">
@@ -126,7 +126,7 @@
 		</Group>
 		
 		<!-- 血精相关症状 -->
-		<Group ID="1.5" Name="Hemospermia" Level="1" ChildCount="3">
+		<Group ID="1.5" Name="Hemospermia" Level="1" ChildCount="3" Type="" isNormal="True">
 			<Title IsShow="False">血精相关症状</Title>
 			<Item ID="1.5.1" Name="Frequency" FirstStr="频度" LastStr="次/天" Level="2" IsShow="False" Type="Edit" Input="True" DataType="Number" Valeu="" />
 			
@@ -152,7 +152,7 @@
 		</Group>
 		
 		<!-- 尿道分泌物 -->
-		<Group ID="1.6" Name="Urethral secretions" Level="1" ChildCount="2">
+		<Group ID="1.6" Name="Urethral secretions" Level="1" ChildCount="2" Type="" isNormal="True">
 			<Title IsShow="False">尿道分泌物</Title>
 			<Item ID="1.6.1" Name="Quality" Level="2" Type="CheckBoxList">
 				<Options ID="1.6.1-1" Checked="0">脓性</Options>
@@ -163,7 +163,7 @@
 		</Group>
 		
 		<!-- 健康查体发现 -->
-		<Group ID="1.7" Name="Check" Level="1" ChildCount="2">
+		<Group ID="1.7" Name="Check" Level="1" ChildCount="2" Type="" isNormal="True">
 			<Title IsShow="False">健康查体发现</Title>
 			<Item ID="1.7.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
 			<Item ID="1.7.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
@@ -172,7 +172,7 @@
 
 		
 		<!-- 体重变化 -->
-		<Group ID="1.8" Name="Weight" Level="1" ChildCount="3">
+		<Group ID="1.8" Name="Weight" Level="1" ChildCount="3" Type="" isNormal="True">
 			<Title IsShow="False">体重变化</Title>
 			<Item ID="1.8.1" Name="change" FirstStr="近三月内体重" Level="2" Type="RadioButtonGroup" IsShow="True">
 				<Options ID="1.8.1-1" Checked="0">增加</Options>
@@ -185,7 +185,7 @@
 	<Root ID="2" Name="Signs" Level="0" ChildCount="6">
 		<Title IsShow="False">体征</Title>
 		<!-- 一般情况 -->
-		<Group ID="2.1" Name="GeneralSituation" Level="1" ChildCount="5">
+		<Group ID="2.1" Name="GeneralSituation" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">一般情况</Title>
 			<Item ID="2.1.1" Name="Pressure" FirstStr="一般情况" Level="2" ChildCount="2">
 				<SubItem ID="2.1.1.1" Name="High" FirstStr="血压" LastStr="/" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" />
@@ -199,7 +199,7 @@
 		</Group>
 		
 		<!-- 腹部 -->
-		<Group ID="2.2" Name="abdomen" FirstStr="腹部" Level="1" ChildCount="5">
+		<Group ID="2.2" Name="abdomen" FirstStr="腹部" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">腹部</Title>
 			<!-- 腹部 -->
 			<Item ID="2.2.1" Name="OverAll" Level="2" ChildCount="7">
@@ -348,7 +348,7 @@
 		</Group>
 		
 		<!-- 肾区 -->
-		<Group ID="2.3" Name="renal" Level="1" ChildCount="2">
+		<Group ID="2.3" Name="renal" Level="1" ChildCount="2" isNormal="True">
 			<Title IsShow="False">肾区</Title>
 			<Item ID="2.3.1" Name="LeftSide" Level="2" ChildCount="4">
 				
@@ -400,7 +400,7 @@
 		</Group>
 		
 		<!-- 膀胱区 -->
-		<Group ID="2.4" Name="BladderRegion" Level="1" ChildCount="1">
+		<Group ID="2.4" Name="BladderRegion" Level="1" ChildCount="1" isNormal="True">
 			<Title IsShow="True">膀胱区</Title>
 			<Item ID="2.4.1" Name="BladderRegion" Level="2" ChildCount="3">
 				
@@ -424,7 +424,7 @@
 		</Group>
 		
 		<!-- 前列腺（直肠指诊） -->
-		<Group ID="2.5" Name="ProstateGland" Level="1" ChildCount="1">
+		<Group ID="2.5" Name="ProstateGland" Level="1" ChildCount="1" isNormal="True">
 			<Title IsShow="True">前列腺（直肠指诊）</Title>
 			<Item ID="2.5.1" Name="ProstateGland" Level="2" ChildCount="7">
 				
@@ -468,7 +468,7 @@
 		</Group>
 		
 		<!-- 生殖器 -->
-		<Group ID="2.6" Name="Genital" Level="1" ChildCount="3">
+		<Group ID="2.6" Name="Genital" Level="1" ChildCount="3" isNormal="True">
 			<Title IsShow="False">生殖器</Title>
 			<!-- 阴茎 -->
 			<Item ID="2.6.1" Name="Penis" FirstStr="阴茎" Level="2" ChildCount="8"  IsShow="True">
@@ -804,7 +804,7 @@
 	
 	<Root ID="4" Name="Past medical history" Level="0" ChildCount="3">
 		<Title IsShow="False">既往史</Title>
-		<Group ID="4.1" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="4.1" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">患病</Title>
 			<!-- 患病 -->
 			<Item ID ="4.1.1" Name="ill" Level="1" Type="CheckBoxList" IsShow="False">
@@ -816,12 +816,12 @@
 			</Item>
 		</Group>
 		<!-- 特殊用药史 -->
-		<Group ID="4.2" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="4.2" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">特殊用药史</Title>
 			<Item ID ="4.2.1" Name="Special medical history" Level="1" Type="Edit" Input="True" DataType="Text"/>
 		</Group>
 		<!-- 手术史 -->
-		<Group ID="4.3" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="4.3" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">手术史</Title>
 			<Item ID ="4.3.1" Name="The history of surgery" Level="1" Type="Edit" Input="True"  DataType="Text"/>
 		</Group>
@@ -829,7 +829,7 @@
 	
 	<Root ID="5" Name="A family history of" Level="0" ChildCount="2">
 		<Title IsShow="False">家族史</Title>
-		<Group ID="5.1" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="5.1" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
 			<Title IsShow="False">家族史</Title>
 			<Item ID ="5.1.1" Name="Disease" Level="1" Type="CheckBoxList" >
 				<Options ID="5.1.1-1" Checked="0">多囊肾</Options>
@@ -842,162 +842,24 @@
 	<Root ID="6" Name="LIS" Level="0" ChildCount="4">
 		<Title IsShow="False">检验</Title>
 		<!-- 血液学检验 -->
-		<Group ID="6.1" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="6.1" Name="Hematologic studies" Level="1" ChildCount="0">
 			<Title IsShow="True">血液学检查</Title>
-			<!-- 血常规 -->
-			<Item ID="6.1.1" Name="Routine blood" FirstStr="血常规" Level="2" ChildCount="3" IsShow="True">
-				
-				<SubItem ID="6.1.1.1" Name="WBC" FirstStr="WBC" LastStr="*10^9" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.1.2" Name="NEUT%" FirstStr="NEUT%" LastStr="%" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.1.3" Name="Hb" FirstStr="Hb" LastStr="g/L" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-			</Item>
-			
-			<!-- 血生化 -->
-			<Item ID="6.1.2" Name="Blood biochemical" FirstStr="血生化" Level="2" ChildCount="7" IsShow="True">
-				
-				<SubItem ID="6.1.2.1" Name="Cr" FirstStr="Cr" LastStr="*10^9" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.2" Name="BUN" FirstStr="BUN" LastStr="%" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.3" Name="K" FirstStr="K" LastStr="g/L" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.4" Name="Na" FirstStr="Na" LastStr="g/L" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.5" Name="Cl" FirstStr="Cl" LastStr="g/L" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.6" Name="Ca" FirstStr="Ca" LastStr="g/L" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.2.7" Name="P" FirstStr="P" LastStr="g/L" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-			</Item>		
-			
-			<!-- 瘤标 -->
-			<Item ID="6.1.3" Name="Tumor mark" FirstStr="瘤标" Level="2" ChildCount="4" IsShow="True">
-				
-				<SubItem ID="6.1.3.1" Name="PSA" FirstStr="PSA" LastStr="*10^9" Level="3" IsShow="True"  Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.3.2" Name="CEA" FirstStr="CEA" LastStr="%" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.3.3" Name="HCG" FirstStr="HCG" LastStr="g/L" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.1.3.4" Name="AFP" FirstStr="AFP" LastStr="g/L" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-			</Item>		
-			
-			<!-- 干扰素释放实验 -->
-			<Item ID="6.1.4" Name="Interferon release experiment" FirstStr="干扰素释放实验" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Text"/>
-			
-			<!-- 甲状旁腺激素 -->
-			<Item ID="6.1.5" Name="Parathyroid hormone" FirstStr="甲状旁腺激素" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Text"/>
-			
 		</Group>
 		
 		<!-- 尿液检查 -->
-		<Group ID="6.2" Name="Urinalysis" Level="1" ChildCount="5" >
+		<Group ID="6.2" Name="Urinalysis" Level="1" ChildCount="0" >
 			<Title IsShow="True">尿液检查</Title>
-			<!-- 尿常规 -->
-			<Item ID="6.2.1" Name="Routine urine" FirstStr="尿常规" Level="2" ChildCount="2" IsShow="True">
-				
-				<SubItem ID="6.2.1.1" Name="RBC" FirstStr="红细胞" LastStr="个／HP" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.2.1.2" Name="WBC" FirstStr="白细胞" LastStr="个／HP" IsShow="True" Level="3" Type="Edit" Input="True" DataType="Number"/>
-				
-			</Item>
-			
-			<!-- 尿培养 -->
-			<Item ID="6.2.2" Name="Urine culture" FirstStr="尿培养" Level="2" ChildCount="2" IsShow="True">
-				
-				<SubItem ID="6.2.2.1" Name="bacteria" FirstStr="细菌" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="6.2.2.1-1" Checked="0">+</Options>
-					<Options ID="6.2.2.1-2" Checked="0">-</Options>
-				</SubItem>	
-				
-				<SubItem ID="6.2.2.2" Name="fungi" FirstStr="真菌" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="6.2.2.2-1" Checked="0">+</Options>
-					<Options ID="6.2.2.2-2" Checked="0">-</Options>
-				</SubItem>
-				
-			</Item>			
-			
-			<!-- 尿红细胞形态 -->
-			<Item ID="6.2.3" Name="Urine red blood cell morphology" FirstStr="尿红细胞形态" Level="2" Type="RadioButtonGroup" IsShow="True">
-				<Options ID="6.2.3-1" Checked="0">变形</Options>
-				<Options ID="6.2.3-2" Checked="0">均一</Options>
-			</Item>		
-			
-			<!-- 尿脱落细胞 -->
-			<Item ID="6.2.4" Name="Urine exfoliated cells" FirstStr="尿脱落细胞" LastStr="瘤细胞" Level="2" Type="RadioButtonGroup" IsShow="True">
-				<Options ID="6.2.4-1" Checked="0">有</Options>
-				<Options ID="6.2.4-2" Checked="0">无</Options>
-			</Item>		
-			
-			<!-- 尿沉渣 -->
-			<Item ID="6.2.5" Name="Urinary sediment" FirstStr="尿沉渣" Level="2" ChildCount="5" IsShow="True">
-				
-				<SubItem ID="6.2.5.1" Name="RBC" FirstStr="红细胞" LastStr="个／HP" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.2.5.2" Name="WBC" FirstStr="白细胞" LastStr="个／HP" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.2.5.3" Name="Transparent tube type" FirstStr="透明管型" LastStr="个／HP" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-				
-				<SubItem ID="6.2.5.4" Name="Renal tubular epithelial cells" FirstStr="肾小管上皮细胞" LastStr="个／HP" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="6.2.5.4-1" Checked="0">大量</Options>
-					<Options ID="6.2.5.4-2" Checked="0">偶见</Options>
-				</SubItem>
-				
-				<SubItem ID="6.2.5.5" Name="Squamous or transitional epithelial cells" FirstStr="鳞状或移行上皮细胞" LastStr="个／HP" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="6.2.5.5-1" Checked="0">大量</Options>
-					<Options ID="6.2.5.5-2" Checked="0">偶见</Options>
-				</SubItem>	
-									
-			</Item>			
-					
 		</Group>
 		
 		<!-- 前列腺液 -->
-		<Group ID="6.3" Name="Prostate fluid" Level="1" ChildCount="3" IsShow="True">
+		<Group ID="6.3" Name="Prostate fluid" Level="1" ChildCount="0" IsShow="True">
 			<Title IsShow="True">前列腺液</Title>
-			<Item ID="6.3.1" Name="RBC" FirstStr="红细胞" LastStr="个／HP" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.3.2" Name="WBC" FirstStr="白细胞" LastStr="个／HP" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.3.3" Name="Lecithin corpuscle" FirstStr="卵磷脂小体" LastStr="%" Level="2" Type="RadioButtonGroup" IsShow="True">
-				<Options ID="6.3.3-1" Checked="0">大量</Options>
-				<Options ID="6.3.3-2" Checked="0">少量</Options>
-				<SubItem ID="6.3.3-3" FirstStr="其他" Level="3" IsShow="True"  Type="Edit" Input="True" DataType="Text"/>
-			</Item>
 		</Group>	
 		
 		<!-- 精液 -->
-		<Group ID="6.4" Name="Semen" Level="1" ChildCount="7" IsShow="True">
+		<Group ID="6.4" Name="Semen" Level="1" ChildCount="0" IsShow="True">
 			<Title IsShow="True">精液</Title>
-			<Item ID="6.4.1" Name="RBC" FirstStr="红细胞" LastStr="个／HP" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.4.2" Name="WBC" FirstStr="白细胞" LastStr="个／HP" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.4.3" Name="Sperm" FirstStr="精子" LastStr="个／HP" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.4.5" Name="Semen volume" FirstStr="精液量" LastStr="ml" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.4.6" Name="Abnormal sperm percentage" FirstStr="畸形精子百分比" LastStr="%" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
-			
-			<Item ID="6.4.7" Name="Activity" FirstStr="精子活动度" LastStr="级" Level="2" Type="RadioButtonGroup" IsShow="True">	
-				<Options ID="6.4.7-1" Checked="0">I</Options>
-				<Options ID="6.4.7-2" Checked="0">II</Options>
-				<Options ID="6.4.7-3" Checked="0">III</Options>
-			</Item>
-			
-			<Item ID="6.4.8" Name="Motility" FirstStr="精子活动力" LastStr="级" Level="2" Type="RadioButtonGroup" IsShow="True">	
-				<Options ID="6.4.8-1" Checked="0">I</Options>
-				<Options ID="6.4.8-2" Checked="0">II</Options>
-				<Options ID="6.4.8-3" Checked="0">III</Options>
-			</Item>			
-			
 		</Group>	
-						
 	</Root>
 
 	<Root ID="7" Name="Check" Level="0" ChildCount="9">
@@ -1028,8 +890,6 @@
 		<!-- B超检查 -->
 		<Group ID="7.7" Name="B ultrasonic inspection" Level="1" ChildCount="2">
 			<Title IsShow="True">B超检查</Title>
-			<Item ID="7.7.1" Name="urine volume" FirstStr="超声膀胱残余尿量测定" LastStr="ml" IsShow="True" Level="2" Type="Edit" Input="True" DataType="Number"/>
-			<Item ID="7.7.2" Name="Others" FirstStr="其它超声" Level="2" Input="False" />			
 		</Group>
 
 		<!-- 同位素肾图 -->

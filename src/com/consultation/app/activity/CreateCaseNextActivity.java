@@ -38,7 +38,7 @@ import com.consultation.app.util.SharePreferencesEditor;
 
 public class CreateCaseNextActivity extends Activity implements OnClickListener {
 
-    private TextView title_text, back_text, case_text;
+    private TextView title_text, back_text;
 
     private LinearLayout back_layout;
 
@@ -78,7 +78,16 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         departmentId=getIntent().getStringExtra("departmentId");
         imageString=getIntent().getStringExtra("imageString");
         initData();
-        initView();
+        initView(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("isAdd", symptom_status_text.getText().toString() + "," + signs_status_text.getText().toString() + ","
+            + diagnosis_status_text.getText().toString() + "," + past_history_status_text.getText().toString() + ","
+            + family_history_status_text.getText().toString() + "," + test_status_text.getText().toString() + ","
+            + check_status_text.getText().toString() + ",");
+        super.onSaveInstanceState(outState);
     }
 
     private void initData() {
@@ -98,7 +107,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         }
     }
 
-    private void initView() {
+    private void initView(Bundle savedInstanceState) {
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText("填写病例");
         title_text.setTextSize(20);
@@ -121,8 +130,8 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 finish();
             }
         });
-        case_text=(TextView)findViewById(R.id.create_case_case_text);
-        case_text.setTextSize(18);
+        // case_text=(TextView)findViewById(R.id.create_case_case_text);
+        // case_text.setTextSize(18);
         symptom_text=(TextView)findViewById(R.id.create_case_symptom_text);
         symptom_text.setTextSize(18);
         signs_text=(TextView)findViewById(R.id.create_case_signs_text);
@@ -137,6 +146,16 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         past_history_text.setTextSize(18);
         family_history_text=(TextView)findViewById(R.id.create_case_family_history_text);
         family_history_text.setTextSize(18);
+
+        if(savedInstanceState != null) {
+            symptom_status_text.setText(savedInstanceState.getString("isAdd").split(",")[0]);
+            signs_status_text.setText(savedInstanceState.getString("isAdd").split(",")[1]);
+            diagnosis_status_text.setText(savedInstanceState.getString("isAdd").split(",")[2]);
+            past_history_status_text.setText(savedInstanceState.getString("isAdd").split(",")[3]);
+            family_history_status_text.setText(savedInstanceState.getString("isAdd").split(",")[4]);
+            test_status_text.setText(savedInstanceState.getString("isAdd").split(",")[5]);
+            check_status_text.setText(savedInstanceState.getString("isAdd").split(",")[6]);
+        }
 
         symptom_status_text=(TextView)findViewById(R.id.create_case_symptom_status_text);
         symptom_status_text.setTextSize(18);
@@ -182,8 +201,12 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         saveBtn=(Button)findViewById(R.id.create_case_btn_finish_save);
         saveBtn.setTextSize(20);
         saveBtn.setOnClickListener(this);
-        if(imageString != null && !"null".equals(imageString) && !"".equals(imageString)  && !"[]".equals(imageString)) {
-            check_status_text.setText("已填写");
+        if(imageString != null && !"null".equals(imageString) && !"".equals(imageString) && !"[]".equals(imageString)) {
+            if(imageString.contains("\"case_item\":\"jc\"")) {
+                check_status_text.setText("已填写");
+            } else if(imageString.contains("\"case_item\":\"jy\"")) {
+                test_status_text.setText("已填写");
+            }
         }
         if(content != null && !"null".equals(content) && !"".equals(content)) {
             String[] contents=content.split("&");
@@ -194,21 +217,13 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 signs_status_text.setText("已填写");
             }
             if(contents[2] != null && !"null".equals(contents[2]) && !"".equals(contents[2])) {
-                test_status_text.setText("已填写");
-            }
-            if(contents[3] != null && !"null".equals(contents[3]) && !"".equals(contents[3])) {
                 diagnosis_status_text.setText("已填写");
             }
-            if(contents[4] != null && !"null".equals(contents[4]) && !"".equals(contents[4])) {
+            if(contents[3] != null && !"null".equals(contents[3]) && !"".equals(contents[3])) {
                 past_history_status_text.setText("已填写");
             }
-            if(contents[5] != null && !"null".equals(contents[5]) && !"".equals(contents[5])) {
+            if(contents[4] != null && !"null".equals(contents[4]) && !"".equals(contents[4])) {
                 family_history_status_text.setText("已填写");
-            }
-            if(!isXml){
-                if(contents[6] != null && !"null".equals(contents[6]) && !"".equals(contents[6])) {
-                    check_status_text.setText("已填写");
-                }
             }
         }
     }
@@ -219,9 +234,9 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
             case R.id.create_case_symptom_layout:
                 // 症状
                 if(isXml) {
-                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
+                    Intent intent=new Intent(CreateCaseNextActivity.this, CaseSelelctSymptomActivity.class);
                     intent.putExtra("page", 0);
-                    intent.putExtra("titleText", "症状");
+                    intent.putExtra("titleText", "现病史");
                     if(!"null".equals(content) && !"".equals(content) && null != content) {
                         intent.putExtra("content", content.split("&")[0]);
                     } else {
@@ -232,7 +247,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 } else {
                     Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
                     intent.putExtra("page", 0);
-                    intent.putExtra("titleText", "症状");
+                    intent.putExtra("titleText", "现病史");
                     if(!"null".equals(content) && !"".equals(content) && null != content) {
                         intent.putExtra("content", content.split("&")[0]);
                     } else {
@@ -246,7 +261,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 if(isXml) {
                     Intent signsIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
                     signsIntent.putExtra("page", 1);
-                    signsIntent.putExtra("titleText", "体征");
+                    signsIntent.putExtra("titleText", "体格检查");
                     if(!"null".equals(content) && !"".equals(content) && null != content) {
                         signsIntent.putExtra("content", content.split("&")[1]);
                     } else {
@@ -257,7 +272,7 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 } else {
                     Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
                     intent.putExtra("page", 1);
-                    intent.putExtra("titleText", "体征");
+                    intent.putExtra("titleText", "体格检查");
                     if(!"null".equals(content) && !"".equals(content) && null != content) {
                         intent.putExtra("content", content.split("&")[1]);
                     } else {
@@ -269,25 +284,19 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
             case R.id.create_case_test_layout:
                 // 检验
                 if(isXml) {
-                    Intent testIntent=new Intent(CreateCaseNextActivity.this, SymptomActivity.class);
-                    testIntent.putExtra("page", 5);
-                    testIntent.putExtra("titleText", "检验");
-                    if(!"null".equals(content) && !"".equals(content) && null != content) {
-                        testIntent.putExtra("content", content.split("&")[2]);
-                    } else {
-                        testIntent.putExtra("content", "");
-                    }
-                    testIntent.putExtra("departmentId", departmentId);
-                    startActivityForResult(testIntent, 5);
+                    Intent checkIntent=new Intent(CreateCaseNextActivity.this, CaseTestActivity.class);
+                    checkIntent.putExtra("page", 5);
+                    checkIntent.putExtra("caseId", caseId);
+                    checkIntent.putExtra("departmentId", departmentId);
+                    checkIntent.putExtra("titleText", "检验");
+                    checkIntent.putExtra("imageString", imageString);
+                    startActivityForResult(checkIntent, 5);
                 } else {
-                    Intent intent=new Intent(CreateCaseNextActivity.this, SymptomTxtActivity.class);
+                    Intent intent=new Intent(CreateCaseNextActivity.this, CaseTestTxtActivity.class);
                     intent.putExtra("titleText", "检验");
+                    intent.putExtra("imageString", imageString);
                     intent.putExtra("page", 5);
-                    if(!"null".equals(content) && !"".equals(content) && null != content) {
-                        intent.putExtra("content", content.split("&")[2]);
-                    } else {
-                        intent.putExtra("content", "");
-                    }
+                    intent.putExtra("caseId", caseId);
                     startActivityForResult(intent, 5);
                 }
                 break;
@@ -300,23 +309,12 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                     checkIntent.putExtra("departmentId", departmentId);
                     checkIntent.putExtra("titleText", "检查");
                     checkIntent.putExtra("imageString", imageString);
-                    if(!"null".equals(content) && !"".equals(content) && null != content) {
-                        checkIntent.putExtra("flag", 1);
-                        checkIntent.putExtra("content", content.split("&")[6]);
-                    } else {
-                        checkIntent.putExtra("flag", 0);
-                    }
                     startActivityForResult(checkIntent, 6);
                 } else {
                     Intent intent=new Intent(CreateCaseNextActivity.this, CaseTestTxtActivity.class);
                     intent.putExtra("titleText", "检查");
                     intent.putExtra("imageString", imageString);
                     intent.putExtra("page", 6);
-                    if(!"null".equals(content) && !"".equals(content) && null != content) {
-                        intent.putExtra("flag", 1);
-                    } else {
-                        intent.putExtra("flag", 0);
-                    }
                     intent.putExtra("caseId", caseId);
                     startActivityForResult(intent, 6);
                 }
@@ -421,9 +419,9 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("case_id", caseId);
         parmas.put("is_submit", isSubmit);
-        if(isXml){
+        if(isXml) {
             parmas.put("fill_tp", "2");
-        }else{
+        } else {
             parmas.put("fill_tp", "1");
         }
         parmas.put("accessToken", ClientUtil.getToken());
@@ -455,15 +453,6 @@ public class CreateCaseNextActivity extends Activity implements OnClickListener 
                 case 4:
                     if(null != caseParams.getValue("4") && !"".equals(caseParams.getValue("4"))) {
                         parmas.put("content_jzs_xml", caseParams.getValue("4"));
-                    }
-                    break;
-                case 5:
-                    if(null != caseParams.getValue("5") && !"".equals(caseParams.getValue("5"))) {
-                        parmas.put("content_jy_xml", caseParams.getValue("5"));
-                    }
-                case 6:
-                    if(null != caseParams.getValue("6") && !"".equals(caseParams.getValue("6"))) {
-                        parmas.put("content_jc_xml", caseParams.getValue("6"));
                     }
                     break;
                 default:

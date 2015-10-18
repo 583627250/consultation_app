@@ -4,24 +4,42 @@ import java.util.List;
 
 public class TitleModel {
 
-    private String id = "0";
+    private String id="0";
 
-    private String name = "";
+    private String name="";
 
-    private String level = "0";
+    private String level="0";
 
-    private String childCount = "0";
+    private String childCount="0";
 
-    private String title = "";
-    
-    private String isShow = "True";
+    private String title="";
 
-    
+    private String isShow="True";
+
+    private String Type="";
+
+    private String isNormal="True";
+
+    public String getIsNormal() {
+        return isNormal;
+    }
+
+    public void setIsNormal(String isNormal) {
+        this.isNormal=isNormal;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type=type;
+    }
+
     public String getIsShow() {
         return isShow;
     }
 
-    
     public void setIsShow(String isShow) {
         this.isShow=isShow;
     }

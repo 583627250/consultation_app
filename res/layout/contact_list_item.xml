@@ -27,7 +27,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
-            android:textColor="#353535" />
+            android:textColor="#999999" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,20 +36,46 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingRight="10dp" >
 
         <CheckBox
             android:id="@+id/contact_isCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right"
             android:background="@null"
             android:button="@null"
-            android:paddingRight="10dp"
-            android:layout_gravity="right"
             android:drawableLeft="@drawable/radio_btn_bg"
             android:drawablePadding="5dp"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            android:paddingRight="10dp"
+            android:visibility="gone" >
         </CheckBox>
+
+        <TextView
+            android:id="@+id/contact_isInvitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="已邀请"
+            android:textColor="#999999"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/contact_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="right"
+            android:background="@drawable/login_login_btn_shape"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="确定"
+            android:textColor="@color/consultation_color_white" />
+        
     </LinearLayout>
 
 </LinearLayout>

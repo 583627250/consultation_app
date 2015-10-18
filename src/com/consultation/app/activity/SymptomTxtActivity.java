@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ public class SymptomTxtActivity extends Activity {
 
     private EditText editText;
 
-    private Button saveBtn;
+//    private Button saveBtn;
 
     private String titleText;
 
@@ -47,7 +46,28 @@ public class SymptomTxtActivity extends Activity {
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setText(titleText);
         title_text.setTextSize(20);
+        TextView header_right=(TextView)findViewById(R.id.header_right);
+        header_right.setText("保存");
+        header_right.setVisibility(View.VISIBLE);
+        header_right.setTextSize(18);
+        header_right.setOnClickListener(new OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                // 保存数据
+                if(null == editText.getText().toString() || "".equals(editText.getText().toString())) {
+                    Toast.makeText(SymptomTxtActivity.this, "请输入病例内容", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ClientUtil.getCaseParams().add(String.valueOf(page), editText.getText().toString());
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isAdd", true);
+                intent.putExtras(bundle);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+        });
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
         back_text=(TextView)findViewById(R.id.header_text_lift);
@@ -75,26 +95,26 @@ public class SymptomTxtActivity extends Activity {
             editText.setText(content);
         }
 
-        saveBtn=(Button)findViewById(R.id.syamptom_txt_btn_save);
-        saveBtn.setTextSize(20);
-        saveBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 保存数据
-                if(null == editText.getText().toString() || "".equals(editText.getText().toString())) {
-                    Toast.makeText(SymptomTxtActivity.this, "请输入病例内容", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                ClientUtil.getCaseParams().add(String.valueOf(page), editText.getText().toString());
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
-                bundle.putBoolean("isAdd", true);
-                intent.putExtras(bundle);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
-            }
-        });
+//        saveBtn=(Button)findViewById(R.id.syamptom_txt_btn_save);
+//        saveBtn.setTextSize(20);
+//        saveBtn.setOnClickListener(new OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                // 保存数据
+//                if(null == editText.getText().toString() || "".equals(editText.getText().toString())) {
+//                    Toast.makeText(SymptomTxtActivity.this, "请输入病例内容", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                ClientUtil.getCaseParams().add(String.valueOf(page), editText.getText().toString());
+//                Intent intent=new Intent();
+//                Bundle bundle=new Bundle();
+//                bundle.putBoolean("isAdd", true);
+//                intent.putExtras(bundle);
+//                setResult(Activity.RESULT_OK, intent);
+//                finish();
+//            }
+//        });
         if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(String.valueOf(page)) != null
             && !"".equals(ClientUtil.getCaseParams().getValue(String.valueOf(page)))) {
             editText.setText(ClientUtil.getCaseParams().getValue(String.valueOf(page)));

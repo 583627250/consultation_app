@@ -4,19 +4,53 @@
     android:layout_height="match_parent"
     android:background="#EBEBEB"
     android:orientation="vertical" >
-    
-    
+
+    <include
+        android:id="@+id/consultation_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/consultation_header" />
+
+    <LinearLayout
+        android:id="@+id/consulation_list_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/recommend_search_edit_shape"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/seache_image_small" />
+
+        <TextView
+            android:id="@+id/consulation_list_search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
+            android:gravity="center"
+            android:textColor="#999999"
+            android:text="搜索" />
+    </LinearLayout>
+
     <com.consultation.app.view.PullToRefreshLayout
-	    android:id="@+id/consulation_list_all_refresh_view"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
+        android:id="@+id/consulation_list_all_refresh_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
         <include layout="@layout/refresh_head" />
-	    <com.consultation.app.view.PullableListView
-	        android:id="@+id/consulation_list_all_listView"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:divider="#DADADA"
+
+        <com.consultation.app.view.PullableListView
+            android:id="@+id/consulation_list_all_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="#DADADA"
             android:dividerHeight="0.1dp" />
-     </com.consultation.app.view.PullToRefreshLayout>
+    </com.consultation.app.view.PullToRefreshLayout>
 
 </LinearLayout>

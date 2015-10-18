@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/knowledge_recommend_layout_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <CheckBox
+            android:id="@+id/case_select_isCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@null"
+            android:button="@null"
+            android:drawableRight="@drawable/radio_btn_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:padding="10dp" >
+        </CheckBox>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/case_select_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="名字"
+            android:textColor="#353535" />
+    </LinearLayout>
+
+</LinearLayout>

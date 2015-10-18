@@ -33,9 +33,18 @@ public class AddPatientPicActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_pic_layout);
+        if(savedInstanceState != null){
+            photoUri=Uri.parse(savedInstanceState.getString("photoUri"));
+        }
         initView();
     }
-
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("photoUri", photoUri.toString());
+        super.onSaveInstanceState(outState);
+    }
+    
     /**
      * 初始化加载View
      */

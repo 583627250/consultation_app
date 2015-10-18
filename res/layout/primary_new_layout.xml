@@ -28,12 +28,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:background="#EBEBEB" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@color/consultation_color_white"
@@ -383,7 +377,6 @@
 	            android:background="@drawable/create_case_submit_selector"
 	            android:textColor="@color/consultation_color_white"
 	            android:text="下一步" />
-        
         </LinearLayout>
     </LinearLayout>
 

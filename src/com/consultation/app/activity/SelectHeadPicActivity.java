@@ -29,14 +29,18 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
     private Button takePhotoBtn, pickPhotoBtn, cancelBtn;
 
     private Uri photoUri;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_pic_layout);
+        System.out.println("SelectHeadPicActivity");
+        if(savedInstanceState != null){
+            photoUri=Uri.parse(savedInstanceState.getString("photoUri"));
+        }
         initView();
     }
-
+    
     /**
      * 初始化加载View
      */
@@ -52,6 +56,12 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
         cancelBtn=(Button)findViewById(R.id.select_pic_btn_cancel);
         cancelBtn.setTextSize(18);
         cancelBtn.setOnClickListener(this);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("photoUri", photoUri.toString());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -104,7 +114,7 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
         finish();
         return super.onTouchEvent(event);
     }
-
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK) {
@@ -134,7 +144,7 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
                 return;
             }
             startPhotoZoom(photoUri);
-        } else {
+        } else if(requestCode == SELECT_PIC_BY_TACK_PHOTO){
             startPhotoZoom(photoUri);
         }
     }
@@ -144,10 +154,6 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
      * @param uri
      */
     private void startPhotoZoom(Uri uri) {
-        /*
-         * 至于下面这个Intent的ACTION是怎么知道的，大家可以看下自己路径下的如下网页 yourself_sdk_path/docs/reference/android/content/Intent.html 直接在里面Ctrl+F搜：CROP
-         * ，之前小马没仔细看过，其实安卓系统早已经有自带图片裁剪功能, 是直接调本地库的，小马不懂C C++ 这个不做详细了解去了，有轮子就用轮子，不再研究轮子是怎么 制做的了...吼吼
-         */
         Intent intent=new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪

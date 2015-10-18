@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="#2CB67A"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+
+            <LinearLayout
+                android:id="@+id/header_layout_lift"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="invisible" >
+
+                <ImageView
+                    android:id="@+id/header_lift_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="3dp"
+                    android:src="@drawable/back_icon" />
+
+                <TextView
+                    android:id="@+id/header_text_lift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="3dp"
+                    android:text="返回"
+                    android:textColor="@color/consultation_color_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/recommend_search_edit_shape"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/header_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_weight="0" />
+
+                <EditText
+                    android:id="@+id/header_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="3"
+                    android:background="@color/consultation_color_white"
+                    android:singleLine="true"
+                    android:textColor="@color/consultation_color_black" />
+
+                <ImageView
+                    android:id="@+id/header_image_delete"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingRight="7dp"
+                    android:src="@drawable/delete_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_layout_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right" >
+
+                <TextView
+                    android:id="@+id/header_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center_vertical"
+                    android:text="搜索"
+                    android:textColor="@color/consultation_color_white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/case_search_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="20dp"
+            android:background="@color/consultation_color_white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/case_search_title_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="10dp"
+                android:text="按照状态搜索"
+                android:textColor="#7D7D7D" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:id="@+id/case_search_waiting_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:paddingTop="3dp"
+                            android:src="@drawable/specialist_unselected" />
+
+                        <TextView
+                            android:id="@+id/case_search_waiting_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="3dp"
+                            android:text="我的待办"
+                            android:textColor="#7D7D7D" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/case_search_finsh_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:paddingTop="3dp"
+                            android:src="@drawable/knowledge_unselected" />
+
+                        <TextView
+                            android:id="@+id/case_search_finsh_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="3dp"
+                            android:text="处理中"
+                            android:textColor="#7D7D7D" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/case_search_histry_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:paddingTop="3dp"
+                            android:src="@drawable/mine_unselected" />
+
+                        <TextView
+                            android:id="@+id/case_search_histry_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="3dp"
+                            android:text="归档"
+                            android:textColor="#7D7D7D" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/case_search_history_listView_delete"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="10dp"
+            android:text="清除历史记录"
+            android:textColor="@color/consultation_color_black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#DADADA" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/consultation_color_white"
+            android:orientation="horizontal" >
+
+            <ListView
+                android:id="@+id/case_search_history_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#DADADA"
+                android:dividerHeight="0.1dp" >
+            </ListView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

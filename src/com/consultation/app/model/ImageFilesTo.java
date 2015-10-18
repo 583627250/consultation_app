@@ -12,6 +12,8 @@ public class ImageFilesTo {
 
     private String test_name;
 
+    private String item_name;
+
     public String getId() {
         return id;
     }
@@ -27,7 +29,7 @@ public class ImageFilesTo {
     public void setPic_url(String pic_url) {
         this.pic_url=pic_url;
     }
-    
+
     public String getLittle_pic_url() {
         return little_pic_url;
     }
@@ -35,6 +37,7 @@ public class ImageFilesTo {
     public void setLittle_pic_url(String little_pic_url) {
         this.little_pic_url=little_pic_url;
     }
+
     public String getCase_id() {
         return case_id;
     }
@@ -49,6 +52,14 @@ public class ImageFilesTo {
 
     public void setTest_name(String test_name) {
         this.test_name=test_name;
+    }
+
+    public String getItem_name() {
+        return item_name;
+    }
+
+    public void setItem_name(String item_name) {
+        this.item_name=item_name;
     }
 
 }

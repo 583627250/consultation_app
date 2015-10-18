@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.consultation.app.R;
@@ -50,11 +51,18 @@ public class SearchConsulationActivity extends Activity {
     private boolean isHave = false;
     
     private ImageView deleteBtn;
+    
+    private RelativeLayout waitingLayout,finshLayout,histryLayout;
+    
+    private LinearLayout allLayout;
+    
+    private boolean isBBS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.knowledge_recommend_list_search_layout);
+        setContentView(R.layout.case_list_search_layout);
+        isBBS = getIntent().getBooleanExtra("isBBS", false);
         initDate();
         initView();
     }
@@ -81,7 +89,7 @@ public class SearchConsulationActivity extends Activity {
         back_text.setTextSize(18);
         searchEditText=(EditText)findViewById(R.id.header_edit);
         searchEditText.setTextSize(16);
-        searchEditText.setHint("请输入病例标题");
+        searchEditText.setHint("请输入病例相关内容");
         searchEditText.setHintTextColor(Color.parseColor("#D3D3D3"));
         deleteBtn = (ImageView)findViewById(R.id.header_image_delete);
         deleteBtn.setOnClickListener(new OnClickListener() {
@@ -91,7 +99,7 @@ public class SearchConsulationActivity extends Activity {
                 searchEditText.setText("");
             }
         });
-        deleteText = (TextView)findViewById(R.id.recommend_search_history_listView_delete);
+        deleteText = (TextView)findViewById(R.id.case_search_history_listView_delete);
         deleteText.setTextSize(16);
         if(!isHasHistory){
             deleteText.setVisibility(View.GONE);
@@ -107,8 +115,6 @@ public class SearchConsulationActivity extends Activity {
                 deleteText.setVisibility(View.GONE);
             }
         });
-        
-        
         back_layout.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -140,6 +146,7 @@ public class SearchConsulationActivity extends Activity {
                         isHave = false;
                     }
                     Intent intent = new Intent(SearchConsulationActivity.this, SearchConsulationResultActivity.class);
+                    intent.putExtra("isBBS", isBBS);
                     intent.putExtra("filter", editTextString);
                     startActivity(intent);
                     deleteText.setVisibility(View.VISIBLE);
@@ -149,17 +156,61 @@ public class SearchConsulationActivity extends Activity {
             }
         });
         myAdapter = new MyAdapter();
-        historyListView=(ListView)findViewById(R.id.recommend_search_history_listView);
+        historyListView=(ListView)findViewById(R.id.case_search_history_listView);
         historyListView.setAdapter(myAdapter);
         historyListView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SearchConsulationActivity.this, SearchConsulationResultActivity.class);
+                intent.putExtra("isBBS", isBBS);
                 intent.putExtra("filter", historyList.get(position));
                 startActivity(intent);
             }
         });
+        
+        TextView searchTitleText = (TextView)findViewById(R.id.case_search_title_text);
+        searchTitleText.setTextSize(18);
+        TextView waitingText = (TextView)findViewById(R.id.case_search_waiting_text);
+        waitingText.setTextSize(15);
+        TextView finshText = (TextView)findViewById(R.id.case_search_finsh_text);
+        finshText.setTextSize(15);
+        TextView histryText = (TextView)findViewById(R.id.case_search_histry_text);
+        histryText.setTextSize(15);
+        waitingLayout = (RelativeLayout)findViewById(R.id.case_search_waiting_layout);
+        waitingLayout.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchConsulationActivity.this, SearchConsulationResultActivity.class);
+                intent.putExtra("flag", 1);
+                startActivity(intent);
+            }
+        });
+        finshLayout = (RelativeLayout)findViewById(R.id.case_search_finsh_layout);
+        finshLayout.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchConsulationActivity.this, SearchConsulationResultActivity.class);
+                intent.putExtra("flag", 2);
+                startActivity(intent);
+            }
+        });
+        histryLayout = (RelativeLayout)findViewById(R.id.case_search_histry_layout);
+        histryLayout.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchConsulationActivity.this, SearchConsulationResultActivity.class);
+                intent.putExtra("flag", 3);
+                startActivity(intent);
+            }
+        });
+        allLayout = (LinearLayout)findViewById(R.id.case_search_title_layout);
+        if(isBBS){
+            allLayout.setVisibility(View.GONE);
+        }
     }
     
     private static class ViewHolder {

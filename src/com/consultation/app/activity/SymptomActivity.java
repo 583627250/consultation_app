@@ -1,6 +1,5 @@
 package com.consultation.app.activity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -42,7 +39,6 @@ import com.consultation.app.model.ItemModel;
 import com.consultation.app.model.OptionsModel;
 import com.consultation.app.model.TitleModel;
 import com.consultation.app.util.ClientUtil;
-import com.consultation.app.util.CommonUtil;
 
 @SuppressLint("UseSparseArrays")
 public class SymptomActivity extends CaseBaseActivity {
@@ -71,15 +67,17 @@ public class SymptomActivity extends CaseBaseActivity {
 
     private Map<String, Object> views=new HashMap<String, Object>();
 
+    private Map<Integer, Boolean> isNomalMap=new HashMap<Integer, Boolean>();
+
     private List<Integer> ids=new ArrayList<Integer>();
+
+    private List<Integer> xbsIds=new ArrayList<Integer>();
 
     private Map<Integer, List<LinearLayout>> maps=new HashMap<Integer, List<LinearLayout>>();
 
     private List<TitleModel> titleModels;
 
     private int page;
-
-    private Button saveBtn;
 
     private String titleText;
 
@@ -88,6 +86,14 @@ public class SymptomActivity extends CaseBaseActivity {
     private String content="";
 
     private String departmentId="";
+
+    private RadioButton noamal, abnomal;
+
+    private int firstCheck;
+
+    private String secondCheck;
+
+    private RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +107,8 @@ public class SymptomActivity extends CaseBaseActivity {
         titleText=getIntent().getStringExtra("titleText");
         content=getIntent().getStringExtra("content");
         departmentId=getIntent().getStringExtra("departmentId");
+        firstCheck=getIntent().getIntExtra("firstCheck", -1);
+        secondCheck=getIntent().getStringExtra("secondCheck");
         initData();
         initView();
     }
@@ -110,10 +118,76 @@ public class SymptomActivity extends CaseBaseActivity {
         title_text.setText(titleText);
         title_text.setTextSize(20);
 
+        TextView header_right=(TextView)findViewById(R.id.header_right);
+        header_right.setText("保存");
+        header_right.setVisibility(View.VISIBLE);
+        header_right.setTextSize(18);
+        header_right.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 保存数据
+                saveData();
+            }
+        });
+
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);
         back_text=(TextView)findViewById(R.id.header_text_lift);
         back_text.setTextSize(18);
+
+        radioGroup=(RadioGroup)findViewById(R.id.syamptom_select_isNormal_radioGroup);
+
+        noamal=(RadioButton)findViewById(R.id.syamptom_select_normal);
+        noamal.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    // 关闭
+                    if(page == 0) {
+                        showRightLayout(xbsIds.get(currentPosition), 2);
+                        isNomalMap.put(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1,
+                            true);
+                    } else {
+                        showRightLayout(currentPosition, 2);
+                        isNomalMap.put(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1, true);
+                    }
+                }
+            }
+        });
+        abnomal=(RadioButton)findViewById(R.id.syamptom_select_abnormal);
+        abnomal.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    // 展开
+                    if(page == 0) {
+                        if(ids.contains(xbsIds.get(currentPosition))) {
+                            // 显示界面，并影藏其他界面
+                            showRightLayout(xbsIds.get(currentPosition), 1);
+                        } else {
+                            // 创建界面
+                            showRightLayout(xbsIds.get(currentPosition), 0);
+                            ids.add(xbsIds.get(currentPosition));
+                        }
+                        isNomalMap.put(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1,
+                            false);
+                    } else {
+                        if(ids.contains(currentPosition)) {
+                            // 显示界面，并影藏其他界面
+                            showRightLayout(currentPosition, 1);
+                        } else {
+                            // 创建界面
+                            showRightLayout(currentPosition, 0);
+                            ids.add(currentPosition);
+                        }
+                        isNomalMap.put(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1, false);
+                    }
+                }
+            }
+        });
 
         back_layout.setOnClickListener(new OnClickListener() {
 
@@ -140,45 +214,101 @@ public class SymptomActivity extends CaseBaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 currentPosition=position;
-                if(ids.contains(position)) {
-                    // 显示界面，并影藏其他界面
-                    showRightLayout(position, 1);
-                } else {
-                    // 创建界面
-                    showRightLayout(position, 0);
-                    ids.add(position);
+                if(page == 0){
+                    for(int i=0; i < leftList.size(); i++) {
+                        if(i != position) {
+                            showRightLayout(xbsIds.get(i), 2);
+                        }
+                    }
+                }else{
+                    for(int i=0; i < leftList.size(); i++) {
+                        if(i != position) {
+                            showRightLayout(i, 2);
+                        }
+                    }
                 }
-                for(int i=0; i < leftList.size(); i++) {
-                    if(i != position) {
-                        showRightLayout(i, 2);
+                if(page == 2) {
+                    radioGroup.setVisibility(View.GONE);
+                    if(ids.contains(currentPosition)) {
+                        // 显示界面，并影藏其他界面
+                        showRightLayout(currentPosition, 1);
+                    } else {
+                        // 创建界面
+                        showRightLayout(currentPosition, 0);
+                        ids.add(currentPosition);
+                    }
+                    isNomalMap.put(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1, false);
+                } else if(page == 0) {
+                    noamal.setChecked(isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId()
+                        .split("\\.")[1]) - 1));
+                    abnomal.setChecked(!isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId()
+                        .split("\\.")[1]) - 1));
+                    if(!isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1)) {
+                        if(ids.contains(xbsIds.get(currentPosition))) {
+                            // 显示界面，并影藏其他界面
+                            showRightLayout(xbsIds.get(currentPosition), 1);
+                        } else {
+                            // 创建界面
+                            showRightLayout(xbsIds.get(currentPosition), 0);
+                            ids.add(xbsIds.get(currentPosition));
+                        }
+                    }
+                } else {
+                    noamal.setChecked(isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1));
+                    abnomal.setChecked(!isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1));
+                    if(!isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1)) {
+                        if(ids.contains(currentPosition)) {
+                            // 显示界面，并影藏其他界面
+                            showRightLayout(currentPosition, 1);
+                        } else {
+                            // 创建界面
+                            showRightLayout(currentPosition, 0);
+                            ids.add(currentPosition);
+                        }
                     }
                 }
                 myAdapter.notifyDataSetChanged();
             }
         });
-
-        saveBtn=(Button)findViewById(R.id.syamptom_btn_save);
-        saveBtn.setTextSize(20);
-        saveBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 保存数据
-                saveData();
-            }
-        });
         currentPosition=0;
-        if(ids.contains(currentPosition)) {
-            // 显示界面，并影藏其他界面
-            showRightLayout(currentPosition, 1);
+        if(page == 2) {
+            radioGroup.setVisibility(View.GONE);
+            if(ids.contains(currentPosition)) {
+                // 显示界面，并影藏其他界面
+                showRightLayout(currentPosition, 1);
+            } else {
+                // 创建界面
+                showRightLayout(currentPosition, 0);
+                ids.add(currentPosition);
+            }
+            isNomalMap.put(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1, false);
+        } else if(page == 0) {
+            noamal
+                .setChecked(isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1));
+            abnomal
+                .setChecked(!isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1));
+            if(!isNomalMap.get(Integer.parseInt(titleModels.get(xbsIds.get(currentPosition)).getId().split("\\.")[1]) - 1)) {
+                if(ids.contains(xbsIds.get(currentPosition))) {
+                    // 显示界面，并影藏其他界面
+                    showRightLayout(xbsIds.get(currentPosition), 1);
+                } else {
+                    // 创建界面
+                    showRightLayout(xbsIds.get(currentPosition), 0);
+                    ids.add(xbsIds.get(currentPosition));
+                }
+            }
         } else {
-            // 创建界面
-            showRightLayout(currentPosition, 0);
-            ids.add(currentPosition);
-        }
-        for(int i=0; i < leftList.size(); i++) {
-            if(i != currentPosition) {
-                showRightLayout(i, 2);
+            noamal.setChecked(isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1));
+            abnomal.setChecked(!isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1));
+            if(!isNomalMap.get(Integer.parseInt(titleModels.get(currentPosition).getId().split("\\.")[1]) - 1)) {
+                if(ids.contains(currentPosition)) {
+                    // 显示界面，并影藏其他界面
+                    showRightLayout(currentPosition, 1);
+                } else {
+                    // 创建界面
+                    showRightLayout(currentPosition, 0);
+                    ids.add(currentPosition);
+                }
             }
         }
     }
@@ -210,7 +340,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                 views.put(subItemModel.getId(), input);
                                 LinearLayout editTextLayout=
                                     createEditText(subItemModel.getFirstStr(), subItemModel.getLastStr(), input,
-                                        subItemModel.getValue(), subItemModel.getDataType(),0);
+                                        subItemModel.getValue(), subItemModel.getDataType(), 0);
                                 layouts.add(editTextLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(editTextLayout);
@@ -225,7 +355,9 @@ public class SymptomActivity extends CaseBaseActivity {
                                     checkBoxs.add(box);
                                     views.put(subItemModel.getOptionsModels().get(j).getId(), box);
                                 }
-                                LinearLayout spinnerLayout=createCheckBox(subItemModel.getFirstStr(), data_list, checkBoxs, values, subItemModel.getLastStr());
+                                LinearLayout spinnerLayout=
+                                    createCheckBox(subItemModel.getFirstStr(), data_list, checkBoxs, values,
+                                        subItemModel.getLastStr());
                                 layouts.add(spinnerLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(spinnerLayout);
@@ -241,7 +373,8 @@ public class SymptomActivity extends CaseBaseActivity {
                                     date[j]=subItemModel.getOptionsModels().get(j).getName();
                                     values[j]=subItemModel.getOptionsModels().get(j).getChecked();
                                 }
-                                LinearLayout radioButtonLayout=createRadioButton(subItemModel.getFirstStr(), date, rBtns, values, subItemModel.getLastStr());
+                                LinearLayout radioButtonLayout=
+                                    createRadioButton(subItemModel.getFirstStr(), date, rBtns, values, subItemModel.getLastStr());
                                 layouts.add(radioButtonLayout);
                                 maps.put(position, layouts);
                                 rightLayout.addView(radioButtonLayout);
@@ -253,7 +386,7 @@ public class SymptomActivity extends CaseBaseActivity {
                             views.put(itemModel.getId(), input);
                             LinearLayout editTextLayout=
                                 createEditText(itemModel.getFirstStr(), itemModel.getLastStr(), input, itemModel.getValue(),
-                                    itemModel.getDataType(),0);
+                                    itemModel.getDataType(), 0);
                             layouts.add(editTextLayout);
                             maps.put(position, layouts);
                             rightLayout.addView(editTextLayout);
@@ -268,7 +401,8 @@ public class SymptomActivity extends CaseBaseActivity {
                                 checkBoxs.add(box);
                                 views.put(itemModel.getOptionsModels().get(j).getId(), box);
                             }
-                            LinearLayout spinnerLayout=createCheckBox(itemModel.getFirstStr(), data_list, checkBoxs, values,itemModel.getLastStr());
+                            LinearLayout spinnerLayout=
+                                createCheckBox(itemModel.getFirstStr(), data_list, checkBoxs, values, itemModel.getLastStr());
                             layouts.add(spinnerLayout);
                             rightLayout.addView(spinnerLayout);
                             if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
@@ -278,7 +412,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                     views.put(suItemModel3.getId(), input);
                                     LinearLayout editTextLayout=
                                         createEditText(suItemModel3.getFirstStr(), suItemModel3.getLastStr(), input,
-                                            suItemModel3.getValue(), suItemModel3.getDataType(),1);
+                                            suItemModel3.getValue(), suItemModel3.getDataType(), 1);
                                     layouts.add(editTextLayout);
                                     rightLayout.addView(editTextLayout);
                                 }
@@ -295,7 +429,8 @@ public class SymptomActivity extends CaseBaseActivity {
                                 date[j]=itemModel.getOptionsModels().get(j).getName();
                                 values[j]=itemModel.getOptionsModels().get(j).getChecked();
                             }
-                            LinearLayout radioButtonLayout=createRadioButton(itemModel.getFirstStr(), date, rBtns, values, itemModel.getLastStr());
+                            LinearLayout radioButtonLayout=
+                                createRadioButton(itemModel.getFirstStr(), date, rBtns, values, itemModel.getLastStr());
                             layouts.add(radioButtonLayout);
                             rightLayout.addView(radioButtonLayout);
                             if(null != itemModel.getItemModels() && itemModel.getItemModels().size() != 0) {
@@ -305,7 +440,7 @@ public class SymptomActivity extends CaseBaseActivity {
                                     views.put(suItemModel3.getId(), input);
                                     LinearLayout editTextLayout=
                                         createEditText(suItemModel3.getFirstStr(), suItemModel3.getLastStr(), input,
-                                            suItemModel3.getValue(), suItemModel3.getDataType(),1);
+                                            suItemModel3.getValue(), suItemModel3.getDataType(), 1);
                                     layouts.add(editTextLayout);
                                     rightLayout.addView(editTextLayout);
                                 }
@@ -333,28 +468,72 @@ public class SymptomActivity extends CaseBaseActivity {
     }
 
     private void saveData() {
+        if(page == 0) {
+            for(int i=0; i < titleModels.size(); i++) {
+                if(i == firstCheck) {
+                    titleModels.get(i).setType("Main");
+                } else {
+                    String[] tempSecondCheck;
+                    if(secondCheck.contains(",")) {
+                        tempSecondCheck=secondCheck.split(",");
+                        for(int j=0; j < tempSecondCheck.length; j++) {
+                            if(tempSecondCheck[j].equals(i + "")) {
+                                titleModels.get(i).setType("Accompany");
+                            }
+                        }
+                    } else {
+                        if(secondCheck.equals(i + "")) {
+                            titleModels.get(i).setType("Accompany");
+                        }
+                    }
+                }
+            }
+        }
+        for(Integer key: isNomalMap.keySet()) {
+            titleModels.get(key).setIsNormal(String.valueOf(isNomalMap.get(key)));
+        } 
         for(String key: views.keySet()) {
             Object view=views.get(key);
             if(EditText.class.isInstance(view)) {
                 if(null != ((EditText)view).getText().toString() && !"".equals(((EditText)view).getText().toString())) {
-                    setValue(key, ((EditText)view).getText().toString(), 0);
-                    isAdd=true;
+                    if(isNomalMap.containsKey(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                        if(!isNomalMap.get(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                            setValue(key, ((EditText)view).getText().toString(), 0);
+                            isAdd=true;
+                        }
+                    }
                 }
             } else if(RadioButton.class.isInstance(view)) {
                 RadioButton radioButton=(RadioButton)view;
                 if(radioButton.isChecked()) {
-                    setValue(key, "1", 1);
-                    isAdd=true;
+                    if(isNomalMap.containsKey(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                        if(!isNomalMap.get(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                            setValue(key, "1", 1);
+                            isAdd=true;
+                        }
+                    }
                 } else {
-                    setValue(key, "0", 1);
+                    if(isNomalMap.containsKey(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                        if(!isNomalMap.get(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                            setValue(key, "0", 1);
+                        }
+                    }
                 }
             } else if(CheckBox.class.isInstance(view)) {
                 CheckBox box=(CheckBox)view;
                 if(box.isChecked()) {
-                    setValue(key, "1", 2);
-                    isAdd=true;
+                    if(isNomalMap.containsKey(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                        if(!isNomalMap.get(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                            setValue(key, "1", 2);
+                            isAdd=true;
+                        }
+                    }
                 } else {
-                    setValue(key, "0", 2);
+                    if(isNomalMap.containsKey(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                        if(!isNomalMap.get(Integer.parseInt(key.split("\\.")[1]) - 1)) {
+                            setValue(key, "0", 2);
+                        }
+                    }
                 }
             }
         }
@@ -364,22 +543,22 @@ public class SymptomActivity extends CaseBaseActivity {
     private void setValue(String id, String value, int type) {
         int titleIds=Integer.parseInt(id.split("\\.")[1]) - 1;
         List<ItemModel> list=titleModels.get(titleIds).getItemModels();
-        int itemId = 0;
-        if(id.split("\\.")[2].contains("-")){
-            itemId = Integer.parseInt(id.split("\\.")[2].split("-")[0]) - 1;
-        }else{
-            itemId = Integer.parseInt(id.split("\\.")[2]) - 1;
+        int itemId=0;
+        if(id.split("\\.")[2].contains("-")) {
+            itemId=Integer.parseInt(id.split("\\.")[2].split("-")[0]) - 1;
+        } else {
+            itemId=Integer.parseInt(id.split("\\.")[2]) - 1;
         }
         ItemModel model=list.get(itemId);
         if(type == 0) {
             if(id.split("\\.").length == 3) {
-                if(id.split("\\.")[2].contains("-")){
+                if(id.split("\\.")[2].contains("-")) {
                     for(int i=0; i < model.getItemModels().size(); i++) {
                         if(model.getItemModels().get(i).getId().equals(id)) {
                             model.getItemModels().get(i).setValue(value);
                         }
                     }
-                }else{
+                } else {
                     if(model.getId().equals(id)) {
                         model.setValue(value);
                     }
@@ -442,7 +621,9 @@ public class SymptomActivity extends CaseBaseActivity {
         CaseModel caseModel;
         if(null != content && !"".equals(content) && !"null".equals(content)) {
             caseModel=caseList.get(0);
-        } else if(ClientUtil.getCaseParams().size()!=0 && ClientUtil.getCaseParams().getValue(page+"") != null && !"".equals(ClientUtil.getCaseParams().getValue(page+""))){
+        } else if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(page + "") != null
+            && !"".equals(ClientUtil.getCaseParams().getValue(page + ""))) {
+            XMLCaseDatas(ClientUtil.getCaseParams().getValue(page + ""));
             caseModel=caseList.get(0);
         } else {
             caseModel=caseList.get(page);
@@ -455,7 +636,12 @@ public class SymptomActivity extends CaseBaseActivity {
             TitleModel titleModel=titleModels.get(i);
             List<ItemModel> itemModels=titleModel.getItemModels();
             stringBuffer.append("<Group ID=\"" + titleModel.getId() + "\" Name=\"" + titleModel.getName() + "\" Level=\""
-                + titleModel.getLevel() + "\" ChildCount=\"" + titleModel.getChildCount() + "\">");
+                + titleModel.getLevel() + "\" ChildCount=\"" + titleModel.getChildCount() + "\"");
+            if(titleModel.getType() != null && !"".equals(titleModel.getType())) {
+                stringBuffer.append(" Type=\"" + titleModel.getType() + "\"");
+            }
+            stringBuffer.append(" isNormal=\"" + titleModel.getIsNormal() + "\"");
+            stringBuffer.append(">");
             stringBuffer.append("<Title IsShow=\"" + titleModel.getIsShow() + "\">" + titleModel.getTitle() + "</Title>");
             for(int j=0; j < itemModels.size(); j++) {
                 ItemModel itemModel=itemModels.get(j);
@@ -556,8 +742,9 @@ public class SymptomActivity extends CaseBaseActivity {
                             }
                             List<ItemModel> subItemModels=itemModel.getItemModels();
                             for(int z=0; z < subItemModels.size(); z++) {
-                                ItemModel subItemModel3 = subItemModels.get(z);
-                                stringBuffer.append("<SubItem ID=\"" + subItemModel3.getId() + "\" Name=\"" + subItemModel3.getName() + "\" ");
+                                ItemModel subItemModel3=subItemModels.get(z);
+                                stringBuffer.append("<SubItem ID=\"" + subItemModel3.getId() + "\" Name=\""
+                                    + subItemModel3.getName() + "\" ");
                                 if(subItemModel3.getFirstStr() != null && !"".equals(subItemModel3.getFirstStr())) {
                                     stringBuffer.append("FirstStr=\"" + subItemModel3.getFirstStr() + "\" ");
                                 }
@@ -576,7 +763,8 @@ public class SymptomActivity extends CaseBaseActivity {
                                     if(subItemModel3.getDataType() != null && !"".equals(subItemModel3.getDataType())) {
                                         stringBuffer.append(" DataType=\"" + subItemModel3.getDataType() + "\"");
                                     }
-                                    if(!"".equals(subItemModel3.getValue()) && !"null".equals(subItemModel3.getValue()) && null != subItemModel3.getValue()) {
+                                    if(!"".equals(subItemModel3.getValue()) && !"null".equals(subItemModel3.getValue())
+                                        && null != subItemModel3.getValue()) {
                                         stringBuffer.append(" Value=\"" + subItemModel3.getValue() + "\"/>");
                                     } else {
                                         stringBuffer.append(" Value=\"" + "\"/>");
@@ -593,8 +781,8 @@ public class SymptomActivity extends CaseBaseActivity {
             stringBuffer.append("</Group>");
         }
         stringBuffer.append("</Root>");
-         CommonUtil.appendToFile(stringBuffer.toString(), new File(Environment.getExternalStorageDirectory() + File.separator +
-         "text1.txt"));
+        // CommonUtil.appendToFile(stringBuffer.toString(), new File(Environment.getExternalStorageDirectory() + File.separator
+        // + "text1.txt"));
         ClientUtil.getCaseParams().add(String.valueOf(page), stringBuffer.toString());
         Intent intent=new Intent();
         Bundle bundle=new Bundle();
@@ -606,18 +794,56 @@ public class SymptomActivity extends CaseBaseActivity {
 
     private void initData() {
         if(null != content && !"".equals(content) && !"null".equals(content)) {
-//            CommonUtil.appendToFile(content, new File(Environment.getExternalStorageDirectory() + File.separator + "text.txt"));
             XMLCaseDatas(content);
             titleModels=caseList.get(0).getTitleModels();
-        } else if(ClientUtil.getCaseParams().size()!=0 && ClientUtil.getCaseParams().getValue(page+"") != null && !"".equals(ClientUtil.getCaseParams().getValue(page+""))){
-            XMLCaseDatas(ClientUtil.getCaseParams().getValue(page+""));
+            if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(page + "") != null
+                && !"".equals(ClientUtil.getCaseParams().getValue(page + ""))) {
+                XMLCaseDatas(ClientUtil.getCaseParams().getValue(page + ""));
+                titleModels=caseList.get(0).getTitleModels();
+            }
+        } else if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(page + "") != null
+            && !"".equals(ClientUtil.getCaseParams().getValue(page + ""))) {
+            XMLCaseDatas(ClientUtil.getCaseParams().getValue(page + ""));
             titleModels=caseList.get(0).getTitleModels();
-        } else{
+        } else {
             initCaseDatas(departmentId + "case.xml");
             titleModels=caseList.get(page).getTitleModels();
         }
-        for(int i=0; i < titleModels.size(); i++) {
-            leftList.add(titleModels.get(i).getTitle());
+        if(page == 0) {
+            for(int i=0; i < titleModels.size(); i++) {
+                if(i == firstCheck) {
+                    leftList.add(titleModels.get(i).getTitle());
+                    xbsIds.add(i);
+                    isNomalMap.put(Integer.parseInt(titleModels.get(i).getId().split("\\.")[1]) - 1,
+                        Boolean.parseBoolean(titleModels.get(i).getIsNormal()));
+                } else {
+                    String[] tempSecondCheck;
+                    if(secondCheck.contains(",")) {
+                        tempSecondCheck=secondCheck.split(",");
+                        for(int j=0; j < tempSecondCheck.length; j++) {
+                            if(tempSecondCheck[j].equals(i + "")) {
+                                leftList.add(titleModels.get(i).getTitle());
+                                xbsIds.add(i);
+                                isNomalMap.put(Integer.parseInt(titleModels.get(i).getId().split("\\.")[1]) - 1,
+                                    Boolean.parseBoolean(titleModels.get(i).getIsNormal()));
+                            }
+                        }
+                    } else {
+                        if(secondCheck.equals(i + "")) {
+                            leftList.add(titleModels.get(i).getTitle());
+                            xbsIds.add(i);
+                            isNomalMap.put(Integer.parseInt(titleModels.get(i).getId().split("\\.")[1]) - 1,
+                                Boolean.parseBoolean(titleModels.get(i).getIsNormal()));
+                        }
+                    }
+                }
+            }
+        } else {
+            for(int i=0; i < titleModels.size(); i++) {
+                leftList.add(titleModels.get(i).getTitle());
+                isNomalMap.put(Integer.parseInt(titleModels.get(i).getId().split("\\.")[1]) - 1,
+                    Boolean.parseBoolean(titleModels.get(i).getIsNormal()));
+            }
         }
     }
 
@@ -668,7 +894,7 @@ public class SymptomActivity extends CaseBaseActivity {
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         if(isTop == 0) {
             layoutParams.topMargin=height / 50;
-        }else{
+        } else {
             layoutParams.leftMargin=width / 40;
             layoutParams.bottomMargin=height / 50;
         }
@@ -692,10 +918,19 @@ public class SymptomActivity extends CaseBaseActivity {
             inputParams.leftMargin=width / 40;
         }
 
-        input.setLayoutParams(inputParams);
-        input.setGravity(Gravity.CENTER);
+        if(page == 2) {
+            LayoutParams inputParams1=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            inputParams1.leftMargin=width / 30;
+            inputParams1.rightMargin=width / 30;
+            input.setLayoutParams(inputParams1);
+            input.setGravity(Gravity.LEFT);
+        } else {
+            input.setLayoutParams(inputParams);
+            input.setGravity(Gravity.CENTER);
+        }
         input.setTextColor(Color.parseColor("#414141"));
         input.setPadding(0, height / 300, 0, 0);
+
         input.setBackgroundResource(R.drawable.edit_bg);
         input.setTextSize(16);
         if(dataType.equals("Number")) {
@@ -742,7 +977,8 @@ public class SymptomActivity extends CaseBaseActivity {
         return layout;
     }
 
-    private LinearLayout createRadioButton(String name, String[] selectTexts, final List<RadioButton> radioButtons, String[] value, String lastStr) {
+    private LinearLayout createRadioButton(String name, String[] selectTexts, final List<RadioButton> radioButtons, String[] value,
+        String lastStr) {
         LinearLayout layout=new LinearLayout(context);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin=height / 50;
@@ -847,7 +1083,7 @@ public class SymptomActivity extends CaseBaseActivity {
             box.setTextColor(Color.parseColor("#414141"));
             layout.addView(box);
         }
-        
+
         if(lastStr != null && !"".equals(lastStr) && !"null".equals(lastStr)) {
             TextView lastStrText=new TextView(context);
             LayoutParams textNameParams=new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);

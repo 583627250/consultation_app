@@ -341,7 +341,7 @@ public class CaseInfoActivity extends Activity {
         title_text.setText("病例详情");
         title_text.setTextSize(20);
         
-        count = (Button)findViewById(R.id.header_right_tip);
+//        count = (Button)findViewById(R.id.header_right_tip);
 
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
         back_layout.setVisibility(View.VISIBLE);

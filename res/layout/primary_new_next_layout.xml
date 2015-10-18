@@ -26,14 +26,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <TextView
+                <!-- <TextView
                     android:id="@+id/create_case_case_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="10dp"
                     android:text="病例"
-                    android:textColor="#414141" />
+                    android:textColor="#414141" /> -->
 
                 <LinearLayout
                     android:id="@+id/create_case_symptom_layout"
@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="症状"
+                        android:text="现病史"
                         android:textColor="#414141" />
 
                     <LinearLayout
@@ -123,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="体征"
+                        android:text="体格检查"
                         android:textColor="#414141" />
 
                     <LinearLayout

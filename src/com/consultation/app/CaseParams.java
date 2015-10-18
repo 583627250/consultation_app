@@ -1,5 +1,6 @@
 package com.consultation.app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,15 +10,13 @@ import java.util.Map;
  * 请求参数封装类
  * @create-time 2012-3-13 下午12:32:17
  */
-public class CaseParams {
+public class CaseParams implements Serializable{
+
+    private static final long serialVersionUID=-6766080677829696350L;
 
     private Map<String, String> parameters=new HashMap<String, String>();
 
     private List<String> keys=new ArrayList<String>();
-
-    public CaseParams() {
-
-    }
 
     public void add(String key, String value) {
         if(this.keys.contains(key)) {

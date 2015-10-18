@@ -136,7 +136,6 @@ public class PrimaryConsultationDiscussionFragment extends Fragment implements O
                             JSONObject info=infos.getJSONObject(i);
                             CasesTo pcasesTo=new CasesTo();
                             pcasesTo.setId(info.getString("id"));
-                            System.out.println(info.getString("id"));
                             pcasesTo.setStatus(info.getString("status"));
                             pcasesTo.setStatus_des(info.getString("status_desc"));
                             pcasesTo.setDestination(info.getString("destination"));

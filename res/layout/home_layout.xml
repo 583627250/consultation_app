@@ -111,6 +111,34 @@
                     android:textColor="@color/consultation_color_black" />
             </LinearLayout>
         </RelativeLayout>
+        
+        <RelativeLayout
+            android:id="@+id/add_new_case_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#DADADA" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:id="@+id/add_new_case_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/add_new_case" />
+            </LinearLayout>
+        </RelativeLayout>
+        
 
         <RelativeLayout
             android:id="@+id/knowledge_layout"
@@ -144,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:paddingBottom="3dp"
-                    android:text="知识"
+                    android:text="讨论区"
                     android:textColor="@color/consultation_color_black" />
             </LinearLayout>
         </RelativeLayout>

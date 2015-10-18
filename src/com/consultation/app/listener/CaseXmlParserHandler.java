@@ -58,6 +58,8 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    titleModel.setName(attributes.getValue("Name"));
 		    titleModel.setLevel(attributes.getValue("Level"));
 		    titleModel.setChildCount(attributes.getValue("ChildCount"));
+		    titleModel.setType(attributes.getValue("Type"));
+		    titleModel.setIsNormal(attributes.getValue("isNormal"));
 		    titleModel.setItemModels(new ArrayList<ItemModel>());
 		} else if (qName.equals("SubItem")) {
 		    isSubOptions = true;

@@ -67,12 +67,18 @@ public class SearchConsulationResultActivity extends Activity {
     private RequestQueue mQueue;
 
     private String filterString;
+    
+    private int flag;
+    
+    private boolean isBBS = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.knowledge_recommend_list_search_result_layout);
         filterString=getIntent().getStringExtra("filter");
+        flag=getIntent().getIntExtra("flag",0);
+        isBBS = getIntent().getBooleanExtra("isBBS", false);
         editor=new SharePreferencesEditor(SearchConsulationResultActivity.this);
         mQueue=Volley.newRequestQueue(SearchConsulationResultActivity.this);
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
@@ -83,7 +89,27 @@ public class SearchConsulationResultActivity extends Activity {
     private void initDate() {
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("page", "1");
-        parmas.put("filter", filterString);
+        if(flag != 0){
+            switch(flag) {
+                case 1:
+                    parmas.put("status", "consult_me");
+                    break;
+                case 2:
+                    parmas.put("status", "consult_other");
+                    break;
+                case 3:
+                    parmas.put("status", "his");
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(null != filterString && !"".equals(filterString)){
+            parmas.put("filter", filterString);
+        }
+        if(isBBS){
+            parmas.put("status", "bbs");
+        }
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("userTp", editor.get("userType", ""));
         parmas.put("accessToken", ClientUtil.getToken());
@@ -153,8 +179,10 @@ public class SearchConsulationResultActivity extends Activity {
                             if(consulationList.size() == 0){
                                 noData = (TextView)findViewById(R.id.recommend_search_no_listView_text);
                                 noData.setTextSize(18);
-                                noData.setText("对不起！没有该专家");
+                                noData.setText("对不起！没有该内容病例");
                                 noData.setVisibility(View.VISIBLE);
+                            }else{
+                                myAdapter.notifyDataSetChanged();
                             }
                         } else if(responses.getInt("rtnCode") == 10004) {
                             Toast.makeText(SearchConsulationResultActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
@@ -195,7 +223,7 @@ public class SearchConsulationResultActivity extends Activity {
         back_text=(TextView)findViewById(R.id.header_text_lift);
         back_text.setTextSize(18);
         title_text=(TextView)findViewById(R.id.header_text);
-        title_text.setText("病例讨论");
+        title_text.setText("病例搜索");
         title_text.setTextSize(20);
         back_layout.setOnClickListener(new OnClickListener() {
 

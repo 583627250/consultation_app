@@ -76,94 +76,88 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingRight="15dp"
-                    android:src="@drawable/header_right_image_search" />
+                    android:src="@drawable/header_right_image_search"
+                    android:visibility="invisible" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/specialist_list_search_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@color/consultation_color_white"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/recommend_search_edit_shape"
+            android:gravity="center"
             android:orientation="horizontal" >
 
-            <LinearLayout
-                android:id="@+id/specialist_select_hospital_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/choose_expand_tab_selector" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/seache_image_small" />
 
-                <TextView
-                    android:id="@+id/specialist_select_hospital_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="选择医院"
-                    android:textColor="@color/consultation_color_black" />
+            <TextView
+                android:id="@+id/specialist_list_search_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:gravity="center"
+                android:text="搜索"
+                android:textColor="#999999" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/specialist_list_contact_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/knowledge_recommend_layout_selector"
+            android:orientation="horizontal"
+            android:padding="10dp" >
+
+            <LinearLayout
+                android:layout_width="30dp"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/yhk_icon" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/specialist_list_contact_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="通讯录匹配"
+                android:textColor="#414141" />
+
             <LinearLayout
-                android:layout_width="0.1dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/choosebar_line" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/specialist_select_department_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/choose_expand_tab_selector" >
+                android:gravity="right"
+                android:orientation="horizontal" >
 
-                <TextView
-                    android:id="@+id/specialist_select_department_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="选择专业"
-                    android:textColor="@color/consultation_color_black" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/choosebar_line" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/specialist_select_title_layout"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@drawable/choose_expand_tab_selector" >
-
-                <TextView
-                    android:id="@+id/specialist_select_title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="选择职称"
-                    android:textColor="@color/consultation_color_black" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="7dp"
+                    android:src="@drawable/icon_item_arrow" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#A2A2A2" >
+            android:layout_height="10dp"
+            android:background="#EBEBEB" >
         </LinearLayout>
 
         <LinearLayout

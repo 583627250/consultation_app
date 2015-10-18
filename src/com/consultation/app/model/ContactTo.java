@@ -8,6 +8,16 @@ public class ContactTo {
 
     private boolean isCheck;
 
+    private String isInvitation;
+
+    public String getIsInvitation() {
+        return isInvitation;
+    }
+
+    public void setInvitation(String isInvitation) {
+        this.isInvitation=isInvitation;
+    }
+
     public String getName() {
         return name;
     }

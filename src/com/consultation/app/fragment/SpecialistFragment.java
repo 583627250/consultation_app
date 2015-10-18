@@ -37,19 +37,16 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
-import com.consultation.app.activity.DepartmentActivity;
-import com.consultation.app.activity.HospitalActivity;
+import com.consultation.app.activity.MatchContactActivity;
 import com.consultation.app.activity.SearchSpecialistActivity;
 import com.consultation.app.activity.SpecialistInfoActivity;
-import com.consultation.app.activity.TitleActivity;
-import com.consultation.app.exception.ConsultationCallbackException;
-import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.model.SpecialistTo;
 import com.consultation.app.model.UserStatisticsTo;
 import com.consultation.app.model.UserTo;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.SharePreferencesEditor;
 import com.consultation.app.view.PullToRefreshLayout;
 import com.consultation.app.view.PullToRefreshLayout.OnRefreshListener;
 import com.consultation.app.view.PullableListView;
@@ -60,9 +57,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
 
     private View specialistLayout;
 
-    private TextView header_text, hospital_text, department_text, title_text;
-
-    private LinearLayout hospital_layout, department_layout, title_layout;
+    private TextView header_text;
 
     private PullableListView specialistListView;
 
@@ -77,18 +72,12 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
     private ImageLoader mImageLoader;
 
     private static Context mContext;
+    
+    private SharePreferencesEditor editor;
 
     private int page=1;
 
     private boolean hasMore=true;
-
-    private ImageView searchBtn;
-
-    private String hospital_id=null;
-
-    private String department_id=null;
-
-    private String title_id=null;
 
     private Handler handler=new Handler() {
 
@@ -123,6 +112,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         specialistLayout=inflater.inflate(R.layout.specialist_layout, container, false);
+        editor=new SharePreferencesEditor(specialistLayout.getContext());
+        System.out.println("specialistLayout");
         initData();
         initLayout();
         return specialistLayout;
@@ -166,7 +157,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                             JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                             specialistTo.setUser(userTo);
                             UserStatisticsTo userStatistics=
-                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
+                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject
+                                    .getInt("star_value"));
                             specialistTo.setUserTj(userStatistics);
                             specialistList.add(specialistTo);
                         }
@@ -196,145 +188,34 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
         header_text=(TextView)specialistLayout.findViewById(R.id.header_text);
         header_text.setText("专家库");
         header_text.setTextSize(20);
-
-        hospital_text=(TextView)specialistLayout.findViewById(R.id.specialist_select_hospital_text);
-        hospital_text.setTextSize(17);
-        hospital_layout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_select_hospital_layout);
-        hospital_layout.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                HospitalActivity.setHandler(new ConsultationCallbackHandler() {
-
-                    @Override
-                    public void onSuccess(String rspContent, int statusCode) {
-                        switch(statusCode) {
-                            case 0:
-                                hospital_text.setText(rspContent.split(",")[0]);
-                                Map<String, String> parmas=new HashMap<String, String>();
-                                parmas.put("hospital_id", rspContent.split(",")[1]);
-                                hospital_id=rspContent.split(",")[1];
-                                getData(parmas);
-                                break;
-                            case 2:
-                                hospital_text.setText("选择医院");
-                                hospital_id = null;
-                                Map<String, String> parmas1=new HashMap<String, String>();
-                                getData(parmas1);
-                                break;
-
-                            default:
-                                break;
-                        }
-                            
-                    }
-
-                    @Override
-                    public void onFailure(ConsultationCallbackException exp) {
-
-                    }
-                });
-                startActivity(new Intent(mContext, HospitalActivity.class));
-            }
-        });
-
-        department_text=(TextView)specialistLayout.findViewById(R.id.specialist_select_department_text);
-        department_text.setTextSize(17);
-        department_layout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_select_department_layout);
-        department_layout.setOnClickListener(new OnClickListener() {
+        TextView searchText=(TextView)specialistLayout.findViewById(R.id.specialist_list_search_text);
+        searchText.setTextSize(15);
+        LinearLayout searchLayout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_list_search_layout);
+        searchLayout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                DepartmentActivity.setHandler(new ConsultationCallbackHandler() {
-
-                    @Override
-                    public void onSuccess(String rspContent, int statusCode) {
-                        switch(statusCode) {
-                            case 0:
-                                department_text.setText("选择专业");
-                                department_id = null;
-                                Map<String, String> parmas1=new HashMap<String, String>();
-                                if(null != hospital_id) {
-                                    parmas1.put("hospital_id", hospital_id);
-                                }
-                                getData(parmas1);
-                                break;
-                            case 1:
-                                department_text.setText(rspContent.split(",")[0]);
-                                Map<String, String> parmas2=new HashMap<String, String>();
-                                if(null != hospital_id) {
-                                    parmas2.put("hospital_id", hospital_id);
-                                }
-                                parmas2.put("depart_id", rspContent.split(",")[1]);
-                                department_id=rspContent.split(",")[1];
-                                getData(parmas2);
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(ConsultationCallbackException exp) {
-
-                    }
-                });
-                startActivity(new Intent(mContext, DepartmentActivity.class));
+                // 搜索
+                startActivity(new Intent(specialistLayout.getContext(), SearchSpecialistActivity.class));
             }
         });
+        TextView contactText=(TextView)specialistLayout.findViewById(R.id.specialist_list_contact_text);
+        contactText.setTextSize(17);
 
-        title_text=(TextView)specialistLayout.findViewById(R.id.specialist_select_title_text);
-        title_text.setTextSize(17);
-        title_layout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_select_title_layout);
-        title_layout.setOnClickListener(new OnClickListener() {
+        LinearLayout contactLayout=(LinearLayout)specialistLayout.findViewById(R.id.specialist_list_contact_layout);
+        contactLayout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                TitleActivity.setHandler(new ConsultationCallbackHandler() {
-
-                    @Override
-                    public void onSuccess(String rspContent, int statusCode) {
-                        switch(statusCode) {
-                            case 0:
-                                title_text.setText("选择职称");
-                                title_id = null;
-                                Map<String, String> parmas1=new HashMap<String, String>();
-                                if(null != hospital_id) {
-                                    parmas1.put("hospital_id", hospital_id);
-                                }
-                                if(null != department_id) {
-                                    parmas1.put("depart_id", department_id);
-                                }
-                                getData(parmas1);
-                                break;
-                            case 1:
-                                title_text.setText(rspContent.split(",")[0]);
-                                Map<String, String> parmas2=new HashMap<String, String>();
-                                if(null != hospital_id) {
-                                    parmas2.put("hospital_id", hospital_id);
-                                }
-                                if(null != department_id) {
-                                    parmas2.put("depart_id", department_id);
-                                }
-                                parmas2.put("title_id", rspContent.split(",")[1]);
-                                title_id=rspContent.split(",")[1];
-                                getData(parmas2);
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(ConsultationCallbackException exp) {
-
-                    }
-                });
-                startActivity(new Intent(mContext, TitleActivity.class));
+                // 联系人匹配
+                startActivity(new Intent(specialistLayout.getContext(), MatchContactActivity.class));
             }
         });
+        if(editor.get("userType", "").equals("0")) {
+            contactLayout.setVisibility(View.GONE);
+        } else {
+            contactLayout.setVisibility(View.VISIBLE);
+        }
 
         myAdapter=new MyAdapter();
 
@@ -346,15 +227,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                     Map<String, String> parmas=new HashMap<String, String>();
                     parmas.put("page", "1");
                     parmas.put("rows", "10");
-                    if(null != hospital_id) {
-                        parmas.put("hospital_id", hospital_id);
-                    }
-                    if(null != department_id) {
-                        parmas.put("depart_id", department_id);
-                    }
-                    if(null != title_id) {
-                        parmas.put("title_id", title_id);
-                    }
                     OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
 
                         @Override
@@ -381,7 +253,8 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
                                         JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
                                         specialistTo.setUser(userTo);
                                         UserStatisticsTo userStatistics=
-                                            new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
+                                            new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"),
+                                                userStatisticsJsonObject.getInt("star_value"));
                                         specialistTo.setUserTj(userStatistics);
                                         specialistList.add(specialistTo);
                                     }
@@ -431,14 +304,14 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             }
         });
 
-        searchBtn=(ImageView)specialistLayout.findViewById(R.id.header_right_image);
-        searchBtn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mContext, SearchSpecialistActivity.class));
-            }
-        });
+        // searchBtn=(ImageView)specialistLayout.findViewById(R.id.header_right_image);
+        // searchBtn.setOnClickListener(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // startActivity(new Intent(mContext, SearchSpecialistActivity.class));
+        // }
+        // });
     }
 
     private class ViewHolder {
@@ -499,9 +372,9 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             holder.photo.setImageResource(R.drawable.photo_expert);
             holder.name.setText(specialistList.get(position).getUser().getUser_name());
             holder.name.setTextSize(18);
-            holder.score.setText((float)specialistList.get(position).getUserTj().getStar_value()/10 + "分");
+            holder.score.setText((float)specialistList.get(position).getUserTj().getStar_value() / 10 + "分");
             holder.score.setTextSize(16);
-            holder.scoreRatingBar.setRating((float)specialistList.get(position).getUserTj().getStar_value()/10);
+            holder.scoreRatingBar.setRating((float)specialistList.get(position).getUserTj().getStar_value() / 10);
             holder.departmen.setText(specialistList.get(position).getDepart_name() + "|" + specialistList.get(position).getTitle());
             holder.departmen.setTextSize(16);
             holder.hospital.setText(specialistList.get(position).getHospital_name());
@@ -510,7 +383,7 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
             holder.patientCount.setText(specialistList.get(position).getUserTj().getTotal_consult() + "");
             holder.patientCount.setTextSize(16);
             if(!"null".equals(imgUrl) && !"".equals(imgUrl)) {
-                ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
+                ImageListener listener=ImageLoader.getImageListener(holder.photo, R.drawable.photo_expert, R.drawable.photo_expert);
                 mImageLoader.get(imgUrl, listener);
             }
             return convertView;
@@ -523,15 +396,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
         page++;
         parmas.put("page", String.valueOf(page));
         parmas.put("rows", "10");
-        if(null != hospital_id) {
-            parmas.put("hospital_id", hospital_id);
-        }
-        if(null != department_id) {
-            parmas.put("depart_id", department_id);
-        }
-        if(null != title_id) {
-            parmas.put("title_id", title_id);
-        }
         OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
 
             @Override
@@ -581,66 +445,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
 
             @Override
             public void onErrorResponse(VolleyError arg0) {
-                Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void getData(Map<String, String> parmas) {
-        parmas.put("page", String.valueOf(page));
-        parmas.put("rows", "10");
-        CommonUtil.showLoadingDialog(mContext);
-        OpenApiService.getInstance(mContext).getExpertList(mQueue, parmas, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String arg0) {
-                CommonUtil.closeLodingDialog();
-                try {
-                    JSONObject responses=new JSONObject(arg0);
-                    if(responses.getInt("rtnCode") == 1) {
-                        JSONArray infos=responses.getJSONArray("experts");
-                        specialistList.clear();
-                        for(int i=0; i < infos.length(); i++) {
-                            JSONObject info=infos.getJSONObject(i);
-                            SpecialistTo specialistTo=new SpecialistTo();
-                            specialistTo.setApprove_status(info.getString("approve_status"));
-                            specialistTo.setDepart_name(info.getString("depart_name"));
-                            specialistTo.setGoodat_fields(info.getString("goodat_fields"));
-                            specialistTo.setHospital_name(info.getString("hospital_name"));
-                            specialistTo.setId(info.getString("id"));
-                            specialistTo.setTitle(info.getString("title"));
-                            JSONObject userToJsonObject=info.getJSONObject("user");
-                            UserTo userTo=
-                                new UserTo(userToJsonObject.getString("real_name"), userToJsonObject.getString("sex"),
-                                    userToJsonObject.getString("birth_year"), userToJsonObject.getString("tp"), userToJsonObject
-                                        .getString("icon_url"));
-                            JSONObject userStatisticsJsonObject=info.getJSONObject("userTj");
-                            specialistTo.setUser(userTo);
-                            UserStatisticsTo userStatistics=
-                                new UserStatisticsTo(userStatisticsJsonObject.getInt("total_consult"), userStatisticsJsonObject.getInt("star_value"));
-                            specialistTo.setUserTj(userStatistics);
-                            specialistList.add(specialistTo);
-                        }
-                        if(infos.length() == 10) {
-                            specialistListView.setHasMoreData(true);
-                        } else {
-                            specialistListView.setHasMoreData(false);
-                        }
-                        Message msg=handler.obtainMessage();
-                        msg.what=3;
-                        handler.sendMessage(msg);
-                    } else {
-                        Toast.makeText(mContext, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch(JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError arg0) {
-                CommonUtil.closeLodingDialog();
                 Toast.makeText(mContext, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
             }
         });
