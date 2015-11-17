@@ -34,7 +34,6 @@ public class SelectHeadPicActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_pic_layout);
-        System.out.println("SelectHeadPicActivity");
         if(savedInstanceState != null){
             photoUri=Uri.parse(savedInstanceState.getString("photoUri"));
         }

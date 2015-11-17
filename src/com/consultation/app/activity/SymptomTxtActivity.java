@@ -22,6 +22,8 @@ public class SymptomTxtActivity extends Activity {
     private LinearLayout back_layout;
 
     private EditText editText;
+    
+    private boolean isAdd = false;
 
 //    private Button saveBtn;
 
@@ -55,17 +57,23 @@ public class SymptomTxtActivity extends Activity {
             @Override
             public void onClick(View v) {
                 // 保存数据
-                if(null == editText.getText().toString() || "".equals(editText.getText().toString())) {
+                if(null == editText.getText().toString() || "".equals(editText.getText().toString().replace(" ",""))) {
                     Toast.makeText(SymptomTxtActivity.this, "请输入病例内容", Toast.LENGTH_LONG).show();
                     return;
                 }
+//                InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if(imm.isActive()) {
+//                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+//                }
                 ClientUtil.getCaseParams().add(String.valueOf(page), editText.getText().toString());
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
-                bundle.putBoolean("isAdd", true);
-                intent.putExtras(bundle);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+                isAdd = true;
+                Toast.makeText(SymptomTxtActivity.this, "已保存到本地", Toast.LENGTH_LONG).show();
+//                Intent intent=new Intent();
+//                Bundle bundle=new Bundle();
+//                bundle.putBoolean("isAdd", true);
+//                intent.putExtras(bundle);
+//                setResult(Activity.RESULT_OK, intent);
+//                finish();
             }
         });
         back_layout=(LinearLayout)findViewById(R.id.header_layout_lift);
@@ -77,12 +85,19 @@ public class SymptomTxtActivity extends Activity {
 
             @Override
             public void onClick(final View v) {
-                Intent intent=new Intent();
-                Bundle bundle=new Bundle();
                 InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 if(imm.isActive()) {
                     imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                 }
+                if(null == editText.getText().toString() || "".equals(editText.getText().toString().replace(" ",""))) {
+                    isAdd = false;
+                }else{
+                    isAdd = true;
+                    ClientUtil.getCaseParams().add(String.valueOf(page), editText.getText().toString());
+                }
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isAdd", isAdd);
                 intent.putExtras(bundle);
                 setResult(Activity.RESULT_OK, intent);
                 finish();
@@ -93,6 +108,7 @@ public class SymptomTxtActivity extends Activity {
         editText.setTextSize(16);
         if(null != content && !"".equals(content) && !"null".equals(content)) {
             editText.setText(content);
+            editText.setSelection(content.length());
         }
 
 //        saveBtn=(Button)findViewById(R.id.syamptom_txt_btn_save);

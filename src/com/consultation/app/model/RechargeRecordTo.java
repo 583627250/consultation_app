@@ -9,7 +9,7 @@ public class RechargeRecordTo {
     
     private String from_tp;
     
-    private String cteate_time;
+    private String create_time;
 
     
     public String getAmount() {
@@ -42,13 +42,13 @@ public class RechargeRecordTo {
     }
 
     
-    public String getCteate_time() {
-        return cteate_time;
+    public String getCreate_time() {
+        return create_time;
     }
 
     
-    public void setCteate_time(String cteate_time) {
-        this.cteate_time=cteate_time;
+    public void setCreate_time(String create_time) {
+        this.create_time=create_time;
     }
     
     

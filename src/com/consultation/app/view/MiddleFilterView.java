@@ -50,7 +50,8 @@ public class MiddleFilterView extends LinearLayout implements ViewBaseAction, Vi
 		init(context);
 	}
 
-	private void init(final Context context) {
+	@SuppressWarnings("deprecation")
+    private void init(final Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.choose_view_midd, this, true);
 		regionListView = (ListView) findViewById(R.id.listView);

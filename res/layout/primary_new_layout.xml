@@ -355,9 +355,8 @@
                         android:layout_height="wrap_content"
                         android:background="@color/consultation_color_white"
                         android:gravity="top"
-                        android:hint="(必填)请准确表述希望专家提供什么样的帮助，限定字数10~100个字"
+                        android:hint="(必填)请准确表述希望专家提供什么样的帮助"
                         android:lines="5"
-                        android:maxLength="500"
                         android:textColorHint="#D3D3D3" />
                 </LinearLayout>
             </LinearLayout>

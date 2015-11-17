@@ -12,12 +12,17 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,6 +43,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
+import com.consultation.app.CaseParams;
 import com.consultation.app.R;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
@@ -46,7 +52,9 @@ import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
+import com.consultation.app.util.GetPathFromUri4kitkat;
 import com.consultation.app.util.SharePreferencesEditor;
+import com.consultation.app.view.SelectPicDialog;
 
 @SuppressLint("HandlerLeak")
 public class CaseTestTxtActivity extends Activity implements OnLongClickListener {
@@ -63,15 +71,15 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
 
     private int height;
 
-    private TextView textAdd, tip;
+    private TextView tip;
 
     private Button saveBtn;
 
-    private List<String> pathList=new ArrayList<String>();
+    private ArrayList<String> pathList=new ArrayList<String>();
 
-    private List<String> idList=new ArrayList<String>();
+    private ArrayList<String> idList=new ArrayList<String>();
 
-    private List<String> bigPathList=new ArrayList<String>();
+    private ArrayList<String> bigPathList=new ArrayList<String>();
 
     private SharePreferencesEditor editor;
 
@@ -81,15 +89,30 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
 
     private ImageLoader mImageLoader;
 
-    private boolean isAdd=false;
+    private boolean isAdd=false,havaNew = false;
 
     private int page;
 
+    private Uri photoUri;
+
+    private Cursor cursor;
+
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_case_add_test_txt_layout);
         context=this;
+        if(savedInstanceState != null) {
+            ClientUtil.setCaseParams((CaseParams)savedInstanceState.getSerializable("caseParams"));
+            isAdd=savedInstanceState.getBoolean("isAdd");
+            if(savedInstanceState.getString("photoUri") != null) {
+                photoUri=Uri.parse(savedInstanceState.getString("photoUri"));
+            }
+            pathList=savedInstanceState.getStringArrayList("pathList");
+            idList=savedInstanceState.getStringArrayList("idList");
+            bigPathList=savedInstanceState.getStringArrayList("bigPathList");
+        }
         editor=new SharePreferencesEditor(context);
         mQueue=Volley.newRequestQueue(context);
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
@@ -101,6 +124,19 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         imageString=getIntent().getStringExtra("imageString");
         initData();
         initView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("caseParams", ClientUtil.getCaseParams());
+        outState.putBoolean("isAdd", isAdd);
+        if(photoUri != null) {
+            outState.putString("photoUri", photoUri.toString());
+        }
+        outState.putStringArrayList("pathList", pathList);
+        outState.putStringArrayList("idList", idList);
+        outState.putStringArrayList("bigPathList", bigPathList);
+        super.onSaveInstanceState(outState);
     }
 
     private void initView() {
@@ -131,18 +167,98 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         });
         rightLayout=(LinearLayout)findViewById(R.id.test_txt_layout);
 
-        textAdd=(TextView)findViewById(R.id.test_txt_add_image_text);
-        textAdd.setText(Html.fromHtml("<u>" + "添加" + "</u>"));
-        textAdd.setGravity(Gravity.CENTER_VERTICAL);
-        textAdd.setTextColor(Color.BLUE);
-        textAdd.setTextSize(17);
-        textAdd.setOnClickListener(new OnClickListener() {
+        TextView rightText=(TextView)findViewById(R.id.header_right);
+        rightText.setVisibility(View.GONE);
+
+        ImageView rightImageView=(ImageView)findViewById(R.id.header_right_image);
+        rightImageView.setVisibility(View.VISIBLE);
+        rightImageView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(CaseTestTxtActivity.this, AddPatientPicActivity.class), 0);
+                final SelectPicDialog dialog=
+                    new SelectPicDialog(CaseTestTxtActivity.this, R.style.selectPicDialog, R.layout.select_pic_dialog);
+                dialog.setCancelable(true);
+                dialog.setPhotographButton(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        String SDState=Environment.getExternalStorageState();
+                        if(SDState.equals(Environment.MEDIA_MOUNTED)) {
+                            Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            ContentValues values=new ContentValues();
+                            photoUri=
+                                CaseTestTxtActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                    values);
+                            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoUri);
+                            startActivityForResult(intent, 2);
+                        } else {
+                            Toast.makeText(CaseTestTxtActivity.this, "内存卡不存在", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                dialog.setSelectButton(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Intent intent=new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(intent, 3);
+                    }
+                });
+                dialog.show();
             }
         });
+
+        // textAdd=(TextView)findViewById(R.id.test_txt_add_image_text);
+        // textAdd.setText(Html.fromHtml("<u>" + "添加" + "</u>"));
+        // textAdd.setGravity(Gravity.CENTER_VERTICAL);
+        // textAdd.setTextColor(Color.BLUE);
+        // textAdd.setTextSize(17);
+        // textAdd.setOnClickListener(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // // startActivityForResult(new Intent(CaseTestTxtActivity.this, AddPatientPicActivity.class), 0);
+        // final SelectPicDialog dialog=
+        // new SelectPicDialog(CaseTestTxtActivity.this, R.style.selectPicDialog, R.layout.select_pic_dialog);
+        // dialog.setCancelable(true);
+        // dialog.setPhotographButton(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // dialog.dismiss();
+        // String SDState=Environment.getExternalStorageState();
+        // if(SDState.equals(Environment.MEDIA_MOUNTED)) {
+        // Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // ContentValues values=new ContentValues();
+        // photoUri=
+        // CaseTestTxtActivity.this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        // values);
+        // intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoUri);
+        // startActivityForResult(intent, 2);
+        // } else {
+        // Toast.makeText(CaseTestTxtActivity.this, "内存卡不存在", Toast.LENGTH_LONG).show();
+        // }
+        // }
+        // });
+        // dialog.setSelectButton(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // dialog.dismiss();
+        // Intent intent=new Intent();
+        // intent.setType("image/*");
+        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        // startActivityForResult(intent, 3);
+        // }
+        // });
+        // dialog.show();
+        // }
+        // });
 
         tip=(TextView)findViewById(R.id.test_txt_image_tip);
         tip.setTextSize(14);
@@ -163,10 +279,15 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                         temp.add(pathList.get(i));
                     }
                 }
+                if(temp == null || temp.size() == 0 || !havaNew) {
+                    Toast.makeText(context, "请添加新图片", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 File[] files=new File[temp.size()];
                 for(int i=0; i < temp.size(); i++) {
-                    File file=new File(temp.get(i));
-                    files[i]=file;
+                    files[i]=CommonUtil.getSmallBitmapFile(temp.get(i));
+                    // File file=new File(temp.get(i));
+                    // files[i]=file;
                 }
                 Map<String, String> params=new HashMap<String, String>();
                 params.put("case_id", caseId);
@@ -184,7 +305,23 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                         @Override
                         public void onSuccess(String rspContent, int statusCode) {
                             CommonUtil.closeLodingDialog();
-                            isAdd=true;
+                            try {
+                                isAdd=true;
+                                havaNew = false;
+                                JSONObject repJsonObject=new JSONObject(rspContent);
+                                if(ClientUtil.getCaseParams().getValue(page + "") == null
+                                    || !"".equals(ClientUtil.getCaseParams().getValue(page + ""))) {
+                                    String addNewImage=repJsonObject.getString("caseFiles");
+                                    ClientUtil.getCaseParams().add(page + "", addNewImage);
+                                } else {
+                                    String newString=repJsonObject.getString("caseFiles").replace("[", ",");
+                                    String oldString=ClientUtil.getCaseParams().getValue(page + "").replace("]", "");
+                                    String addNewImage=newString + oldString;
+                                    ClientUtil.getCaseParams().add(page + "", addNewImage);
+                                }
+                            } catch(JSONException e) {
+                                e.printStackTrace();
+                            }
                             Toast.makeText(context, "上传成功", Toast.LENGTH_LONG).show();
                         }
 
@@ -269,7 +406,9 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         if(!"null".equals(path) && !"".equals(path)) {
             if(path.startsWith("http:")) {
                 imageView.setTag(path);
-                imageView.setImageResource(R.anim.loading_anim_test);
+                imageView.setBackgroundResource(R.anim.loading_anim);
+                AnimationDrawable animation = (AnimationDrawable)imageView.getBackground();  
+                animation.start();
                 ImageListener listener=ImageLoader.getImageListener(imageView, 0, android.R.drawable.ic_menu_delete);
                 mImageLoader.get(path, listener, 200, 200);
             } else {
@@ -285,6 +424,27 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         if(null != imageString && !"".equals(imageString)) {
             try {
                 JSONArray jsonArray=new JSONArray(imageString);
+                for(int i=0; i < jsonArray.length(); i++) {
+                    JSONObject imageFilesObject=jsonArray.getJSONObject(i);
+                    if(page == 5 && imageFilesObject.getString("case_item").equals("jy")) {
+                        pathList.add(imageFilesObject.getString("little_pic_url"));
+                        idList.add(imageFilesObject.getString("id"));
+                        bigPathList.add(imageFilesObject.getString("pic_url"));
+                    } else if(page == 6 && imageFilesObject.getString("case_item").equals("jc")) {
+                        pathList.add(imageFilesObject.getString("little_pic_url"));
+                        idList.add(imageFilesObject.getString("id"));
+                        bigPathList.add(imageFilesObject.getString("pic_url"));
+                    }
+                }
+                showRightLayout();
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        String addNewImage=ClientUtil.getCaseParams().getValue(page + "");
+        if(null != addNewImage && !"".equals(addNewImage)) {
+            try {
+                JSONArray jsonArray=new JSONArray(addNewImage);
                 for(int i=0; i < jsonArray.length(); i++) {
                     JSONObject imageFilesObject=jsonArray.getJSONObject(i);
                     if(page == 5 && imageFilesObject.getString("case_item").equals("jy")) {
@@ -319,6 +479,11 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                 break;
             case 1:
                 if(resultCode == Activity.RESULT_OK) {
+                    if(!pathList.get(data.getIntExtra("index", 0)).startsWith("http")) {
+                        pathList.remove(data.getIntExtra("index", 0));
+                        bigPathList.remove(data.getIntExtra("index", 0));
+                        showRightLayout();
+                    } else {
                     Map<String, String> parmas=new HashMap<String, String>();
                     parmas.put("id", idList.get(data.getIntExtra("index", 0)));
                     parmas.put("accessToken", ClientUtil.getToken());
@@ -334,6 +499,7 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                                     JSONObject responses=new JSONObject(arg0);
                                     if(responses.getInt("rtnCode") == 1) {
                                         pathList.remove(data.getIntExtra("index", 0));
+                                        bigPathList.remove(data.getIntExtra("index", 0));
                                         idList.remove(data.getIntExtra("index", 0));
                                         showRightLayout();
                                     } else if(responses.getInt("rtnCode") == 10004) {
@@ -366,13 +532,59 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
                                 Toast.makeText(CaseTestTxtActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
                             }
                         });
+                    }
+                }
+                break;
+            case 2:
+                if(resultCode == Activity.RESULT_OK) {
+                    doPhoto(requestCode, data);
+                }
+                break;
+            case 3:
+                if(resultCode == Activity.RESULT_OK) {
+                    doPhoto(requestCode, data);
                 }
                 break;
             default:
                 break;
         }
-
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void doPhoto(int requestCode, Intent data) {
+        if(requestCode == 3) {
+            if(data == null) {
+                Toast.makeText(this, "选择图片文件出错", Toast.LENGTH_LONG).show();
+                return;
+            }
+            photoUri=data.getData();
+            if(photoUri == null) {
+                Toast.makeText(this, "选择图片文件出错", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+        // String[] pojo={MediaStore.Images.Media.DATA};
+        // cursor=managedQuery(photoUri, pojo, null, null, null);
+        String picPath=GetPathFromUri4kitkat.getPath(context, photoUri);
+        // if(cursor != null) {
+        // int columnIndex=cursor.getColumnIndexOrThrow(pojo[0]);
+        // cursor.moveToFirst();
+        // picPath=cursor.getString(columnIndex);
+        // // cursor.close();
+        // } else {
+        // picPath=photoUri.toString().replace("file://", "");
+        // }
+        if(picPath != null
+            && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))) {
+            if(!pathList.contains(picPath)) {
+                pathList.add(picPath);
+                bigPathList.add(picPath);
+            }
+            havaNew = true;
+            showRightLayout();
+        } else {
+            Toast.makeText(this, "选择图片文件不正确", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -383,5 +595,13 @@ public class CaseTestTxtActivity extends Activity implements OnLongClickListener
         intent.putExtra("titleText", "删除该图片?");
         startActivityForResult(intent, 1);
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(cursor != null) {
+            cursor.close();
+        }
+        super.onDestroy();
     }
 }

@@ -100,6 +100,9 @@ public class SearchConsulationResultActivity extends Activity {
                 case 3:
                     parmas.put("status", "his");
                     break;
+                case 4:
+//                    parmas.put("status", "his");
+                    break;
                 default:
                     break;
             }
@@ -240,8 +243,13 @@ public class SearchConsulationResultActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent=new Intent(SearchConsulationResultActivity.this, CaseInfoActivity.class);
+                Intent intent=new Intent(SearchConsulationResultActivity.this, CaseInfoNewActivity.class);
                 intent.putExtra("caseId", consulationList.get(position).getId());
+                if(isBBS){
+                    intent.putExtra("type", 0);
+                }else{
+                    intent.putExtra("type", 1);
+                }
                 startActivityForResult(intent, 0);
             }
         });

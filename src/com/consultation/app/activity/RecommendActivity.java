@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.consultation.app.R;
-import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 
 
@@ -24,13 +23,15 @@ public class RecommendActivity extends Activity {
     
     private WebView webView;
     
-    private String id;
+    private String url,title,id;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recommend_layout);
         id = getIntent().getStringExtra("id");
+        url = getIntent().getStringExtra("url");
+        title = getIntent().getStringExtra("title");
         initView();
     }
 
@@ -41,7 +42,7 @@ public class RecommendActivity extends Activity {
         back_text.setTextSize(18);
         titile_text=(TextView)findViewById(R.id.header_text);
         titile_text.setTextSize(20);
-        titile_text.setText("科普知识");
+        titile_text.setText(title);
         back_layout.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -50,7 +51,12 @@ public class RecommendActivity extends Activity {
             }
         });
         webView = (WebView)findViewById(R.id.recommend_webView);
-        webView.loadUrl(ClientUtil.GET_KNOWLEDGE_BYID_URL+"?id="+id+"&from=mobile");
+//        webView.loadUrl(ClientUtil.GET_KNOWLEDGE_BYID_URL+"?id="+id+"&from=mobile");
+        if("".equals(id) || null == id){
+            webView.loadUrl(url);
+        }else{
+            webView.loadUrl(url+"?id="+id+"&from=mobile");
+        }
         webView.setWebViewClient(new MyWebViewClient ());
     }
     
@@ -81,12 +87,4 @@ public class RecommendActivity extends Activity {
         }
     }
     
-//    @Override 
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {  
-//        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {  
-//            webView.goBack();
-//            return true;  
-//        }  
-//        return false;  
-//    }
 }

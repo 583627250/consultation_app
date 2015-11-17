@@ -90,7 +90,8 @@ public class ChooseTextAdapter extends ArrayAdapter<String> {
 		return -1;
 	}
 
-	@Override
+	@SuppressWarnings("deprecation")
+    @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView view;
 		if (convertView == null) {

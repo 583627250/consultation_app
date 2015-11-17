@@ -86,7 +86,8 @@ public class ChooseTextMiddleAdapter extends ArrayAdapter<String> {
 		return -1;
 	}
 
-	@Override
+	@SuppressWarnings("deprecation")
+    @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView textView;
 		ImageView imageView;;

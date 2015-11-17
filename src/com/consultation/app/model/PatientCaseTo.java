@@ -38,6 +38,8 @@ public class PatientCaseTo {
 
     private UserTo userTo;
 
+    private String is_commented;
+
     public PatientCaseTo() {
         super();
     }
@@ -88,6 +90,14 @@ public class PatientCaseTo {
 
     public void setStatus_desc(String status_desc) {
         this.status_desc=status_desc;
+    }
+
+    public String getIs_commented() {
+        return is_commented;
+    }
+
+    public void setIs_commented(String is_commented) {
+        this.is_commented=is_commented;
     }
 
     public String getDoctor_userid() {

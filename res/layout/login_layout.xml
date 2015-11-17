@@ -3,197 +3,257 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <LinearLayout 
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:background="#EBEBEB"
-       android:orientation="vertical" >
-       
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
         <include
-	        android:id="@+id/consultation_header"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        layout="@layout/header" />
-        
-        
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_gravity="center_vertical"
             android:background="@color/consultation_color_white"
-            android:layout_gravity="center_vertical" >
+            android:padding="8dp" >
 
             <TextView
                 android:id="@+id/login_username_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_weight="3"
+                android:gravity="center_vertical"
                 android:padding="5dp"
-                android:textColor="#7B7C7C"
-                android:text="用户名"/>
-            
-            <LinearLayout 
-	            android:layout_width="0.1dp"
-	            android:layout_height="match_parent"
-	            android:background="@color/consultation_color_F4F4F4">
-        	</LinearLayout>
-            
+                android:text="用户名"
+                android:textColor="#7B7C7C" />
+
+            <LinearLayout
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/consultation_color_F4F4F4" >
+            </LinearLayout>
+
             <EditText
                 android:id="@+id/login_username_input_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@color/consultation_color_white"
                 android:gravity="center_vertical"
-                android:layout_weight="1"
                 android:hint="请输入手机号码"
-                android:textColorHint="#D3D3D3"
-                android:maxLength="11"
                 android:inputType="phone"
+                android:maxLength="11"
                 android:padding="5dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#D3D3D3" />
         </LinearLayout>
-        <LinearLayout 
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="#DADADA">
+            android:background="#DADADA" >
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:layout_gravity="center_vertical"
             android:background="@color/consultation_color_white"
-            android:layout_gravity="center_vertical" >
+            android:padding="8dp" >
 
             <TextView
                 android:id="@+id/login_pwd_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_weight="3"
+                android:gravity="center_vertical"
                 android:padding="5dp"
-                android:textColor="#7B7C7C"
-                android:text="登陆密码"/>
-            <LinearLayout 
-	            android:layout_width="0.1dp"
-	            android:layout_height="match_parent"
-	            android:background="@color/consultation_color_F4F4F4">
-        	</LinearLayout>
-            
+                android:text="登陆密码"
+                android:textColor="#7B7C7C" />
+
+            <LinearLayout
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/consultation_color_F4F4F4" >
+            </LinearLayout>
+
             <EditText
                 android:id="@+id/login_pwd_input_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@color/consultation_color_white"
                 android:gravity="center_vertical"
-                android:layout_weight="1"
                 android:hint="请输入密码"
-                android:textColorHint="#D3D3D3"
                 android:inputType="textPassword"
                 android:padding="5dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#D3D3D3" />
         </LinearLayout>
-		<LinearLayout 
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="#DADADA">
+            android:background="#DADADA" >
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/consultation_color_white"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/login_code_phone_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="验证码"
+                android:textColor="#7B7C7C" />
+
+            <LinearLayout
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/consultation_color_F4F4F4" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <EditText
+                    android:id="@+id/login_code_phone_input_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/consultation_color_white"
+                    android:gravity="center_vertical"
+                    android:hint="请输入手机验证码"
+                    android:inputType="number"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:textColorHint="#D3D3D3" />
+
+                <Button
+                    android:id="@+id/login_phone_get_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/login_register_btn_shape"
+                    android:singleLine="true"
+                    android:text="获取验证码"
+                    android:textColor="@color/consultation_color_2CB67A" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="#DADADA" >
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/login_code_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:visibility="gone"
+            android:layout_gravity="center_vertical"
             android:background="@color/consultation_color_white"
-            android:layout_gravity="center_vertical" >
+            android:padding="8dp"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/login_code_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_weight="1.08"
+                android:gravity="center_vertical"
                 android:padding="5dp"
-                android:textColor="#7B7C7C"
-                android:text="验证码"/>
-            <LinearLayout 
-	            android:layout_width="0.1dp"
-	            android:layout_height="match_parent"
-	            android:background="@color/consultation_color_F4F4F4">
-        	</LinearLayout>
-            
+                android:text="验证码"
+                android:textColor="#7B7C7C" />
+
+            <LinearLayout
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/consultation_color_F4F4F4" >
+            </LinearLayout>
+
             <EditText
                 android:id="@+id/login_code_input_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="0.8"
                 android:background="@color/consultation_color_white"
                 android:gravity="center_vertical"
-                android:layout_weight="0.8"
                 android:hint="请输入验证码"
-                android:textColorHint="#D3D3D3"
                 android:inputType="number"
                 android:padding="5dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="#D3D3D3" />
 
             <ImageView
                 android:id="@+id/login_code_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@anim/loading_anim_test"
-                android:layout_weight="1" />
-            
+                android:layout_weight="1"
+                android:src="@anim/loading_anim" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="30dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical" >
-            
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+
             <Button
-	            android:id="@+id/login_btn_login"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:padding="10dp"
-	            android:background="@drawable/login_login_btn_shape"
-	            android:textColor="@color/consultation_color_white"
-	            android:text="登 陆" />
-            
-            
-            <TextView 
+                android:id="@+id/login_btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_login_btn_shape"
+                android:padding="10dp"
+                android:text="登 陆"
+                android:textColor="@color/consultation_color_white" />
+
+            <TextView
                 android:id="@+id/login_forget_pwd_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:paddingTop="15dp"
                 android:text="忘记密码?"
-                android:gravity="center"
-                android:textColor="#FFAD2B"/>
-            
+                android:textColor="#FFAD2B" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="40dp"
-            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
             android:gravity="bottom"
-            android:layout_gravity="center_vertical" >
-            
-            <TextView 
+            android:orientation="vertical"
+            android:paddingBottom="40dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+
+            <TextView
                 android:id="@+id/login_no_acount_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:padding="10dp"
                 android:text="还没有账户?"
-                android:gravity="center"
-                android:textColor="#B5B5B5"/>
+                android:textColor="#B5B5B5" />
 
             <Button
                 android:id="@+id/login_btn_register"
@@ -201,9 +261,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_register_btn_shape"
                 android:padding="10dp"
-                android:textColor="@color/consultation_color_2CB67A"
-                android:text="注    册" />
-            
+                android:text="注    册"
+                android:textColor="@color/consultation_color_2CB67A" />
         </LinearLayout>
-	</LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

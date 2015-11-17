@@ -62,6 +62,14 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/consultation_color_white" />
         
+        <LinearLayout 
+            android:id="@+id/header_mid_tip_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+        
         <Button
             android:id="@+id/header_mid_tip"
             android:layout_width="20dp"
@@ -69,8 +77,8 @@
             android:layout_gravity="center"
             android:background="@drawable/discussion_count_shape"
             android:gravity="center"
-            android:textColor="@color/consultation_color_white"
-            android:visibility="invisible" />
+            android:textColor="@color/consultation_color_white" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -80,6 +88,14 @@
         android:gravity="right"
         android:orientation="horizontal"
         android:paddingRight="15dp" >
+        
+        <ImageView
+            android:id="@+id/header_right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            android:src="@drawable/camera_btn_bg" />
 
         <TextView
             android:id="@+id/header_right"

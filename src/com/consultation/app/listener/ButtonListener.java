@@ -41,6 +41,7 @@ public class ButtonListener {
     // 按钮切换
     private OnTouchListener btnTouchListener=new OnTouchListener() {
 
+        @SuppressWarnings("deprecation")
         public boolean onTouch(View v, MotionEvent event) {
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 if(v instanceof ImageButton) {

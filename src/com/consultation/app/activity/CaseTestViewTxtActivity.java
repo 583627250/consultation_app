@@ -72,6 +72,7 @@ public class CaseTestViewTxtActivity extends Activity{
 
     private ImageLoader mImageLoader;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

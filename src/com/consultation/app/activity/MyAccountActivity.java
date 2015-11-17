@@ -41,10 +41,10 @@ public class MyAccountActivity extends Activity implements OnClickListener{
 
     private TextView back_text;
 
-    private TextView blanceTitle,srtitle,czTitle,zfTitle,txtitle,payText,withdrawalsText,
-                     czjl,zfjl,srjl,txjl,blanceAmont,srAmount,czAmount,zfAmount,txAmount;
+    private TextView blanceTitle,withdrawalsTitle,incomeTitle,txText,czText,
+                     czjl,zfjl,srjl,txjl,blanceAmont,srAmount,txAmount;
     
-    private LinearLayout czLayout,txLayout,czjlLayout,zfjlLayout,srjlLayout,txjlLayout,line1,line2,line3;
+    private LinearLayout czLayout,txLayout,czjlLayout,zfjlLayout,srjlLayout,txjlLayout;
 
     private SharePreferencesEditor editor;
 
@@ -74,7 +74,7 @@ public class MyAccountActivity extends Activity implements OnClickListener{
                     JSONObject responses=new JSONObject(arg0);
                     if(responses.getInt("rtnCode") == 1) {
                         Message msg=new Message();
-                        msg.obj=responses.getJSONObject("userBalance");
+                        msg.obj=responses;
                         handler.dispatchMessage(msg);
                     } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(MyAccountActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
@@ -112,11 +112,14 @@ public class MyAccountActivity extends Activity implements OnClickListener{
             super.handleMessage(msg);
             JSONObject info=(JSONObject)msg.obj;
             try {
-                blanceAmont.setText((float)Long.parseLong(info.getString("current_balance"))/100+"");
-                srAmount.setText((float)Long.parseLong(info.getString("total_income"))/100+"");
-                czAmount.setText((float)Long.parseLong(info.getString("total_topup"))/100+"");
-                zfAmount.setText((float)Long.parseLong(info.getString("total_payment"))/100+"");
-                txAmount.setText((float)Long.parseLong(info.getString("total_draw"))/100+"");
+                blanceAmont.setText(info.getString("current_balance"));
+                if(editor.get("userType", "").equals("0")){
+                    srAmount.setText(info.getString("total_topup"));
+                    txAmount.setText(info.getString("total_payment"));
+                }else{
+                    srAmount.setText(info.getString("total_income"));
+                    txAmount.setText(info.getString("total_draw"));
+                }
             } catch(JSONException e) {
                 e.printStackTrace();
             }
@@ -146,18 +149,16 @@ public class MyAccountActivity extends Activity implements OnClickListener{
         
         blanceTitle = (TextView)findViewById(R.id.my_acount_blance_title_text);
         blanceTitle.setTextSize(19);
-        srtitle = (TextView)findViewById(R.id.my_acount_info_title_ncome_text);
-        srtitle.setTextSize(19);
-        czTitle = (TextView)findViewById(R.id.my_acount_info_title_recharge_text);
-        czTitle.setTextSize(19);
-        zfTitle = (TextView)findViewById(R.id.my_acount_info_title_pay_text);
-        zfTitle.setTextSize(19);
-        txtitle = (TextView)findViewById(R.id.my_acount_info_title_withdrawals_text);
-        txtitle.setTextSize(19);
-        payText = (TextView)findViewById(R.id.my_acount_chongzhi_text);
-        payText.setTextSize(19);
-        withdrawalsText = (TextView)findViewById(R.id.my_acount_tixian_text);
-        withdrawalsText.setTextSize(19);
+        incomeTitle = (TextView)findViewById(R.id.my_acount_info_title_income_text);
+        incomeTitle.setTextSize(19);
+        withdrawalsTitle = (TextView)findViewById(R.id.my_acount_info_title_withdrawals_text);
+        withdrawalsTitle.setTextSize(19);
+        
+        txText = (TextView)findViewById(R.id.my_acount_chongzhi_text);
+        txText.setTextSize(19);
+        czText = (TextView)findViewById(R.id.my_acount_tixian_text);
+        czText.setTextSize(19);
+        
         czjl = (TextView)findViewById(R.id.my_acount_chongzhijilu_text);
         czjl.setTextSize(19);
         zfjl = (TextView)findViewById(R.id.my_acount_payjilu_text);
@@ -172,10 +173,6 @@ public class MyAccountActivity extends Activity implements OnClickListener{
         blanceAmont.setTextSize(17);
         srAmount = (TextView)findViewById(R.id.my_acount_info_income_text);
         srAmount.setTextSize(17);
-        czAmount = (TextView)findViewById(R.id.my_acount_info_recharge_text);
-        czAmount.setTextSize(17);
-        zfAmount = (TextView)findViewById(R.id.my_acount_info_pay_text);
-        zfAmount.setTextSize(17);
         txAmount = (TextView)findViewById(R.id.my_acount_info_withdrawals_text);
         txAmount.setTextSize(17);
         
@@ -183,61 +180,93 @@ public class MyAccountActivity extends Activity implements OnClickListener{
         czLayout.setOnClickListener(this);
         txLayout = (LinearLayout)findViewById(R.id.my_acount_tixian_layout);
         txLayout.setOnClickListener(this);
+        
         czjlLayout = (LinearLayout)findViewById(R.id.my_acount_chongzhijilu_layout);
         czjlLayout.setOnClickListener(this);
         zfjlLayout = (LinearLayout)findViewById(R.id.my_acount_payjilu_layout);
         zfjlLayout.setOnClickListener(this);
+        
         srjlLayout = (LinearLayout)findViewById(R.id.my_acount_incomejilu_layout);
         srjlLayout.setOnClickListener(this);
         txjlLayout = (LinearLayout)findViewById(R.id.my_acount_tixianjilu_layout);
         txjlLayout.setOnClickListener(this);
-        line1 = (LinearLayout)findViewById(R.id.my_acount_line1);
-        line2 = (LinearLayout)findViewById(R.id.my_acount_line2);
-        line3 = (LinearLayout)findViewById(R.id.my_acount_line3);
+        
         if(editor.get("userType", "").equals("0")){
-            patientLayout();
+            incomeTitle.setText("总充值(元)");
+            withdrawalsTitle.setText("总消费(元)");
+            txLayout.setVisibility(View.GONE);
+            LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.my_acount_line1);
+            linearLayout1.setVisibility(View.GONE);
+            LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.my_acount_line2);
+            linearLayout2.setVisibility(View.VISIBLE);
+            srjlLayout.setVisibility(View.GONE);
+            txjlLayout.setVisibility(View.GONE);
+        }else{
+            LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.my_acount_line1);
+            linearLayout1.setVisibility(View.VISIBLE);
+            LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.my_acount_line2);
+            linearLayout2.setVisibility(View.GONE);
+            czLayout.setVisibility(View.GONE);
+            czjlLayout.setVisibility(View.GONE);
+            zfjlLayout.setVisibility(View.GONE);
         }
     }
     
-    private void patientLayout(){
-        line1.setVisibility(View.GONE);
-        line2.setVisibility(View.GONE);
-        line3.setVisibility(View.GONE);
-        srtitle.setVisibility(View.GONE);
-        srAmount.setVisibility(View.GONE);
-        srjlLayout.setVisibility(View.GONE);
-    }
-
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.my_acount_chongzhi_layout:
                 //充值界面
-                
+                Intent payIntent = new Intent(MyAccountActivity.this, PayActivity.class);
+                startActivityForResult(payIntent,0);
                 break;
             case R.id.my_acount_tixian_layout:
                 //提现界面
-                
+                Intent txIntent = new Intent(MyAccountActivity.this, PayActivity.class);
+                startActivityForResult(txIntent,1);
                 break;
             case R.id.my_acount_chongzhijilu_layout:
                 //充值记录界面
-                startActivity(new Intent(MyAccountActivity.this, RechargeRecordActivity.class));
+                Intent intent = new Intent(MyAccountActivity.this, RechargeRecordActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_acount_payjilu_layout:
                 //支付记录界面
-                
+                Intent intentPayRecord = new Intent(MyAccountActivity.this, PayRecordActivity.class);
+                startActivity(intentPayRecord);
                 break;
             case R.id.my_acount_incomejilu_layout:
                 //收入记录界面
-                
+                Intent intentIncomRecord = new Intent(MyAccountActivity.this, IncomeRecordActivity.class);
+                startActivity(intentIncomRecord);
                 break;
             case R.id.my_acount_tixianjilu_layout:
                 //提现记录界面
-                startActivity(new Intent(MyAccountActivity.this, WithdrawalsRecordActivity.class));
+                Intent intentWithdrawalsRecord = new Intent(MyAccountActivity.this, WithdrawalsRecordActivity.class);
+                startActivity(intentWithdrawalsRecord);
                 break;
 
             default:
                 break;
         }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            switch(requestCode) {
+                case 0:
+                    //支付充值
+                    initDate();
+                    break;
+                case 1:
+                    //提现
+                    initDate();
+                    break;
+                default:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -307,7 +307,7 @@
                             android:drawablePadding="5dp"
                             android:gravity="center_vertical"
                             android:paddingRight="15dp"
-                            android:text="初级医师"
+                            android:text="首诊医师"
                             android:textColor="#414141" >
                         </RadioButton>
 
@@ -327,6 +327,85 @@
                     </RadioGroup>
                 </LinearLayout>
                 
+                <LinearLayout
+                    android:id="@+id/update_my_info_expert_tp_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:orientation="horizontal"
+                    android:background="#DADADA" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/update_my_info_expert_tp_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="3dp" >
+
+                    <TextView
+                        android:id="@+id/update_my_info_expert_tp_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2.5"
+                        android:gravity="center_vertical"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="专家类别"
+                        android:textColor="#7B7C7C" />
+
+                    <LinearLayout
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_marginTop="3dp"
+                        android:background="@color/consultation_color_E8D8D8" >
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingLeft="5dp" >
+
+                        <RadioButton
+                            android:id="@+id/update_my_info_expert_clinical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableLeft="@drawable/radio_btn_bg"
+                            android:drawablePadding="5dp"
+                            android:gravity="center_vertical"
+                            android:paddingRight="15dp"
+                            android:text="临床专家"
+                            android:textColor="#414141" >
+                        </RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/update_my_info_expert_technology"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/radio_btn_bg"
+                            android:drawablePadding="5dp"
+                            android:gravity="center_vertical"
+                            android:text="医技专家"
+                            android:textColor="#414141" >
+                        </RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
                 
                 <LinearLayout
                     android:id="@+id/update_my_info_expert_grade_line"
@@ -441,7 +520,7 @@
                     android:layout_height="10dp"
                     android:background="#EBEBEB" >
                 </LinearLayout>
-
+<!--
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -473,7 +552,7 @@
                         android:background="@color/consultation_color_E8D8D8" >
                     </LinearLayout>
 
-                    <EditText
+                     <EditText
                         android:id="@+id/update_my_info_code_input_edit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -493,7 +572,7 @@
                     android:layout_height="0.1dp"
                     android:background="#DADADA" >
                 </LinearLayout>
-
+ -->
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -513,7 +592,7 @@
                         android:gravity="center_vertical"
                         android:padding="5dp"
                         android:singleLine="true"
-                        android:text="上传职业证书照片"
+                        android:text="上传执业证书、资格证书或单位胸卡照片"
                         android:textColor="#7B7C7C" />
 
                     <LinearLayout

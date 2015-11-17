@@ -17,16 +17,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.ConsultionStatusCode;
 import com.consultation.app.R;
@@ -35,10 +31,10 @@ import com.consultation.app.listener.ButtonListener;
 import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.AccountUtil;
-import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
+import com.umeng.message.UmengRegistrar;
 
 public class LoginActivity extends Activity {
 
@@ -48,40 +44,38 @@ public class LoginActivity extends Activity {
 
     private TextView pwd_text;
 
-    private TextView verification_code_text;
+    private TextView verification_code_text, verification_text;
 
-    private ImageView verification_image;
+    // private ImageView verification_image;
 
-    private Button login_btn;
+    private Button register_btn, getVerification_btn, login_btn;
 
-    private Button register_btn;
-
-    private LinearLayout code_layout;
+    // private LinearLayout code_layout;
 
     private static ConsultationCallbackHandler handler;
 
-    private EditText account, password, code;
+    private EditText account, password, verification_edit;
 
     private TextView forgetPwd, noAcount;
 
-    private int loginCount=0;
+    // private int loginCount=0;
 
     private RequestQueue mQueue;
 
     private SharePreferencesEditor editor;
 
-    private ImageLoader mImageLoader;
-    
-    private int flag;
+    // private ImageLoader mImageLoader;
+
+    private int flag, times;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
         mQueue=Volley.newRequestQueue(LoginActivity.this);
-        mImageLoader=new ImageLoader(mQueue, new BitmapCache());
+        // mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         editor=new SharePreferencesEditor(LoginActivity.this);
-        flag= getIntent().getIntExtra("flag", -1);
+        flag=getIntent().getIntExtra("flag", -1);
         init();
     }
 
@@ -110,6 +104,12 @@ public class LoginActivity extends Activity {
         noAcount=(TextView)findViewById(R.id.login_no_acount_text);
         noAcount.setTextSize(16);
 
+        verification_text=(TextView)findViewById(R.id.login_code_phone_text);
+        verification_text.setTextSize(18);
+
+        verification_edit=(EditText)findViewById(R.id.login_code_phone_input_edit);
+        verification_edit.setTextSize(18);
+
         // back_layout = (LinearLayout)findViewById(R.id.header_layout_lift);
         // back_layout.setVisibility(View.VISIBLE);
         // back_text = (TextView)findViewById(R.id.header_text_lift);
@@ -135,34 +135,105 @@ public class LoginActivity extends Activity {
         verification_code_text=(TextView)findViewById(R.id.login_code_text);
         verification_code_text.setTextSize(18);
 
-        verification_image=(ImageView)findViewById(R.id.login_code_imageView);
+        // verification_image=(ImageView)findViewById(R.id.login_code_imageView);
 
         account=(EditText)findViewById(R.id.login_username_input_edit);
         account.setTextSize(18);
         password=(EditText)findViewById(R.id.login_pwd_input_edit);
         password.setTextSize(18);
-        code=(EditText)findViewById(R.id.login_code_input_edit);
-        code.setTextSize(18);
+//        code=(EditText)findViewById(R.id.login_code_input_edit);
+//        code.setTextSize(18);
 
-        code_layout=(LinearLayout)findViewById(R.id.login_code_layout);
+        // code_layout=(LinearLayout)findViewById(R.id.login_code_layout);
 
-        verification_image.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                verification_image.setImageResource(R.anim.loading_anim_test);
-                ImageListener listener=ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
-                mImageLoader.get(
-                    ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString() + "&ts="
-                        + System.currentTimeMillis(), listener);
-            }
-        });
+        // verification_image.setOnClickListener(new OnClickListener() {
+        //
+        // @Override
+        // public void onClick(View v) {
+        // verification_image.setBackgroundResource(R.anim.loading_anim);
+        // AnimationDrawable animation=(AnimationDrawable)verification_image.getBackground();
+        // animation.start();
+        // ImageListener listener=ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
+        // mImageLoader.get(
+        // ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString() + "&ts="
+        // + System.currentTimeMillis(), listener);
+        // }
+        // });
 
         login_btn=(Button)findViewById(R.id.login_btn_login);
         login_btn.setTextSize(20);
 
         register_btn=(Button)findViewById(R.id.login_btn_register);
         register_btn.setTextSize(20);
+
+        getVerification_btn=(Button)findViewById(R.id.login_phone_get_btn);
+        getVerification_btn.setTextSize(14);
+        getVerification_btn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 获取验证码
+                if(null == account.getText().toString() || "".equals(account.getText().toString())) {
+                    Toast.makeText(LoginActivity.this, "请输入手机号码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!AccountUtil.isPhoneNum(account.getText().toString())) {
+                    Toast.makeText(LoginActivity.this, "手机号输入有误，请重输入正确的手机号", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                final Map<String, String> parmas=new HashMap<String, String>();
+                parmas.put("mobile_ph", account.getText().toString());
+                CommonUtil.showLoadingDialog(LoginActivity.this);
+                OpenApiService.getInstance(LoginActivity.this).getLoginVerification(mQueue, parmas,
+                    new Response.Listener<String>() {
+
+                        @Override
+                        public void onResponse(String arg0) {
+                            CommonUtil.closeLodingDialog();
+                            try {
+                                JSONObject responses=new JSONObject(arg0);
+                                if(responses.getInt("rtnCode") == 1) {
+                                    getVerification_btn.setEnabled(false);
+                                    Toast.makeText(LoginActivity.this, "验证码请求成功", Toast.LENGTH_SHORT).show();
+                                    new Thread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            times=30;
+                                            while(times >= 0) {
+                                                try {
+                                                    Message msg=new Message();
+                                                    msg.what=times;
+                                                    h.sendMessage(msg);
+                                                    Thread.sleep(1000);
+                                                    times--;
+                                                } catch(InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    }).start();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                }
+                            } catch(JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError arg0) {
+                            CommonUtil.closeLodingDialog();
+                            Toast.makeText(LoginActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            }
+        });
+        getVerification_btn.setOnTouchListener(new ButtonListener().setImage(
+            getResources().getDrawable(R.drawable.login_register_btn_shape),
+            getResources().getDrawable(R.drawable.login_register_press_btn_shape)).getBtnTouchListener());
 
         login_btn.setOnClickListener(new OnClickListener() {
 
@@ -171,6 +242,10 @@ public class LoginActivity extends Activity {
                 // 登陆
                 if(account.getText().toString() == null || "".equals(account.getText().toString())) {
                     Toast.makeText(LoginActivity.this, "手机号不能位空,请输入手机号!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(verification_edit.getText().toString() == null || "".equals(verification_edit.getText().toString())) {
+                    Toast.makeText(LoginActivity.this, "验证码不能位空，请输入验证码!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(!AccountUtil.isPhoneNum(account.getText().toString())) {
@@ -185,19 +260,24 @@ public class LoginActivity extends Activity {
                     Toast.makeText(LoginActivity.this, "密码格式不正确,请输入6-20位字母或数字的密码!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(loginCount > 3) {
-                    if(code.getText().toString() == null || "".equals(code.getText().toString())) {
-                        Toast.makeText(LoginActivity.this, "验证码不能位空,请输入验证码!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
+                // if(loginCount > 3) {
+                // if(code.getText().toString() == null || "".equals(code.getText().toString())) {
+                // Toast.makeText(LoginActivity.this, "验证码不能位空,请输入验证码!", Toast.LENGTH_SHORT).show();
+                // return;
+                // }
+                // }
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("mobile_ph", account.getText().toString());
                 parmas.put("pwd", password.getText().toString());
-                if(loginCount > 3) {
-                    parmas.put("smsVerifyCode", code.getText().toString());
-                }
+                parmas.put("device_token", UmengRegistrar.getRegistrationId(LoginActivity.this));
+                parmas.put("device_tp", "Android");
+                parmas.put("device_tp", "Android");
+                // if(loginCount > 3) {
+                parmas.put("smsVerifyCode", verification_edit.getText().toString());
+                // }
                 CommonUtil.showLoadingDialog(LoginActivity.this);
+                ClientUtil.setToken("");
+                editor.put("refreshToken", "");
                 OpenApiService.getInstance(LoginActivity.this).getLogin(mQueue, parmas, new Response.Listener<String>() {
 
                     @Override
@@ -217,17 +297,17 @@ public class LoginActivity extends Activity {
                                 finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
-                                loginCount++;
-                                if(loginCount == 3) {
-                                    code_layout.setVisibility(View.VISIBLE);
-                                    Map<String, String> imageParmas=new HashMap<String, String>();
-                                    imageParmas.put("mobile_ph", account.getText().toString());
-                                    imageParmas.put("ts", System.currentTimeMillis() + "");
-                                    ImageListener listener=
-                                        ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
-                                    mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString()
-                                        + "&ts=" + System.currentTimeMillis(), listener);
-                                }
+                                // loginCount++;
+                                // if(loginCount == 3) {
+                                // code_layout.setVisibility(View.VISIBLE);
+                                // Map<String, String> imageParmas=new HashMap<String, String>();
+                                // imageParmas.put("mobile_ph", account.getText().toString());
+                                // imageParmas.put("ts", System.currentTimeMillis() + "");
+                                // ImageListener listener=
+                                // ImageLoader.getImageListener(verification_image, 0, android.R.drawable.ic_delete);
+                                // mImageLoader.get(ClientUtil.GET_LOGIN_IMAGE_URL + "??mobile_ph=" + account.getText().toString()
+                                // + "&ts=" + System.currentTimeMillis(), listener);
+                                // }
                             }
                         } catch(JSONException e) {
                             e.printStackTrace();
@@ -289,6 +369,18 @@ public class LoginActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private Handler h=new Handler() {
+
+        public void dispatchMessage(Message msg) {
+            if(msg.what == 0) {
+                getVerification_btn.setEnabled(true);
+                getVerification_btn.setText("获取验证码");
+            } else {
+                getVerification_btn.setText(msg.what + "s后重新发送");
+            }
+        };
+    };
 
     private void exit() {
         if(!isExit) {

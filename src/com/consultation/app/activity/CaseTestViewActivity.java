@@ -93,6 +93,7 @@ public class CaseTestViewActivity extends CaseBaseActivity{
     
     private Map<Integer, List<String>> pathMap=new HashMap<Integer, List<String>>();
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

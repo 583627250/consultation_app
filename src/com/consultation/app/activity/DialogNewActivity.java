@@ -29,6 +29,7 @@ public class DialogNewActivity extends Activity {
     
     private int flag,index;
     
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

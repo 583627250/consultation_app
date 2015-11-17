@@ -17,8 +17,12 @@ public class ClientUtil {
     public static String GET_KNOWLEDGE_LIST_URL=SERVICE_DOMAIN + "/api/knowledge/list.json";
 
     public static String GET_KNOWLEDGE_BYID_URL=SERVICE_DOMAIN + "/h5/knowledge/content.shtml";
+    
+    public static String GET_HELP_BYID_URL=SERVICE_DOMAIN + "/h5/helpCenter/content.shtml";
 
     public static String GET_REGISTER_VERIFICATION_URL=SERVICE_DOMAIN + "/api/user/smsVerifyCode.json";
+    
+    public static String GET_LOGIN_VERIFICATION_URL=SERVICE_DOMAIN + "/api/user/loginVerifyCode.json";
 
     public static String GET_REGISTER_MOBILEUSABLE_URL=SERVICE_DOMAIN + "/api/user/mobileUsable.json";
     
@@ -72,6 +76,10 @@ public class ClientUtil {
     
     public static String GET_FEEDBACK_LIST_URL =SERVICE_DOMAIN + "/api/userFeeback/list.json";
     
+    public static String GET_HELP_LIST_URL =SERVICE_DOMAIN + "/api/helpCenter/list.json";
+    
+    public static String GET_VERSION_CODE_URL =SERVICE_DOMAIN + "/api/appVersion/getVersion.json";
+    
     public static String GET_SEND_FEEDBACK_URL =SERVICE_DOMAIN + "/api/userFeeback/save.json";
     
     public static String GET_DISCUSSION_CASE_LIST_URL =SERVICE_DOMAIN + "/api/caseDiscuss/list.json";
@@ -106,7 +114,7 @@ public class ClientUtil {
     
     public static String GET_MY_ACOUNT_RECHARGE_RECORD_URL =SERVICE_DOMAIN + "/api/userBalanceTopup/list.json";
     
-    public static String GET_MY_ACOUNT_WITHDRAWALS_RECORD_URL =SERVICE_DOMAIN + "/api/userBalancexxx/list.json";
+    public static String GET_MY_ACOUNT_WITHDRAWALS_RECORD_URL =SERVICE_DOMAIN + "/api/userBalanceDraw/list.json";
     
     public static String GET_MY_ACOUNT_INCOME_RECORD_URL =SERVICE_DOMAIN + "/api/userBalanceIncome/list.json";
     

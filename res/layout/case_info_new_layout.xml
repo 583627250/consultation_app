@@ -109,7 +109,7 @@
                         android:textColor="#000000" />
                 </LinearLayout>
 
-                <TextView
+                <!-- <TextView
                     android:id="@+id/case_info_new_title_zljg_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textColor="#000000" />
-                </LinearLayout>
+                </LinearLayout> -->
 
                 <TextView
                     android:id="@+id/case_info_new_title_jws_text"
@@ -225,41 +225,41 @@
                     android:background="@color/consultation_color_white"
                     android:orientation="vertical"
                     android:padding="10dp" >
-                    
+
                     <TextView
                         android:id="@+id/case_info_new_jy_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="检验："
                         android:padding="4dp"
+                        android:text="检验："
                         android:textColor="#000000" />
-                    
+
                     <LinearLayout
-	                    android:id="@+id/case_info_new_title_jy_layout"
-	                    android:layout_width="match_parent"
-	                    android:layout_height="wrap_content"
-	                    android:layout_gravity="center_vertical"
-	                    android:background="@color/consultation_color_white"
-	                    android:orientation="vertical" >
+                        android:id="@+id/case_info_new_title_jy_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/consultation_color_white"
+                        android:orientation="vertical" >
                     </LinearLayout>
-                    
+
                     <TextView
                         android:id="@+id/case_info_new_jc_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="检查："
                         android:padding="4dp"
+                        android:text="检查："
                         android:textColor="#000000" />
-                    
-					<LinearLayout
-	                    android:id="@+id/case_info_new_title_fzjc_layout"
-	                    android:layout_width="match_parent"
-	                    android:layout_height="wrap_content"
-	                    android:layout_gravity="center_vertical"
-	                    android:background="@color/consultation_color_white"
-	                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/case_info_new_title_fzjc_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/consultation_color_white"
+                        android:orientation="vertical" >
                     </LinearLayout>
                 </LinearLayout>
 
@@ -288,6 +288,7 @@
                         android:textColor="#000000" />
                 </LinearLayout>
 
+                <!--
                 <TextView
                     android:id="@+id/case_info_new_title_zxfs_text"
                     android:layout_width="wrap_content"
@@ -312,7 +313,10 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="#000000" />
                 </LinearLayout>
+                -->
 
+
+                <!--
                 <TextView
                     android:id="@+id/case_info_new_title_zt_text"
                     android:layout_width="wrap_content"
@@ -337,6 +341,7 @@
                         android:layout_gravity="center_vertical"
                         android:textColor="#000000" />
                 </LinearLayout>
+                -->
 
                 <TextView
                     android:id="@+id/case_info_new_title_bhyy_text"
@@ -383,7 +388,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@color/consultation_color_white"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:padding="10dp"
                     android:visibility="gone" >
 
@@ -395,6 +400,77 @@
                         android:dividerHeight="0.1dp"
                         android:visibility="gone" >
                     </ListView>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/case_info_new_title_pj_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="评价"
+                    android:textColor="#7B7B7B"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/case_info_new_pj_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:padding="10dp" >
+
+                    <TextView
+                        android:id="@+id/case_info_new_pj_text_expert_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="张三获得评价："
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textColor="#CCCCCC" />
+
+                    <TextView
+                        android:id="@+id/case_info_new_pj_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#000000" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:orientation="horizontal" >
+
+                        <RatingBar
+                            android:id="@+id/case_info_new_pj_ratingBar"
+                            style="@style/roomRatingBar2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:isIndicator="true"
+                            android:maxHeight="24dp"
+                            android:minHeight="24dp"
+                            android:numStars="5"
+                            android:rating="0"
+                            android:stepSize="0.5" />
+
+                        <TextView
+                            android:id="@+id/case_info_new_pj_stars_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical|right"
+                            android:paddingLeft="15dp"
+                            android:textColor="#2CB67A" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -496,8 +572,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
-                                android:hint="请选择评价星级"
                                 android:padding="5dp"
+                                android:text="请选择评价星级"
                                 android:textColor="#7B7C7C" />
 
                             <RatingBar
@@ -602,14 +678,20 @@
                         android:orientation="vertical"
                         android:visibility="gone" >
 
-                        <TextView
+                        <!-- <TextView
                             android:id="@+id/case_info_new_title_zjtlk_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:padding="10dp"
                             android:text="专家讨论框"
-                            android:textColor="#7B7B7B" />
+                            android:textColor="#7B7B7B" /> -->
+                            
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="#EBEBEB" >
+                            </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
@@ -732,7 +814,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="3"
                                 android:gravity="center_vertical"
-                                android:text="建议术式"
+                                android:text="治疗建议"
                                 android:textColor="#7B7C7C" />
 
                             <LinearLayout
@@ -748,7 +830,43 @@
                                 android:layout_weight="1"
                                 android:background="@color/consultation_color_white"
                                 android:gravity="center_vertical"
-                                android:hint="请输入建议术式"
+                                android:hint="请输入治疗建议"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:singleLine="true"
+                                android:textColorHint="#D3D3D3" />
+                        </LinearLayout>
+                        
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/consultation_color_white"
+                            android:padding="10dp" >
+
+                            <TextView
+                                android:id="@+id/case_info_new_title_zjtlk_other_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="3"
+                                android:gravity="center_vertical"
+                                android:text="其他"
+                                android:textColor="#7B7C7C" />
+
+                            <LinearLayout
+                                android:layout_width="0.1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/consultation_color_F4F4F4" >
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/case_info_new_title_zjtlk_other_input_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@color/consultation_color_white"
+                                android:gravity="center_vertical"
+                                android:hint="请输入其他内容"
                                 android:paddingLeft="5dp"
                                 android:paddingRight="5dp"
                                 android:singleLine="true"
@@ -808,8 +926,8 @@
                         <LinearLayout
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
+                            android:layout_marginTop="5dp"
                             android:background="#FFFFFF" >
                         </LinearLayout>
 

@@ -75,7 +75,7 @@ public class KnowledgeFragment extends Fragment {
     
     private MyAdapter myAdapter = new MyAdapter();
 
-    private int[] imageResId=new int[]{R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e};
+    private int[] imageResId=new int[]{};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

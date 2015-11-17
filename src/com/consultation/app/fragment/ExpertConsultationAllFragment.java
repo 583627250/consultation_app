@@ -319,6 +319,8 @@ public class ExpertConsultationAllFragment extends Fragment implements OnLoadLis
                             } else {
                                 patientListView.setHasMoreData(false);
                             }
+                            myAdapter.notifyDataSetChanged();
+                            patientListView.setSelection(0);
                         } else if(responses.getInt("rtnCode") == 10004) {
                             Toast.makeText(expertConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
                                 Toast.LENGTH_SHORT).show();

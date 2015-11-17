@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -306,6 +305,8 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                             } else {
                                 patientListView.setHasMoreData(false);
                             }
+                            myAdapter.notifyDataSetChanged();
+                            patientListView.setSelection(0);
                         } else if(responses.getInt("rtnCode") == 10004) {
 
                             Toast.makeText(patientConsultationAllFragment.getContext(), responses.getString("rtnMsg"),
@@ -522,7 +523,7 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
 
         TextView stateText;
         
-        Button countBtn;
+        TextView countBtn;
     }
 
     private class MyAdapter extends BaseAdapter {
@@ -553,7 +554,7 @@ public class PatientConsultationAllFragment extends Fragment implements OnLoadLi
                 holder.doctorText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_doctor);
                 holder.dateText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_date);
                 holder.stateText=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_state);
-                holder.countBtn=(Button)convertView.findViewById(R.id.consulation_patient_list_all_item_count);
+                holder.countBtn=(TextView)convertView.findViewById(R.id.consulation_patient_list_all_item_count);
                 convertView.setTag(holder);
             } else {
                 holder=(PatientViewHolder)convertView.getTag();

@@ -27,9 +27,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingBottom="40dp"
-                android:paddingTop="40dp"
-                android:text="确认转到住院或手术？"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:lineSpacingMultiplier="1.5"
                 android:textColor="#414141" />
 
             <EditText

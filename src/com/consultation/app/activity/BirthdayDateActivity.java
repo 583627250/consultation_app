@@ -164,6 +164,7 @@ public class BirthdayDateActivity extends Activity {
         });
     }
     
+    @SuppressWarnings("deprecation")
     private void initYearDatas() {
         Date data = new Date();
         years = new int[data.getYear()];

@@ -561,12 +561,14 @@ public class PhoneUtil {
                  >= Configuration.SCREENLAYOUT_SIZE_LARGE;
      }
      
-     public int getWidth(Context ctx){
+     @SuppressWarnings("deprecation")
+    public int getWidth(Context ctx){
          WindowManager wm=((Activity)ctx).getWindowManager();
          return wm.getDefaultDisplay().getWidth();
      }
      
-     public int getHeight(Context ctx){
+     @SuppressWarnings("deprecation")
+    public int getHeight(Context ctx){
          WindowManager wm=((Activity)ctx).getWindowManager();
          return wm.getDefaultDisplay().getHeight();
      }

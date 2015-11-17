@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/consultation_header"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/header" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="50dp"
+                    android:paddingRight="50dp"
+                    android:paddingTop="15dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/about_image" />
+
+                <TextView
+                    android:id="@+id/about_description_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/about_shape"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:lineSpacingMultiplier="1.5"
+                    android:text="\u3000\u3000医联帮由北京医联众康科技有限公司于2015年创建，主要借助移动互联网与大数据技术，整合全球稀缺的高端医疗人才资源，为全国各区县的医生和患者提供新型在线医疗服务。\n\u3000\u3000医联帮以“满足每一个医疗需求”为己任，经过多重途径实现核心医生资源和典型病例的汇聚，致力打造成国内首家以D2D2P（Doctor to Doctor to Patient）为主要特征的医疗资源跨地域协同综合服务平台。"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/about_bottom_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:gravity="center|bottom"
+                android:text="Copyright@2015-2025"
+                android:textColor="#999999" />
+
+            <TextView
+                android:id="@+id/about_company_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:gravity="center|bottom"
+                android:paddingBottom="20dp"
+                android:text="北京医联众康科技有限"
+                android:textColor="#999999" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

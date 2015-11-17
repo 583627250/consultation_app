@@ -10,7 +10,7 @@ public class DoctorCommentsTo {
 
     private long create_time;
 
-    private int start_value;
+    private int star_value;
 
     private String photo_url;
     
@@ -54,12 +54,12 @@ public class DoctorCommentsTo {
         this.create_time=create_time;
     }
 
-    public int getStart_value() {
-        return start_value;
+    public int getStar_value() {
+        return star_value;
     }
 
-    public void setStart_value(int start_value) {
-        this.start_value=start_value;
+    public void setStar_value(int star_value) {
+        this.star_value=star_value;
     }
 
 }

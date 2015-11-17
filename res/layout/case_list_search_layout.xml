@@ -187,7 +187,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:paddingBottom="3dp"
-                            android:text="处理中"
+                            android:text="他人处理中"
                             android:textColor="#7D7D7D" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -222,6 +222,65 @@
                             android:textColor="#7D7D7D" />
                     </LinearLayout>
                 </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/case_search_dis_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="20dp"
+            android:background="@color/consultation_color_white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/case_search_dis_title_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="10dp"
+                android:text="按照状态搜索"
+                android:textColor="#7D7D7D" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:id="@+id/case_search_dis_discussion_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="5dp"
+                            android:paddingTop="3dp"
+                            android:src="@drawable/specialist_unselected" />
+
+                        <TextView
+                            android:id="@+id/case_search_dis_discussion_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="3dp"
+                            android:text="我参与过的讨论"
+                            android:textColor="#7D7D7D" />
+                    </LinearLayout>
+                </RelativeLayout>
+
             </LinearLayout>
         </LinearLayout>
 

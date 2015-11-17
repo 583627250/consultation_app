@@ -122,16 +122,22 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
                 try {
                     JSONObject responses=new JSONObject(arg0);
                     if(responses.getInt("rtnCode") == 1) {
-                        JSONArray infos=responses.getJSONArray("topups");
+                        JSONArray infos=responses.getJSONArray("draws");
                         for(int i=0; i < infos.length(); i++) {
                             JSONObject info=infos.getJSONObject(i);
                             RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                             rechargeRecordTo.setAmount(info.getString("amount"));
-                            rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                            rechargeRecordTo.setCreate_time(info.getString("create_time"));
                             rechargeRecordTo.setFrom_tp(info.getString("to_tp"));
                             rechargeRecordTo.setStatus(info.getString("status"));
                             rechargeRecordTos.add(rechargeRecordTo);
                         }
+                        if(infos.length() == 10) {
+                            listView.setHasMoreData(true);
+                        } else {
+                            listView.setHasMoreData(false);
+                        }
+                        myAdapter.notifyDataSetChanged();
                     } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(WithdrawalsRecordActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
@@ -146,6 +152,9 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
                             }
                         });
                         startActivity(new Intent(WithdrawalsRecordActivity.this, LoginActivity.class));
+                    }else{
+                        Toast.makeText(WithdrawalsRecordActivity.this, responses.getString("rtnMsg"),
+                            Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
                     e.printStackTrace();
@@ -186,6 +195,7 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
         titleAmount.setTextSize(18);
         totleType=(TextView)findViewById(R.id.my_acount_recharge_title_type_text);
         totleType.setTextSize(18);
+        totleType.setVisibility(View.GONE);
         titleStatus=(TextView)findViewById(R.id.my_acount_recharge_title_status_text);
         titleStatus.setTextSize(18);
         titleTime=(TextView)findViewById(R.id.my_acount_recharge_title_time_text);
@@ -209,12 +219,13 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
                                 try {
                                     JSONObject responses=new JSONObject(arg0);
                                     if(responses.getInt("rtnCode") == 1) {
-                                        JSONArray infos=responses.getJSONArray("topups");
+                                        rechargeRecordTos.clear();
+                                        JSONArray infos=responses.getJSONArray("draws");
                                         for(int i=0; i < infos.length(); i++) {
                                             JSONObject info=infos.getJSONObject(i);
                                             RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                                             rechargeRecordTo.setAmount(info.getString("amount"));
-                                            rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                                            rechargeRecordTo.setCreate_time(info.getString("create_time"));
                                             rechargeRecordTo.setFrom_tp(info.getString("to_tp"));
                                             rechargeRecordTo.setStatus(info.getString("status"));
                                             rechargeRecordTos.add(rechargeRecordTo);
@@ -275,7 +286,6 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
         listView=(PullableListView)findViewById(R.id.my_acount_recharge_title_list_listView);
         listView.setAdapter(myAdapter);
         listView.setOnLoadListener(this);
-
     }
 
     private static class ViewHolder {
@@ -306,6 +316,7 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
             return position;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
@@ -319,8 +330,9 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
             } else {
                 holder=(ViewHolder)convertView.getTag();
             }
+            holder.type.setVisibility(View.GONE);
             holder.amount.setTextSize(17);
-            holder.amount.setText((float)Long.parseLong(rechargeRecordTos.get(position).getAmount())/100+"");
+            holder.amount.setText(rechargeRecordTos.get(position).getAmount());
             holder.type.setTextSize(17);
             if(rechargeRecordTos.get(position).getFrom_tp().equals("wx")){
                 holder.type.setText("微信");
@@ -335,7 +347,7 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
             }
             holder.time.setTextSize(17);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-            String sd=sdf.format(new Date(rechargeRecordTos.get(position).getCteate_time()));
+            String sd=sdf.format(new Date(rechargeRecordTos.get(position).getCreate_time()));
             holder.time.setText(sd);
             return convertView;
         }
@@ -357,12 +369,12 @@ public class WithdrawalsRecordActivity extends Activity implements OnLoadListene
                     try {
                         JSONObject responses=new JSONObject(arg0);
                         if(responses.getInt("rtnCode") == 1) {
-                            JSONArray infos=responses.getJSONArray("topups");
+                            JSONArray infos=responses.getJSONArray("draws");
                             for(int i=0; i < infos.length(); i++) {
                                 JSONObject info=infos.getJSONObject(i);
                                 RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                                 rechargeRecordTo.setAmount(info.getString("amount"));
-                                rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                                rechargeRecordTo.setCreate_time(info.getString("create_time"));
                                 rechargeRecordTo.setFrom_tp(info.getString("to_tp"));
                                 rechargeRecordTo.setStatus(info.getString("status"));
                                 rechargeRecordTos.add(rechargeRecordTo);

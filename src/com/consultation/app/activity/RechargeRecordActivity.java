@@ -118,7 +118,6 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
 
             @Override
             public void onResponse(String arg0) {
-                System.out.println(arg0);
                 CommonUtil.closeLodingDialog();
                 try {
                     JSONObject responses=new JSONObject(arg0);
@@ -128,11 +127,17 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
                             JSONObject info=infos.getJSONObject(i);
                             RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                             rechargeRecordTo.setAmount(info.getString("amount"));
-                            rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                            rechargeRecordTo.setCreate_time(info.getString("create_time"));
                             rechargeRecordTo.setFrom_tp(info.getString("from_tp"));
                             rechargeRecordTo.setStatus(info.getString("status"));
                             rechargeRecordTos.add(rechargeRecordTo);
                         }
+                        if(infos.length() == 10) {
+                            listView.setHasMoreData(true);
+                        } else {
+                            listView.setHasMoreData(false);
+                        }
+                        myAdapter.notifyDataSetChanged();
                     } else if(responses.getInt("rtnCode") == 10004) {
                         Toast.makeText(RechargeRecordActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
@@ -147,6 +152,9 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
                             }
                         });
                         startActivity(new Intent(RechargeRecordActivity.this, LoginActivity.class));
+                    }else{
+                        Toast.makeText(RechargeRecordActivity.this, responses.getString("rtnMsg"),
+                            Toast.LENGTH_SHORT).show();
                     }
                 } catch(JSONException e) {
                     e.printStackTrace();
@@ -210,12 +218,13 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
                                 try {
                                     JSONObject responses=new JSONObject(arg0);
                                     if(responses.getInt("rtnCode") == 1) {
+                                        rechargeRecordTos.clear();
                                         JSONArray infos=responses.getJSONArray("topups");
                                         for(int i=0; i < infos.length(); i++) {
                                             JSONObject info=infos.getJSONObject(i);
                                             RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                                             rechargeRecordTo.setAmount(info.getString("amount"));
-                                            rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                                            rechargeRecordTo.setCreate_time(info.getString("create_time"));
                                             rechargeRecordTo.setFrom_tp(info.getString("from_tp"));
                                             rechargeRecordTo.setStatus(info.getString("status"));
                                             rechargeRecordTos.add(rechargeRecordTo);
@@ -307,6 +316,7 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
             return position;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
@@ -321,7 +331,7 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
                 holder=(ViewHolder)convertView.getTag();
             }
             holder.amount.setTextSize(17);
-            holder.amount.setText((float)Long.parseLong(rechargeRecordTos.get(position).getAmount())/100+"");
+            holder.amount.setText(rechargeRecordTos.get(position).getAmount());
             holder.type.setTextSize(17);
             if(rechargeRecordTos.get(position).getFrom_tp().equals("wx")){
                 holder.type.setText("微信");
@@ -336,7 +346,7 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
             }
             holder.time.setTextSize(17);
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-            String sd=sdf.format(new Date(rechargeRecordTos.get(position).getCteate_time()));
+            String sd=sdf.format(new Date(rechargeRecordTos.get(position).getCreate_time()));
             holder.time.setText(sd);
             return convertView;
         }
@@ -363,7 +373,7 @@ public class RechargeRecordActivity extends Activity implements OnLoadListener {
                                 JSONObject info=infos.getJSONObject(i);
                                 RechargeRecordTo rechargeRecordTo = new RechargeRecordTo();
                                 rechargeRecordTo.setAmount(info.getString("amount"));
-                                rechargeRecordTo.setCteate_time(info.getString("cteate_time"));
+                                rechargeRecordTo.setCreate_time(info.getString("create_time"));
                                 rechargeRecordTo.setFrom_tp(info.getString("from_tp"));
                                 rechargeRecordTo.setStatus(info.getString("status"));
                                 rechargeRecordTos.add(rechargeRecordTo);

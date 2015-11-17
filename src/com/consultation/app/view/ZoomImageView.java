@@ -17,9 +17,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
-/**
- * @author zhy 博客地址：http://blog.csdn.net/lmj623565791/article/details/39480503
- */
 public class ZoomImageView extends ImageView implements OnScaleGestureListener, OnTouchListener,
         ViewTreeObserver.OnGlobalLayoutListener{
 
@@ -368,6 +365,7 @@ public class ZoomImageView extends ImageView implements OnScaleGestureListener, 
         getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();

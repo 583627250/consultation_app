@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MedicalRecord Name="Medical records" ChildCount="8">
-	<Root ID="1" Name="Symptoms" Level="0" ChildCount="8">
+	<Root ID="1" Name="Symptoms" Level="0" ChildCount="8" SuffixP="。">
 		<Title IsShow="False">症状</Title>
 		<!-- 发热 -->
-		<Group ID="1.1" Name="Fever" Level="1" ChildCount="3" Type="" isNormal="True">
-			<Title IsShow="True">发热</Title>
-			<Item ID="1.1.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.1.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.1.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.1.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>	
-			<Item ID="1.1.5" Name="temperature" FirstStr="最高" LastStr="℃" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+		<Group ID="1.1" Name="Fever" Level="1" ChildCount="3" Type="" IsNormal="True" SuffixP="；">
+			<Title IsShow="False">发热</Title>
+			<Item ID="1.1.1" Name="Quality" FirstStr="发热" Level="2" ChildCount="4" IsShow="True" SuffixP="，">
+				<SubItem ID="1.1.1.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.1.1.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.1.1.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.1.1.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>	
+			</Item>	
+			<Item ID="1.1.2" Name="temperature" FirstStr="最高" LastStr="℃" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
 		</Group>
 		
 		<!-- 疼痛 -->
-		<Group ID="1.2" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" isNormal="True">
+		<Group ID="1.2" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">疼痛</Title>
 			<Item ID="1.2.1" Name="ease" FirstStr="疼痛发作性质" Level="2" Type="RadioButtonGroup" IsShow="False">
 				<Options ID="1.2.1-1" Checked="0">间歇</Options>
@@ -21,8 +23,8 @@
 				<Options ID="1.2.1-3" Checked="0">偶发</Options>
 			</Item>
 			<Item ID="1.2.2" Name="PainTime" FirstStr="疼痛时间" Level="2" Type="CheckBoxList" IsShow="False">
-				<Options ID="1.2.2-1" Checked="0">尿中痛</Options>
-				<Options ID="1.2.2-2" Checked="0">尿后痛</Options>
+				<Options ID="1.2.2-1" Checked="0">尿中</Options>
+				<Options ID="1.2.2-2" Checked="0">尿后</Options>
 			</Item>
 					
 			<Item ID="1.2.3" Name="Part" FirstStr="部位" Level="2" Type="CheckBoxList" IsShow="False">
@@ -34,31 +36,31 @@
 				<Options ID="1.2.3-6" Checked="0">下腹部</Options>
 			</Item>
 			
-			<Item ID="1.2.4" Name="Quality" FirstStr="性质" Level="2" Type="CheckBoxList" IsShow="False">
+			<Item ID="1.2.4" Name="Quality" FirstStr="性质" Level="2" NoChecked="疼痛" Type="CheckBoxList" IsShow="False">
 				<Options ID="1.2.4-1" Checked="0">绞痛</Options>
 				<Options ID="1.2.4-2" Checked="0">隐痛</Options>
 			</Item>
 			
-			<Item ID="1.2.5" Name="Quality" FirstStr="疼痛病程" Level="2" IsShow="False"/>
-			<Item ID="1.2.6" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.2.7" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.2.8" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.2.9" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+			<Item ID="1.2.5" Name="Quality" FirstStr="疼痛病程" Level="2" ChildCount="4" IsShow="False" SuffixP="，">
+				<SubItem ID="1.2.5.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.2.5.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.2.5.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.2.5.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+			</Item>
 			
-			<Item ID="1.2.10" Name="Quality" FirstStr="放射痛" Level="2" IsShow="False"/>
-			<Item ID="1.2.11" Name="years" FirstStr="疼痛放射至" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Text" Value=""/>
+			<Item ID="1.2.6" Name="Quality" FirstStr="疼痛放射至" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Text" Value="" SuffixP="，"/>
 			
-			<Item ID="1.2.12" Name="add" FirstStr="加重、缓解方式" Level="2" Type="CheckBoxList">
-				<Options ID="1.2.12-1" Checked="0">饮酒后疼痛加重</Options>
-				<Options ID="1.2.12-2" Checked="0">久坐加重</Options>
-				<SubItem ID="1.2.12-3" FirstStr="其他" Level="3" IsShow="True"  Type="Edit" Input="True" DataType="Text"/>
+			<Item ID="1.2.7" Name="add" FirstStr="加重、缓解方式" Level="2" Type="CheckBoxList">
+				<Options ID="1.2.7-1" Checked="0">饮酒后疼痛加重</Options>
+				<Options ID="1.2.7-2" Checked="0">久坐加重</Options>
+				<SubItem ID="1.2.7-3" FirstStr="其他" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Text" Value=""/>
 			</Item>
 		</Group>
 		
 		<!-- 排尿相关症状 -->
-		<Group ID="1.3" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" isNormal="True">
+		<Group ID="1.3" Name="Pain" Level="1" ChildCount="7" IsShow="False" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">排尿相关症状</Title>
-			<Item ID="1.3.1" Name="Voiding symptoms" Level="1" Type="CheckBoxList">
+			<Item ID="1.3.1" Name="Voiding symptoms" Level="1" Type="CheckBoxList" Separator="、">
 				<Options ID="1.3.1-1" Checked="0">尿频</Options>
 				<Options ID="1.3.1-2" Checked="0">尿急</Options>
 				<Options ID="1.3.1-3" Checked="0">尿痛</Options>
@@ -69,7 +71,7 @@
 				<Options ID="1.3.1-8" Checked="0">遗尿</Options>
 				<Options ID="1.3.1-9" Checked="0">尿线变细</Options>
 				<Options ID="1.3.1-10" Checked="0">排尿无力</Options>
-				<Options ID="1.3.1-11" Checked="0">终末滴沥</Options>
+				<Options ID="1.3.1-11" Checked="0">尿末滴沥</Options>
 				<Options ID="1.3.1-12" Checked="0">尿滁留</Options>
 				<Options ID="1.3.1-13" Checked="0">尿失禁</Options>
 				<Options ID="1.3.1-14" Checked="0">血尿</Options>
@@ -80,184 +82,188 @@
 				<Options ID="1.3.1-19" Checked="0">无尿</Options>
 			</Item>
 			
-			<Item ID="1.3.2" Name="Quality" FirstStr="持续时间" Level="2" IsShow="False"/>
-			<Item ID="1.3.3" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.3.4" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.3.5" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.3.6" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>			
+			<Item ID="1.3.2" Name="Quality" FirstStr="持续时间" Level="2" ChildCount="4" IsShow="False">
+				<SubItem ID="1.3.2.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.3.2.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.3.2.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.3.2.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>		、
+			</Item>	
 		</Group>
 		
 		<!-- 血尿相关症状 -->
-		<Group ID="1.4" Name="Hematuria associated symptoms" Level="1" ChildCount="3" Type="" isNormal="True">
+		<Group ID="1.4" Name="Hematuria associated symptoms" Level="1" ChildCount="3" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">血尿相关症状</Title>
 			<!-- 镜下观察 -->
-			<Item ID="1.4.1" Name="microscopy" Level="2" Type="RadioButtonGroup">
-				<Options ID="1.4.1-1" Checked="0">镜下血尿</Options>
-				<Options ID="1.4.1-2" Checked="0">肉眼血尿</Options>
-			</Item>
-			
-			<!-- 肉眼检查 -->
-			<Item ID="1.4.2" Name="Visual inspection" Level="2" ChildCount="4" IsShow="True">
+			<Item ID="1.4.1" Name="Quality" FirstStr="镜下血尿" Level="2" ChildCount="4" IsShow="True">
+				<SubItem ID="1.4.1.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.1.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.1.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.1.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>		、
+			</Item>	
+			<Item ID="1.4.2" Name="Quality" FirstStr="肉眼血尿" Level="2" ChildCount="8" IsShow="False">
 				<SubItem ID="1.4.2.1" Name="State" Level="3" Type="RadioButtonGroup">
 					<Options ID="1.4.2.1-1" Checked="0">初始肉眼血尿</Options>
 					<Options ID="1.4.2.1-2" Checked="0">全程肉眼血尿</Options>
 					<Options ID="1.4.2.1-3" Checked="0">终末肉眼血尿</Options>
 				</SubItem>
+				<SubItem ID="1.4.2.2" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.2.3" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.2.4" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.4.2.5" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>	
 				
-				<SubItem ID="1.4.2.2" Name="Color" FirstStr="尿液" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="1.4.2.2-1" Checked="0">鲜红</Options>
-					<Options ID="1.4.2.2-2" Checked="0">暗红</Options>
-					<Options ID="1.4.2.2-3" Checked="0">淡红</Options>
+				<SubItem ID="1.4.2.6" Name="Color" FirstStr="尿液" Level="3" Type="RadioButtonGroup" IsShow="True" PrefixP="，" SuffixP="，">
+					<Options ID="1.4.2.6-1" Checked="0">鲜红</Options>
+					<Options ID="1.4.2.6-2" Checked="0">暗红</Options>
+					<Options ID="1.4.2.6-3" Checked="0">淡红</Options>
 				</SubItem>
 				
-				<SubItem ID="1.4.2.3" Name="With" Level="3" Type="RadioButtonGroup">
-					<Options ID="1.4.2.3-1" Checked="0">不伴血块</Options>
-					<Options ID="1.4.2.3-2" Checked="0">伴血块</Options>
+				<SubItem ID="1.4.2.7" Name="With" Level="3" Type="RadioButtonGroup" SuffixP="，">
+					<Options ID="1.4.2.7-1" Checked="0">不伴血块</Options>
+					<Options ID="1.4.2.7-2" Checked="0">伴血块</Options>
 				</SubItem>
 				
-				<SubItem ID="1.4.2.4" Name="Status" FirstStr="血块呈" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="1.4.2.4-1" Checked="0">条状</Options>
-					<Options ID="1.4.2.4-2" Checked="0">蚯蚓状</Options>
-					<Options ID="1.4.2.4-3" Checked="0">片状</Options>
-				</SubItem>
-				
-			</Item>
-			
+				<SubItem ID="1.4.2.8" Name="Status" FirstStr="血块呈" Level="3" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="1.4.2.8-1" Checked="0">条状</Options>
+					<Options ID="1.4.2.8-2" Checked="0">蚯蚓状</Options>
+					<Options ID="1.4.2.8-3" Checked="0">片状</Options>
+				</SubItem>	、
+			</Item>						
 		</Group>
 		
 		<!-- 血精相关症状 -->
-		<Group ID="1.5" Name="Hemospermia" Level="1" ChildCount="3" Type="" isNormal="True">
+		<Group ID="1.5" Name="Hemospermia" Level="1" ChildCount="2" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">血精相关症状</Title>
-			<Item ID="1.5.1" Name="Frequency" FirstStr="频度" LastStr="次/天" Level="2" IsShow="False" Type="Edit" Input="True" DataType="Number" Valeu="" />
+			<Item ID="1.5.1" Name="Frequency" FirstStr="血精" LastStr="" Level="2" ChildCount="4" IsShow="True" SuffixP="，">
+				<SubItem ID="1.5.1.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.5.1.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.5.1.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.5.1.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>				
+			</Item>
 			
 			<Item ID="1.5.2" Name="Color" FirstStr="颜色" Level="2" Type="RadioButtonGroup" IsShow="False">
 				<Options ID="1.5.2-1" Checked="0">鲜红</Options>
 				<Options ID="1.5.2-2" Checked="0">暗红</Options>
 				<Options ID="1.5.2-3" Checked="0">淡红</Options>
 			</Item>
-			
-			<Item ID="1.5.3" Name="AlongWithSymptoms" FirstStr="伴随症状" Level="2" ChildCount="2" IsShow="False">
-				
-				<SubItem ID="1.5.3.1" Name="AlongWith" FirstStr="伴随" Level="3" Type="CheckBoxList" IsShow="True">
-					<Options ID="1.5.3.1-1" Checked="0">睾丸</Options>
-					<Options ID="1.5.3.1-2" Checked="0">会阴部</Options>
-				</SubItem>
-				
-				<SubItem ID="1.5.3.2" Name="Symptoms" Level="3" Type="CheckBoxList">
-					<Options ID="1.5.3.2-1" Checked="0">疼痛</Options>
-					<Options ID="1.5.3.2-2" Checked="0">尿频</Options>
-					<Options ID="1.5.3.2-3" Checked="0">尿分叉</Options>
-				</SubItem>
-			</Item>	
 		</Group>
 		
 		<!-- 尿道分泌物 -->
-		<Group ID="1.6" Name="Urethral secretions" Level="1" ChildCount="2" Type="" isNormal="True">
+		<Group ID="1.6" Name="Urethral secretions" Level="1" ChildCount="2" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">尿道分泌物</Title>
 			<Item ID="1.6.1" Name="Quality" Level="2" Type="CheckBoxList">
-				<Options ID="1.6.1-1" Checked="0">脓性</Options>
-				<Options ID="1.6.1-2" Checked="0">血性</Options>
+				<Options ID="1.6.1-1" Checked="0">脓性尿道分泌物</Options>
+				<Options ID="1.6.1-2" Checked="0">血性尿道分泌物</Options>
 			</Item>
 			
-			<Item ID="1.6.2" Name="Color" FirstStr="颜色" Level="2" IsShow="False" Type="Edit" Input="True" DataType="Text" />
+			<Item ID="1.6.2" Name="Color" FirstStr="病程" Level="2" ChildCount="4" IsShow="False" >
+				<SubItem ID="1.6.2.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.6.2.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.6.2.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.6.2.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>			
+			</Item>
 		</Group>
 		
 		<!-- 健康查体发现 -->
-		<Group ID="1.7" Name="Check" Level="1" ChildCount="2" Type="" isNormal="True">
+		<Group ID="1.7" Name="Check" Level="1" ChildCount="2" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">健康查体发现</Title>
-			<Item ID="1.7.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.7.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
-			<Item ID="1.7.3" Name="days" LastStr="日" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+			<Item ID="1.7.1" Name="years" FirstStr="查体发现" LastStr="" Level="2" Type="Edit" Input="True" IsShow="False" DataType="Text" Value=""/>
+			<Item ID="1.7.2" Name="Color" FirstStr="病程" Level="2" ChildCount="4" IsShow="False" >
+				<SubItem ID="1.7.2.1" Name="years" LastStr="年" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.7.2.2" Name="months" LastStr="月" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.7.2.3" Name="days" LastStr="天" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>
+				<SubItem ID="1.7.2.4" Name="Hours" LastStr="时" Level="2" Type="Edit" Input="True" IsShow="True" DataType="Number" Value=""/>			
+			</Item>
 		</Group>
 
 		
 		<!-- 体重变化 -->
-		<Group ID="1.8" Name="Weight" Level="1" ChildCount="3" Type="" isNormal="True">
+		<Group ID="1.8" Name="Weight" Level="1" ChildCount="2" Type="" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">体重变化</Title>
 			<Item ID="1.8.1" Name="change" FirstStr="近三月内体重" Level="2" Type="RadioButtonGroup" IsShow="True">
 				<Options ID="1.8.1-1" Checked="0">增加</Options>
 				<Options ID="1.8.1-2" Checked="0">减少</Options>				
 			</Item>
-			<Item ID="1.8.2" Name="count" LastStr="kg" Level="2" Type="Edit" Input="True" DataType="Number"/>				
+			<Item ID="1.8.2" Name="count" LastStr="kg" Level="2" Type="Edit" Input="True" DataType="Number" IsShow="True"/>				
 		</Group>		
 	</Root>
 	
 	<Root ID="2" Name="Signs" Level="0" ChildCount="6">
 		<Title IsShow="False">体征</Title>
 		<!-- 一般情况 -->
-		<Group ID="2.1" Name="GeneralSituation" Level="1" ChildCount="5" isNormal="True">
-			<Title IsShow="False">一般情况</Title>
-			<Item ID="2.1.1" Name="Pressure" FirstStr="一般情况" Level="2" ChildCount="2">
-				<SubItem ID="2.1.1.1" Name="High" FirstStr="血压" LastStr="/" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" />
-				<SubItem ID="2.1.1.2" Name="Low" LastStr="mmHg" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+		<Group ID="2.1" Name="GeneralSituation" Level="1" ChildCount="5" IsNormal="True" SuffixP="。">
+			<Title IsShow="True" LineBreak="True">一般情况</Title>
+			<Item ID="2.1.1" Name="Pressure" FirstStr="" Level="2" ChildCount="2" IsShow="True" SuffixP="，">
+				<SubItem ID="2.1.1.1" Name="High" FirstStr="血压" LastStr="/" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" Value=""/>
+				<SubItem ID="2.1.1.2" Name="Low" LastStr="mmHg" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" Value=""/>
 			</Item>
 			
-			<Item ID="2.1.2" Name="RhythmOfTheHeart" FirstStr="心率" LastStr="次/分" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" />
-			<Item ID="2.1.3" Name="Temperature" FirstStr="体温" LastStr="℃" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" />
-			<Item ID="2.1.4" Name="Breathing" FirstStr="呼吸" LastStr="次/分" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" />
-			<Item ID="2.1.5" Name="Weight" FirstStr="体重" LastStr="Kg" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+			<Item ID="2.1.2" Name="RhythmOfTheHeart" FirstStr="心率" LastStr="次/分" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
+			<Item ID="2.1.3" Name="Temperature" FirstStr="体温" LastStr="℃" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
+			<Item ID="2.1.4" Name="Breathing" FirstStr="呼吸" LastStr="次/分" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
+			<Item ID="2.1.5" Name="Weight" FirstStr="体重" LastStr="Kg" Level="2" IsShow="True" Type="Edit" Input="True" DataType="Number"/>
 		</Group>
 		
 		<!-- 腹部 -->
-		<Group ID="2.2" Name="abdomen" FirstStr="腹部" Level="1" ChildCount="5" isNormal="True">
-			<Title IsShow="False">腹部</Title>
+		<Group ID="2.2" Name="abdomen" FirstStr="腹部" Level="1" ChildCount="5" IsNormal="True">
+			<Title IsShow="True" LineBreak="True">腹部</Title>
 			<!-- 腹部 -->
-			<Item ID="2.2.1" Name="OverAll" Level="2" ChildCount="7">
-				<SubItem ID="2.2.1.1" Name="Performance" FirstStr="腹部" Level="3" Type="RadioButtonGroup"  IsShow="True">
+			<Item ID="2.2.1" Name="OverAll" Level="2" ChildCount="7" SuffixP="。">
+				<SubItem ID="2.2.1.1" Name="Performance" FirstStr="腹部" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.1.1-1" Checked="0">膨隆</Options>
 					<Options ID="2.2.1.1-2" Checked="0">平坦</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.2" Name="AbdominalVenous" FirstStr="腹壁静脉" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.1.2" Name="AbdominalVenous" FirstStr="腹壁静脉" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.1.2-1" Checked="0">曲张</Options>
 					<Options ID="2.2.1.2-2" Checked="0">无曲张</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.3" Name="AbdominalMuscle" FirstStr="腹肌" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.1.3" Name="AbdominalMuscle" FirstStr="腹肌" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.1.3-1" Checked="0">紧</Options>
 					<Options ID="2.2.1.3-2" Checked="0">软</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.4" Name="SideOfTheAbdomen" LastStr="侧腹部压痛" Level="3" Type="CheckBoxList"  IsShow="True">
-					<Options ID="2.2.1.4-1" Checked="0">左</Options>
-					<Options ID="2.2.1.4-2" Checked="0">右</Options>
+				<SubItem ID="2.2.1.4" Name="SideOfTheAbdomen" LastStr="腹部压痛" Level="3" Type="CheckBoxList" IsShow="True" SuffixP="，">
+					<Options ID="2.2.1.4-1" Checked="0">左侧</Options>
+					<Options ID="2.2.1.4-2" Checked="0">右侧</Options>
+					<Options ID="2.2.1.4-3" Checked="0">两侧</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.5" Name="ReboundTenderness" LastStr="反跳痛" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.1.5" Name="ReboundTenderness" LastStr="反跳痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.1.5-1" Checked="0">伴</Options>
 					<Options ID="2.2.1.5-2" Checked="0">不伴</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.6" Name="Percussion" FirstStr="叩诊呈" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.1.6" Name="Percussion" FirstStr="叩诊呈" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.1.6-1" Checked="0">实音</Options>
 					<Options ID="2.2.1.6-2" Checked="0">浊音</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.1.7" Name="BowelSounds" FirstStr="肠鸣音" LastStr="次/分" Level="3" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.2.1.7" Name="BowelSounds" FirstStr="肠鸣音" LastStr="次/分" Level="3" Type="Edit" Input="True" DataType="Number" IsShow="True"/>
 				
 			</Item>
 			
 			<!-- 左上腹部 -->
-			<Item ID="2.2.2" Name="UpperLeft" Level="2" ChildCount="5">
+			<Item ID="2.2.2" Name="UpperLeft" Level="2" ChildCount="5" SuffixP="。">
 				
-				<SubItem ID="2.2.2.1" Name="Touch" FirstStr="左上腹部" LastStr="触及肿物" Level="3" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.2.2.1-1" Checked="0">不可</Options>
-					<Options ID="2.2.2.1-2" Checked="0">可</Options>
+				<SubItem ID="2.2.2.1" Name="Touch" FirstStr="左上腹部" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.2.2.1-1" Checked="0">不可触及肿物</Options>
+					<Options ID="2.2.2.1-2" Checked="0">可触及肿物</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.2.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3"  IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.2.2.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.2.2.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.2.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.2.3-1" Checked="0">触痛</Options>
 					<Options ID="2.2.2.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.2.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.2.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.2.4-1" Checked="0">紧密</Options>
 					<Options ID="2.2.2.4-2" Checked="0">不紧密</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.2.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.2.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.2.5-1" Checked="0">差</Options>
 					<Options ID="2.2.2.5-2" Checked="0">可</Options>
 				</SubItem>
@@ -265,26 +271,26 @@
 			</Item>
 			
 			<!-- 左下腹部 -->
-			<Item ID="2.2.3" Name="DownLeft" Level="2" ChildCount="5">
+			<Item ID="2.2.3" Name="DownLeft" Level="2" ChildCount="5" SuffixP="。">
 				
-				<SubItem ID="2.2.3.1" Name="Touch" FirstStr="左下腹部" LastStr="触及肿物" Level="3" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.2.3.1-1" Checked="0">不可</Options>
-					<Options ID="2.2.3.1-2" Checked="0">可</Options>
+				<SubItem ID="2.2.3.1" Name="Touch" FirstStr="左下腹部" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.2.3.1-1" Checked="0">不可触及肿物</Options>
+					<Options ID="2.2.3.1-2" Checked="0">可触及肿物</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.3.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3"  IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.2.3.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.2.3.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.3.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.3.3-1" Checked="0">触痛</Options>
 					<Options ID="2.2.3.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.3.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.3.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.3.4-1" Checked="0">紧密</Options>
 					<Options ID="2.2.3.4-2" Checked="0">不紧密</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.3.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.3.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.3.5-1" Checked="0">差</Options>
 					<Options ID="2.2.3.5-2" Checked="0">可</Options>
 				</SubItem>
@@ -292,26 +298,26 @@
 			</Item>
 			
 			<!-- 右上腹部 -->
-			<Item ID="2.2.4" Name="UpperRight" Level="2" ChildCount="5">
+			<Item ID="2.2.4" Name="UpperRight" Level="2" ChildCount="5" SuffixP="。">
 				
-				<SubItem ID="2.2.4.1" Name="Touch" FirstStr="右上腹部" LastStr="触及肿物" Level="3" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.2.4.1-1" Checked="0">不可</Options>
-					<Options ID="2.2.4.1-2" Checked="0">可</Options>
+				<SubItem ID="2.2.4.1" Name="Touch" FirstStr="右上腹部" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.2.4.1-1" Checked="0">不可触及肿物</Options>
+					<Options ID="2.2.4.1-2" Checked="0">可触及肿物</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.4.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3"  IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.2.4.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.2.4.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.4.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.4.3-1" Checked="0">触痛</Options>
 					<Options ID="2.2.4.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.4.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.4.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.4.4-1" Checked="0">紧密</Options>
 					<Options ID="2.2.4.4-2" Checked="0">不紧密</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.4.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.4.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup" IsShow="True" >
 					<Options ID="2.2.4.5-1" Checked="0">差</Options>
 					<Options ID="2.2.4.5-2" Checked="0">可</Options>
 				</SubItem>
@@ -319,26 +325,26 @@
 			</Item>
 			
 			<!-- 右下腹部 -->
-			<Item ID="2.2.5" Name="DownRight" Level="2" ChildCount="5">
+			<Item ID="2.2.5" Name="DownRight" Level="2" ChildCount="5" SuffixP="。">
 				
-				<SubItem ID="2.2.5.1" Name="Touch" FirstStr="右下腹部" LastStr="触及肿物" Level="3" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.2.5.1-1" Checked="0">不可</Options>
-					<Options ID="2.2.5.1-2" Checked="0">可</Options>
+				<SubItem ID="2.2.5.1" Name="Touch" FirstStr="右下腹部" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.2.5.1-1" Checked="0">不可触及肿物</Options>
+					<Options ID="2.2.5.1-2" Checked="0">可触及肿物</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.5.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3"  IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.2.5.2" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.2.5.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.5.3" Name="TouchPaint" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.5.3-1" Checked="0">触痛</Options>
 					<Options ID="2.2.5.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.5.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.5.4" Name="Relation" FirstStr="与周围组织关系" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.2.5.4-1" Checked="0">紧密</Options>
 					<Options ID="2.2.5.4-2" Checked="0">不紧密</Options>
 				</SubItem>
 				
-				<SubItem ID="2.2.5.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup"  IsShow="True">
+				<SubItem ID="2.2.5.5" Name="Activity" FirstStr="活动度" Level="3" Type="RadioButtonGroup" IsShow="True" >
 					<Options ID="2.2.5.5-1" Checked="0">差</Options>
 					<Options ID="2.2.5.5-2" Checked="0">可</Options>
 				</SubItem>
@@ -348,21 +354,21 @@
 		</Group>
 		
 		<!-- 肾区 -->
-		<Group ID="2.3" Name="renal" Level="1" ChildCount="2" isNormal="True">
-			<Title IsShow="False">肾区</Title>
-			<Item ID="2.3.1" Name="LeftSide" Level="2" ChildCount="4">
+		<Group ID="2.3" Name="renal" Level="1" ChildCount="2" IsNormal="True">
+			<Title IsShow="True" LineBreak="True">肾区</Title>
+			<Item ID="2.3.1" Name="LeftSide" Level="2" ChildCount="4" SuffixP="。">
 				
-				<SubItem ID="2.3.1.1" Name="Performance" FirstStr="左侧肾区" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.3.1.1" Name="Performance" FirstStr="左侧肾区" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.3.1.1-1" Checked="0">隆起</Options>
 					<Options ID="2.3.1.1-2" Checked="0">无隆起</Options>
 				</SubItem>
 				
-				<SubItem ID="2.3.1.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.3.1.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.3.1.2-1" Checked="0">伴</Options>
 					<Options ID="2.3.1.2-2" Checked="0">不伴</Options>
 				</SubItem>
 				
-				<SubItem ID="2.3.1.3" Name="TapsPain" LastStr="肾区叩击痛" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.3.1.3" Name="TapsPain" LastStr="肾区叩击痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.3.1.3-1" Checked="0">有</Options>
 					<Options ID="2.3.1.3-2" Checked="0">无</Options>
 				</SubItem>
@@ -374,47 +380,47 @@
 				
 			</Item>
 			
-			<Item ID="2.3.2" Name="RightSide" Level="2" ChildCount="4">
+			<Item ID="2.3.2" Name="RightSide" Level="2" ChildCount="4" SuffixP="。">
 				
-				<SubItem ID="2.3.1.1" Name="Performance" FirstStr="右侧肾区" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.3.1.1-1" Checked="0">隆起</Options>
-					<Options ID="2.3.1.1-2" Checked="0">无隆起</Options>
+				<SubItem ID="2.3.2.1" Name="Performance" FirstStr="右侧肾区" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.3.2.1-1" Checked="0">隆起</Options>
+					<Options ID="2.3.2.1-2" Checked="0">无隆起</Options>
 				</SubItem>
 				
-				<SubItem ID="2.3.1.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.3.1.2-1" Checked="0">伴</Options>
-					<Options ID="2.3.1.2-2" Checked="0">不伴</Options>
+				<SubItem ID="2.3.2.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.3.2.2-1" Checked="0">伴</Options>
+					<Options ID="2.3.2.2-2" Checked="0">不伴</Options>
 				</SubItem>
 				
-				<SubItem ID="2.3.1.3" Name="TapsPain" LastStr="肾区叩击痛" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.3.1.3-1" Checked="0">有</Options>
-					<Options ID="2.3.1.3-2" Checked="0">无</Options>
+				<SubItem ID="2.3.2.3" Name="TapsPain" LastStr="肾区叩击痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.3.2.3-1" Checked="0">有</Options>
+					<Options ID="2.3.2.3-2" Checked="0">无</Options>
 				</SubItem>
 				
-				<SubItem ID="2.3.1.4" Name="PressurePain" LastStr="输尿管点压痛" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.3.1.4-1" Checked="0">上</Options>
-					<Options ID="2.3.1.4-2" Checked="0">中</Options>
+				<SubItem ID="2.3.2.4" Name="PressurePain" LastStr="输尿管点压痛" Level="3" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.3.2.4-1" Checked="0">上</Options>
+					<Options ID="2.3.2.4-2" Checked="0">中</Options>
 				</SubItem>
 			</Item>
 			
 		</Group>
 		
 		<!-- 膀胱区 -->
-		<Group ID="2.4" Name="BladderRegion" Level="1" ChildCount="1" isNormal="True">
-			<Title IsShow="True">膀胱区</Title>
-			<Item ID="2.4.1" Name="BladderRegion" Level="2" ChildCount="3">
+		<Group ID="2.4" Name="BladderRegion" Level="1" ChildCount="1" IsNormal="True">
+			<Title IsShow="True" LineBreak="True">膀胱区</Title>
+			<Item ID="2.4.1" Name="BladderRegion" Level="2" ChildCount="3" SuffixP="。">
 				
-				<SubItem ID="2.4.1.1" Name="Performance" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.4.1.1" Name="Performance" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.4.1.1-1" Checked="0">隆起</Options>
 					<Options ID="2.4.1.1-2" Checked="0">无隆起</Options>
 				</SubItem>
 				
-				<SubItem ID="2.4.1.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.4.1.2" Name="AlongWith" LastStr="压痛" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.4.1.2-1" Checked="0">伴</Options>
 					<Options ID="2.4.1.2-2" Checked="0">不伴</Options>
 				</SubItem>
 				
-				<SubItem ID="2.4.1.3" Name="TapsPain" FirstStr="叩诊呈" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.4.1.3" Name="TapsPain" FirstStr="叩诊呈" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，"> 
 					<Options ID="2.4.1.3-1" Checked="0">实音</Options>
 					<Options ID="2.4.1.3-2" Checked="0">浊音</Options>
 				</SubItem>
@@ -424,43 +430,43 @@
 		</Group>
 		
 		<!-- 前列腺（直肠指诊） -->
-		<Group ID="2.5" Name="ProstateGland" Level="1" ChildCount="1" isNormal="True">
-			<Title IsShow="True">前列腺（直肠指诊）</Title>
-			<Item ID="2.5.1" Name="ProstateGland" Level="2" ChildCount="7">
+		<Group ID="2.5" Name="ProstateGland" Level="1" ChildCount="1" IsNormal="True">
+			<Title IsShow="True" LineBreak="True">前列腺（直肠指诊）</Title>
+			<Item ID="2.5.1" Name="ProstateGland" Level="2" ChildCount="8" SuffixP="。">
 				
-				<SubItem ID="2.5.1.1" Name="Change" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.5.1.1" Name="Change" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.5.1.1-1" Checked="0">增大</Options>
 					<Options ID="2.5.1.1-2" Checked="0">未增大</Options>
 				</SubItem>
 				
-				<SubItem ID="2.5.1.2" Name="Quality" FirstStr="质地" Level="3" Type="CheckBoxList" IsShow="True">
+				<SubItem ID="2.5.1.2" Name="Quality" FirstStr="质地" Level="3" Type="CheckBoxList" IsShow="True" SuffixP="，">
 					<Options ID="2.5.1.2-1" Checked="0">软</Options>
 					<Options ID="2.5.1.2-2" Checked="0">硬</Options>
 					<Options ID="2.5.1.2-2" Checked="0">中等</Options>
 				</SubItem>
 				
-				<SubItem ID="2.5.1.3" Name="CentralSulcus" FirstStr="中央沟" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<SubItem ID="2.5.1.3" Name="CentralSulcus" FirstStr="中央沟" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
 					<Options ID="2.5.1.3-1" Checked="0">变浅</Options>
 					<Options ID="2.5.1.3-2" Checked="0">清晰</Options>
 				</SubItem>
 				
-				<SubItem ID="2.5.1.4" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.5.1.4" Name="Size" FirstStr="大小约" LastStr="cm" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.5.1.5" Name="Touch" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.5.1.5-1" Checked="0">触及</Options>
+				<SubItem ID="2.5.1.5" Name="Touch" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.5.1.5-1" Checked="0">不可触及</Options>
 					<Options ID="2.5.1.5-2" Checked="0">可触及</Options>
 				</SubItem>
 				
-				<SubItem ID="2.5.1.5" Name="Num" LastStr="个结节" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.5.1.6" Name="Num" LastStr="个结节" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 				
-				<SubItem ID="2.5.1.6" Name="Quality" FirstStr="质地" Level="3" Type="CheckBoxList" IsShow="True">
-					<Options ID="2.5.1.6-1" Checked="0">软</Options>
-					<Options ID="2.5.1.6-2" Checked="0">硬</Options>
+				<SubItem ID="2.5.1.7" Name="Quality" FirstStr="质地" Level="3" Type="CheckBoxList" IsShow="True" SuffixP="，">
+					<Options ID="2.5.1.7-1" Checked="0">软</Options>
+					<Options ID="2.5.1.7-2" Checked="0">硬</Options>
 				</SubItem>
 				
-				<SubItem ID="2.5.1.7" Name="Finger" FirstStr="指套" LastStr="血迹" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.5.1.7-1" Checked="0">有</Options>
-					<Options ID="2.5.1.7-2" Checked="0">无</Options>
+				<SubItem ID="2.5.1.8" Name="Finger" FirstStr="指套" Level="3" Type="RadioButtonGroup" IsShow="True" >
+					<Options ID="2.5.1.8-1" Checked="0">有血迹</Options>
+					<Options ID="2.5.1.8-2" Checked="0">无血迹</Options>
 				</SubItem>
 				
 			</Item>
@@ -468,398 +474,423 @@
 		</Group>
 		
 		<!-- 生殖器 -->
-		<Group ID="2.6" Name="Genital" Level="1" ChildCount="3" isNormal="True">
-			<Title IsShow="False">生殖器</Title>
-			<!-- 阴茎 -->
-			<Item ID="2.6.1" Name="Penis" FirstStr="阴茎" Level="2" ChildCount="8"  IsShow="True">
-				<SubItem ID="2.6.1.1" Name="Shape" LastStr="型" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.1-1" Checked="0">成年</Options>
-					<Options ID="2.6.1.1-2" Checked="0">幼年</Options>
-				</SubItem>
+		<Group ID="2.6" Name="Genital" Level="1" ChildCount="8" IsNormal="True" SuffixP="。">
+			<Title IsShow="True" LineBreak="True">阴茎</Title>
+			<Item ID="2.6.1" Name="Shape" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.1-1" Checked="0">成年型</Options>
+				<Options ID="2.6.1-2" Checked="0">幼年型</Options>
+			</Item>
 				
-				<SubItem ID="2.6.1.2" Name="Cover" FirstStr="包皮" LastStr="尿道口" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.2-1" Checked="0">未覆盖</Options>
-					<Options ID="2.6.1.2-2" Checked="0">覆盖</Options>
-				</SubItem>
+			<Item ID="2.6.2" Name="Cover" FirstStr="包皮" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.2-1" Checked="0">未覆盖尿道口</Options>
+				<Options ID="2.6.2-2" Checked="0">覆盖尿道口</Options>
+			</Item>
 				
-				<SubItem ID="2.6.1.3" Name="Edema" FirstStr="龟头粘膜" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.3-1" Checked="0">水肿</Options>
-					<Options ID="2.6.1.3-2" Checked="0">无红肿</Options>
-				</SubItem>
+			<Item ID="2.6.3" Name="Edema" FirstStr="龟头粘膜" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.3-1" Checked="0">水肿</Options>
+				<Options ID="2.6.3-2" Checked="0">无红肿</Options>
+			</Item>
 				
-				<SubItem ID="2.6.1.4" Name="Development" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.4-1" Checked="0">畸形</Options>
-					<Options ID="2.6.1.4-2" Checked="0">正常</Options>
-				</SubItem>
+			<Item ID="2.6.4" Name="Development" FirstStr="发育" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.4-1" Checked="0">畸形</Options>
+				<Options ID="2.6.4-2" Checked="0">正常</Options>
+			</Item>
 				
-				<SubItem ID="2.6.1.5" Name="Edema" FirstStr="尿道外口" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.5-1" Checked="0">红肿</Options>
-					<Options ID="2.6.1.5-2" Checked="0">无红肿</Options>
-				</SubItem>
+			<Item ID="2.6.5" Name="Edema" FirstStr="尿道外口" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.5-1" Checked="0">红肿</Options>
+				<Options ID="2.6.5-2" Checked="0">无红肿</Options>
+			</Item>
 				
-				<SubItem ID="2.6.1.6" Name="AlongWith" FirstStr="伴有" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.6-1" Checked="0">大</Options>
-					<Options ID="2.6.1.6-2" Checked="0">少量</Options>
-				</SubItem>
-				
-				<SubItem ID="2.6.1.7" Name="Color" LastStr="色分泌物" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Text" />
-				
-				<SubItem ID="2.6.1.8" Name="Quality" FirstStr="质" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.1.8-1" Checked="0">粘稠</Options>
-					<Options ID="2.6.1.8-2" Checked="0">稀</Options>
-				</SubItem>
-				
+			<Item ID="2.6.6" Name="AlongWith" FirstStr="伴有" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.6.6-1" Checked="0">大量</Options>
+				<Options ID="2.6.6-2" Checked="0">少量</Options>
 			</Item>
 			
+			<Item ID="2.6.7" Name="Color" LastStr="色分泌物" Level="3" IsShow="True" Type="Edit" Input="True" DataType="Text" SuffixP="，"/>
+				
+			<Item ID="2.6.8" Name="Quality" FirstStr="质" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<Options ID="2.6.8-1" Checked="0">粘稠</Options>
+				<Options ID="2.6.8-2" Checked="0">稀</Options>
+			</Item>			
+		</Group>
+			
+		<Group ID="2.7" Name="Genital" Level="1" ChildCount="3" IsNormal="True" SuffixP="。">
+			<Title IsShow="True" LineBreak="True">阴囊</Title>
 			<!-- 阴囊 -->
-			<Item ID="2.6.2" Name="Scrotum" FirstStr="阴囊>睾丸>左侧阴囊" Level="2" ChildCount="3" IsShow="False">
-				<SubItem ID="2.6.2.1" Name="Swelling" FirstStr="左侧阴囊" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.2.1-1" Checked="0">肿大</Options>
-					<Options ID="2.6.2.1-2" Checked="0">无肿大</Options>
+			<Item ID="2.7.1" Name="Scrotum" FirstStr="睾丸>左侧阴囊" Level="2" ChildCount="3" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.1.1" Name="Swelling" FirstStr="左侧阴囊" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.1.1-1" Checked="0">肿大</Options>
+					<Options ID="2.7.1.1-2" Checked="0">无肿大</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.2.2" Name="Light" FirstStr="透光实验" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.2.2-1" Checked="0">阳性</Options>
-					<Options ID="2.6.2.2-2" Checked="0">阴性</Options>
+				<SubItem ID="2.7.1.2" Name="Light" FirstStr="透光实验" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.1.2-1" Checked="0">阳性</Options>
+					<Options ID="2.7.1.2-2" Checked="0">阴性</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.2.3" Name="Hung" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.2.3-1" Checked="0">下垂</Options>
-					<Options ID="2.6.2.3-2" Checked="0">无下垂</Options>
+				<SubItem ID="2.7.1.3" Name="Hung" Level="5" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.1.3-1" Checked="0">下垂</Options>
+					<Options ID="2.7.1.3-2" Checked="0">无下垂</Options>
 				</SubItem>
 			</Item>
 			<!-- 右侧阴囊 -->
-			<Item ID="2.6.3" Name="Scrotum" FirstStr="阴囊>睾丸>右侧阴囊" Level="2" ChildCount="3" IsShow="False">
-				<SubItem ID="2.6.3.1" Name="Swelling" FirstStr="右侧阴囊" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.3.1-1" Checked="0">肿大</Options>
-					<Options ID="2.6.3.1-2" Checked="0">无肿大</Options>
+			<Item ID="2.7.2" Name="Scrotum" FirstStr="睾丸>右侧阴囊" Level="2" ChildCount="3" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.2.1" Name="Swelling" FirstStr="右侧阴囊" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.2.1-1" Checked="0">肿大</Options>
+					<Options ID="2.7.2.1-2" Checked="0">无肿大</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.3.2" Name="Light" FirstStr="透光实验" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.3.2-1" Checked="0">阳性</Options>
-					<Options ID="2.6.3.2-2" Checked="0">阴性</Options>
+				<SubItem ID="2.7.2.2" Name="Light" FirstStr="透光实验" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.2.2-1" Checked="0">阳性</Options>
+					<Options ID="2.7.2.2-2" Checked="0">阴性</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.3.3" Name="Hung" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.3.3-1" Checked="0">下垂</Options>
-					<Options ID="2.6.3.3-2" Checked="0">无下垂</Options>
+				<SubItem ID="2.7.2.3" Name="Hung" Level="5" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.2.3-1" Checked="0">下垂</Options>
+					<Options ID="2.7.2.3-2" Checked="0">无下垂</Options>
 				</SubItem>
 						
 			</Item>			
 			<!-- 左侧睾丸 -->
-			<Item ID="2.6.4" Name="LeftSide" FirstStr="阴囊>睾丸>左侧睾丸" Level="4" ChildCount="3" IsShow="False">
-				<SubItem ID="2.6.4.1" Name="Touch" FirstStr="左侧睾丸" LastStr="触及" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.4.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.4.1-2" Checked="0">可</Options>
+			<Item ID="2.7.3" Name="LeftSide" FirstStr="睾丸>左侧睾丸" Level="4" ChildCount="3" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.3.1" Name="Touch" FirstStr="左侧睾丸" LastStr="触及" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.3.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.3.1-2" Checked="0">可</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.4.2" Name="Swelling" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.4.2-1" Checked="0">肿大</Options>
-					<Options ID="2.6.4.2-2" Checked="0">无肿大</Options>
+				<SubItem ID="2.7.3.2" Name="Swelling" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.3.2-1" Checked="0">肿大</Options>
+					<Options ID="2.7.3.2-2" Checked="0">无肿大</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.4.3" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.4.3-1" Checked="0">触痛</Options>
-					<Options ID="2.6.4.3-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.3.3" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.3.3-1" Checked="0">触痛</Options>
+					<Options ID="2.7.3.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 						
 			</Item>
 			
 			<!-- 右侧睾丸 -->
-			<Item ID="2.6.5" Name="LeftSide" FirstStr="阴囊>睾丸>右侧睾丸" Level="4" ChildCount="3" IsShow="False">
+			<Item ID="2.7.4" Name="LeftSide" FirstStr="睾丸>右侧睾丸" Level="4" ChildCount="3" IsShow="False" SuffixP="。">
 						
-				<SubItem ID="2.6.5.1" Name="Touch" FirstStr="右侧睾丸" LastStr="触及" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.5.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.5.1-2" Checked="0">可</Options>
+				<SubItem ID="2.7.4.1" Name="Touch" FirstStr="右侧睾丸" LastStr="触及" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.4.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.4.1-2" Checked="0">可</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.5.2" Name="Swelling" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.5.2-1" Checked="0">肿大</Options>
-					<Options ID="2.6.5.2-2" Checked="0">无肿大</Options>
+				<SubItem ID="2.7.4.2" Name="Swelling" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.4.2-1" Checked="0">肿大</Options>
+					<Options ID="2.7.4.2-2" Checked="0">无肿大</Options>
 				</SubItem>
 						
-				<SubItem ID="2.6.5.3" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.5.3-1" Checked="0">触痛</Options>
-					<Options ID="2.6.5.3-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.4.3" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.4.3-1" Checked="0">触痛</Options>
+					<Options ID="2.7.4.3-2" Checked="0">无触痛</Options>
 				</SubItem>
 					
 			</Item>			
 									
 			<!-- 精索 -->
-			<Item ID="2.6.6" Name="SpermaticCord" FirstStr="阴囊>睾丸>精索"  Level="3" ChildCount="2" IsShow="False">
+			<Item ID="2.7.5" Name="SpermaticCord" FirstStr="睾丸>精索" Level="3" ChildCount="2" IsShow="False" SuffixP="。">
 					
-				<SubItem ID="2.6.6.1" Name="Change" FirstStr="左侧精索静脉" LastStr="，呈蚯蚓状" Level="4" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.6.1-1" Checked="0">增粗</Options>
-					<Options ID="2.6.6.1-2" Checked="0">未增粗</Options>
+				<SubItem ID="2.7.5.1" Name="Change" FirstStr="左侧精索静脉" LastStr="，呈蚯蚓状" Level="4" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.5.1-1" Checked="0">增粗</Options>
+					<Options ID="2.7.5.1-2" Checked="0">未增粗</Options>
 				</SubItem>
 					
-				<SubItem ID="2.6.6.2" Name="Change" FirstStr="右侧精索静脉" LastStr="，呈蚯蚓状" Level="4" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.6.2-1" Checked="0">增粗</Options>
-					<Options ID="2.6.6.2-2" Checked="0">未增粗</Options>
+				<SubItem ID="2.7.5.2" Name="Change" FirstStr="右侧精索静脉" LastStr="呈蚯蚓状" Level="4" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.5.2-1" Checked="0">增粗</Options>
+					<Options ID="2.7.5.2-2" Checked="0">未增粗</Options>
 				</SubItem>	
 			</Item>				
 
 			<!--附睾>左侧附睾头 -->
-			<Item ID="2.6.7" Name="LeftSideHead" FirstStr="阴囊>附睾>左侧附睾头" Level="4" ChildCount="6" IsShow="False">
-				<SubItem ID="2.6.7.1" Name="Touch" FirstStr="左侧附睾头" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.7.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.7.1-2" Checked="0">可</Options>
+			<Item ID="2.7.6" Name="LeftSideHead" FirstStr="附睾>左侧附睾头" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.6.1" Name="Touch" FirstStr="左侧附睾头" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.6.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.6.1-2" Checked="0">可</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.7.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.6.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 							
-				<SubItem ID="2.6.7.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.7.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.7.3-2" Checked="0">软</Options>
+				<SubItem ID="2.7.6.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.6.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.6.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.7.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.7.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.7.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.6.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.6.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.6.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.7.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.7.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.7.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.6.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.6.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.6.5-2" Checked="0">不紧密</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.7.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.7.6-1" Checked="0">可</Options>
-					<Options ID="2.6.7.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.6.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.6.6-1" Checked="0">可</Options>
+					<Options ID="2.7.6.6-2" Checked="0">差</Options>
 				</SubItem>
 							
 			</Item>			
 			
 			<!-- 附睾体 -->
-			<Item ID="2.6.8" Name="LeftSideBody" FirstStr="阴囊>附睾>左侧附睾体"  Level="4" ChildCount="6" IsShow="False">
+			<Item ID="2.7.7" Name="LeftSideBody" FirstStr="附睾>左侧附睾体" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
 						
-				<SubItem ID="2.6.8.1" Name="Touch" FirstStr="左侧附睾体" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.8.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.8.1-2" Checked="0">可</Options>
+				<SubItem ID="2.7.7.1" Name="Touch" FirstStr="左侧附睾体" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.7.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.7.1-2" Checked="0">可</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.8.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.7.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 							
-				<SubItem ID="2.6.8.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.8.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.8.3-2" Checked="0">软</Options>
+				<SubItem ID="2.7.7.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.7.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.7.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.8.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.8.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.8.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.7.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.7.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.7.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.8.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.8.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.8.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.7.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.7.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.7.5-2" Checked="0">不紧密</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.8.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.8.6-1" Checked="0">可</Options>
-					<Options ID="2.6.8.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.7.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.7.6-1" Checked="0">可</Options>
+					<Options ID="2.7.7.6-2" Checked="0">差</Options>
 				</SubItem>
 							
 			</Item>				
 
 			<!-- 附睾尾 -->
-			<Item ID="2.6.9" Name="LeftSideTail" FirstStr="阴囊>附睾>左侧附睾尾"  Level="4" ChildCount="6" IsShow="False">
+			<Item ID="2.7.8" Name="LeftSideTail" FirstStr="附睾>左侧附睾尾" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
 							
-				<SubItem ID="2.6.9.1" Name="Touch" FirstStr="左侧附睾尾" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.9.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.9.1-2" Checked="0">可</Options>
+				<SubItem ID="2.7.8.1" Name="Touch" FirstStr="左侧附睾尾" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.8.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.8.1-2" Checked="0">可</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.9.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.8.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 							
-				<SubItem ID="2.6.9.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.9.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.9.3-2" Checked="0">软</Options>
+				<SubItem ID="2.7.8.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.8.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.8.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.9.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.9.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.9.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.8.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.8.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.8.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.9.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.9.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.9.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.8.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.8.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.8.5-2" Checked="0">不紧密</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.9.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.9.6-1" Checked="0">可</Options>
-					<Options ID="2.6.9.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.8.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.8.6-1" Checked="0">可</Options>
+					<Options ID="2.7.8.6-2" Checked="0">差</Options>
 				</SubItem>
 							
 			</Item>
 
 			<!-- 附睾头 -->
-			<Item ID="2.6.10" Name="LeftSideHead" FirstStr="阴囊>附睾>右侧附睾头"  Level="4" ChildCount="6" IsShow="False">
-				<SubItem ID="2.6.10.1" Name="Touch" FirstStr="右侧附睾头" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.10.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.10.1-2" Checked="0">可</Options>
+			<Item ID="2.7.9" Name="LeftSideHead" FirstStr="附睾>右侧附睾头" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.9.1" Name="Touch" FirstStr="右侧附睾头" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.9.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.9.1-2" Checked="0">可</Options>
 				</SubItem>
-				<SubItem ID="2.6.10.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.9.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 						
-				<SubItem ID="2.6.10.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.10.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.10.3-2" Checked="0">软</Options>
+				<SubItem ID="2.7.9.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.9.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.9.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.10.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.10.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.10.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.9.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.9.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.9.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.10.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.10.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.10.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.9.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.9.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.9.5-2" Checked="0">不紧密</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.10.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.10.6-1" Checked="0">可</Options>
-					<Options ID="2.6.10.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.9.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.9.6-1" Checked="0">可</Options>
+					<Options ID="2.7.9.6-2" Checked="0">差</Options>
 				</SubItem>
 			</Item>
 
 			<!-- 附睾体 -->
-			<Item ID="2.6.11" Name="LeftSideBody" FirstStr="阴囊>附睾>右侧附睾体"  Level="4" ChildCount="6" IsShow="False">
-				<SubItem ID="2.6.11.1" Name="Touch" FirstStr="右侧附睾体" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.11.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.11.1-2" Checked="0">可</Options>
+			<Item ID="2.7.10" Name="LeftSideBody" FirstStr="附睾>右侧附睾体" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.10.1" Name="Touch" FirstStr="右侧附睾体" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.10.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.10.1-2" Checked="0">可</Options>
 				</SubItem>
-				<SubItem ID="2.6.11.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.10.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 							
-				<SubItem ID="2.6.11.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.11.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.11.3-2" Checked="0">软</Options>
-				</SubItem>
-							
-				<SubItem ID="2.6.11.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.11.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.11.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.10.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.10.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.10.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.11.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.11.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.11.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.10.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.10.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.10.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.11.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.11.6-1" Checked="0">可</Options>
-					<Options ID="2.6.11.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.10.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.10.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.10.5-2" Checked="0">不紧密</Options>
+				</SubItem>
+							
+				<SubItem ID="2.7.10.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.10.6-1" Checked="0">可</Options>
+					<Options ID="2.7.10.6-2" Checked="0">差</Options>
 				</SubItem>
 			</Item>
 			<!-- 附睾尾 -->
-			<Item ID="2.6.12" Name="LeftSideTail" FirstStr="阴囊>附睾>右侧附睾尾"  Level="4" ChildCount="6" IsShow="False">
-				<SubItem ID="2.6.12.1" Name="Touch" FirstStr="右侧附睾尾" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.12.1-1" Checked="0">不可</Options>
-					<Options ID="2.6.12.1-2" Checked="0">可</Options>
+			<Item ID="2.7.11" Name="LeftSideTail" FirstStr="附睾>右侧附睾尾" Level="4" ChildCount="6" IsShow="False" SuffixP="。">
+				<SubItem ID="2.7.11.1" Name="Touch" FirstStr="右侧附睾尾" LastStr="触及肿物" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.11.1-1" Checked="0">不可</Options>
+					<Options ID="2.7.11.1-2" Checked="0">可</Options>
 				</SubItem>
-				<SubItem ID="2.6.12.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" />
+				<SubItem ID="2.7.11.2" Name="Size" First="大小约" LastStr="cm" Level="5" IsShow="True" Type="Edit" Input="True" DataType="Number" SuffixP="，"/>
 							
-				<SubItem ID="2.6.12.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.12.3-1" Checked="0">硬</Options>
-					<Options ID="2.6.12.3-2" Checked="0">软</Options>
-				</SubItem>
-							
-				<SubItem ID="2.6.12.4" Name="TouchPain" Level="5" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.12.4-1" Checked="0">触痛</Options>
-					<Options ID="2.6.12.4-2" Checked="0">无触痛</Options>
+				<SubItem ID="2.7.11.3" Name="Quality" FirstStr="质地" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.11.3-1" Checked="0">硬</Options>
+					<Options ID="2.7.11.3-2" Checked="0">软</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.12.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.12.5-1" Checked="0">紧密</Options>
-					<Options ID="2.6.12.5-2" Checked="0">不紧密</Options>
+				<SubItem ID="2.7.11.4" Name="TouchPain" Level="5" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.11.4-1" Checked="0">触痛</Options>
+					<Options ID="2.7.11.4-2" Checked="0">无触痛</Options>
 				</SubItem>
 							
-				<SubItem ID="2.6.12.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup"  IsShow="True">
-					<Options ID="2.6.12.6-1" Checked="0">可</Options>
-					<Options ID="2.6.12.6-2" Checked="0">差</Options>
+				<SubItem ID="2.7.11.5" Name="Relation" Level="5" FirstStr="与周围组织关系" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+					<Options ID="2.7.11.5-1" Checked="0">紧密</Options>
+					<Options ID="2.7.11.5-2" Checked="0">不紧密</Options>
 				</SubItem>
-			</Item>
-			
-			<!-- 宫颈 -->
-			<Item ID="2.6.13" Name="Cervical" FirstStr="宫颈"  Level="2" ChildCount="4">
-				<SubItem ID="2.6.13.1" Name="Qualitative" FirstStr="宫颈抬举实验" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.13.1-1" Checked="0">阳性</Options>
-					<Options ID="2.6.13.1-2" Checked="0">阴性</Options>
-				</SubItem>
-				<SubItem ID="2.6.13.2" Name="Feeling" FirstStr="会阴部皮肤感觉" Level="3" Type="RadioButtonGroup" IsShow="True">
-					<Options ID="2.6.13.2-1" Checked="0">障碍</Options>
-					<Options ID="2.6.13.2-2" Checked="0">正常</Options>
+							
+				<SubItem ID="2.7.11.6" Name="Activity" Level="5" FirstStr="活动度" Type="RadioButtonGroup" IsShow="True">
+					<Options ID="2.7.11.6-1" Checked="0">可</Options>
+					<Options ID="2.7.11.6-2" Checked="0">差</Options>
 				</SubItem>
 			</Item>
 		</Group>
+		
+		<Group ID="2.8" Name="Genital" Level="1" ChildCount="2" IsNormal="True" SuffixP="。">			
+			<!-- 宫颈 -->
+			<Title IsShow="True" LineBreak="True">宫颈</Title>
+			<Item ID="2.8.1" Name="Qualitative" FirstStr="宫颈抬举实验" Level="3" Type="RadioButtonGroup" IsShow="True" SuffixP="，">
+				<Options ID="2.8.1-1" Checked="0">阳性</Options>
+				<Options ID="2.8.1-2" Checked="0">阴性</Options>
+			</Item>
+			<Item ID="2.8.2" Name="Feeling" FirstStr="会阴部皮肤感觉" Level="3" Type="RadioButtonGroup" IsShow="True">
+				<Options ID="2.8.2-1" Checked="0">障碍</Options>
+				<Options ID="2.8.2-2" Checked="0">正常</Options>
+			</Item>
+		</Group>	
 	</Root>
-	<Root ID="3" Name="DiagnosisAndTreatment" Level="0" ChildCount="1">
+	
+	<Root ID="3" Name="DiagnosisAndTreatment" Level="0" ChildCount="1" SuffixP="。">
 		<Title IsShow="False">诊疗经过</Title>
-		<Group ID="3.1" Name="Hematologic studies" Level="1" ChildCount="5">
+		<Group ID="3.1" Name="Hematologic studies" Level="1" ChildCount="1">
 			<Title IsShow="False">诊疗经过</Title>
 			<Item ID ="3.1.1" Name="DiagnosisAndTreatment" Level="1" Type="Edit" Input="True" DataType="Text"/>
 		</Group>
 		
 	</Root>
 	
-	<Root ID="4" Name="Past medical history" Level="0" ChildCount="3">
+	<Root ID="4" Name="Past medical history" Level="0" ChildCount="3" SuffixP="。">
 		<Title IsShow="False">既往史</Title>
-		<Group ID="4.1" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
+		<Group ID="4.1" Name="Hematologic studies" Level="1" ChildCount="5" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">患病</Title>
 			<!-- 患病 -->
-			<Item ID ="4.1.1" Name="ill" Level="1" Type="CheckBoxList" IsShow="False">
+			<Item ID ="4.1.1" Name="ill" Level="1" Type="CheckBoxList" IsShow="False" Seperator="，">
 				<Options ID="4.1.1-1" Checked="0">高血压</Options>
 				<Options ID="4.1.1-2" Checked="0">糖尿病</Options>		
 				<Options ID="4.1.1-3" Checked="0">脑梗塞</Options>		
 				<Options ID="4.1.1-4" Checked="0">冠心病</Options>		
 				<Options ID="4.1.1-5" Checked="0">感染性疾病</Options>		
 			</Item>
+			<Item ID ="4.1.2" Name="Other" FirstStr="其它" Level="1" IsShow="False" Type="Edit" Input="True" DataType="Text" Value=""/>
 		</Group>
 		<!-- 特殊用药史 -->
-		<Group ID="4.2" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
+		<Group ID="4.2" Name="Hematologic studies" Level="1" ChildCount="5" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">特殊用药史</Title>
-			<Item ID ="4.2.1" Name="Special medical history" Level="1" Type="Edit" Input="True" DataType="Text"/>
+			<Item ID ="4.2.1" Name="Special medical history" FirstStr="服用" Level="1" IsShow="True" Type="Edit" Input="True" DataType="Text" Value=""/>
 		</Group>
 		<!-- 手术史 -->
-		<Group ID="4.3" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
+		<Group ID="4.3" Name="Hematologic studies" Level="1" ChildCount="5" IsNormal="True" SuffixP="；">
 			<Title IsShow="False">手术史</Title>
-			<Item ID ="4.3.1" Name="The history of surgery" Level="1" Type="Edit" Input="True"  DataType="Text"/>
+			<Item ID ="4.3.1" Name="The history of surgery" FirstStr="手术" Level="1" Type="Edit" Input="True" DataType="Text" Value=""/>
 		</Group>
+		
 	</Root>
 	
 	<Root ID="5" Name="A family history of" Level="0" ChildCount="2">
 		<Title IsShow="False">家族史</Title>
-		<Group ID="5.1" Name="Hematologic studies" Level="1" ChildCount="5" isNormal="True">
+		<Group ID="5.1" Name="Hematologic studies" Level="1" ChildCount="5" IsNormal="True" SuffixP="。">
 			<Title IsShow="False">家族史</Title>
-			<Item ID ="5.1.1" Name="Disease" Level="1" Type="CheckBoxList" >
+			<Item ID ="5.1.1" Name="Disease" Level="1" Type="CheckBoxList" Seperator="，" SuffixP="，">
 				<Options ID="5.1.1-1" Checked="0">多囊肾</Options>
-				<Options ID="5.1.1-2" Checked="0">泌尿系结石</Options>			
+				<Options ID="5.1.1-2" Checked="0">泌尿系结石</Options>	
+				<Options ID="5.1.1-3" Checked="0">泌尿系肿瘤</Options>			
 			</Item>
-			<Item ID ="5.1.2" Name="Other" FirstStr="其它" Level="1" IsShow="False" Type="Edit" Input="True" DataType="Text"/>
+			<Item ID ="5.1.2" Name="Other" FirstStr="其它" Level="1" IsShow="False" Type="Edit" Input="True" DataType="Text" Value=""/>
 		</Group>
 	</Root>
 	
 	<Root ID="6" Name="LIS" Level="0" ChildCount="4">
 		<Title IsShow="False">检验</Title>
 		<!-- 血液学检验 -->
-		<Group ID="6.1" Name="Hematologic studies" Level="1" ChildCount="0">
-			<Title IsShow="True">血液学检查</Title>
+		<Group ID="6.1" Name="Routine blood" Level="1" ChildCount="0">
+			<Title IsShow="True">血常规</Title>
 		</Group>
-		
-		<!-- 尿液检查 -->
-		<Group ID="6.2" Name="Urinalysis" Level="1" ChildCount="0" >
-			<Title IsShow="True">尿液检查</Title>
+		<Group ID="6.2" Name="Blood biochemical" Level="1" ChildCount="0">
+			<Title IsShow="True">血生化</Title>
 		</Group>
-		
-		<!-- 前列腺液 -->
-		<Group ID="6.3" Name="Prostate fluid" Level="1" ChildCount="0" IsShow="True">
+		<Group ID="6.3" Name="Tumor mark" Level="1" ChildCount="0">
+			<Title IsShow="True">瘤标</Title>
+		</Group>
+		<Group ID="6.4" Name="Interferon release experiment" Level="1" ChildCount="0">
+			<Title IsShow="True">干扰素释放实验</Title>
+		</Group>
+		<Group ID="6.5" Name="Parathyroid hormone" Level="1" ChildCount="0">
+			<Title IsShow="True">甲状旁腺激素</Title>
+		</Group>
+		<Group ID="6.6" Name="Routine urine" Level="1" ChildCount="0">
+			<Title IsShow="True">尿常规</Title>
+		</Group>
+		<Group ID="6.7" Name="Urine culture" Level="1" ChildCount="0">
+			<Title IsShow="True">尿培养</Title>
+		</Group>
+		<Group ID="6.8" Name="Urine red blood cell morphology" Level="1" ChildCount="0" >
+			<Title IsShow="True">尿红细胞形态</Title>
+		</Group>
+		<Group ID="6.9" Name="Urine exfoliated cells" Level="1" ChildCount="0" >
+			<Title IsShow="True">尿脱落细胞</Title>
+		</Group>
+		<Group ID="6.10" Name="Urinary sediment" Level="1" ChildCount="0" >
+			<Title IsShow="True">尿沉渣</Title>
+		</Group>
+		<Group ID="6.11" Name="Prostate fluid" Level="1" ChildCount="0" IsShow="True">
 			<Title IsShow="True">前列腺液</Title>
 		</Group>	
-		
-		<!-- 精液 -->
-		<Group ID="6.4" Name="Semen" Level="1" ChildCount="0" IsShow="True">
+		<Group ID="6.12" Name="Semen" Level="1" ChildCount="0" IsShow="True">
 			<Title IsShow="True">精液</Title>
-		</Group>	
+		</Group>
+		<Group ID="6.13" Name="Other" Level="1" ChildCount="0">
+			<Title IsShow="True">其他</Title>
+		</Group>			
 	</Root>
 
 	<Root ID="7" Name="Check" Level="0" ChildCount="9">
@@ -917,6 +948,10 @@
 			<Title IsShow="True">病理检查</Title>
 		</Group>
 		
+		<!-- 病理检查 -->
+		<Group ID="7.13" Name="Other" Level="1" ChildCount="0">
+			<Title IsShow="True">其他</Title>
+		</Group>
 	</Root>
 
 </MedicalRecord>

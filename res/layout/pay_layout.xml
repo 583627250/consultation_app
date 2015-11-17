@@ -1,70 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:background="@color/consultation_color_E8D8D8"
-       android:orientation="vertical" >
-       
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EBEBEB"
+        android:orientation="vertical" >
+
         <include
-	        android:id="@+id/consultation_header"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        layout="@layout/header" />
-    
-	          <LinearLayout
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="2dp"
-	            android:padding="8dp"
-	            android:background="@color/consultation_color_white"
-	            android:layout_gravity="center_vertical"
-	            android:orientation="horizontal" >
-	            
-	            <TextView
-	                android:id="@+id/pay_amount_text"
-	                android:layout_width="match_parent"
-	                android:layout_height="match_parent"
-	                android:layout_weight="3"
-	                android:gravity="center_vertical"
-	                android:padding="5dp"
-	                android:singleLine="true"
-	                android:textColor="@color/consultation_color_black"
-	                android:text="充值金额" />
-	
-	            <EditText
-	                android:id="@+id/pay_amount_input_edit"
-	                android:layout_width="match_parent"
-	                android:layout_height="match_parent"
-	                android:layout_weight="1"
-	                android:background="@color/consultation_color_white"
-	                android:gravity="center_vertical"
-	                android:hint="请输入支付的金额"
-	                android:singleLine="true"
-	                android:inputType="number"
-	                android:textColor="@color/consultation_color_black"
-	                android:padding="5dp" />
-        </LinearLayout>
-        
+            android:id="@+id/consultation_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/header" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/pay_select_grade_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:text="请选择会员等级"
+                        android:textColor="#414141" />
+
+                    <TextView
+                        android:id="@+id/pay_select_grade_tip_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="(会员名称/会费)"
+                        android:textColor="#FF0000" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <ListView
+                        android:id="@+id/pay_select_grade_listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="#DADADA"
+                        android:dividerHeight="0.1dp" >
+                    </ListView>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/pay_select_type_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="请选择支付方式"
+                    android:textColor="#414141" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/pay_select_pay_alipay_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="支付宝支付"
+                            android:textColor="#353535" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="4"
+                        android:gravity="right"
+                        android:orientation="vertical" >
+
+                        <CheckBox
+                            android:id="@+id/pay_select_pay_alipay_check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawablePadding="5dp"
+                            android:drawableRight="@drawable/radio_btn_bg"
+                            android:gravity="center_vertical"
+                            android:padding="10dp" >
+                        </CheckBox>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="#DADADA" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/consultation_color_white"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/pay_select_pay_weixinpay_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="微信支付"
+                            android:textColor="#353535" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="4"
+                        android:gravity="right"
+                        android:orientation="vertical" >
+
+                        <CheckBox
+                            android:id="@+id/pay_select_pay_weixinpay_check"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawablePadding="5dp"
+                            android:drawableRight="@drawable/radio_btn_bg"
+                            android:gravity="center_vertical"
+                            android:padding="10dp" >
+                        </CheckBox>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" >
+            android:background="@color/consultation_color_F4F4F4"
+            android:orientation="vertical" >
 
             <Button
-                android:id="@+id/pay_btn_commint"
+                android:id="@+id/pay_btn_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="确    定"
+                android:background="@drawable/create_case_submit_selector"
+                android:padding="10dp"
+                android:text="支付"
                 android:textColor="@color/consultation_color_white" />
         </LinearLayout>
-        
-     </LinearLayout>
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

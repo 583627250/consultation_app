@@ -235,6 +235,7 @@ public class FeedBackActivity extends Activity implements OnLoadListener {
                             JSONObject responses=new JSONObject(arg0);
                             if(responses.getInt("rtnCode") == 1) {
                                 Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
+                                contentEdit.setText("");
                                 initDate();
                             } else if(responses.getInt("rtnCode") == 10004) {
                                 Toast.makeText(FeedBackActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();

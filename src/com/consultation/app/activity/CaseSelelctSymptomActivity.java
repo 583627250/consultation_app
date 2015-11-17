@@ -35,6 +35,8 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
     private List<SymptomTo> mainList=new ArrayList<SymptomTo>();
 
     private List<SymptomTo> accompanyList=new ArrayList<SymptomTo>();
+    
+    private List<SymptomTo> accompanyTempList=new ArrayList<SymptomTo>();
 
     private TextView title_text, back_text;
 
@@ -74,7 +76,6 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
     private void initData() {
         if(null != content && !"".equals(content) && !"null".equals(content)) {
             XMLCaseDatas(content);
-            // CommonUtil.appendToFile(content, new File(Environment.getExternalStorageDirectory() + File.separator + "text.txt"));
             titleModels=caseList.get(0).getTitleModels();
             if(ClientUtil.getCaseParams().size() != 0 && ClientUtil.getCaseParams().getValue(page + "") != null
                 && !"".equals(ClientUtil.getCaseParams().getValue(page + ""))) {
@@ -104,8 +105,10 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
                 symptomTo.setCheckAccompany(false);
             }
             symptomTo.setName(titleModels.get(i).getTitle());
+            symptomTo.setId(i);
             mainList.add(symptomTo);
             accompanyList.add(symptomTo);
+            accompanyTempList.add(symptomTo);
         }
     }
 
@@ -155,10 +158,6 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
                     Toast.makeText(CaseSelelctSymptomActivity.this, "请选择主要症状", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(secondCheck.size() == 0) {
-                    Toast.makeText(CaseSelelctSymptomActivity.this, "请选择伴随症状", Toast.LENGTH_LONG).show();
-                    return;
-                }
                 Intent intent=new Intent(CaseSelelctSymptomActivity.this, SymptomActivity.class);
                 intent.putExtra("page", 0);
                 intent.putExtra("titleText", "现病史");
@@ -177,7 +176,11 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
                         buffer.append(",").append(secondCheck.get(i));
                     }
                 }
-                intent.putExtra("secondCheck", buffer.toString());
+                if(secondCheck.size() == 0){
+                    intent.putExtra("secondCheck", "");
+                }else{
+                    intent.putExtra("secondCheck", buffer.toString());
+                }
                 startActivityForResult(intent, 0);
             }
         });
@@ -187,14 +190,12 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(data != null) {
             if(resultCode == Activity.RESULT_OK) {
-                if(data.getExtras().getBoolean("isAdd")) {
-                    Intent intent=new Intent();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isAdd", data.getExtras().getBoolean("isAdd"));
-                    intent.putExtras(bundle);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
-                }
+                Intent intent=new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putBoolean("isAdd", data.getExtras().getBoolean("isAdd"));
+                intent.putExtras(bundle);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -236,7 +237,7 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
             if(model == 1) {
                 return mainList.size();
             }
-            return accompanyList.size();
+            return accompanyTempList.size();
         }
 
         @Override
@@ -244,7 +245,7 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
             if(model == 1) {
                 return mainList.get(location);
             }
-            return accompanyList.get(location);
+            return accompanyTempList.get(location);
         }
 
         @Override
@@ -280,18 +281,18 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
                 });
             } else {
                 mainHolder.title.setTextSize(18);
-                mainHolder.title.setText(accompanyList.get(position).getName());
+                mainHolder.title.setText(accompanyTempList.get(position).getName());
                 mainHolder.isCheck.setTextSize(18);
-                mainHolder.isCheck.setChecked(mainList.get(position).isCheckAccompany());
+                mainHolder.isCheck.setChecked(accompanyTempList.get(position).isCheckAccompany());
                 mainHolder.isCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(isChecked) {
-                            secondCheck.add(position);
+                            secondCheck.add(accompanyTempList.get(position).getId());
                         } else {
-                            if(secondCheck.contains(position)) {
-                                secondCheck.remove(Integer.valueOf(position));
+                            if(secondCheck.contains(accompanyTempList.get(position).getId())) {
+                                secondCheck.remove(Integer.valueOf(accompanyTempList.get(position).getId()));
                             }
                         }
                     }
@@ -302,29 +303,20 @@ public class CaseSelelctSymptomActivity extends CaseBaseActivity {
     }
 
     private void mainIsCheck(int index) {
+        accompanyTempList.clear();
+        for(int i=0; i < accompanyList.size(); i++) {
+            accompanyTempList.add(accompanyList.get(i));
+        }
         for(int i=0; i < mainList.size(); i++) {
-            SymptomTo symptomTo=mainList.get(i);
             if(i != index) {
-                if(symptomTo.isCheckAccompany()) {
-                    mainList.remove(symptomTo);
-                    SymptomTo tempSymptomTo=new SymptomTo();
-                    tempSymptomTo.setName(symptomTo.getName());
-                    tempSymptomTo.setCheckMain(false);
-                    tempSymptomTo.setCheckAccompany(symptomTo.isCheckAccompany());
-                    mainList.add(i, tempSymptomTo);
-                }
+                mainList.get(i).setCheckMain(false);
             } else {
-                if(!symptomTo.isCheckMain()) {
-                    mainList.remove(symptomTo);
-                    SymptomTo tempSymptomTo=new SymptomTo();
-                    tempSymptomTo.setName(symptomTo.getName());
-                    tempSymptomTo.setCheckMain(true);
-                    tempSymptomTo.setCheckAccompany(symptomTo.isCheckAccompany());
-                    mainList.add(i, tempSymptomTo);
-                }
+                mainList.get(i).setCheckMain(true);
+                accompanyTempList.remove(i);
                 firstCheck=index;
             }
         }
         myMainAdapter.notifyDataSetChanged();
+        myAccompanyAdapter.notifyDataSetChanged();
     }
 }

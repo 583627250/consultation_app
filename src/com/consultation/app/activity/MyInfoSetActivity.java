@@ -1,9 +1,11 @@
 package com.consultation.app.activity;
 
 import com.consultation.app.R;
+import com.consultation.app.util.CommonUtil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +19,7 @@ public class MyInfoSetActivity extends Activity implements OnClickListener{
 
     private LinearLayout back_layout;
 
-    private TextView set_text, update_text, about_text;
+    private TextView set_text, update_text, about_text, clear_text;
 
     private LinearLayout set_layout, update_layout, about_layout;
 
@@ -52,6 +54,10 @@ public class MyInfoSetActivity extends Activity implements OnClickListener{
         
         set_text=(TextView)findViewById(R.id.mine_info_set_text);
         set_text.setTextSize(18);
+        
+        clear_text=(TextView)findViewById(R.id.mine_info_set_clear_text);
+        clear_text.setTextSize(18);
+        clear_text.setText("缓存:"+CommonUtil.getFileSize());
 
         update_text=(TextView)findViewById(R.id.mine_info_update_text);
         update_text.setTextSize(18);
@@ -73,13 +79,16 @@ public class MyInfoSetActivity extends Activity implements OnClickListener{
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.mine_my_set_layout:
-                
+                CommonUtil.clearFile(MyInfoSetActivity.this);
+                clear_text.setText("缓存:0.0KB");
                 break;
             case R.id.mine_my_update_layout:
-                
+                Intent updateIntent=new Intent(MyInfoSetActivity.this, UpdateActivity.class);
+                startActivity(updateIntent);
                 break;
             case R.id.mine_my_about_layout:
-                
+                Intent intent=new Intent(MyInfoSetActivity.this, AboutActivity.class);
+                startActivity(intent);
                 break;
 
             default:

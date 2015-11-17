@@ -47,6 +47,7 @@ public class DialogActivity extends Activity {
     
     private SharePreferencesEditor editor;
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

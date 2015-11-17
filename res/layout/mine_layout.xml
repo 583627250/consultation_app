@@ -35,8 +35,8 @@
 
                     <ImageView
                         android:id="@+id/mine_info_imageView"
-                        android:layout_width="70dip"
-                        android:layout_height="70dip"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/photo_patient" />
 
@@ -224,15 +224,15 @@
                     android:padding="15dp" >
 
                     <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/yhk_icon" />
+                            android:src="@drawable/iconfont_zhanghuchongzhi" />
                     </LinearLayout>
 
                     <TextView
@@ -287,15 +287,15 @@
                     android:padding="15dp" >
 
                     <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/yhk_icon" />
+                            android:src="@drawable/iconfont_jiazu" />
                     </LinearLayout>
 
                     <TextView
@@ -304,7 +304,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="加入医生团队"
+                        android:text="医师认证"
                         android:textColor="#414141" />
 
                     <LinearLayout
@@ -339,15 +339,15 @@
                     android:padding="15dp" >
 
                     <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/gx2_icon" />
+                            android:src="@drawable/iconfont_fenxiang" />
                     </LinearLayout>
 
                     <TextView
@@ -391,15 +391,15 @@
                     android:padding="15dp" >
 
                     <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/fk_icon" />
+                            android:src="@drawable/iconfont_shengjiweijingxiaoshang" />
                     </LinearLayout>
 
                     <TextView
@@ -495,15 +495,15 @@
                     android:padding="15dp" >
 
                     <LinearLayout
-                        android:layout_width="30dp"
-                        android:layout_height="match_parent" >
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/bz_icon" />
+                            android:src="@drawable/iconfont_iconfontbangzhu" />
                     </LinearLayout>
 
                     <TextView

@@ -43,7 +43,10 @@ import com.consultation.app.listener.ConsultationCallbackHandler;
 import com.consultation.app.service.OpenApiService;
 import com.consultation.app.util.CaseCountBroadcastReceiver;
 import com.consultation.app.util.ClientUtil;
+import com.consultation.app.util.MyBroadcastReceiver;
 import com.consultation.app.util.SharePreferencesEditor;
+import com.umeng.socialize.bean.SocializeConfig;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 @SuppressLint("HandlerLeak")
 public class HomeActivity extends FragmentActivity implements OnClickListener {
@@ -119,13 +122,10 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.home_layout);
         if(savedInstanceState != null){
-            System.out.println(savedInstanceState.getString("token"));
             ClientUtil.setToken(savedInstanceState.getString("token"));
         }
         editor=new SharePreferencesEditor(HomeActivity.this);
         mQueue=Volley.newRequestQueue(this);
-        System.out.println("home");
-        System.out.println(ClientUtil.getToken());
         initData();
         initViews(); // 初始化界面，并设置四个tab的监听
         fragmentManager=getSupportFragmentManager();
@@ -142,6 +142,12 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
         outState.putString("token", ClientUtil.getToken());
         outState.putInt("currentIndex", currentIndex);
         super.onSaveInstanceState(outState);
+    }
+    
+    @Override
+    protected void onResume() {
+        setTabSelection(currentIndex);
+        super.onResume();
     }
 
     private void initData() {
@@ -290,6 +296,10 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
                     finish();
                 }
             }
+        }
+        UMSsoHandler ssoHandler=SocializeConfig.getSocializeConfig().getSsoHandler(requestCode);
+        if(ssoHandler != null) {
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -502,7 +512,7 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
             public void onSuccess(String rspContent, int statusCode) {
                 if(rspContent.equals("switch")){
                     initData();
-                }else{
+                }else if(rspContent.equals("refresh") && currentIndex==0){
                     //刷新
                     Map<String, String> parmas=new HashMap<String, String>();
                     parmas.put("accessToken", ClientUtil.getToken());
@@ -536,8 +546,25 @@ public class HomeActivity extends FragmentActivity implements OnClickListener {
             public void onFailure(ConsultationCallbackException exp) {
             }
         });
-    }
+        
+        MyBroadcastReceiver.setHander(new ConsultationCallbackHandler() {
 
+            @Override
+            public void onSuccess(String rspContent, int statusCode) {
+                if(statusCode == 0){
+                    setTabSelection(2);
+                }else if(statusCode == 1){
+                    setTabSelection(0);
+                }
+            }
+
+            @Override
+            public void onFailure(ConsultationCallbackException exp) {
+
+            }
+        });
+    }
+    
     /*
      * 点击四个tab时的监听
      * @param v 四个控件的view

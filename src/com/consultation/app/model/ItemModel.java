@@ -4,45 +4,80 @@ import java.util.List;
 
 public class ItemModel {
 
-    private String id = "0";
+    private String id="0";
 
-    private String name = "";
+    private String name="";
 
-    private String firstStr = "";
+    private String firstStr="";
 
-    private String lastStr = "";
+    private String lastStr="";
 
-    private String level = "";
+    private String level="";
 
-    private String type = "";
+    private String type="";
 
-    private String input = "";
-    
-    private String childCount = "0";
-    
-    private String value = "";
-    
-    private String dataType = "";
+    private String input="";
 
-    private String isShow = "True";
-    
-    
+    private String childCount="0";
+
+    private String value="";
+
+    private String dataType="";
+
+    private String isShow="True";
+
+    private String prefixP="";
+
+    private String suffixP="";
+
+    private String seperator="";
+
+    private String noChecked="";
+
+    public String getPrefixP() {
+        return prefixP;
+    }
+
+    public void setPrefixP(String prefixP) {
+        this.prefixP=prefixP;
+    }
+
+    public String getSuffixP() {
+        return suffixP;
+    }
+
+    public void setSuffixP(String suffixP) {
+        this.suffixP=suffixP;
+    }
+
+    public String getSeperator() {
+        return seperator;
+    }
+
+    public void setSeperator(String seperator) {
+        this.seperator=seperator;
+    }
+
+    public String getNoChecked() {
+        return noChecked;
+    }
+
+    public void setNoChecked(String noChecked) {
+        this.noChecked=noChecked;
+    }
+
     public String getIsShow() {
         return isShow;
     }
 
-
-    
     public void setIsShow(String isShow) {
         this.isShow=isShow;
     }
-
 
     public String getDataType() {
         return dataType;
     }
 
-    
     public void setDataType(String dataType) {
         this.dataType=dataType;
     }
@@ -54,17 +89,15 @@ public class ItemModel {
     public String getChildCount() {
         return childCount;
     }
-    
+
     public void setChildCount(String childCount) {
         this.childCount=childCount;
     }
-
 
     public String getValue() {
         return value;
     }
 
-    
     public void setValue(String value) {
         this.value=value;
     }

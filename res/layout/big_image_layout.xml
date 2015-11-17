@@ -11,8 +11,7 @@
         android:id="@+id/big_image_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@anim/image_loading_anim" >
+        android:layout_gravity="center" >
     </ImageView>
 
     <com.consultation.app.view.ZoomImageView

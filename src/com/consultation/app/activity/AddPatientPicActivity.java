@@ -3,7 +3,6 @@ package com.consultation.app.activity;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.consultation.app.R;
+import com.consultation.app.util.GetPathFromUri4kitkat;
 
 public class AddPatientPicActivity extends Activity implements OnClickListener {
 
@@ -138,17 +138,17 @@ public class AddPatientPicActivity extends Activity implements OnClickListener {
                 return;
             }
         }
-        String[] pojo={MediaStore.Images.Media.DATA};
-        Cursor cursor=managedQuery(photoUri, pojo, null, null, null);
-        String picPath=null;
-        if(cursor != null) {
-            int columnIndex=cursor.getColumnIndexOrThrow(pojo[0]);
-            cursor.moveToFirst();
-            picPath=cursor.getString(columnIndex);
-            cursor.close();
-        } else {
-            picPath=photoUri.toString().replace("file://", "");
-        }
+//        String[] pojo={MediaStore.Images.Media.DATA};
+//        Cursor cursor=managedQuery(photoUri, pojo, null, null, null);
+        String picPath=GetPathFromUri4kitkat.getPath(this, photoUri);
+//        if(cursor != null) {
+//            int columnIndex=cursor.getColumnIndexOrThrow(pojo[0]);
+//            cursor.moveToFirst();
+//            picPath=cursor.getString(columnIndex);
+//            cursor.close();
+//        } else {
+//            picPath=photoUri.toString().replace("file://", "");
+//        }
         if(picPath != null
             && (picPath.endsWith(".png") || picPath.endsWith(".PNG") || picPath.endsWith(".jpg") || picPath.endsWith(".JPG"))) {
             Intent intent=new Intent();

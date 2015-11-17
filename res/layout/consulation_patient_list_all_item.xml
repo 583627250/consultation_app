@@ -75,7 +75,7 @@
                     android:paddingTop="3dp"
                     android:textColor="#FFAF2C" />
 
-                <Button
+                <TextView
                     android:id="@+id/consulation_patient_list_all_item_count"
                     android:layout_width="10dp"
                     android:layout_height="10dp"

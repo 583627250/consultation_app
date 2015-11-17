@@ -64,6 +64,9 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.primary_new_layout);
+        if(savedInstanceState != null) {
+            ClientUtil.setToken(savedInstanceState.getString("token"));
+        }
         mQueue=Volley.newRequestQueue(CreateCaseActivity.this);
         editor=new SharePreferencesEditor(CreateCaseActivity.this);
         patientId=getIntent().getStringExtra("patientId");
@@ -80,6 +83,12 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
         imageString=getIntent().getStringExtra("imageString");
         initData();
         initView();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("token", ClientUtil.getToken());
+        super.onSaveInstanceState(outState);
     }
 
     private void initData() {
@@ -256,10 +265,10 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                     Toast.makeText(CreateCaseActivity.this, "请输入20个字以内的主诉", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(hope_edit.getText().toString().length()<10 || hope_edit.getText().toString().length()>100){
-                    Toast.makeText(CreateCaseActivity.this, "请输入10~100个字以内的问题与需求", Toast.LENGTH_LONG).show();
-                    return;
-                }
+//                if(hope_edit.getText().toString().length()<10 || hope_edit.getText().toString().length()>100){
+//                    Toast.makeText(CreateCaseActivity.this, "请输入10~100个字以内的问题与需求", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
                 Map<String, String> parmas=new HashMap<String, String>();
                 parmas.put("patient_userid", patientId);
                 parmas.put("case_templ_id", departmentId);
@@ -297,6 +306,11 @@ public class CreateCaseActivity extends Activity implements OnClickListener {
                                 intent.putExtra("isUpdate", isUpdate);
                                 intent.putExtra("imageString", imageString);
                                 intent.putExtra("content", content);
+                                if(radioButton1.isChecked()) {
+                                    intent.putExtra("isOpen", 1);
+                                }else if(radioButton3.isChecked()) {
+                                    intent.putExtra("isOpen", 0);
+                                }
                                 startActivity(intent);
                             } else if(responses.getInt("rtnCode") == 10004){
                                 Toast.makeText(CreateCaseActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();

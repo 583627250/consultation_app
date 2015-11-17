@@ -39,7 +39,8 @@ public class RightFilterView extends RelativeLayout implements ViewBaseAction {
 		init(context);
 	}
 
-	private void init(Context context) {
+	@SuppressWarnings("deprecation")
+    private void init(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.choose_view_distance, this, true);
 		setBackgroundDrawable(getResources().getDrawable(R.drawable.choosearea_bg_right));
@@ -70,13 +71,11 @@ public class RightFilterView extends RelativeLayout implements ViewBaseAction {
 
 	@Override
 	public void hideMenu() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void showMenu() {
-		// TODO Auto-generated method stub
 
 	}
 }

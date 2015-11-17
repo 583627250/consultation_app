@@ -319,6 +319,8 @@ public class ConsultationDiscussionFragment extends Fragment implements OnLoadLi
                             if(isShow == 1) {
                                 CommonUtil.closeLodingDialog();
                             }
+                            myAdapter.notifyDataSetChanged();
+                            patientListView.setSelection(0);
                         } else if(responses.getInt("rtnCode") == 10004) {
                             if(isShow == 1) {
                                 CommonUtil.closeLodingDialog();

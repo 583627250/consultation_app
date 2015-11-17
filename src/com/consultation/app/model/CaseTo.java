@@ -12,6 +12,8 @@ public class CaseTo {
 
     private ArrayList<DiscussionTo> discussionTos;
 
+    private DoctorCommentsTo commentsTo;
+
     private String handleReason;
 
     public PatientCaseTo getPatientCase() {
@@ -36,6 +38,14 @@ public class CaseTo {
 
     public void setImageFilesTos(ArrayList<ImageFilesTo> imageFilesTos) {
         this.imageFilesTos=imageFilesTos;
+    }
+
+    public DoctorCommentsTo getCommentsTo() {
+        return commentsTo;
+    }
+
+    public void setCommentsTo(DoctorCommentsTo commentsTo) {
+        this.commentsTo=commentsTo;
     }
 
     public ArrayList<DiscussionTo> getDiscussionTos() {

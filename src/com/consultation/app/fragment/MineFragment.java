@@ -12,14 +12,17 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,12 +42,12 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.Volley;
 import com.consultation.app.R;
 import com.consultation.app.activity.FeedBackActivity;
+import com.consultation.app.activity.HelpActivity;
 import com.consultation.app.activity.HomeActivity;
 import com.consultation.app.activity.LoginActivity;
 import com.consultation.app.activity.MyAccountActivity;
 import com.consultation.app.activity.MyInfoActivity;
 import com.consultation.app.activity.MyInfoSetActivity;
-import com.consultation.app.activity.SelectHeadPicActivity;
 import com.consultation.app.activity.UpdateMyInfoActivity;
 import com.consultation.app.exception.ConsultationCallbackException;
 import com.consultation.app.listener.ButtonListener;
@@ -55,6 +58,22 @@ import com.consultation.app.util.BitmapCache;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
+import com.consultation.app.view.SelectPicDialog;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.media.QQShareContent;
+import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.SinaShareContent;
+import com.umeng.socialize.media.TencentWbShareContent;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.TencentWBSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
+import com.umeng.socialize.weixin.media.CircleShareContent;
+import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 @SuppressLint("HandlerLeak")
 public class MineFragment extends Fragment implements OnClickListener {
@@ -86,15 +105,25 @@ public class MineFragment extends Fragment implements OnClickListener {
 
     private static Activity mainActivity;
 
+    private Uri photoUri;
+    
+    private final UMSocialService mController=UMServiceFactory.getUMSocialService("com.umeng.share");
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mineLayout=inflater.inflate(R.layout.mine_layout, container, false);
         editor=new SharePreferencesEditor(mineLayout.getContext());
         mQueue=Volley.newRequestQueue(mineLayout.getContext());
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
-        System.out.println("mine");
+        if(!editor.get("photoUri", "").equals("")){
+            photoUri = Uri.parse(editor.get("photoUri", ""));
+        }
         initLayout();
         initDate(1);
+        // 配置需要分享的相关平台
+        configPlatforms();
+        // 设置分享的内容
+        setShareContent();
         return mineLayout;
     }
 
@@ -103,7 +132,6 @@ public class MineFragment extends Fragment implements OnClickListener {
         Map<String, String> parmas=new HashMap<String, String>();
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("accessToken", ClientUtil.getToken());
-        System.out.println(ClientUtil.getToken()+"------");
         if(isShow == 1) {
             CommonUtil.showLoadingDialog(mineLayout.getContext());
         }
@@ -133,13 +161,12 @@ public class MineFragment extends Fragment implements OnClickListener {
                         doctorInfo=jsonObject.getString("doctor");
                         handler.dispatchMessage(msg);
                     } else if(responses.getInt("rtnCode") == 10004) {
-                        System.out.println("11");
                         Toast.makeText(mineLayout.getContext(), responses.getString("rtnMsg"), Toast.LENGTH_SHORT).show();
                         LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                             @Override
                             public void onSuccess(String rspContent, int statusCode) {
-                                 initDate(0);
+                                initDate(0);
                             }
 
                             @Override
@@ -270,7 +297,7 @@ public class MineFragment extends Fragment implements OnClickListener {
             // }else{
             // invitation_layout.setVisibility(View.VISIBLE);
             // }
-            blance_text.setText("余额" + (float)blance / 100 + "元");
+            blance_text.setText("余额:" + blance + "元");
             if(null != doctorInfo && !"null".equals(doctorInfo) && !"".equals(doctorInfo)) {
                 doctor_layout.setVisibility(View.VISIBLE);
                 line.setVisibility(View.GONE);
@@ -431,50 +458,58 @@ public class MineFragment extends Fragment implements OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case 0:
-                if(data != null) {
-                    Bundle extras=data.getExtras();
-                    if(extras != null) {
-                        final Bitmap photo=extras.getParcelable("data");
-                        File file=new File(Environment.getExternalStorageDirectory() + File.separator + "photo.jpg");// 将要保存图片的路径
-                        try {
-                            BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(file));
-                            photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                            bos.flush();
-                            bos.close();
-                            File[] files=new File[1];
-                            files[0]=file;
-                            Map<String, String> params=new HashMap<String, String>();
-                            params.put("accessToken", ClientUtil.getToken());
-                            params.put("uid", editor.get("uid", ""));
-                            CommonUtil.showLoadingDialog(mineLayout.getContext());
-                            OpenApiService.getInstance(mineLayout.getContext()).getUploadFiles(ClientUtil.GET_USER_ICON_URL,
-                                mineLayout.getContext(), new ConsultationCallbackHandler() {
-
-                                    @Override
-                                    public void onSuccess(String rspContent, int statusCode) {
-                                        CommonUtil.closeLodingDialog();
-                                        photos.setImageBitmap(photo);
-                                        JSONObject jsonObject;
-                                        try {
-                                            jsonObject=new JSONObject(rspContent);
-                                            editor.put("icon_url", jsonObject.getString("filePath"));
-                                        } catch(JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Toast.makeText(mineLayout.getContext(), "图片上传成功", Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onFailure(ConsultationCallbackException exp) {
-                                        Toast.makeText(mineLayout.getContext(), "图片上传失败，请重新上传", Toast.LENGTH_LONG).show();
-                                        CommonUtil.closeLodingDialog();
-                                    }
-                                }, files, params);
-
-                        } catch(IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                if(resultCode == Activity.RESULT_OK) {
+                    doPhoto(requestCode, data);
+                }
+                // if(data != null) {
+                // Bundle extras=data.getExtras();
+                // if(extras != null) {
+                // final Bitmap photo=extras.getParcelable("data");
+                // File file=new File(Environment.getExternalStorageDirectory() + File.separator + "photo.jpg");// 将要保存图片的路径
+                // try {
+                // BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(file));
+                // photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                // bos.flush();
+                // bos.close();
+                // File[] files=new File[1];
+                // files[0]=file;
+                // Map<String, String> params=new HashMap<String, String>();
+                // params.put("accessToken", ClientUtil.getToken());
+                // params.put("uid", editor.get("uid", ""));
+                // CommonUtil.showLoadingDialog(mineLayout.getContext());
+                // OpenApiService.getInstance(mineLayout.getContext()).getUploadFiles(ClientUtil.GET_USER_ICON_URL,
+                // mineLayout.getContext(), new ConsultationCallbackHandler() {
+                //
+                // @Override
+                // public void onSuccess(String rspContent, int statusCode) {
+                // CommonUtil.closeLodingDialog();
+                // photos.setImageBitmap(photo);
+                // JSONObject jsonObject;
+                // try {
+                // jsonObject=new JSONObject(rspContent);
+                // editor.put("icon_url", jsonObject.getString("filePath"));
+                // } catch(JSONException e) {
+                // e.printStackTrace();
+                // }
+                // Toast.makeText(mineLayout.getContext(), "图片上传成功", Toast.LENGTH_LONG).show();
+                // }
+                //
+                // @Override
+                // public void onFailure(ConsultationCallbackException exp) {
+                // Toast.makeText(mineLayout.getContext(), "图片上传失败，请重新上传", Toast.LENGTH_LONG).show();
+                // CommonUtil.closeLodingDialog();
+                // }
+                // }, files, params);
+                //
+                // } catch(IOException e) {
+                // e.printStackTrace();
+                // }
+                // }
+                // }
+                break;
+            case 1:
+                if(resultCode == Activity.RESULT_OK) {
+                    doPhoto(requestCode, data);
                 }
                 break;
             case 2:
@@ -484,10 +519,99 @@ public class MineFragment extends Fragment implements OnClickListener {
                     }
                 }
                 break;
+            case 3:
+                if(resultCode == Activity.RESULT_OK) {
+                    doPhoto(requestCode, data);
+                }
+                break;
             default:
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void doPhoto(int requestCode, Intent data) {
+        if(requestCode == 3) { // 从相册取图片，有些手机有异常情况，请注意
+            if(data != null) {
+                Bundle extras=data.getExtras();
+                if(extras != null) {
+                    final Bitmap photo=extras.getParcelable("data");
+                    File file=new File(Environment.getExternalStorageDirectory() + File.separator + "photo.jpg");// 将要保存图片的路径
+                    try {
+                        BufferedOutputStream bos=new BufferedOutputStream(new FileOutputStream(file));
+                        photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                        bos.flush();
+                        bos.close();
+                        File[] files=new File[1];
+                        files[0]=file;
+                        Map<String, String> params=new HashMap<String, String>();
+                        params.put("accessToken", ClientUtil.getToken());
+                        params.put("uid", editor.get("uid", ""));
+                        CommonUtil.showLoadingDialog(mineLayout.getContext());
+                        OpenApiService.getInstance(mineLayout.getContext()).getUploadFiles(ClientUtil.GET_USER_ICON_URL,
+                            mineLayout.getContext(), new ConsultationCallbackHandler() {
+
+                                @Override
+                                public void onSuccess(String rspContent, int statusCode) {
+                                    CommonUtil.closeLodingDialog();
+//                                    photos.setImageBitmap(photo);
+                                    JSONObject jsonObject;
+                                    try {
+                                        jsonObject=new JSONObject(rspContent);
+                                        editor.put("photoUri", "");
+                                        editor.put("icon_url", jsonObject.getString("filePath"));
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    initDate(0);
+                                    Toast.makeText(mineLayout.getContext(), "图片上传成功", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onFailure(ConsultationCallbackException exp) {
+                                    Toast.makeText(mineLayout.getContext(), "图片上传失败，请重新上传", Toast.LENGTH_LONG).show();
+                                    CommonUtil.closeLodingDialog();
+                                }
+                            }, files, params);
+
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else if(requestCode == 1) {
+            if(data == null) {
+                Toast.makeText(mainActivity, "选择图片文件出错", Toast.LENGTH_LONG).show();
+                return;
+            }
+            photoUri=data.getData();
+            if(photoUri == null) {
+                Toast.makeText(mainActivity, "选择图片文件出错", Toast.LENGTH_LONG).show();
+                return;
+            }
+            startPhotoZoom(photoUri);
+        } else if(requestCode == 0) {
+            startPhotoZoom(photoUri);
+        }
+    }
+
+    /**
+     * 裁剪图片方法实现
+     * @param uri
+     */
+    private void startPhotoZoom(Uri uri) {
+        Intent intent=new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 3);
     }
 
     @Override
@@ -498,14 +622,46 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.mine_info_imageView:
-                startActivityForResult(new Intent(mineLayout.getContext(), SelectHeadPicActivity.class), 0);
+                // startActivityForResult(new Intent(mineLayout.getContext(), SelectHeadPicActivity.class), 0);
+                final SelectPicDialog dialog=new SelectPicDialog(mainActivity, R.style.selectPicDialog, R.layout.select_pic_dialog);
+                dialog.setCancelable(true);
+                dialog.setPhotographButton(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        String SDState=Environment.getExternalStorageState();
+                        if(SDState.equals(Environment.MEDIA_MOUNTED)) {
+                            Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            ContentValues values=new ContentValues();
+                            photoUri=mainActivity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                            editor.put("photoUri", photoUri.toString());
+                            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, photoUri);
+                            startActivityForResult(intent, 0);
+                        } else {
+                            Toast.makeText(mainActivity, "内存卡不存在", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                dialog.setSelectButton(new OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        Intent intent=new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(intent, 1);
+                    }
+                });
+                dialog.show();
                 break;
             case R.id.mine_my_pay_layout:
                 startActivity(new Intent(mineLayout.getContext(), MyAccountActivity.class));
                 break;
             case R.id.mine_my_share_layout:
                 // 分享
-
+                shareMethod();
                 break;
             case R.id.mine_my_jion_layout:
                 Intent updateIntent=new Intent(mineLayout.getContext(), UpdateMyInfoActivity.class);
@@ -520,6 +676,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(new Intent(mineLayout.getContext(), FeedBackActivity.class));
                 break;
             case R.id.mine_my_help_layout:
+                startActivity(new Intent(mineLayout.getContext(), HelpActivity.class));
                 break;
             case R.id.mine_my_doctor_info_layout:
                 // 进入修改医生信息的界面
@@ -529,8 +686,6 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(infoIntent);
                 break;
             case R.id.mine_info_logout_btn:
-                ClientUtil.setToken("");
-                editor.put("refreshToken", "");
                 LoginActivity.setHandler(new ConsultationCallbackHandler() {
 
                     @Override
@@ -552,5 +707,124 @@ public class MineFragment extends Fragment implements OnClickListener {
             default:
                 break;
         }
+    }
+
+    private void shareMethod() {
+        mController.getConfig().setPlatforms(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.QQ,
+            SHARE_MEDIA.QZONE, SHARE_MEDIA.SINA, SHARE_MEDIA.TENCENT);
+        mController.openShare((Activity)mineLayout.getContext(), false);
+    }
+    
+    private void configPlatforms() {
+        // 添加新浪SSO授权
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        // 添加腾讯微博SSO授权
+        mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
+
+        // 添加QQ、QZone平台
+        addQQQZonePlatform();
+
+        // 添加微信、微信朋友圈平台
+        addWXPlatform();
+    }
+    
+    private void addWXPlatform() {
+        // 注意：在微信授权的时候，必须传递appSecret
+        // wx967daebe835fbeac是你在微信开发平台注册应用的AppID, 这里需要替换成你注册的AppID
+        String appId="wx807ff2a55add4359";
+        String appSecret="d4624c36b6795d1d99dcf0547af5443d";
+        // 添加微信平台
+        UMWXHandler wxHandler=new UMWXHandler(mineLayout.getContext(), appId, appSecret);
+        wxHandler.addToSocialSDK();
+
+        // 支持微信朋友圈
+        UMWXHandler wxCircleHandler=new UMWXHandler(mineLayout.getContext(), appId, appSecret);
+        wxCircleHandler.setToCircle(true);
+        wxCircleHandler.addToSocialSDK();
+    }
+    
+    private void setShareContent() {
+        // 配置SSO
+        mController.getConfig().setSsoHandler(new SinaSsoHandler());
+        mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
+
+        QZoneSsoHandler qZoneSsoHandler=new QZoneSsoHandler((Activity)mineLayout.getContext(), "100424468", "c7394704798a158208a74ab60104f0ba");
+        qZoneSsoHandler.addToSocialSDK();
+        mController.setShareContent("友盟社会化组件（SDK）让移动应用快速整合社交分享功能。http://www.baidu.com");
+
+        UMImage resImage = new UMImage(mineLayout.getContext(), R.drawable.share_icon);
+
+        WeiXinShareContent weixinContent=new WeiXinShareContent();
+        weixinContent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-微信。http://www.baidu.com");
+        weixinContent.setTitle("这是标题");
+        weixinContent.setTargetUrl("http://www.baidu.com");
+        weixinContent.setShareMedia(resImage);
+        mController.setShareMedia(weixinContent);
+
+        // 设置朋友圈分享的内容
+        CircleShareContent circleMedia=new CircleShareContent();
+        circleMedia.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-朋友圈。http://www.baidu.com");
+        circleMedia.setTitle("这是标题");
+        circleMedia.setShareMedia(resImage);
+        circleMedia.setTargetUrl("http://www.baidu.com");
+        mController.setShareMedia(circleMedia);
+
+        // 设置renren分享内容
+//        RenrenShareContent renrenShareContent=new RenrenShareContent();
+//        renrenShareContent.setShareContent("人人分享内容");
+//        UMImage image=new UMImage(mineLayout.getContext(), BitmapFactory.decodeResource(getResources(), R.drawable.share_icon));
+//        image.setTitle("这是标题");
+//        image.setThumb("http://www.umeng.com/images/pic/social/integrated_3.png");
+//        renrenShareContent.setShareImage(image);
+//        renrenShareContent.setAppWebSite("http://www.baidu.com");
+//        mController.setShareMedia(renrenShareContent);
+
+        // 设置QQ空间分享内容
+        QZoneShareContent qzone=new QZoneShareContent();
+        qzone.setShareContent("这是分享内容");
+        qzone.setTargetUrl("http://www.baidu.com");
+        qzone.setTitle("这是标题");
+        qzone.setShareMedia(resImage);
+        mController.setShareMedia(qzone);
+
+        QQShareContent qqShareContent=new QQShareContent();
+        qqShareContent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能 -- QQ");
+        qqShareContent.setTitle("这是标题");
+        qqShareContent.setShareMedia(resImage);
+        qqShareContent.setTargetUrl("http://www.baidu.com");
+        mController.setShareMedia(qqShareContent);
+
+        TencentWbShareContent tencent=new TencentWbShareContent();
+        tencent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-腾讯微博。http://www.baidu.com");
+        mController.setShareMedia(tencent);
+
+        SinaShareContent sinaContent=new SinaShareContent();
+        sinaContent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-新浪微博。http://www.baidu.com");
+        sinaContent.setShareImage(new UMImage(mineLayout.getContext(), R.drawable.actionbar_back_indicator));
+        mController.setShareMedia(sinaContent);
+
+//        TwitterShareContent twitterShareContent=new TwitterShareContent();
+//        twitterShareContent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-TWITTER。http://www.baidu.com");
+//        twitterShareContent.setShareMedia(new UMImage(mineLayout.getContext(), new File("/storage/sdcard0/emoji.gif")));
+//        mController.setShareMedia(twitterShareContent);
+
+//        GooglePlusShareContent googlePlusShareContent=new GooglePlusShareContent();
+//        googlePlusShareContent.setShareContent("来自友盟社会化组件（SDK）让移动应用快速整合社交分享功能-G+。http://www.baidu.com");
+//        googlePlusShareContent.setShareMedia(resImage);
+//        mController.setShareMedia(googlePlusShareContent);
+
+    }
+    
+    private void addQQQZonePlatform() {
+        String appId="100424468";
+        String appKey="c7394704798a158208a74ab60104f0ba";
+        // 添加QQ支持, 并且设置QQ分享内容的target url
+        UMQQSsoHandler qqSsoHandler=new UMQQSsoHandler((Activity)mineLayout.getContext(), appId, appKey);
+        qqSsoHandler.setTargetUrl("http://www.baidu.com");
+        qqSsoHandler.addToSocialSDK();
+
+        // 添加QZone平台
+        QZoneSsoHandler qZoneSsoHandler=new QZoneSsoHandler((Activity)mineLayout.getContext(), appId, appKey);
+        qZoneSsoHandler.addToSocialSDK();
     }
 }

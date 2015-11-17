@@ -112,7 +112,6 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
         primaryConsultationAllFragment=inflater.inflate(R.layout.consulation_list_all_layout, container, false);
         editor=new SharePreferencesEditor(primaryConsultationAllFragment.getContext());
         myAdapter=new MyAdapter();
-        System.out.println("primaryConsultationAllFragment");
         mQueue=Volley.newRequestQueue(primaryConsultationAllFragment.getContext());
         mImageLoader=new ImageLoader(mQueue, new BitmapCache());
         initData(1);
@@ -249,7 +248,6 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
         parmas.put("accessToken", ClientUtil.getToken());
         parmas.put("uid", editor.get("uid", ""));
         parmas.put("userTp", editor.get("userType", ""));
-        System.out.println(parmas+"------prim");
         if(isShow == 1) {
             CommonUtil.showLoadingDialog(primaryConsultationAllFragment.getContext());
         }
@@ -324,6 +322,8 @@ public class PrimaryConsultationAllFragment extends Fragment implements OnLoadLi
                             if(isShow == 1) {
                                 CommonUtil.closeLodingDialog();
                             }
+                            myAdapter.notifyDataSetChanged();
+                            patientListView.setSelection(0);
                         } else if(responses.getInt("rtnCode") == 10004) {
                             if(isShow == 1) {
                                 CommonUtil.closeLodingDialog();

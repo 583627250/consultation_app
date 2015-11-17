@@ -3,10 +3,20 @@ package com.consultation.app.model;
 public class SymptomTo {
 
     private String name;
+    
+    private int id;
 
     private boolean isCheckMain;
 
     private boolean isCheckAccompany;
+    
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id=id;
+    }
 
     public String getName() {
         return name;

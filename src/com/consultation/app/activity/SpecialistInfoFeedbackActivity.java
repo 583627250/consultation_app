@@ -154,7 +154,7 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                             } else {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            commentsTo.setStart_value(info.getInt("star_value"));
+                            commentsTo.setStar_value(info.getInt("star_value"));
                             String photo_url = info.getJSONObject("user").getString("icon_url");
                             commentsTo.setPhoto_url(photo_url);
                             feedbackList.add(commentsTo);
@@ -202,7 +202,7 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
         back_text.setTextSize(18);
         title_text=(TextView)findViewById(R.id.header_text);
         title_text.setTextSize(20);
-        title_text.setText("患者评价");
+        title_text.setText("病例评价");
         back_layout.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -244,7 +244,7 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                                     } else {
                                         commentsTo.setCreate_time(Long.parseLong(createTime));
                                     }
-                                    commentsTo.setStart_value(info.getInt("star_value"));
+                                    commentsTo.setStar_value(info.getInt("star_value"));
                                     String photo_url = info.getJSONObject("user").getString("icon_url");
                                     commentsTo.setPhoto_url(photo_url);
                                     feedbackList.add(commentsTo);
@@ -370,7 +370,7 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
             String sd=sdf.format(new Date(feedbackList.get(position).getCreate_time()));
             feedbackViewHolder.date.setText(sd);
             feedbackViewHolder.date.setTextSize(14);
-            feedbackViewHolder.feedbackRatingBar.setRating((float)feedbackList.get(position).getStart_value()/10);
+            feedbackViewHolder.feedbackRatingBar.setRating((float)feedbackList.get(position).getStar_value()/10);
             if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
                 ImageListener listener = ImageLoader.getImageListener(feedbackViewHolder.photo, R.drawable.photo_patient, R.drawable.photo_patient);
                 mImageLoader.get(imgUrl, listener);
@@ -410,7 +410,7 @@ public class SpecialistInfoFeedbackActivity extends Activity implements OnLoadLi
                             } else {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            commentsTo.setStart_value(info.getInt("star_value"));
+                            commentsTo.setStar_value(info.getInt("star_value"));
                             String photo_url = info.getJSONObject("user").getString("icon_url");
                             commentsTo.setPhoto_url(photo_url);
                             feedbackList.add(commentsTo);

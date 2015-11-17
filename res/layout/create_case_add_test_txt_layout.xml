@@ -36,11 +36,11 @@
                     android:orientation="vertical"
                     android:padding="10dp" >
 
-                    <TextView
+                   <!--  <TextView
                         android:id="@+id/test_txt_add_image_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="添加" />
+                        android:text="添加" /> -->
 
                     <LinearLayout
                         android:id="@+id/test_txt_layout"

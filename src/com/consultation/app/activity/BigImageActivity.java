@@ -2,6 +2,7 @@ package com.consultation.app.activity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,9 +42,13 @@ public class BigImageActivity extends Activity {
         imgUrl=url;
     }
 
+    @SuppressWarnings("deprecation")
     private void ininView() {
         imageView=(ZoomImageView)findViewById(R.id.big_image);
         loading=(ImageView)findViewById(R.id.big_image_loading);
+        loading.setBackgroundResource(R.anim.image_loading_anim);  
+        final AnimationDrawable animation = (AnimationDrawable)loading.getBackground();  
+        animation.start();
         mQueue = Volley.newRequestQueue(BigImageActivity.this);
         imageLoader=new MyImageLoader(mQueue, new BitmapCache());
         MyImageLoader.setHandler(new ConsultationCallbackHandler() {
@@ -51,6 +56,7 @@ public class BigImageActivity extends Activity {
             @Override
             public void onSuccess(String rspContent, int statusCode) {
                 imageView.setVisibility(View.VISIBLE);
+                animation.stop();
                 loading.setVisibility(View.GONE);
             }
             
@@ -64,6 +70,8 @@ public class BigImageActivity extends Activity {
                     MyImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_delete);
                 imageLoader.get(imgUrl, listener);
             } else {
+                imageView.setVisibility(View.VISIBLE);
+                loading.setVisibility(View.GONE);
                 WindowManager wm=this.getWindowManager();
                 int width=wm.getDefaultDisplay().getWidth();
                 Bitmap bitmap=CommonUtil.readBitMap(width, imgUrl);

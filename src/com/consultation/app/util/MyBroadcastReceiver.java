@@ -13,7 +13,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context arg0, Intent arg1) {
         if(callbackHandler != null){
-            callbackHandler.onSuccess("", 0);
+            callbackHandler.onSuccess("", arg1.getIntExtra("isOpen", 1));
         }
     }
 

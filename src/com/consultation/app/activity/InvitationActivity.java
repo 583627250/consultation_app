@@ -407,6 +407,7 @@ public class InvitationActivity extends Activity implements OnLoadListener {
             return position;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {

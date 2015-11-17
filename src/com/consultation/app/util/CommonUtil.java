@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
@@ -35,6 +36,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -247,6 +249,7 @@ public class CommonUtil {
     }
 
     // 将图片保存到/data/data/packagename/files下
+    @SuppressWarnings("deprecation")
     @SuppressLint("WorldReadableFiles")
     public static String bitmapToFile(Context ctx, String imageName, Bitmap mBitmap) throws IOException {
         FileOutputStream fOut=null;
@@ -272,6 +275,7 @@ public class CommonUtil {
      * @return
      * @throws IOException
      */
+    @SuppressWarnings("deprecation")
     public static boolean downloadApktoappDir(Context ctx, String path, String apkname) throws IOException {
         URL url;
         FileOutputStream fos=null;
@@ -303,6 +307,61 @@ public class CommonUtil {
     }
 
     /**
+     * 读取图片的旋转的角度
+     * @param path 图片绝对路径
+     * @return 图片的旋转角度
+     */
+    public static int getBitmapDegree(String path) {
+        int degree=0;
+        try {
+            // 从指定路径下读取图片，并获取其EXIF信息
+            ExifInterface exifInterface=new ExifInterface(path);
+            // 获取图片的旋转信息
+            int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch(orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree=90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree=180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree=270;
+                    break;
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
+    /**
+     * 将图片按照某个角度进行旋转
+     * @param bm 需要旋转的图片
+     * @param degree 旋转角度
+     * @return 旋转后的图片
+     */
+    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
+        Bitmap returnBm=null;
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix=new Matrix();
+        matrix.postRotate(degree);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm=Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        } catch(OutOfMemoryError e) {
+            e.printStackTrace();
+        }
+        if(returnBm == null) {
+            returnBm=bm;
+        }
+        if(bm != returnBm) {
+            bm.recycle();
+        }
+        return returnBm;
+    }
+
+    /**
      * 获取文件名
      * @param url
      * @return
@@ -317,6 +376,7 @@ public class CommonUtil {
         return filename;
     }
 
+    @SuppressWarnings("deprecation")
     public static Drawable getConvertDrawable(String filepath) {
         Bitmap bitmap=BitmapFactory.decodeFile(filepath);
         Drawable drawable=new BitmapDrawable(bitmap);
@@ -472,5 +532,82 @@ public class CommonUtil {
                 }
             }
         }
+    }
+
+    public static File getSmallBitmapFile(String filePath) {
+        File file=new File(filePath);
+        Bitmap bm=getSmallBitmap(filePath);
+        FileOutputStream fos;
+        File f = new File(getAlbumDir(), "small_" + file.getName());
+        try {
+            fos=new FileOutputStream(f);
+            bm.compress(Bitmap.CompressFormat.JPEG, 40, fos);
+        } catch(FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return f;
+    }
+    
+    public static void clearFile(Context context){
+        CommonUtil.showLoadingDialog(context, "数据清理中...");
+        File dir=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "consultation");
+        if(dir != null){
+            File[] files = dir.listFiles();
+            if(files != null && files.length != 0){
+                for(int i=0; i < files.length; i++) {
+                    files[i].delete();
+                }
+            }
+        }
+        CommonUtil.closeLodingDialog();
+    }
+    
+    public static String getFileSize(){
+        float size = 0;
+        File dir=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "consultation");
+        if(dir != null){
+            File[] files = dir.listFiles();
+            if(files != null && files.length != 0){
+                for(int i=0; i < files.length; i++) {
+                    size+=files[i].length()/1024;
+                }
+            }
+        }
+        if(size>1024){
+            size = size /1024;
+            return size+"M";
+        }
+        return size+"KB";
+    }
+    
+
+    public static File getAlbumDir() {
+        File dir=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "consultation");
+        if(!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
+    }
+
+    public static Bitmap getSmallBitmap(String filePath) {
+        final BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inJustDecodeBounds=true;
+        BitmapFactory.decodeFile(filePath, options);
+        options.inSampleSize=calculateInSampleSize(options, 720, 1280);
+        options.inJustDecodeBounds=false;
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height=options.outHeight;
+        final int width=options.outWidth;
+        int inSampleSize=1;
+        if(height > reqHeight || width > reqWidth) {
+            final int heightRatio=Math.round((float)height / (float)reqHeight);
+            final int widthRatio=Math.round((float)width / (float)reqWidth);
+            inSampleSize=heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
     }
 }

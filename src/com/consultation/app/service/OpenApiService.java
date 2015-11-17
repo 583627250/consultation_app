@@ -53,6 +53,11 @@ public class OpenApiService {
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_REGISTER_VERIFICATION_URL, parmas, listener, errorListener);
     }
+    
+    public void getLoginVerification(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_LOGIN_VERIFICATION_URL, parmas, listener, errorListener);
+    }
 
     public void getRegisterMobileUsable(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
@@ -187,6 +192,16 @@ public class OpenApiService {
     public void getFeedBackList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
         Response.ErrorListener errorListener) {
         httpRequest(mQueue, ClientUtil.GET_FEEDBACK_LIST_URL, parmas, listener, errorListener);
+    }
+    
+    public void getHelpList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_HELP_LIST_URL, parmas, listener, errorListener);
+    }
+    
+    public void getVersionCode(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,
+        Response.ErrorListener errorListener) {
+        httpRequest(mQueue, ClientUtil.GET_VERSION_CODE_URL, parmas, listener, errorListener);
     }
 
     public void getDiscussionCaseList(RequestQueue mQueue, final Map<String, String> parmas, Response.Listener<String> listener,

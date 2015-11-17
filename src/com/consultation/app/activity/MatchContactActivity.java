@@ -66,7 +66,7 @@ public class MatchContactActivity extends Activity{
     private List<ContactTo> contacts=new ArrayList<ContactTo>();
 
     private List<ContactTo> temp=new ArrayList<ContactTo>();
-
+    
     private MyAdapter myAdapter;
 
     private ViewHolder holder;
@@ -125,7 +125,6 @@ public class MatchContactActivity extends Activity{
                 contactTo.setPhone(phoneNumber);
                 if(AccountUtil.isPhoneNum(phoneNumber)){
                     contacts.add(contactTo);
-//                    temp.add(contactTo);
                     if(count == 0){
                         phoneBuffer.append("{");
                         phoneBuffer.append("\"name\":\""+contactName+"\",\"mobile_ph\":\""+phoneNumber+"\",\"condition\":\"0\"}");
@@ -153,6 +152,7 @@ public class MatchContactActivity extends Activity{
                         JSONObject responses=new JSONObject(arg0);
                         if(responses.getInt("rtnCode") == 1) {
                             JSONArray infos=responses.getJSONArray("conditions");
+                            contacts.clear();
                             temp.clear();
                             allLayout.setVisibility(View.VISIBLE);
                             for(int i=0; i < infos.length(); i++) {
@@ -162,6 +162,7 @@ public class MatchContactActivity extends Activity{
                                 contactTo.setName(info.getString("name"));
                                 contactTo.setPhone(info.getString("mobile_ph"));
                                 temp.add(contactTo);
+                                contacts.add(contactTo);
                             }
                             myAdapter.notifyDataSetChanged();
                         } else if(responses.getInt("rtnCode") == 10004) {
@@ -269,6 +270,9 @@ public class MatchContactActivity extends Activity{
                 if(contacts.get(i).getName().contains(name) || strPinYin.startsWith(name.toLowerCase())) {
                     temp.add(contacts.get(i));
                 }
+                if(contacts.get(i).getPhone().contains(name)){
+                    temp.add(contacts.get(i));
+                }
             }
         }
         myAdapter.notifyDataSetChanged();
@@ -319,6 +323,8 @@ public class MatchContactActivity extends Activity{
             holder.phone.setTextSize(16);
             holder.name.setText(temp.get(position).getName());
             holder.name.setTextSize(18);
+            holder.btn.setVisibility(View.VISIBLE);
+            holder.isInvitation.setVisibility(View.GONE);
             if(temp.get(position).getIsInvitation().equals("2")){
                 holder.btn.setText("呼叫");
                 holder.btn.setTextSize(16);
@@ -339,6 +345,54 @@ public class MatchContactActivity extends Activity{
                     @Override
                     public void onClick(View v) {
                         //邀请
+                        Map<String, String> parmas=new HashMap<String, String>();
+                        parmas.put("mobile_ph", temp.get(position).getPhone());
+                        parmas.put("accessToken", ClientUtil.getToken());
+                        parmas.put("uid", editor.get("uid", ""));
+                        CommonUtil.showLoadingDialog(MatchContactActivity.this);
+                        OpenApiService.getInstance(MatchContactActivity.this).getSendInvitation(mQueue, parmas,
+                            new Response.Listener<String>() {
+
+                                @Override
+                                public void onResponse(String arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    try {
+                                        JSONObject responses=new JSONObject(arg0);
+                                        if(responses.getInt("rtnCode") == 1) {
+                                            Toast.makeText(MatchContactActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            initData();
+                                        } else if(responses.getInt("rtnCode") == 10004) {
+                                            Toast.makeText(MatchContactActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                            LoginActivity.setHandler(new ConsultationCallbackHandler() {
+
+                                                @Override
+                                                public void onSuccess(String rspContent, int statusCode) {
+                                                    initData();
+                                                }
+
+                                                @Override
+                                                public void onFailure(ConsultationCallbackException exp) {
+                                                }
+                                            });
+                                            startActivity(new Intent(MatchContactActivity.this, LoginActivity.class));
+                                        } else {
+                                            Toast.makeText(MatchContactActivity.this, responses.getString("rtnMsg"), Toast.LENGTH_SHORT)
+                                                .show();
+                                        }
+                                    } catch(JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+
+                                @Override
+                                public void onErrorResponse(VolleyError arg0) {
+                                    CommonUtil.closeLodingDialog();
+                                    Toast.makeText(MatchContactActivity.this, "网络连接失败,请稍后重试", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                     }
                 });
             }else if(temp.get(position).getIsInvitation().equals("1")){

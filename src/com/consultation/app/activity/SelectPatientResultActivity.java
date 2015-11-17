@@ -109,7 +109,7 @@ public class SelectPatientResultActivity extends Activity {
                             || "null".equals(infos.getJSONObject("userBalance").getString("current_balance"))) {
                             blance.setText("余额:0.0元");
                         } else {
-                            blance.setText("余额:" + (float)Long.parseLong(infos.getJSONObject("userBalance").getString("current_balance"))/100 + "元");
+                            blance.setText("余额:" + infos.getJSONObject("userBalance").getString("current_balance") + "元");
                         }
                         info_layout.setVisibility(View.VISIBLE);
                     } else if(responses.getInt("rtnCode") == 10004) {

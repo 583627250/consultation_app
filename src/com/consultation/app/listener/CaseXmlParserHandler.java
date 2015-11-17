@@ -59,7 +59,11 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    titleModel.setLevel(attributes.getValue("Level"));
 		    titleModel.setChildCount(attributes.getValue("ChildCount"));
 		    titleModel.setType(attributes.getValue("Type"));
-		    titleModel.setIsNormal(attributes.getValue("isNormal"));
+		    titleModel.setIsNormal(attributes.getValue("IsNormal"));
+		    titleModel.setPrefixP(attributes.getValue("PrefixP"));
+		    titleModel.setSuffixP(attributes.getValue("SuffixP"));
+		    titleModel.setSeperator(attributes.getValue("Seperator"));
+		    titleModel.setNoChecked(attributes.getValue("NoChecked"));
 		    titleModel.setItemModels(new ArrayList<ItemModel>());
 		} else if (qName.equals("SubItem")) {
 		    isSubOptions = true;
@@ -74,6 +78,10 @@ public class CaseXmlParserHandler extends DefaultHandler {
 		    subItemModel.setInput(attributes.getValue("Input"));
 		    subItemModel.setValue(attributes.getValue("Value"));
 		    subItemModel.setDataType(attributes.getValue("DataType"));
+		    subItemModel.setPrefixP(attributes.getValue("PrefixP"));
+		    subItemModel.setSuffixP(attributes.getValue("SuffixP"));
+		    subItemModel.setSeperator(attributes.getValue("Seperator"));
+		    subItemModel.setNoChecked(attributes.getValue("NoChecked"));
 		    subItemModel.setOptionsModels(new ArrayList<OptionsModel>());
         } else if (qName.equals("Item")) {
             isSubOptions = false;
@@ -89,6 +97,10 @@ public class CaseXmlParserHandler extends DefaultHandler {
             itemModel.setValue(attributes.getValue("Value"));
             itemModel.setIsShow(attributes.getValue("IsShow"));
             itemModel.setDataType(attributes.getValue("DataType"));
+            itemModel.setPrefixP(attributes.getValue("PrefixP"));
+            itemModel.setSuffixP(attributes.getValue("SuffixP"));
+            itemModel.setSeperator(attributes.getValue("Seperator"));
+            itemModel.setNoChecked(attributes.getValue("NoChecked"));
             itemModel.setOptionsModels(new ArrayList<OptionsModel>());
             itemModel.setItemModels(new ArrayList<ItemModel>());
         } else if (qName.equals("Options")) {
@@ -99,6 +111,7 @@ public class CaseXmlParserHandler extends DefaultHandler {
         } else if (qName.equals("Title")) {
             if(isTitle){
                 titleModel.setIsShow(attributes.getValue("IsShow"));
+                titleModel.setLineBreak(attributes.getValue("LineBreak"));
             }else{
                 caseModel.setIsShow(attributes.getValue("IsShow"));
             }

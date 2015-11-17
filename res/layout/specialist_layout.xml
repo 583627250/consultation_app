@@ -118,15 +118,15 @@
             android:padding="10dp" >
 
             <LinearLayout
-                android:layout_width="30dp"
-                android:layout_height="match_parent" >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:scaleType="fitXY"
-                    android:src="@drawable/yhk_icon" />
+                    android:src="@drawable/iconfont_dianhuaben" />
             </LinearLayout>
 
             <TextView

@@ -60,56 +60,21 @@
             android:paddingTop="15dp" >
 
             <TextView
-                android:id="@+id/my_acount_info_title_ncome_text"
+                android:id="@+id/my_acount_info_title_income_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="收入(元)"
+                android:text="总收入(元)"
                 android:textColor="#414141" />
 
             <LinearLayout
-                android:id="@+id/my_acount_line1"
                 android:layout_width="0.1dp"
                 android:layout_height="match_parent"
                 android:background="#DADADA"
                 android:orientation="horizontal" >
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/my_acount_info_title_recharge_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="充值(元)"
-                android:textColor="#414141" />
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:background="#DADADA" >
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/my_acount_info_title_pay_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="支付(元)"
-                android:textColor="#414141" />
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:background="#DADADA" >
             </LinearLayout>
 
             <TextView
@@ -120,7 +85,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="提现(元)"
+                android:text="总提现(元)"
                 android:textColor="#414141" />
         </LinearLayout>
 
@@ -145,46 +110,10 @@
                 android:textColor="#414141" />
 
             <LinearLayout
-                android:id="@+id/my_acount_line2"
                 android:layout_width="0.1dp"
                 android:layout_height="match_parent"
                 android:background="#DADADA"
                 android:orientation="horizontal" >
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/my_acount_info_recharge_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:text="0.00"
-                android:textColor="#414141" />
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:background="#DADADA" >
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/my_acount_info_pay_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:paddingBottom="5dp"
-                android:text="0.00"
-                android:textColor="#414141" />
-
-            <LinearLayout
-                android:layout_width="0.1dp"
-                android:layout_height="match_parent"
-                android:background="#DADADA" >
             </LinearLayout>
 
             <TextView
@@ -214,13 +143,25 @@
             android:orientation="horizontal"
             android:padding="15dp" >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_chongzhi" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/my_acount_chongzhi_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="充值"
+                android:text="会员充值"
                 android:textColor="#414141" />
 
             <LinearLayout
@@ -240,12 +181,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="#DADADA" >
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/my_acount_tixian_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -253,6 +188,18 @@
             android:background="@drawable/knowledge_recommend_layout_selector"
             android:orientation="horizontal"
             android:padding="15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_tixian" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/my_acount_tixian_text"
@@ -294,6 +241,18 @@
             android:orientation="horizontal"
             android:padding="15dp" >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_clipboard" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/my_acount_incomejilu_text"
                 android:layout_width="wrap_content"
@@ -320,11 +279,57 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/my_acount_line3"
+            android:id="@+id/my_acount_line1"
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
             android:background="#DADADA"
             android:orientation="horizontal" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/my_acount_tixianjilu_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/knowledge_recommend_layout_selector"
+            android:orientation="horizontal"
+            android:padding="15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_quanbudingdan" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/my_acount_tixianjilu_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="5dp"
+                android:text="提现记录"
+                android:textColor="#414141" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="7dp"
+                    android:src="@drawable/icon_item_arrow" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -335,6 +340,18 @@
             android:background="@drawable/knowledge_recommend_layout_selector"
             android:orientation="horizontal"
             android:padding="15dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_dingdan" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/my_acount_chongzhijilu_text"
@@ -362,9 +379,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/my_acount_line2"
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
-            android:background="#DADADA" >
+            android:background="#DADADA"
+            android:orientation="horizontal" >
         </LinearLayout>
 
         <LinearLayout
@@ -376,53 +395,25 @@
             android:orientation="horizontal"
             android:padding="15dp" >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/iconfont_icon" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/my_acount_payjilu_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="5dp"
-                android:text="支付记录"
-                android:textColor="#414141" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:gravity="right"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:paddingRight="7dp"
-                    android:src="@drawable/icon_item_arrow" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="#DADADA" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/my_acount_tixianjilu_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/knowledge_recommend_layout_selector"
-            android:orientation="horizontal"
-            android:padding="15dp" >
-
-            <TextView
-                android:id="@+id/my_acount_tixianjilu_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="5dp"
-                android:text="提现记录"
+                android:text="消费记录"
                 android:textColor="#414141" />
 
             <LinearLayout

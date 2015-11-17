@@ -73,7 +73,8 @@ public class ExpandTabRecommendedView extends LinearLayout implements OnDismissL
 	/**
 	 * 设置tabitem的个数和初始值
 	 */
-	public void setValue(ArrayList<String> textArray, ArrayList<View> viewArray) {
+	@SuppressWarnings("deprecation")
+    public void setValue(ArrayList<String> textArray, ArrayList<View> viewArray) {
 		if (mContext == null) {
 			return;
 		}
@@ -82,7 +83,7 @@ public class ExpandTabRecommendedView extends LinearLayout implements OnDismissL
 		for (int i = 0; i < viewArray.size(); i++) {
 			final RelativeLayout r = new RelativeLayout(mContext);
 			int maxHeight = (int) (displayHeight * 0.7);
-			RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, maxHeight);
+            RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, maxHeight);
 			rl.leftMargin = 10;
 			rl.rightMargin = 10;
 			r.addView(viewArray.get(i), rl);
@@ -191,7 +192,8 @@ public class ExpandTabRecommendedView extends LinearLayout implements OnDismissL
 		}
 	}
 
-	private void init(Context context) {
+	@SuppressWarnings("deprecation")
+    private void init(Context context) {
 		mContext = context;
 		displayWidth = ((Activity) mContext).getWindowManager().getDefaultDisplay().getWidth();
 		displayHeight = ((Activity) mContext).getWindowManager().getDefaultDisplay().getHeight();

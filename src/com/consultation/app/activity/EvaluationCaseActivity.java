@@ -158,7 +158,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                             } else {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            commentsTo.setStart_value(info.getInt("star_value"));
+                            commentsTo.setStar_value(info.getInt("star_value"));
                             String photo_url = info.getJSONObject("user").getString("icon_url");
                             commentsTo.setPhoto_url(photo_url);
                             evaluationList.add(commentsTo);
@@ -358,7 +358,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                                         } else {
                                             commentsTo.setCreate_time(Long.parseLong(createTime));
                                         }
-                                        commentsTo.setStart_value(info.getInt("star_value"));
+                                        commentsTo.setStar_value(info.getInt("star_value"));
                                         String photo_url = info.getJSONObject("user").getString("icon_url");
                                         commentsTo.setPhoto_url(photo_url);
                                         evaluationList.add(commentsTo);
@@ -478,7 +478,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
             String sd=sdf.format(new Date(evaluationList.get(position).getCreate_time()));
             holder.date.setText(sd);
             holder.date.setTextSize(14);
-            holder.feedbackRatingBar.setRating(evaluationList.get(position).getStart_value());
+            holder.feedbackRatingBar.setRating(evaluationList.get(position).getStar_value());
             if(imgUrl != null && !imgUrl.equals("") && !"null".equals(imgUrl)) {
                 ImageListener listener = ImageLoader.getImageListener(holder.photo, R.drawable.photo_primary, R.drawable.photo_primary);
                 mImageLoader.get(imgUrl, listener);
@@ -516,7 +516,7 @@ public class EvaluationCaseActivity extends Activity implements OnLoadListener {
                             } else {
                                 commentsTo.setCreate_time(Long.parseLong(createTime));
                             }
-                            commentsTo.setStart_value(info.getInt("star_value"));
+                            commentsTo.setStar_value(info.getInt("star_value"));
                             String photo_url = info.getJSONObject("user").getString("icon_url");
                             commentsTo.setPhoto_url(photo_url);
                             evaluationList.add(commentsTo);

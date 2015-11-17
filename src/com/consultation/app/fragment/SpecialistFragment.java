@@ -113,7 +113,6 @@ public class SpecialistFragment extends Fragment implements OnLoadListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         specialistLayout=inflater.inflate(R.layout.specialist_layout, container, false);
         editor=new SharePreferencesEditor(specialistLayout.getContext());
-        System.out.println("specialistLayout");
         initData();
         initLayout();
         return specialistLayout;

@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:background="@color/consultation_color_white"
                 android:orientation="horizontal" >
 
                 <com.consultation.app.view.PullToRefreshLayout

@@ -39,11 +39,14 @@ public class MyExpertGradeActivity extends Activity {
     private List<ExpertGradeTo> expertGradeTos=new ArrayList<ExpertGradeTo>();
 
     private static ConsultationCallbackHandler h;
+    
+    private String expert_tp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.expert_grade_layout);
+        expert_tp = getIntent().getStringExtra("expert_tp");
         initData();
         initView();
     }
@@ -61,7 +64,8 @@ public class MyExpertGradeActivity extends Activity {
                     ExpertGradeTo expertGradeTo=new ExpertGradeTo();
                     expertGradeTo.setExpert_gradeid(cursor.getString(0));
                     expertGradeTo.setExpert_grade(cursor.getString(1));
-                    expertGradeTo.setConsult_fee(cursor.getInt(2) + "");
+                    expertGradeTo.setClinic_fee(cursor.getInt(2) + "");
+                    expertGradeTo.setTechnology_fee(cursor.getInt(3) + "");
                     expertGradeTos.add(expertGradeTo);
                 }
             }
@@ -141,7 +145,11 @@ public class MyExpertGradeActivity extends Activity {
             name.setText(expertGradeTos.get(position).getExpert_grade());
             money.setTextSize(20);
             money.setTextColor(Color.parseColor("#000000"));
-            money.setText((float)Long.parseLong(expertGradeTos.get(position).getConsult_fee()) / 100 + "");
+            if(expert_tp.equals("1")){
+                money.setText(expertGradeTos.get(position).getClinic_fee());
+            }else{
+                money.setText(expertGradeTos.get(position).getTechnology_fee());
+            }
             return convertView;
         }
     }

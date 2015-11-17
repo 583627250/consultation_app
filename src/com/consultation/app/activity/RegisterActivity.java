@@ -34,6 +34,7 @@ import com.consultation.app.util.AccountUtil;
 import com.consultation.app.util.ClientUtil;
 import com.consultation.app.util.CommonUtil;
 import com.consultation.app.util.SharePreferencesEditor;
+import com.umeng.message.UmengRegistrar;
 
 
 @SuppressLint("HandlerLeak")
@@ -246,11 +247,15 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                ClientUtil.setToken("");
+                editor.put("refreshToken", "");
                 CommonUtil.showLoadingDialog(RegisterActivity.this);
                 Map<String, String> parmas = new HashMap<String, String>();
                 parmas.put("mobile_ph", phone_edit.getText().toString());
                 parmas.put("pwd", pwd_edit.getText().toString());
                 parmas.put("smsVerifyCode", verification_edit.getText().toString());
+                parmas.put("device_token", UmengRegistrar.getRegistrationId(RegisterActivity.this));
+                parmas.put("device_tp", "Android");
                 CommonUtil.showLoadingDialog(RegisterActivity.this);
                 OpenApiService.getInstance(RegisterActivity.this).getRegister(mQueue, parmas, new Response.Listener<String>() {
 

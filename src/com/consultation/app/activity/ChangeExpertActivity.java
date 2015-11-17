@@ -100,6 +100,11 @@ public class ChangeExpertActivity extends Activity {
                 finish();
             }
         });
+        
+        expert_layout_line=(LinearLayout)findViewById(R.id.change_expert_select_expert_layout_line);
+        expert_layout=(LinearLayout)findViewById(R.id.change_expert_select_expert_layout);
+        code_layout_line=(LinearLayout)findViewById(R.id.change_expert_code_layout_line);
+        code_layout=(LinearLayout)findViewById(R.id.change_expert_code_layout);
 
         expert_text=(TextView)findViewById(R.id.change_expert_select_expert_text);
         expert_text.setTextSize(18);
@@ -162,11 +167,6 @@ public class ChangeExpertActivity extends Activity {
                 }
             }
         });
-
-        expert_layout_line=(LinearLayout)findViewById(R.id.change_expert_select_expert_layout_line);
-        expert_layout=(LinearLayout)findViewById(R.id.change_expert_select_expert_layout);
-        code_layout_line=(LinearLayout)findViewById(R.id.change_expert_code_layout_line);
-        code_layout=(LinearLayout)findViewById(R.id.change_expert_code_layout);
 
         submitBtn=(Button)findViewById(R.id.change_expert_btn_submit);
         submitBtn.setTextSize(20);
